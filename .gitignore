@@ -23,3 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 log.txt
 /dir1
+wanplan.sublime-project
+wanplan.sublime-workspace

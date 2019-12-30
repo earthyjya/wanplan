@@ -6,7 +6,7 @@ import Count from "./count/Count";
 import Plan from "./plan/Plan";
 import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
-import { Route } from "react-router-dom";
+import { Route, BrowserRouter } from "react-router-dom";
 import Request from "./lib/Request";
 
 class App extends Component {
@@ -32,36 +32,49 @@ class App extends Component {
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
-        <Route
-          path="/home"
-          component={() => (
-            <div>
-              <p>
-                <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
-              </p>
-            </div>
-          )}
-        />
-        <Route path="/plan" component={Plan} />
-        <Route
-          path="/users"
-          component={() => (
-            <Request url="https://jsonplaceholder.typicode.com/users">
-              {data => <User data={data} />}
-            </Request>
-          )}
-        />
-        <Route
-          path="/posts"
-          component={() => (
-            <Request url="https://jsonplaceholder.typicode.com/posts">
-              {data => <Posts data={data} />}
-            </Request>
-          )}
-        />
-        <Route path="/count" render={(props) => <Count {...props} serverIP={this.state.serverIP} />} />
-        <Route path="/chat" component={Chatform} />
-        <Route path="/chatroom" render={(props) => <Chatroom {...props} serverIP={this.state.serverIP} />} />
+
+        <BrowserRouter>
+          <Route
+            path="/home"
+            component={() => (
+              <div>
+                <p>
+                  <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
+                </p>
+              </div>
+            )}
+          />
+          <Route path="/plan" component={Plan} />
+          <Route
+            path="/users"
+            component={() => (
+              <Request url="https://jsonplaceholder.typicode.com/users">
+                {data => <User data={data} />}
+              </Request>
+            )}
+          />
+          <Route
+            path="/posts"
+            component={() => (
+              <Request url="https://jsonplaceholder.typicode.com/posts">
+                {data => <Posts data={data} />}
+              </Request>
+            )}
+          />
+          <Route
+            path="/count"
+            render={props => (
+              <Count {...props} serverIP={this.state.serverIP} />
+            )}
+          />
+          <Route path="/chat" component={Chatform} />
+          <Route
+            path="/chatroom"
+            render={props => (
+              <Chatroom {...props} serverIP={this.state.serverIP} />
+            )}
+          />
+        </BrowserRouter>
       </div>
     );
   }

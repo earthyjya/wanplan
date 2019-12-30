@@ -1,7 +1,7 @@
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline"
-import PlaceDes from "./PlaceDes"
+import AttracDes from "./AttracDes"
 
 
 class Plan extends React.Component {
@@ -16,7 +16,7 @@ class Plan extends React.Component {
 	toggle = () => this.setState({ modal: !this.state.modal });
 
 	close = () => {
-		if (this.state.modal == true) {
+		if (this.state.modal === true) {
 			this.setState({ modal: false });
 		}
 	};
@@ -49,7 +49,7 @@ class Plan extends React.Component {
 
 				<Timeline {...this.state} />
 
-				<PlaceDes {...this.state} />
+				<AttracDes {...this.state} />
 
 			</div>
 		);
