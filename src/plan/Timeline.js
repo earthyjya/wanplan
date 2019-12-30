@@ -9,6 +9,7 @@ class Timeline extends React.Component {
     return (
       <div >
       	This is timeline
+        Finished
       </div>
     );
   }
