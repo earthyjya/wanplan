@@ -33,7 +33,7 @@ class Plan extends React.Component {
 					<div className="city">{this.state.city_name}</div>
 					<div className="title">{this.state.trip_title}</div>
 					<button className="share" onClick={this.toggle}>
-						Shareee!
+						Shareeeee!
 						<span style={{ fontSize: "15px" }}>
 							<br />
 							this plan
