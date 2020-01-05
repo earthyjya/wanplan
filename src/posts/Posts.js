@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table } from 'reactstrap';
+import { Table } from "reactstrap";
 // import withRequest from "../lib/withRequest";
 
 class Posts extends Component {
@@ -16,8 +16,10 @@ class Posts extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.data === undefined ? (
-							<div></div>
+						{this.props.isLoading ? (
+							<div>Loading...</div>
+						) : this.props.error ? (
+							<div>{this.props.error.message}</div>
 						) : (
 							this.props.data.map(post => (
 								<tr key={post.id}>

@@ -13,7 +13,7 @@ class App extends Component {
   state = {
     name: "Janat",
     isOpen: false,
-    serverIP: "172.50.1.103:8080"
+    serverIP: "127.0.0.1:8080"
   };
 
   toggle = () => this.setState({ isOpen: !this.state.isOpen });
@@ -48,8 +48,8 @@ class App extends Component {
           <Route
             path="/users"
             component={() => (
-              <Request url="https://jsonplaceholder.typicode.com/users">
-                {data => <User data={data} />}
+              <Request url="https://jsonplacdeholder.typicode.com/users">
+                {result => <User {...result} />}
               </Request>
             )}
           />
@@ -57,7 +57,7 @@ class App extends Component {
             path="/posts"
             component={() => (
               <Request url="https://jsonplaceholder.typicode.com/posts">
-                {data => <Posts data={data} />}
+                {result => <Posts {...result} />}
               </Request>
             )}
           />

@@ -4,17 +4,22 @@ import axios from "axios"
 
 export class Request extends Component {
 	state = {
-		data: []
+		data: [],
+		isLoading: false,
+		error: null
 	};
 
 	async componentDidMount() {
-		const result = await axios.get(this.props.url);
-		this.setState({ data: result.data });
+		this.setState({ isLoading: true });
+
+		await axios.get(this.props.url)
+		.then(result => this.setState({data: result.data, isLoading: false}))
+		.catch(error => this.setState({error, isLoading: false}))
 	}
 
 	render() {
 		// console.log(this.props.children);
-		return this.props.children(this.state.data);
+		return this.props.children(this.state);
 	}
 }
 
