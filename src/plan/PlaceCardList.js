@@ -5,13 +5,16 @@ class PlaceCardList extends React.Component {
 
   render() {
     const {details} = this.props;
-    return (details.map(detail => {
+    return <div class = "placeList">{(details.map(detail => {
         return(
-          <div>
+          
               <PlaceCard detail = {detail}/>
-          </div>
+          
         )
-    }))
+    }))}
+        <button >Add</button>
+    
+    </div>
   }
 }
 

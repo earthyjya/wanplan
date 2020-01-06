@@ -37,8 +37,7 @@ class Timeline extends React.Component {
   render() {
     return (
       <div >
-      	This is timeline
-        Finished
+      	<h1>Your wonderful Trip !!!!!!</h1>
         <PlaceCardList details = {this.state.details}/>
       </div>
     );

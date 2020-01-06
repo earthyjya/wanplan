@@ -226,3 +226,30 @@
   background: #55ACEE;
   color: white;
 }
+
+.placeCard{
+  width: 80%;
+  height: 25%;
+  border: 1px solid #000;
+  background: #fff;
+  margin-bottom: 30px;
+  margin-left: 10%;
+  position: relative;
+}
+
+.placeCard h6{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 11px;
+}
+
+.placeList{
+  width: 30%;
+  height: 1000px;
+  background: #f4f4f4;
+}
+
+.placeList button{
+  margin-left: 10%;
+}
