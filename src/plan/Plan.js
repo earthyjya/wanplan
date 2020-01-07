@@ -1,8 +1,7 @@
 import React from "react";
 import Share from "./Share";
-import Timeline from "./Timeline"
-import AttracDes from "./AttracDes"
-
+import Timeline from "./Timeline";
+import AttracDes from "./AttracDes";
 
 class Plan extends React.Component {
 	state = {
@@ -28,12 +27,11 @@ class Plan extends React.Component {
 	render() {
 		return (
 			<div>
-
 				<div className="title-bar">
 					<div className="city">{this.state.city_name}</div>
 					<div className="title">{this.state.trip_title}</div>
 					<button className="share" onClick={this.toggle}>
-						Shareeeee!
+						Share!
 						<span style={{ fontSize: "15px" }}>
 							<br />
 							this plan
@@ -41,16 +39,17 @@ class Plan extends React.Component {
 					</button>
 				</div>
 
-
-
-				{this.state.modal ? <div className="share-modal">
-					<Share close={this.close}/>
-				</div> : <div></div>}
+				{this.state.modal ? (
+					<div className="share-modal">
+						<Share close={this.close} />
+					</div>
+				) : (
+					<div></div>
+				)}
 
 				<Timeline {...this.state} />
 
 				<AttracDes {...this.state} />
-
 			</div>
 		);
 	}

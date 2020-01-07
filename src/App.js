@@ -27,10 +27,10 @@ class App extends Component {
             WANPLAN
           </a>
           <a href="/plan">Plan</a>
-          <a href="/users">Users</a>
+          {/*<a href="/users">Users</a>
           <a href="/posts">Posts</a>
           <a href="/count">Count</a>
-          <a href="/chat">Chat</a>
+          <a href="/chat">Chat</a>*/}
         </div>
 
         <BrowserRouter>
@@ -48,7 +48,7 @@ class App extends Component {
           <Route
             path="/users"
             component={() => (
-              <Request url="https://jsonplacdeholder.typicode.com/users">
+              <Request url="https://jsonplaceholder.typicode.com/users">
                 {result => <User {...result} />}
               </Request>
             )}
