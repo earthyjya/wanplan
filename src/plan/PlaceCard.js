@@ -4,7 +4,7 @@ class PlaceCard extends React.Component {
 	render() {
 		const { detail } = this.props;
 		return (
-			<div class="placeCard">
+			<div className="placeCard">
 				<h2>{detail.attractionName}</h2>
 				<h3>{detail.attractionType}</h3>
 				<div>

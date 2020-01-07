@@ -5,7 +5,7 @@ class PlaceCardList extends React.Component {
   render() {
     const { details } = this.props;
     return (
-      <div class="placeList">
+      <div className="placeList">
         {details.map(detail => {
           return <PlaceCard detail={detail} />;
         })}
