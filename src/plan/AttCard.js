@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './AttCard.css';
 
 class AttCard extends React.Component {
 	render() {
@@ -16,11 +17,12 @@ class AttCard extends React.Component {
 		this.props.data.map(dat => {
           
 			return (
-				<div>
-					<div class = "timeFrom">{this.props.start_time}</div>
-					<div class = "timeUntil">{this.props.end_time}</div>
-					<h2 class = "attName">{dat.attraction_name}</h2>
-					<h3 class = "attType">{dat.attraction_type}</h3>
+				<div class = "Attcard">
+					<div className = "timeFrom">{this.props.start_time}</div>
+					<div className = "timeUntil">{this.props.end_time}</div>
+					<div className = "attPhoto"></div>
+					<h2 className = "attName">{dat.attraction_name}</h2>
+					
 				</div>
 				
 				)}))}

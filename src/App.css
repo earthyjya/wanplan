@@ -244,10 +244,11 @@
   font-size: 11px;
 }
 
-.placeList{
-  width: 30%;
-  height: 1000px;
+.AttList{
+  width: 66.7%;
+  height: 100vh;
   background: #f4f4f4;
+  padding-top: 16px;
 }
 
 .placeList button{
