@@ -31,7 +31,7 @@ class App extends Component {
           <a className="wanplan" href="/home">
             WANPLAN
           </a>
-          <a href="/plan">Plan</a>
+          <a href="/plan/1">Plan</a>
           <a href="/users">Users</a>
           <a href="/posts">Posts</a>
           <a href="/count">Count</a>
