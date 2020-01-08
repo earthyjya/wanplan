@@ -15,9 +15,8 @@ class Timeline extends React.Component {
 
     return (
       <div className="Timeline">
-        <h1>Your wonderful Trip !!!!!!</h1>
-        <Request url= {this.props.serverIP + ":3030/trip_detail"}>
-                {result => <AttCardList {...result} serverIP = {this.props.serverIP} />}
+        <Request url= {this.state.serverIP + ":3030/trip_detail"}>
+                {result => <AttCardList {...result} />}
         </Request>
       </div>
     );

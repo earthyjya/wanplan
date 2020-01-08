@@ -15,7 +15,7 @@ class AttCardList extends React.Component {
     
     return (
       
-      <div className="placeList">
+      <div className="AttList">
         {this.props.isLoading ? (
       <div>Loading...</div>
     ) : this.props.error ? (
