@@ -5,6 +5,8 @@ class Timeline extends React.Component {
   state = {
     details: [
       {
+        timeFrom: "10.00",
+        timeUntil: "11.00",
         attractionName: "name1",
         attractionType: "type1",
         openTime: "01.00",
@@ -14,6 +16,8 @@ class Timeline extends React.Component {
         updatedTime: "time1"
       },
       {
+        timeFrom: "11.00",
+        timeUntil: "12.00",
         attractionName: "name2",
         attractionType: "type2",
         openTime: "02.00",
@@ -23,6 +27,8 @@ class Timeline extends React.Component {
         updatedTime: "time2"
       },
       {
+        timeFrom: "12.00",
+        timeUntil: "13.00",
         attractionName: "name3",
         attractionType: "type3",
         openTime: "03.00",

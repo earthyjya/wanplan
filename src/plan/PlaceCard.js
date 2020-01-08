@@ -5,13 +5,10 @@ class PlaceCard extends React.Component {
 		const { detail } = this.props;
 		return (
 			<div className="placeCard">
-				<h2>{detail.attractionName}</h2>
-				<h3>{detail.attractionType}</h3>
-				<div>
-					opening hours : {detail.openTime} - {detail.closeTime}
-				</div>
-				<div>{detail.cityId}</div>
-				<div>Entry Fee : {detail.entryFee} Yen</div>
+				<div class = "timeFrom">{detail.timeFrom}</div>
+				<div class = "timeUntil">{detail.timeUntil}</div>
+				<h2 class = "attName">{detail.attractionName}</h2>
+				<h3 class = "attType">{detail.attractionType}</h3>
 				<h6>Last Updated {detail.updatedTime}</h6>
 			</div>
 		);
