@@ -23,7 +23,6 @@ class AttCard extends React.Component {
 					<div className = "attPhoto"></div>
 					<div className = "attType">{dat.attraction_type}</div>
 					<h2 className = "attName">{dat.attraction_name}</h2>
-					
 				</div>
 				
 				)}))}

@@ -4,55 +4,66 @@ import Timeline from "./Timeline";
 import AttracDes from "./AttracDes";
 
 class Plan extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			modal: false,
-			trip_id: null
-		};
-	}
+  state = {
+    modal: false,
+    trip_id: null,
+    days: [1]
+  };
 
-	toggle = () => this.setState({ modal: !this.state.modal });
+  toggle = () => this.setState({ modal: !this.state.modal });
 
-	close = () => {
-		if (this.state.modal === true) {
-			this.setState({ modal: false });
-		}
-	};
+  close = () => {
+    if (this.state.modal === true) {
+      this.setState({ modal: false });
+    }
+  };
 
-	componentDidMount() {
-		// DO sth
-	}
+  componentDidMount() {
+    // DO sth
+  }
 
-	render() {
-		return (
-			<div>
-				<div className="title-bar">
-					<div className="city">{this.state.city_name}</div>
-					<div className="title">{this.state.trip_title}</div>
-					<button className="share" onClick={this.toggle}>
-						Share!
-						<span style={{ fontSize: "15px" }}>
-							<br />
-							this plan
-						</span>
-					</button>
-				</div>
+  changeDays = n => {
+	this.setState({ days: [...this.state.days, n] });
+  };
 
-				{this.state.modal ? (
-					<div className="share-modal">
-						<Share close={this.close} />
-					</div>
-				) : (
-					<div></div>
-				)}
+  render() {
+    return (
+      <div>
+        <div className="title-bar">
+          <div className="city">{this.state.city_name}</div>
+          <div className="title">{this.state.trip_title}</div>
+          <button className="share" onClick={this.toggle}>
+            Share!
+            <span style={{ fontSize: "15px" }}>
+              <br />
+              this plan
+            </span>
+          </button>
+        </div>
 
-				<Timeline {...this.state} />
+        {this.state.modal ? (
+          <div className="share-modal">
+            <Share close={this.close} />
+          </div>
+        ) : (
+          <div></div>
+        )}
 
-				<AttracDes {...this.state} />
-			</div>
-		);
-	}
+		<h1>{this.state.days.length} Day Trip</h1>
+		{this.state.days.map( day =>{
+		
+        return(<Timeline
+          {...this.state}
+          serverIP={this.props.serverIP}
+		  changeDays={this.changeDays}
+		  day = {day}
+        />)
+  })}
+
+        <AttracDes {...this.state} />
+      </div>
+    );
+  }
 }
 
 export default Plan;
