@@ -34,6 +34,10 @@ class Timeline extends React.Component {
     ]
   };
 
+  componentDidMount() {
+    
+  }
+
   render() {
     return (
       <div className="Timeline">

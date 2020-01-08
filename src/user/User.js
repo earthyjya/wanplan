@@ -10,7 +10,7 @@ class User extends Component {
 					<thead>
 						<tr>
 							<th>Id</th>
-							<th>Name</th>
+							<th>Username</th>
 							<th>Email</th>
 						</tr>
 					</thead>
@@ -21,9 +21,9 @@ class User extends Component {
 							<div>{this.props.error.message}</div>
 						) : (
 							this.props.data.map(user => (
-								<tr key={user.id}>
-									<th scope="row">{user.id}</th>
-									<td>{user.name}</td>
+								<tr key={user.user_id}>
+									<th scope="row">{user.user_id}</th>
+									<td>{user.username}</td>
 									<td>{user.email}</td>
 								</tr>
 							))

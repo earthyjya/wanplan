@@ -3,16 +3,19 @@ import axios from "axios";
 
 // higher order component
 
-export default url => WrappedComponent =>
+export default (url, query) => WrappedComponent =>
 	class extends Component {
 		state = {
-			data: []
+			data: [],
+			isLoading: false,
+			error: null
 		};
 
-		async componentDidMount() {
-			// console.log("ComponentDidMount");
-			const result = await axios.get(url);
-			this.setState({ data: result.data });
+		componentDidMount() {
+			axios
+				.get(url + query)
+				.then(setState({ data: result.data, isLoading: false }))
+				.catch(error => this.setState({ error, isLoading: false }));
 		}
 
 		render() {

@@ -4,13 +4,13 @@ import Timeline from "./Timeline";
 import AttracDes from "./AttracDes";
 
 class Plan extends React.Component {
-	state = {
-		modal: false,
-		city_id: 0,
-		city_name: "Tokyo",
-		trip_id: 0,
-		trip_title: "東京 แบบประหยัด"
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			modal: false,
+			trip_id: null
+		};
+	}
 
 	toggle = () => this.setState({ modal: !this.state.modal });
 
