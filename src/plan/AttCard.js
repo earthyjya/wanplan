@@ -21,6 +21,7 @@ class AttCard extends React.Component {
 					<div className = "timeFrom">{this.props.start_time}</div>
 					<div className = "timeUntil">{this.props.end_time}</div>
 					<div className = "attPhoto"></div>
+					<div className = "attType">{dat.attraction_type}</div>
 					<h2 className = "attName">{dat.attraction_name}</h2>
 					
 				</div>

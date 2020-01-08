@@ -1,6 +1,6 @@
 .AttCard {
     position: relative;
-    background:#6CAD8C;
+    background:#F5F6F3;
     box-sizing: border-box;
     padding-left: 28px;
     margin: 30px auto;
@@ -11,32 +11,41 @@
 .timeFrom{
     position: absolute;
     margin-top: 8px;
-    font-size: medium;
+    font-size: large;
     font-weight: 700;
 }
 
 .timeUntil{
     position: absolute;
     margin-top: 24px;
-    font-size: medium;
+    font-size: large;
     font-weight: 400;
 }
 .attPhoto{
     position: absolute;
     margin-top: 11px;
-    margin-left: 128px;
+    margin-left: 64px;
     width: 128px;
     height: 128px;
+    border-radius: 10px;
     
     background: #ffffff;
-    
 
+}
 
+.attType{
+    position: absolute;
+    margin-top: 78px;
+    margin-left: 19.5px;
+    background: #fcd328;
+    width: 64px;
+
+    transform: rotate(-90deg);
 }
 .attName{
     position: absolute;
     margin-top: 8px;
-    margin-left: 260px;
+    margin-left: 208px;
 
 }
 
