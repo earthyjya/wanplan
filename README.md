@@ -1,11 +1,7 @@
-Hi 
-Hi JEL
-<<<<<<< HEAD
-bye bye 
-=======
-eiei
-eiei
->>>>>>> janat
+## How to run json-server (faked backend)
+
+### `npx json-server --watch db.json --port 3030`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -14,7 +14,7 @@ class App extends Component {
     user_id: 2,
     isLoggedIn: true,
     isOpen: false,
-    serverIP: "http://192.168.0.145",
+    serverIP: "http://localhost",
     nodePort: 8080,
     jsonPort: 3030
   };
@@ -31,7 +31,7 @@ class App extends Component {
           <a className="wanplan" href="/home">
             WANPLAN
           </a>
-          <a href="/plan">Plan</a>
+          <a href="/plan/1">Plan</a>
           <a href="/users">Users</a>
           <a href="/posts">Posts</a>
           <a href="/count">Count</a>
