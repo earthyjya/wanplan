@@ -4,20 +4,20 @@ import Request from "../lib/Request";
 
 class Timeline extends React.Component {
   state = {
-    serverIP: "http://192.168.0.145"
+    serverIP: ""
     
   };
 
   componentDidMount() {
-    
+    this.setState({serverIP: this.props.serverIP})
   }
   render() {
 
     return (
       <div className="Timeline">
         <h1>Your wonderful Trip !!!!!!</h1>
-        <Request url= {this.state.serverIP + ":3030/trip_detail"}>
-                {result => <AttCardList {...result} />}
+        <Request url= {this.props.serverIP + ":3030/trip_detail"}>
+                {result => <AttCardList {...result} serverIP = {this.props.serverIP} />}
         </Request>
       </div>
     );
