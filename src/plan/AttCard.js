@@ -16,7 +16,7 @@ class AttCard extends React.Component {
 		this.props.data.map(dat => {
           
 			return (
-				<div>
+				<div key = {dat.atraction_id}>
 					<div class = "timeFrom">{this.props.start_time}</div>
 					<div class = "timeUntil">{this.props.end_time}</div>
 					<h2 class = "attName">{dat.attraction_name}</h2>

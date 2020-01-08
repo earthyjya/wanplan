@@ -47,7 +47,7 @@ class Plan extends React.Component {
 					<div></div>
 				)}
 
-				<Timeline {...this.state} />
+				<Timeline {...this.state} serverIP = {this.props.serverIP}/>
 
 				<AttracDes {...this.state} />
 			</div>

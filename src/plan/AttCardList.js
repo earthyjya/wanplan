@@ -4,8 +4,12 @@ import Request from "../lib/Request";
 
 class AttCardList extends React.Component {
   state = {
-    serverIP: "http://192.168.0.145"
+    serverIP: ""
   };
+
+  componentDidMount(){
+    this.setState({serverIP: this.props.serverIP})
+  }
   render() {
 
     
@@ -21,8 +25,8 @@ class AttCardList extends React.Component {
         this.props.data.map(dat => {
           
           return (
-          <Request url= {this.state.serverIP + ":3030/attraction?attraction_id=" + dat.attraction_id}>
-                {result => <AttCard {...result} {...dat}/>}
+          <Request url= {this.props.serverIP + ":3030/attraction?attraction_id=" + dat.attraction_id} key = {dat.atraction_id}>
+                {result => <AttCard {...result} {...dat} />}
           </Request>
         )}))}
         <button>Add</button>
