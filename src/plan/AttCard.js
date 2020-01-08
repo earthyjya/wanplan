@@ -22,7 +22,6 @@ class AttCard extends React.Component {
 					<div className = "timeUntil">{this.props.end_time}</div>
 					<div className = "attPhoto"></div>
 					<h2 className = "attName">{dat.attraction_name}</h2>
-					
 				</div>
 				
 				)}))}

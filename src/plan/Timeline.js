@@ -4,12 +4,12 @@ import Request from "../lib/Request";
 
 class Timeline extends React.Component {
   state = {
-    serverIP: "http://192.168.0.145"
+    serverIP: ""
     
   };
 
   componentDidMount() {
-    
+    this.setState({serverIP: this.props.serverIP})
   }
   render() {
 

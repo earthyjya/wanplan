@@ -56,7 +56,7 @@ class App extends Component {
                   match.params.trip_id
                 }
               >
-                {result => <Plan {...result} />}
+                {result => <Plan {...result} serverIP = {this.state.serverIP}/>}
               </Request>
             )}
           />
