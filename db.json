@@ -51,7 +51,7 @@
       "user_id": 1,
       "day": 1,
       "order": 1,
-      "start_time": "9:00",
+      "start_time": "09:00",
       "end_time": "10:00",
       "time_spend": 60,
       "attraction_id": 1,

@@ -1,24 +1,28 @@
 import React, { Component } from "react";
-import './AttCard.css';
-import { LoremIpsum } from 'react-lorem-ipsum';
+import "./AttCard.css";
+import { LoremIpsum } from "react-lorem-ipsum";
 
-
-class AttCard extends React.Component {
+class AttCard extends Component {
 	render() {
-		if (this.props.isLoading) return <div>Loading...</div>;
-		if (this.props.error) return <div>Something went wrong :(</div>;
+		if (this.props.isLoading) return <div className="AttCard">Loading...</div>;
+		if (this.props.error)
+			return <div className="AttCard">Something went wrong :(</div>;
 		const [attraction, ...rest] = this.props.data;
 		return (
 			<div className="AttCard">
-				<div className="timeFrom">{this.props.start_time}</div>
-				<div className="timeUntil">{this.props.end_time}</div>
-				<div className="attPhoto"></div>
-				<div className="attTypeCont">
-					<div className = "attType">{attraction.attraction_type}</div>
+				<div className="StartTime">{this.props.start_time}</div>
+				<div className="EndTime">{this.props.end_time}</div>
+				<div className="AttPhoto"></div>
+				<div className="AttTypeCont">
+					<div className="AttType">{attraction.attraction_type}</div>
 				</div>
-        <div className = "attName">{attraction.attraction_name}</div>
-				<div className="attDesCont">
-					<LoremIpsum className="attDes" avgSentencesPerParagraph={8}  avgWordsPerSentence={4}/>
+				<div className="AttName">{attraction.attraction_name}</div>
+				<div className="AttDesCont">
+					<LoremIpsum
+						className="AttDes"
+						avgSentencesPerParagraph={8}
+						avgWordsPerSentence={4}
+					/>
 				</div>
 			</div>
 		);

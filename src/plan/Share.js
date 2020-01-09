@@ -37,8 +37,8 @@ class Share extends React.Component {
             ) : null}
           </div>
           <div>
-            <a href="" class="fa fa-facebook"></a>
-            <a href="" class="fa fa-twitter"></a>
+            <a href="" class="fa fa-facebook" />
+            <a href="" class="fa fa-twitter" />
           </div>
         </div>
       </div>
