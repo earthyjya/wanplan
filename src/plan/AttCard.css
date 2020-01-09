@@ -1,6 +1,6 @@
 .AttCard {
     position: relative;
-    background:#6CAD8C;
+    background:#F5F6F3;
     box-sizing: border-box;
     padding-left: 28px;
     margin: 30px auto;
@@ -9,73 +9,79 @@
     border-radius: 10px;
 }
 .timeFrom{
+    font-family: sans-serif;
     position: absolute;
     margin-top: 8px;
-    font-size: medium;
+    font-size: large;
     font-weight: 700;
+    
 }
 
 .timeUntil{
+    font-family: sans-serif;
     position: absolute;
-    margin-top: 24px;
+    margin-top: 26px;
     font-size: medium;
     font-weight: 400;
+    
 }
 .attPhoto{
+    
     position: absolute;
-    margin-top: 11px;
-    margin-left: 128px;
-    width: 128px;
-    height: 128px;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    height: 120px;
+    width: 120px;
+    left: 100px;
+    border-radius: 10px;
+    
     
     background: #ffffff;
+
+}
+
+.attTypeCont{
+    position: absolute;
+    margin-top: 84px;
+    background: #fcd328;
+    height: 18px;
+    width: 64px;
+    margin-left: 31px;
+    box-sizing: border-box;
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
+    transform: rotate(-90deg);
+    text-align: center;
     
+}
 
-
+.attType{
+    margin-top: 2px;
+    font-size: x-small;
+    
+    
+    
+    font-family: sans-serif;
 }
 .attName{
     position: absolute;
-    margin-top: 8px;
-    margin-left: 260px;
+    margin-top: 14px;
+    margin-left: 208px;
+    font-family: sans-serif;
 
 }
-
-
-
-
-.place {
+.attDes{
+   font-size: 10px;
+   font-weight: 100;
+}
+.attDesCont{
     position: relative;
-    margin-left: 100px;
-    margin-top: 100px;
-    right: 100px;
-    top: 0px;
-    left: 0px;
-    width: 384px;
-    background:#F5F6F3 ;
-    height: 96px;
-    border-radius: 10px;
-    padding-left: 28px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    box-sizing: border-box;
+    font-size: 10px;
+    width: 300px;
+    height: 100px;
+    top:41px;
+    left:210px;
 }
 
-.photo {
-    position: absolute;
-    border-radius: 10px;
-    height: 64px;
-    width: 64px;
-    background: #e0e0e0;
-}
-.text{
-    position: absolute;
-    margin-left: 80px;
-    font-weight: bold;
-    
-}
-.text2{
-    position: absolute;
-    margin-top: 16px;
-    margin-left: 80px;
-    
-}
+

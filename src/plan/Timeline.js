@@ -29,7 +29,9 @@ class Timeline extends React.Component {
         >
           {result => <AttCardList {...result} {...this.props} />}
         </Request>
+
         <button onClick={this.addDay}>+</button>
+
       </div>
     );
   }
