@@ -6,6 +6,7 @@
     margin: 30px 13% 30px 13%;
     height: 150px;
     width: auto;
+    max-width: 800px;
     border-radius: 10px;
     box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
 }
