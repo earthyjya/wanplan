@@ -245,14 +245,19 @@
 
 .AddDay {
   position: relative;
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
   align-content: center;
   color: #0a090c;
   background-color: #fcd328;
+  margin-left: 20px;
+  margin-bottom: 20px;
   border: none;
+  border-radius: 20px;
 }
 
 .AddDay:hover {
   color: #000000;
   background-color: #fcc626;
-
 }

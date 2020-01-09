@@ -9,7 +9,7 @@ class Plan extends React.Component {
     isLoading: true,
     error: null,
     modal: false,
-    days: [1]
+    days: []
   };
 
   toggle = () => this.setState({ modal: !this.state.modal });
@@ -55,6 +55,8 @@ class Plan extends React.Component {
         this.setState({ city, isLoading: false });
       })
       .catch(error => this.setState({ error, isLoading: false }));
+    var [a, ...rest] = Array(this.state.trip_overview.duration + 1).keys();
+    this.setState({ days: rest });
   }
 
   addDays = () => {
@@ -72,8 +74,9 @@ class Plan extends React.Component {
             <div className="city">{city.city_name}</div>
             <div className="title">{trip_overview.trip_name}</div>
             <div className="days">
-              {trip_overview.duration}{" "}
-              {trip_overview.duration > 1 ? "Days" : "Day"} Trip
+              {trip_overview.duration > 1
+                ? trip_overview.duration + " Days Trip"
+                : "One Day Trip"}
             </div>
             <button className="share" onClick={this.toggle}>
               Share!

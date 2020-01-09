@@ -4,6 +4,7 @@ import User from "./user/User";
 import Posts from "./posts/Posts";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
+import MyPlan from "./plan/MyPlan";
 import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
 import { Route, BrowserRouter } from "react-router-dom";
@@ -11,7 +12,7 @@ import Request from "./lib/Request";
 
 class App extends Component {
   state = {
-    user_id: 2,
+    user_id: 1,
     isLoggedIn: true,
     serverIP: "http://localhost",
     nodePort: "8080",
@@ -28,7 +29,7 @@ class App extends Component {
           <a className="wanplan" href="/home">
             WANPLAN
           </a>
-          <a href="/plan/1">Plan</a>
+          <a href="/myplan">Plan</a>
           <a href="/users">Users</a>
           <a href="/posts/">Posts</a>
           <a href="/count">Count</a>
@@ -44,6 +45,24 @@ class App extends Component {
               </div>
             )}
           />
+
+          <Route
+            path="/myplan"
+            component={() => (
+              <Request
+                url={
+                  serverIP +
+                  ":" +
+                  jsonPort +
+                  "/trip_overview?user_id=" +
+                  user_id
+                }
+              >
+                {result => <MyPlan {...result} />}
+              </Request>
+            )}
+          />
+
           <Route
             path="/plan/:trip_id"
             component={({ match }) => (

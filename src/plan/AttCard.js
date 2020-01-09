@@ -12,7 +12,7 @@ class AttCard extends Component {
 			<div className="AttCard">
 				<div className="StartTime">{this.props.start_time}</div>
 				<div className="EndTime">{this.props.end_time}</div>
-				<img className="AttPhoto"></img>
+				<img className="AttPhoto" />
 				<div className="AttTypeCont">
 					<div className="AttType">{attraction.attraction_type}</div>
 				</div>

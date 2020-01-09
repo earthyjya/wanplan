@@ -9,11 +9,12 @@ class Timeline extends Component {
   render() {
     return (
       <div className="Timeline">
-        <h2 style={{padding: "10px 0px 5px 10px"}}>Day {this.props.day}</h2>
-        <hr style={{margin: "0px"}} />
+        <hr style={{ margin: "0px" }} />
+        <h2 style={{ padding: "10px 0px 5px 10px" }}>Day {this.props.day}</h2>
         <AttCardList {...this.props} />
-
-        <button className="AddDay" onClick={this.addDay}>+</button>
+        <button className="AddDay" onClick={this.addDay}>
+          +
+        </button>
       </div>
     );
   }
