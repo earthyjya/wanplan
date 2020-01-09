@@ -18,7 +18,7 @@ class User extends Component {
 						{this.props.isLoading ? (
 							<div>Loading...</div>
 						) : this.props.error ? (
-							<div>{this.props.error.message}</div>
+							<div>{this.props.error.response.status}</div>
 						) : (
 							this.props.data.map(user => (
 								<tr key={user.user_id}>

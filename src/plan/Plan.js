@@ -6,7 +6,6 @@ import AttracDes from "./AttracDes";
 class Plan extends React.Component {
   state = {
     modal: false,
-    trip_id: null,
     days: [1]
   };
 
@@ -22,47 +21,56 @@ class Plan extends React.Component {
     // DO sth
   }
 
-  changeDays = n => {
-	this.setState({ days: [...this.state.days, n] });
+  addDays = () => {
+    this.setState({ days: [...this.state.days, this.state.days.length + 1] });
   };
 
   render() {
-    return (
-      <div>
-        <div className="title-bar">
-          <div className="city">{this.state.city_name}</div>
-          <div className="title">{this.state.trip_title}</div>
-          <button className="share" onClick={this.toggle}>
-            Share!
-            <span style={{ fontSize: "15px" }}>
-              <br />
-              this plan
-            </span>
-          </button>
-        </div>
-
-        {this.state.modal ? (
-          <div className="share-modal">
-            <Share close={this.close} />
+    const { isLoading, error, city, trip_overview, trip_detail } = this.props;
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Can't find the plan</div>;
+    else
+      return (
+        <div>
+          <div className="title-bar">
+            <div className="city">{city.city_name}</div>
+            <div className="title">{trip_overview.trip_name}</div>
+            <div className="days">
+              {trip_overview.duration}{" "}
+              {trip_overview.duration > 1 ? "Days" : "Day"} Trip
+            </div>
+            <button className="share" onClick={this.toggle}>
+              Share!
+              <span style={{ fontSize: "15px" }}>
+                <br />
+                this plan
+              </span>
+            </button>
           </div>
-        ) : (
-          <div></div>
-        )}
 
-		<h1>{this.state.days.length} Day Trip</h1>
-		{this.state.days.map( day =>{
-		
-        return(<Timeline
-          {...this.state}
-          serverIP={this.props.serverIP}
-		  changeDays={this.changeDays}
-		  day = {day}
-        />)
-  })}
+          {this.state.modal ? (
+            <div className="share-modal">
+              <Share close={this.close} />
+            </div>
+          ) : (
+            <div></div>
+          )}
 
-        <AttracDes {...this.state} />
-      </div>
-    );
+          
+
+          {this.state.days.map(day => (
+            <Timeline
+              {...this.state}
+              {...this.props}
+              addDays={this.addDays}
+              day={day}
+              key={day.toString()}
+            />
+          ))}
+
+          <AttracDes {...this.state} />
+        </div>
+      );
   }
 }
 
