@@ -18,9 +18,11 @@ class Timeline extends React.Component {
   render() {
     return (
       <div className="Timeline">
-        <h2>Day {this.props.day}</h2>
-        <Request url={this.props.serverIP + ":3030/trip_detail"}>
-          {result => <AttCardList {...result} serverIP={this.props.serverIP} />}
+
+  <h2>Day {this.props.day}</h2>
+        <Request url= {this.props.serverIP + ":3030/trip_detail?day=" + this.props.day}>
+                {result => <AttCardList {...result} serverIP = {this.props.serverIP} />}
+
         </Request>
         <button onClick={this.addDay}>+</button>
       </div>
