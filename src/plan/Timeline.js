@@ -25,7 +25,7 @@ class Timeline extends React.Component {
                 {result => <AttCardList {...result} serverIP = {this.props.serverIP} />}
 
         </Request>
-        <button onClick = {this.addDay}>+</button>
+        <button onClick = {this.addDay }>+</button>
       </div>
     );
   }
