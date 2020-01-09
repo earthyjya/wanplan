@@ -14,15 +14,13 @@ class App extends Component {
   state = {
     user_id: 2,
     isLoggedIn: true,
-    isOpen: false,
-    serverIP: "http://192.168.0.145",
-    nodePort: 8080,
-    jsonPort: 3030
+    serverIP: "http://localhost",
+    nodePort: "8080",
+    jsonPort: "3030"
   };
 
   componentDidMount() {}
 
-  toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
   render() {
     const { user_id, serverIP, nodePort, jsonPort } = this.state;
@@ -60,7 +58,7 @@ class App extends Component {
           <Route
             path="/users"
             component={() => (
-              <Request url={serverIP + ":3030/user"}>
+              <Request url={serverIP + ":" + jsonPort + "/user"}>
                 {result => <User {...result} />}
               </Request>
             )}

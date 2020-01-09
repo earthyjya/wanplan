@@ -4,30 +4,41 @@ import axios from "axios";
 
 export class Request extends Component {
 	state = {
-		trip_overview: null,
+		trip_overview: [],
 		trip_detail: [],
-		isLoading: false,
+		city: [],
+		isLoading: true,
 		error: null
 	};
 
 	async componentDidMount() {
-		this.setState({ isLoading: true });
-		var url1 =
+		var url =
 			this.props.serverIP + ":3030/trip_overview?trip_id=" + this.props.trip_id;
-		var url2 =
+		await axios
+			.get(url)
+			.then(result => {
+				const [trip_overview, ...rest] = result.data;
+				this.setState({ trip_overview });
+			})
+			.catch(error => this.setState({ error }));
+		if (!this.state.trip_overview) {
+			this.setState({ isLoading: false, error: true });
+			return;
+		}
+		var url =
 			this.props.serverIP + ":3030/trip_detail?trip_id=" + this.props.trip_id;
 		await axios
-			.get(url1)
-			.then(result1 => this.setState({ trip_overview: result1.data }))
-			.then(
-				axios
-					.get(url2)
-					.then(result2 =>
-						this.setState({ trip_detail: result2.data, isLoading: false })
-					)
-					.catch(error2 => this.setState({ error: error2 }))
-			)
-			.catch(error1 => this.setState({ error: error1, isLoading: false }));
+			.get(url)
+			.then(result => this.setState({ trip_detail: result.data }))
+			.catch(error => this.setState({ error }));
+		var url = this.props.serverIP + ":3030/city?city_id=" + this.state.trip_overview.city_id;
+		await axios
+			.get(url)
+			.then(result => {
+				const [city, ...rest] = result.data;
+				this.setState({ city , isLoading: false});
+			})
+			.catch(error => this.setState({ error, isLoading: false }));
 	}
 
 	render() {

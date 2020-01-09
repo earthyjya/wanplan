@@ -158,7 +158,14 @@
 
 .title-bar > div.title {
   color: #f47;
-  padding-top: 16px;
+  padding-top: 15px;
+  padding-bottom: 13px;
+  cursor: default;
+}
+
+.title-bar > div.days {
+  color: #f47;
+  padding-top: 15px;
   padding-bottom: 13px;
   cursor: default;
 }
