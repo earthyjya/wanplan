@@ -242,3 +242,17 @@
   padding-top: 16px;
   padding-bottom: 16px;
 }
+
+.AddDay {
+  position: relative;
+  align-content: center;
+  color: #0a090c;
+  background-color: #fcd328;
+  border: none;
+}
+
+.AddDay:hover {
+  color: #000000;
+  background-color: #fcc626;
+
+}

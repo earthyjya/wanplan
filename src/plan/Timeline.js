@@ -10,7 +10,7 @@ class Timeline extends Component {
     return (
       <div className="Timeline">
         <h2 style={{padding: "10px 0px 5px 10px"}}>Day {this.props.day}</h2>
-        <hr />
+        <hr style={{margin: "0px"}} />
         <AttCardList {...this.props} />
 
         <button className="AddDay" onClick={this.addDay}>+</button>
