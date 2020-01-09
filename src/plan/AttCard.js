@@ -16,7 +16,7 @@ class AttCard extends React.Component {
 				<div className="attTypeCont">
 					<div className = "attType">{attraction.attraction_type}</div>
 				</div>
-        <div className = "attName">{dat.attraction_name}</div>
+        <div className = "attName">{attraction.attraction_name}</div>
 				<div className="attDesCont">
 					<LoremIpsum className="attDes" avgSentencesPerParagraph={8}  avgWordsPerSentence={4}/>
 				</div>
