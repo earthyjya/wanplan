@@ -8,13 +8,14 @@ import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
 import { Route, BrowserRouter } from "react-router-dom";
 import Request from "./lib/Request";
+import RequestPlan from "./lib/RequestPlan";
 
 class App extends Component {
   state = {
     user_id: 2,
     isLoggedIn: true,
     isOpen: false,
-    serverIP: "http://localhost",
+    serverIP: "http://192.168.0.145",
     nodePort: 8080,
     jsonPort: 3030
   };
@@ -33,7 +34,7 @@ class App extends Component {
           </a>
           <a href="/plan/1">Plan</a>
           <a href="/users">Users</a>
-          <a href="/posts">Posts</a>
+          <a href="/posts/">Posts</a>
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
@@ -50,14 +51,9 @@ class App extends Component {
           <Route
             path="/plan/:trip_id"
             component={({ match }) => (
-              <Request
-                url={
-                  serverIP + ":3030/trip_detail?trip_id=" +
-                  match.params.trip_id
-                }
-              >
-                {result => <Plan {...result} serverIP = {this.state.serverIP}/>}
-              </Request>
+              <RequestPlan serverIP={this.state.serverIP} trip_id={match.params.trip_id}>
+                {result => <Plan {...result} {...this.state} />}
+              </RequestPlan>
             )}
           />
 

@@ -4,11 +4,10 @@ import Request from "../lib/Request";
 
 class AttCardList extends React.Component {
   state = {
-    serverIP: ""
   };
 
   componentDidMount(){
-    this.setState({serverIP: this.props.serverIP})
+
   }
   render() {
 
