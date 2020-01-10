@@ -4,14 +4,14 @@ import { LoremIpsum } from "react-lorem-ipsum";
 
 class AttCard extends Component {
 	render() {
-		if (this.props.isLoading) return <div className="AttCard">Loading...</div>;
-		if (this.props.error)
-			return <div className="AttCard">Something went wrong :(</div>;
-		const [attraction, ...rest] = this.props.data;
+		const { isLoading, error, data, start_time, end_time } = this.props;
+		if (isLoading) return <div className="AttCard">Loading...</div>;
+		if (error) return <div className="AttCard">Something went wrong :(</div>;
+		const [attraction, ...rest] = data;
 		return (
 			<div className="AttCard">
-				<div className="StartTime">{this.props.start_time}</div>
-				<div className="EndTime">{this.props.end_time}</div>
+				<div className="StartTime">{start_time}</div>
+				<div className="EndTime">{end_time}</div>
 				<img className="AttPhoto" />
 				<div className="AttTypeCont">
 					<div className="AttType">{attraction.attraction_type}</div>

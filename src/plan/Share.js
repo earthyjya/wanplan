@@ -12,29 +12,28 @@ class Share extends React.Component {
   }
 
   render() {
+    const { URL, copied } = this.state;
     return (
       <div className="share-modal-content">
         <div
-          style={{ float: "right", cursor: "pointer", fontSize: "25px" }}
+          style={{ float: "right", cursor: "pointer", fontSize: "20px" }}
           onClick={this.props.close}
         >
-          &times;
+          &#10005;
         </div>
         <div>
           <div>Here is your link!</div>
           <div>
-            <input value={this.state.URL} />
+            <input value={URL} />
           </div>
           <div>
             <CopyToClipboard
-              text={this.state.URL}
+              text={URL}
               onCopy={() => this.setState({ copied: true })}
             >
               <button>Copy</button>
             </CopyToClipboard>
-            {this.state.copied ? (
-              <span style={{ color: "red" }}>Copied.</span>
-            ) : null}
+            {copied ? <span style={{ color: "red" }}>Copied.</span> : null}
           </div>
           <div>
             <a href="" class="fa fa-facebook" />

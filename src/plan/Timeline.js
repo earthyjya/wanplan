@@ -4,17 +4,32 @@ import Request from "../lib/Request";
 
 class Timeline extends Component {
   addDay = () => {
-    this.props.addDays(this.props.days.length + 1);
+    this.props.addDay(this.props.day);
   };
+
+  delDay = () => {
+    this.props.delDay(this.props.day);
+  };
+
   render() {
+    const { day } = this.props;
     return (
       <div className="Timeline">
-        <hr style={{ margin: "0px" }} />
-        <h2 style={{ padding: "10px 0px 5px 10px" }}>Day {this.props.day}</h2>
+        <div>
+          <button className="AddDay" onClick={this.addDay}>
+            +
+          </button>
+          <hr style={{ margin: "0px 30px 30px 30px" }} />
+        </div>
+        <div style={{}}>
+          <button className="DelDay" onClick={this.delDay}>
+            &#10005;
+          </button>
+          <h2>
+            Day {day}
+          </h2>
+        </div>
         <AttCardList {...this.props} />
-        <button className="AddDay" onClick={this.addDay}>
-          +
-        </button>
       </div>
     );
   }

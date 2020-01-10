@@ -210,6 +210,39 @@
       "time_spend": 120,
       "attraction_id": 6,
       "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 7,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 8,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 3,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 9,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 5,
+      "updated_time": ""
     }
   ],
   "trip_overview": [
@@ -238,7 +271,7 @@
       "trip_name": "FUKUOOOOOOKA",
       "user_id": 1,
       "city_id": 3,
-      "duration": 2,
+      "duration": 3,
       "trip_style": "Sightseeing",
       "star_rating": 1.0,
       "updated_time": ""

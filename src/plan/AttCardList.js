@@ -4,23 +4,24 @@ import Request from "../lib/Request";
 
 class AttCardList extends Component {
   render() {
-    if (this.props.isLoading) return <div className="AttList">Loading...</div>;
-    if (this.props.error)
+    const { isLoading, error, trip_detail, serverIP, jsonPort } = this.props;
+    if (isLoading) return <div className="AttList">Loading...</div>;
+    if (error)
       return <div className="AttList">Something went wrong :(</div>;
     return (
       <div className="AttList">
-        {this.props.trip_detail.map(data => (
+        {trip_detail.map(detail => (
           <Request
-            key={data.order}
+            key={detail.order}
             url={
-              this.props.serverIP +
+              serverIP +
               ":" +
-              this.props.jsonPort +
+              jsonPort +
               "/attraction?attraction_id=" +
-              data.attraction_id
+              detail.attraction_id
             }
           >
-            {result => <AttCard {...result} {...data} />}
+            {result => <AttCard {...result} {...detail} />}
           </Request>
         ))}
       </div>

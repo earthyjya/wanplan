@@ -20,7 +20,37 @@ class Plan extends React.Component {
     }
   };
 
+  addDay = day => {
+    var { days, trip_overview, trip_detail } = this.state;
+    days = days.concat(days.length + 1);
+    trip_overview.duration += 1;
+    trip_detail.map(detail => {
+      if (detail.day >= day) detail.day += 1;
+    });
+    this.setState({
+      days,
+      trip_overview,
+      trip_detail
+    });
+  };
+
+  delDay = day => {
+    var { days, trip_overview, trip_detail } = this.state;
+    days.pop();
+    trip_overview.duration -= 1;
+    trip_detail = trip_detail.filter(trip => trip.day !== day);
+    trip_detail.map(detail => {
+      if (detail.day >= day) detail.day -= 1;
+    });
+    this.setState({
+      days,
+      trip_overview,
+      trip_detail
+    });
+  };
+
   async componentDidMount() {
+    // Since it has to fetch three times, we fetch it here and store the data in the state
     const { serverIP, jsonPort, trip_id } = this.props;
     var url = serverIP + ":" + jsonPort + "/trip_overview?trip_id=" + trip_id;
     await axios
@@ -59,12 +89,16 @@ class Plan extends React.Component {
     this.setState({ days: rest });
   }
 
-  addDays = () => {
-    this.setState({ days: [...this.state.days, this.state.days.length + 1] });
-  };
-
   render() {
-    const { isLoading, error, city, trip_overview, trip_detail } = this.state;
+    const {
+      isLoading,
+      error,
+      city,
+      trip_overview,
+      trip_detail,
+      days,
+      modal
+    } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Can't find the plan</div>;
     else
@@ -87,7 +121,7 @@ class Plan extends React.Component {
             </button>
           </div>
 
-          {this.state.modal ? (
+          {modal ? (
             <div className="share-modal">
               <Share close={this.close} />
             </div>
@@ -95,16 +129,23 @@ class Plan extends React.Component {
             <div></div>
           )}
 
-          {this.state.days.map(day => (
+          {days.map(day => (
             <Timeline
               {...this.state}
               {...this.props}
               trip_detail={trip_detail.filter(trip => trip.day === day)}
-              addDays={this.addDays}
+              addDay={this.addDay}
+              delDay={this.delDay}
               day={day}
               key={day.toString()}
             />
           ))}
+          <div>
+            <button className="AddDay" onClick={this.addDay}>
+              +
+            </button>
+            <hr style={{ margin: "0px 30px 30px 30px" }} />
+          </div>
 
           <AttInfo {...this.state} />
         </div>
