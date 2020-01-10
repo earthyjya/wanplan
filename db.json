@@ -51,7 +51,7 @@
       "user_id": 1,
       "day": 1,
       "order": 1,
-      "start_time": "9:00",
+      "start_time": "09:00",
       "end_time": "10:00",
       "time_spend": 60,
       "attraction_id": 1,
@@ -78,6 +78,171 @@
       "time_spend": 120,
       "attraction_id": 3,
       "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 1,
+      "order": 1,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 1,
+      "order": 2,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 5,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 1,
+      "order": 3,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 6,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 2,
+      "order": 4,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 1,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 2,
+      "order": 5,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 2,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 2,
+      "order": 6,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 3,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 1,
+      "order": 1,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 1,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 1,
+      "order": 2,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 2,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 1,
+      "order": 3,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 3,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 2,
+      "order": 4,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 2,
+      "order": 5,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 5,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 2,
+      "order": 6,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 6,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 7,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 8,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 3,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 9,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 5,
+      "updated_time": ""
     }
   ],
   "trip_overview": [
@@ -88,7 +253,27 @@
       "city_id": 1,
       "duration": 1,
       "trip_style": "Cultural",
+      "star_rating": 3.0,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 2,
+      "trip_name": "Osaka hahaha",
+      "user_id": 1,
+      "city_id": 2,
+      "duration": 2,
+      "trip_style": "Cultural",
       "star_rating": 5.0,
+      "updated_time": ""
+    },
+    {
+      "trip_id": 3,
+      "trip_name": "FUKUOOOOOOKA",
+      "user_id": 1,
+      "city_id": 3,
+      "duration": 3,
+      "trip_style": "Sightseeing",
+      "star_rating": 1.0,
       "updated_time": ""
     }
   ],
@@ -96,7 +281,7 @@
     {
       "attraction_id": 1,
       "attraction_name": "Sensoji Temple",
-      "attraction_type": "Cultural",
+      "attraction_type": "cultural",
       "open_time": "9:00",
       "close_time": "19:00",
       "description": "asdfghjkl",
@@ -106,7 +291,7 @@
     {
       "attraction_id": 2,
       "attraction_name": "Ueno Park",
-      "attraction_type": "Relax",
+      "attraction_type": "relax",
       "open_time": "9:00",
       "close_time": "19:00",
       "description": "asdfghjkl",
@@ -116,10 +301,40 @@
     {
       "attraction_id": 3,
       "attraction_name": "Tokyo Tower",
-      "attraction_type": "Sightseeing",
+      "attraction_type": "sightseeing",
       "open_time": "9:00",
       "close_time": "19:00",
       "description": "asdfghjkl",
+      "city_id": 1,
+      "updated_time": ""
+    },
+    {
+      "attraction_id": 4,
+      "attraction_name": "Odaiba Kaihin Park",
+      "attraction_type": "sightseeing",
+      "open_time": "09:00",
+      "close_time": "19:00",
+      "description": "fasdfsdfeivojasdfsda",
+      "city_id": 1,
+      "updated_time": ""
+    },
+    {
+      "attraction_id": 5,
+      "attraction_name": "Tsukiji fish market",
+      "attraction_type": "food",
+      "open_time": "09:00",
+      "close_time": "19:00",
+      "description": "fasdfsdfeivojasdfsda",
+      "city_id": 1,
+      "updated_time": ""
+    },
+    {
+      "attraction_id": 6,
+      "attraction_name": "Shibuya",
+      "attraction_type": "shopping",
+      "open_time": "09:00",
+      "close_time": "19:00",
+      "description": "fasdfsdfeivojasdfsda",
       "city_id": 1,
       "updated_time": ""
     }
@@ -130,24 +345,72 @@
       "city_name": "Tokyo",
       "prefecture": "Tokyo",
       "region": "Kanto",
-      "country_id": 1
+      "country_id": 1,
+      "updated_time": ""
     },
     {
       "city_id": 2,
       "city_name": "Osaka",
       "prefecture": "Osaka",
       "region": "Kansai",
-      "country_id": 1
+      "country_id": 1,
+      "updated_time": ""
+    },
+    {
+      "city_id": 3,
+      "city_name": "Fukuoka",
+      "prefecture": "Fukuoka",
+      "region": "Kyushu",
+      "country_id": 1,
+      "updated_time": ""
+    },
+
+    {
+      "city_id": 4,
+      "city_name": "Kyoto",
+      "prefecture": "Kyoto",
+      "region": "Kansai",
+      "country_id": 1,
+      "updated_time": ""
+    },
+
+    {
+      "city_id": 5,
+      "city_name": "Takayama",
+      "prefecture": "Gifu",
+      "region": "chubu",
+      "country_id": 1,
+      "updated_time": ""
+    },
+
+    {
+      "city_id": 6,
+      "city_name": "Kobe",
+      "prefecture": "Hyogo",
+      "region": "Kansai",
+      "country_id": 1,
+      "updated_time": ""
+    },
+
+    {
+      "city_id": 7,
+      "city_name": "Yokohama",
+      "prefecture": "Kanagawa",
+      "region": "Kanto",
+      "country_id": 1,
+      "updated_time": ""
     }
   ],
   "country": [
     {
       "country_id": 1,
-      "country_name": "Japan"
+      "country_name": "Japan",
+      "continent": "Asia"
     },
     {
       "country_id": 2,
-      "country_name": "Thailand"
+      "country_name": "Thailand",
+      "continent": "Asia"
     }
   ]
 }

@@ -1,32 +1,33 @@
 .AttCard {
     position: relative;
-    background:#F5F6F3;
+    background: #f5f6f3;
     box-sizing: border-box;
     padding-left: 28px;
-    margin: 30px auto;
+    margin: 30px 13% 30px 13%;
     height: 150px;
-    width: 60%;
+    width: auto;
+    max-width: 800px;
     border-radius: 10px;
+    box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
 }
-.timeFrom{
+.StartTime {
     font-family: sans-serif;
     position: absolute;
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: large;
     font-weight: 700;
-    
+    color: grey;
 }
 
-.timeUntil{
+.EndTime {
     font-family: sans-serif;
     position: absolute;
-    margin-top: 26px;
+    margin-top: 30px;
     font-size: medium;
     font-weight: 400;
-    
+    color: grey;
 }
-.attPhoto{
-    
+.AttPhoto {
     position: absolute;
     top: 50%;
     -ms-transform: translateY(-50%);
@@ -35,13 +36,11 @@
     width: 120px;
     left: 100px;
     border-radius: 10px;
-    
-    
+    border: none;
     background: #ffffff;
-
 }
 
-.attTypeCont{
+.AttTypeCont {
     position: absolute;
     margin-top: 84px;
     background: #fcd328;
@@ -49,39 +48,31 @@
     width: 64px;
     margin-left: 31px;
     box-sizing: border-box;
-    border-top-right-radius: 7px;
-    border-top-left-radius: 7px;
+    border-radius: 7px 7px 0px 0px;
     transform: rotate(-90deg);
     text-align: center;
-    
 }
 
-.attType{
+.AttType {
     margin-top: 2px;
     font-size: x-small;
-    
-    
-    
+
     font-family: sans-serif;
 }
-.attName{
+.AttName {
     position: absolute;
     margin-top: 14px;
     margin-left: 208px;
     font-family: sans-serif;
-
 }
-.attDes{
-   font-size: 10px;
-   font-weight: 100;
+.AttDes {
+    font-size: 10px;
+    font-weight: 100;
 }
-.attDesCont{
+.AttDesCont {
     position: relative;
     font-size: 10px;
-    width: 300px;
-    height: 100px;
-    top:41px;
-    left:210px;
+    width: auto;
+    height: auto;
+    padding: 41px 16px 16px 210px;
 }
-
-
