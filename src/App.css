@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: "noto_sans_thai_uiregular", sans-serif;
-  unicode-range: U+0E00 –U + 0e7f;
+  unicode-range: "U+0E00–U+0e7f";
 }
 
 .App {
@@ -109,6 +109,7 @@
 .topnav {
   overflow: hidden;
   background-color: #f8f9fa;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.3);
 }
 
 .topnav > a {
@@ -137,6 +138,7 @@
 .title-bar {
   overflow: hidden;
   background-color: #0a090c;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.4);
 }
 
 .title-bar div {
@@ -157,7 +159,14 @@
 
 .title-bar > div.title {
   color: #f47;
-  padding-top: 16px;
+  padding-top: 15px;
+  padding-bottom: 13px;
+  cursor: default;
+}
+
+.title-bar > div.days {
+  color: #f47;
+  padding-top: 15px;
   padding-bottom: 13px;
   cursor: default;
 }
@@ -213,7 +222,8 @@
 }
 
 .fa:hover {
-  opacity: 0.7;
+  opacity: 0.9;
+  text-decoration: none;
 }
 
 .fa-facebook {
@@ -226,30 +236,47 @@
   color: white;
 }
 
-.placeCard {
-  width: 80%;
-  height: 25%;
-  border: 1px solid #000;
-  background: #fff;
-  margin-bottom: 30px;
-  margin-left: 10%;
-  position: relative;
-}
-
-.placeCard h6 {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 11px;
-}
-
 .AttList {
   width: 66.7%;
-  height: 100vh;
-  background: #f4f4f4;
-  padding-top: 16px;
+  background: white;
 }
 
-.placeList button {
-  margin-left: 10%;
+.AddDay {
+  position: relative;
+  top: 20px;
+  left: 50px;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  font-size: 22px;
+  align-content: center;
+  color: #0a090c;
+  background-color: #fcd328;
+  border: none;
+}
+
+.AddDay:hover {
+  color: #000000;
+  background-color: #fcc626;
+}
+
+.DelDay {
+  position: relative;
+  float: left;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  font-size: 11px;
+  align-content: center;
+  text-indent: -1px;
+  color: white;
+  background-color: white;
+  margin: 10px 5px 10px 25px;
+  border: none;
+  font-weight: 700;  
+}
+
+.DelDay:hover {
+  color: white;
+  background-color: lightgrey;
 }

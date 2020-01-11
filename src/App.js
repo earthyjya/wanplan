@@ -4,25 +4,22 @@ import User from "./user/User";
 import Posts from "./posts/Posts";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
+import MyPlan from "./plan/MyPlan";
 import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
 import { Route, BrowserRouter } from "react-router-dom";
 import Request from "./lib/Request";
-import RequestPlan from "./lib/RequestPlan";
 
 class App extends Component {
   state = {
-    user_id: 2,
+    user_id: 1,
     isLoggedIn: true,
-    isOpen: false,
-    serverIP: "http://192.168.0.145",
-    nodePort: 8080,
-    jsonPort: 3030
+    serverIP: "http://localhost",
+    nodePort: "8080",
+    jsonPort: "3030"
   };
 
   componentDidMount() {}
-
-  toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
   render() {
     const { user_id, serverIP, nodePort, jsonPort } = this.state;
@@ -32,7 +29,7 @@ class App extends Component {
           <a className="wanplan" href="/home">
             WANPLAN
           </a>
-          <a href="/plan/1">Plan</a>
+          <a href="/myplan">Plan</a>
           <a href="/users">Users</a>
           <a href="/posts/">Posts</a>
           <a href="/count">Count</a>
@@ -48,19 +45,35 @@ class App extends Component {
               </div>
             )}
           />
+
+          <Route
+            path="/myplan"
+            component={() => (
+              <Request
+                url={
+                  serverIP +
+                  ":" +
+                  jsonPort +
+                  "/trip_overview?user_id=" +
+                  user_id
+                }
+              >
+                {result => <MyPlan {...result} />}
+              </Request>
+            )}
+          />
+
           <Route
             path="/plan/:trip_id"
             component={({ match }) => (
-              <RequestPlan serverIP={this.state.serverIP} trip_id={match.params.trip_id}>
-                {result => <Plan {...result} {...this.state} />}
-              </RequestPlan>
+              <Plan trip_id={match.params.trip_id} {...this.state} />
             )}
           />
 
           <Route
             path="/users"
             component={() => (
-              <Request url={serverIP + ":3030/user"}>
+              <Request url={serverIP + ":" + jsonPort + "/user"}>
                 {result => <User {...result} />}
               </Request>
             )}
@@ -76,14 +89,14 @@ class App extends Component {
           <Route
             path="/count"
             render={props => (
-              <Count {...props} serverIP={this.state.serverIP + ":8080"} />
+              <Count {...props} serverIP={serverIP + ":" + nodePort} />
             )}
           />
           <Route path="/chat" component={Chatform} />
           <Route
             path="/chatroom"
             render={props => (
-              <Chatroom {...props} serverIP={this.state.serverIP + ":8080"} />
+              <Chatroom {...props} serverIP={serverIP + ":" + nodePort} />
             )}
           />
         </BrowserRouter>

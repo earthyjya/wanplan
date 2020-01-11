@@ -2,29 +2,34 @@ import React, { Component } from "react";
 import AttCardList from "./AttCardList";
 import Request from "../lib/Request";
 
-class Timeline extends React.Component {
-  state = {
-    serverIP: "",
-    day: 1
-  };
-
-  componentDidMount() {
-    this.setState({ serverIP: this.props.serverIP });
-  }
-
+class Timeline extends Component {
   addDay = () => {
-    this.props.changeDays(this.props.days.length + 1);
+    this.props.addDay(this.props.day);
   };
+
+  delDay = () => {
+    this.props.delDay(this.props.day);
+  };
+
   render() {
+    const { day } = this.props;
     return (
       <div className="Timeline">
-
-  <h2>Day {this.props.day}</h2>
-        <Request url= {this.props.serverIP + ":3030/trip_detail?day=" + this.props.day}>
-                {result => <AttCardList {...result} serverIP = {this.props.serverIP} />}
-
-        </Request>
-        <button onClick={this.addDay}>+</button>
+        <div>
+          <button className="AddDay" onClick={this.addDay}>
+            +
+          </button>
+          <hr style={{ margin: "0px 30px 30px 30px" }} />
+        </div>
+        <div style={{}}>
+          <button className="DelDay" onClick={this.delDay}>
+            &#10005;
+          </button>
+          <h2>
+            Day {day}
+          </h2>
+        </div>
+        <AttCardList {...this.props} />
       </div>
     );
   }

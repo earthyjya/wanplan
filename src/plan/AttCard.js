@@ -1,30 +1,29 @@
 import React, { Component } from "react";
-import './AttCard.css';
+import "./AttCard.css";
+import { LoremIpsum } from "react-lorem-ipsum";
 
-class AttCard extends React.Component {
+class AttCard extends Component {
 	render() {
-		
+		const { isLoading, error, data, start_time, end_time } = this.props;
+		if (isLoading) return <div className="AttCard">Loading...</div>;
+		if (error) return <div className="AttCard">Something went wrong :(</div>;
+		const [attraction, ...rest] = data;
 		return (
 			<div className="AttCard">
-				{this.props.isLoading ? (
-      <div>Loading...</div>
-    ) : this.props.error ? (
-      <div>{this.props.error.message}</div>
-    ) : (
-		//{
-		//	const data = this.props.data;
-		//}
-		this.props.data.map(dat => {
-          
-			return (
-				<div class = "Attcard">
-					<div className = "timeFrom">{this.props.start_time}</div>
-					<div className = "timeUntil">{this.props.end_time}</div>
-					<div className = "attPhoto"></div>
-					<h2 className = "attName">{dat.attraction_name}</h2>
+				<div className="StartTime">{start_time}</div>
+				<div className="EndTime">{end_time}</div>
+				<img className="AttPhoto" />
+				<div className="AttTypeCont">
+					<div className="AttType">{attraction.attraction_type}</div>
 				</div>
-				
-				)}))}
+				<div className="AttName">{attraction.attraction_name}</div>
+				<div className="AttDesCont">
+					<LoremIpsum
+						className="AttDes"
+						avgSentencesPerParagraph={8}
+						avgWordsPerSentence={4}
+					/>
+				</div>
 			</div>
 		);
 	}
