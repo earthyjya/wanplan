@@ -1,0 +1,32 @@
+.AttBar {
+  position: absolute;
+  right: 0;
+  top: 108px;
+  border: solid 1px;
+  width: 33.3%;
+  padding: 12px;
+}
+
+.attPhoto2 {
+  float: left;
+  margin-top: 11px;
+  margin-left: 11px;
+  width: 128px;
+  height: 128px;
+
+  background: #ffffff;
+}
+
+.attName2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.attType2 {
+  line-height: 1em;
+  font-style: italic;
+}
+
+.description {
+  margin-top: 8px;
+}

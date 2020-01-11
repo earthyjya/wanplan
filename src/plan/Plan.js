@@ -2,6 +2,8 @@ import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline";
 import AttracDes from "./AttracDes";
+import AttBar from "./AttBar";
+import Request from "../lib/Request.js";
 
 class Plan extends React.Component {
   state = {
@@ -23,7 +25,7 @@ class Plan extends React.Component {
   }
 
   changeDays = n => {
-	this.setState({ days: [...this.state.days, n] });
+    this.setState({ days: [...this.state.days, n] });
   };
 
   render() {
@@ -49,16 +51,21 @@ class Plan extends React.Component {
           <div></div>
         )}
 
-		<h1>{this.state.days.length} Day Trip</h1>
-		{this.state.days.map( day =>{
-		
-        return(<Timeline
-          {...this.state}
-          serverIP={this.props.serverIP}
-		  changeDays={this.changeDays}
-		  day = {day}
-        />)
-  })}
+        <h1>{this.state.days.length} Day Trip</h1>
+        {this.state.days.map(day => {
+          return (
+            <Timeline
+              {...this.state}
+              serverIP={this.props.serverIP}
+              changeDays={this.changeDays}
+              day={day}
+            />
+          );
+        })}
+
+        <Request url={this.props.serverIP + ":3030/attraction"}>
+          {result => <AttBar {...result} {...this.state} />}
+        </Request>
 
         <AttracDes {...this.state} />
       </div>

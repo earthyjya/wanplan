@@ -1,81 +1,72 @@
 .AttCard {
-    position: relative;
-    background:#6CAD8C;
-    box-sizing: border-box;
-    padding-left: 28px;
-    margin: 30px auto;
-    height: 150px;
-    width: 60%;
-    border-radius: 10px;
+  position: relative;
+  background: #6cad8c;
+  box-sizing: border-box;
+  padding-left: 28px;
+  margin: 30px auto;
+  height: 150px;
+  width: 60%;
+  border-radius: 10px;
 }
-.timeFrom{
-    position: absolute;
-    margin-top: 8px;
-    font-size: medium;
-    font-weight: 700;
-}
-
-.timeUntil{
-    position: absolute;
-    margin-top: 24px;
-    font-size: medium;
-    font-weight: 400;
-}
-.attPhoto{
-    position: absolute;
-    margin-top: 11px;
-    margin-left: 128px;
-    width: 128px;
-    height: 128px;
-    
-    background: #ffffff;
-    
-
-
-}
-.attName{
-    position: absolute;
-    margin-top: 8px;
-    margin-left: 260px;
-
+.timeFrom {
+  position: absolute;
+  margin-top: 8px;
+  font-size: medium;
+  font-weight: 700;
 }
 
+.timeUntil {
+  position: absolute;
+  margin-top: 24px;
+  font-size: medium;
+  font-weight: 400;
+}
+.attPhoto {
+  position: absolute;
+  margin-top: 11px;
+  margin-left: 128px;
+  width: 128px;
+  height: 128px;
 
-
+  background: #ffffff;
+}
+.attName {
+  position: absolute;
+  margin-top: 8px;
+  margin-left: 260px;
+}
 
 .place {
-    position: relative;
-    margin-left: 100px;
-    margin-top: 100px;
-    right: 100px;
-    top: 0px;
-    left: 0px;
-    width: 384px;
-    background:#F5F6F3 ;
-    height: 96px;
-    border-radius: 10px;
-    padding-left: 28px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    box-sizing: border-box;
+  position: relative;
+  margin-left: 100px;
+  margin-top: 100px;
+  right: 100px;
+  top: 0px;
+  left: 0px;
+  width: 384px;
+  background: #f5f6f3;
+  height: 96px;
+  border-radius: 10px;
+  padding-left: 28px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  box-sizing: border-box;
 }
 
 .photo {
-    position: absolute;
-    border-radius: 10px;
-    height: 64px;
-    width: 64px;
-    background: #e0e0e0;
+  position: absolute;
+  border-radius: 10px;
+  height: 64px;
+  width: 64px;
+  background: #e0e0e0;
 }
-.text{
-    position: absolute;
-    margin-left: 80px;
-    font-weight: bold;
-    
+.text {
+  position: absolute;
+  margin-left: 80px;
+  font-weight: bold;
 }
-.text2{
-    position: absolute;
-    margin-top: 16px;
-    margin-left: 80px;
-    
+.text2 {
+  position: absolute;
+  margin-top: 16px;
+  margin-left: 80px;
 }
