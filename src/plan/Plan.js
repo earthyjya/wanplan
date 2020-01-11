@@ -1,7 +1,6 @@
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline";
-import AttInfo from "./AttInfo";
 import axios from "axios";
 import Request from "../lib/Request.js"
 import AttBar from "./AttBar.js"
@@ -153,7 +152,6 @@ class Plan extends React.Component {
             {result => <AttBar {...result}/>}
           </Request>
 
-          <AttInfo {...this.state} />
         </div>
       );
   }
