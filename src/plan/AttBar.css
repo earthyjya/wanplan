@@ -7,6 +7,18 @@
   padding: 12px;
 }
 
+.AttBarCard {
+  position: relative;
+  background: #f5f6f3;
+  box-sizing: border-box;
+  padding-left: 10px;
+  margin: 30px 10% 30px 10%;
+  height: 150px;
+  width: auto;
+  border-radius: 10px;
+  box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
+}
+
 .attPhoto2 {
   float: left;
   margin-top: 11px;
@@ -18,15 +30,24 @@
 }
 
 .attName2 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
+  width:200px;
 }
 
 .attType2 {
-  line-height: 1em;
   font-style: italic;
+  line-height: 1em;
+  width:200px;
 }
 
 .description {
-  margin-top: 8px;
+  margin-top: 12px;
+  width:200px;
+}
+
+@media(max-width:1494px){
+    .AttBarCard{
+        height:300px;
+    }
 }
