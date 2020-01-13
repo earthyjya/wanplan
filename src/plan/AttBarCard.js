@@ -10,7 +10,7 @@ class AttBarCard extends Component {
       description
     } = this.props;
     return (
-      <div className="AttCard" style={{ width: "80%", padding: "0px" }}>
+      <div className="AttBarCard" >
         <div className="attPhoto2"></div>
         <div style={{ float: "left", margin: "12px" }}>
           <div className="attName2">{attraction_name}</div>
