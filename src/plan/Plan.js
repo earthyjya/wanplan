@@ -54,45 +54,58 @@ class Plan extends React.Component {
   };
 
   reorderCards = (source, destination) => {
-    const { droppableId } = destination;
-    let a = source.index;
-    let b = destination.index;
+    const { droppableId, index } = destination;
     const { trip_detail } = this.state;
+    let a = source.index;
+    let b = index;
     const attA = trip_detail.filter(trip => trip.order === a)[0].attraction_id;
-    if (a < b) {
-      if (source.droppableId !== droppableId) b -= 1;
-      trip_detail.map(detail => {
-        if (detail.order < b && detail.order >= a) {
-          let { attraction_id, day } = trip_detail.filter(
-            trip => trip.order === detail.order + 1
-          )[0];
-          detail.attraction_id = attraction_id;
-          detail.day = day;
-        }
-        if (detail.order === b) {
-          detail.attraction_id = attA;
-          detail.day = Number(droppableId);
-        }
-      });
-    }
+    if (index !== 0) {
+      if (a < b) {
+        if (source.droppableId !== droppableId) b -= 1;
+        trip_detail.map(detail => {
+          if (detail.order < b && detail.order >= a) {
+            console.log(
+              trip_detail.filter(trip => trip.order === detail.order + 1)[0]
+            );
+            let { attraction_id, day } = trip_detail.filter(
+              trip => trip.order === detail.order + 1
+            )[0];
 
-    if (a >= b) {
-      trip_detail.sort((a, b) => b.order - a.order);
-      trip_detail.map(detail => {
-        if (detail.order > b && detail.order <= a) {
-          let { attraction_id, day } = trip_detail.filter(
-            trip => trip.order === detail.order - 1
-          )[0];
-          detail.attraction_id = attraction_id;
-          detail.day = day;
-        }
-        if (detail.order === b) {
-          detail.attraction_id = attA;
-          detail.day = Number(droppableId);
-        }
-      });
+            detail.attraction_id = attraction_id;
+            detail.day = day;
+          }
+          if (detail.order === b) {
+            detail.attraction_id = attA;
+            detail.day = Number(droppableId);
+          }
+        });
+      }
 
-      trip_detail.sort((a, b) => a.order - b.order);
+      if (a >= b) {
+        trip_detail.sort((a, b) => b.order - a.order);
+        trip_detail.map(detail => {
+          if (detail.order > b && detail.order <= a) {
+            console.log(
+              trip_detail.filter(trip => trip.order === detail.order - 1)[0]
+            );
+            let { attraction_id, day } = trip_detail.filter(
+              trip => trip.order === detail.order - 1
+            )[0];
+            detail.attraction_id = attraction_id;
+            detail.day = day;
+          }
+          if (detail.order === b) {
+            detail.attraction_id = attA;
+            detail.day = Number(droppableId);
+          }
+        });
+
+        trip_detail.sort((a, b) => a.order - b.order);
+      }
+    } else {
+      trip_detail.map(detail => {
+        if (detail.order === source.index) detail.day = Number(droppableId);
+      });
     }
 
     this.setState({
