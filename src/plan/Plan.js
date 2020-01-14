@@ -138,7 +138,9 @@ class Plan extends React.Component {
         let { data } = result;
         data = data.reduce(
           (acc, val) =>
-            val.attraction_id in acc ? acc : [...acc, val.attraction_id],
+            acc.indexOf(val.attraction_id) === -1
+              ? [...acc, val.attraction_id]
+              : acc,
           []
         );
         data.map(async detail => {
