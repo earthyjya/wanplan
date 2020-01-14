@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AttCardList from "./AttCardList";
-import Request from "../lib/Request";
 
 class Timeline extends Component {
   addDay = () => {
@@ -25,9 +24,7 @@ class Timeline extends Component {
           <button className="DelDay" onClick={this.delDay}>
             &#10005;
           </button>
-          <h2>
-            Day {day}
-          </h2>
+          <h2>Day {day}</h2>
         </div>
         <AttCardList {...this.props} />
       </div>

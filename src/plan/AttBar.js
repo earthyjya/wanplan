@@ -13,7 +13,7 @@ class AttBar extends Component {
         ) : this.props.error ? (
           <div>{this.props.error.message}</div>
         ) : (
-          this.props.data.map(dat => <AttBarCard {...dat} />)
+          this.props.data.map(dat => <AttBarCard {...dat} key = {dat.attraction_id.toString()}/>)
         )}
       </div>
     );
