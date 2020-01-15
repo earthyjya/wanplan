@@ -1,8 +1,9 @@
 .AttBar {
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 108px;
-  border: solid 1px;
+  bottom: 0px;
+  border-left: solid 1px;
   width: 33.3%;
   padding: 12px;
 }
@@ -13,7 +14,7 @@
   box-sizing: border-box;
   padding-left: 10px;
   margin: 30px 10% 30px 10%;
-  height: 150px;
+  height: 300px;
   width: auto;
   border-radius: 10px;
   box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
@@ -44,10 +45,4 @@
 .description {
   margin-top: 12px;
   width:200px;
-}
-
-@media(max-width:1494px){
-    .AttBarCard{
-        height:300px;
-    }
 }

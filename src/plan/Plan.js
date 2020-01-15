@@ -56,62 +56,100 @@ class Plan extends React.Component {
   reorderCards = (source, destination) => {
     const { droppableId, index } = destination;
     const { trip_detail } = this.state;
+    const [removed] = trip_detail.splice(source.index - 1, 1);
     let a = source.index;
     let b = index;
-    const attA = trip_detail.filter(trip => trip.order === a)[0].attraction_id;
-    if (index !== 0) {
-      if (a < b) {
-        if (source.droppableId !== droppableId) b -= 1;
-        trip_detail.map(detail => {
-          if (detail.order < b && detail.order >= a) {
-            console.log(
-              trip_detail.filter(trip => trip.order === detail.order + 1)[0]
-            );
-            let { attraction_id, day } = trip_detail.filter(
-              trip => trip.order === detail.order + 1
-            )[0];
-
-            detail.attraction_id = attraction_id;
-            detail.day = day;
-          }
-          if (detail.order === b) {
-            detail.attraction_id = attA;
-            detail.day = Number(droppableId);
-          }
-        });
-      }
-
-      if (a >= b) {
-        trip_detail.sort((a, b) => b.order - a.order);
-        trip_detail.map(detail => {
-          if (detail.order > b && detail.order <= a) {
-            console.log(
-              trip_detail.filter(trip => trip.order === detail.order - 1)[0]
-            );
-            let { attraction_id, day } = trip_detail.filter(
-              trip => trip.order === detail.order - 1
-            )[0];
-            detail.attraction_id = attraction_id;
-            detail.day = day;
-          }
-          if (detail.order === b) {
-            detail.attraction_id = attA;
-            detail.day = Number(droppableId);
-          }
-        });
-
-        trip_detail.sort((a, b) => a.order - b.order);
-      }
+    removed.day = Number(droppableId);
+    if (b !== 0) {
+      if (a < b && source.droppableId !== droppableId) b -= 1;
+      trip_detail.splice(b - 1, 0, removed);
+      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
     } else {
-      trip_detail.map(detail => {
-        if (detail.order === source.index) detail.day = Number(droppableId);
-      });
+      trip_detail.splice(0, 0, removed);
+      trip_detail
+        .sort((a, b) => a.day - b.day)
+        .map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
     }
+
+    // unused, but might be useful when reordering start/end time
+
+    // const attA = trip_detail.filter(trip => trip.order === a)[0].attraction_id;
+    // if (index !== 0) {
+    //   if (a < b) {
+    //     if (source.droppableId !== droppableId) b -= 1;
+    //     trip_detail.map(detail => {
+    //       if (detail.order < b && detail.order >= a) {
+    //         console.log(
+    //           trip_detail.filter(trip => trip.order === detail.order + 1)[0]
+    //         );
+    //         let { attraction_id, day } = trip_detail.filter(
+    //           trip => trip.order === detail.order + 1
+    //         )[0];
+
+    //         detail.attraction_id = attraction_id;
+    //         detail.day = day;
+    //       }
+    //       if (detail.order === b) {
+    //         detail.attraction_id = attA;
+    //         detail.day = Number(droppableId);
+    //       }
+    //     });
+    //   }
+
+    //   if (a >= b) {
+    //     trip_detail.sort((a, b) => b.order - a.order);
+    //     trip_detail.map(detail => {
+    //       if (detail.order > b && detail.order <= a) {
+    //         console.log(
+    //           trip_detail.filter(trip => trip.order === detail.order - 1)[0]
+    //         );
+    //         let { attraction_id, day } = trip_detail.filter(
+    //           trip => trip.order === detail.order - 1
+    //         )[0];
+    //         detail.attraction_id = attraction_id;
+    //         detail.day = day;
+    //       }
+    //       if (detail.order === b) {
+    //         detail.attraction_id = attA;
+    //         detail.day = Number(droppableId);
+    //       }
+    //     });
+
+    //     trip_detail.sort((a, b) => a.order - b.order);
+    //   }
+    // } else {
+    //   trip_detail.map(detail => {
+    //     if (detail.order === a) detail.day = Number(droppableId);
+    //   });
+    // }
 
     this.setState({
       trip_detail
     });
   };
+
+  addCard = (source, destination) => {
+    const { droppableId, index } = destination;
+    const { trip_detail } = this.state;
+    const { user_id, trip_id } = this.state.trip_overview;
+    const toAdd = { trip_id, user_id };
+    toAdd.day = Number(droppableId);
+    toAdd.attraction_id = source.index;
+    if (index !== 0) {
+      trip_detail.splice(index - 1, 0, toAdd);
+      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
+    } else {
+      trip_detail.splice(0, 0, toAdd);
+      trip_detail
+        .sort((a, b) => a.day - b.day)
+        .map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
+    }
+    this.setState({
+      trip_detail
+    });
+  };
+
+  onDragStart = () => {};
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
@@ -231,32 +269,37 @@ class Plan extends React.Component {
                 return;
               }
 
-              this.reorderCards(source, destination);
+              if (source.droppableId !== "bar")
+                this.reorderCards(source, destination);
+              else this.addCard(source, destination);
             }}
+            onDragStart={this.onDragStart}
           >
-            {days.map(day => (
-              <Timeline
-                {...this.state}
-                {...this.props}
-                trip_detail={trip_detail.filter(trip => trip.day === day)}
-                addDay={this.addDay}
-                delDay={this.delDay}
-                day={day}
-                key={day.toString()}
-                changeOrder={this.changeOrder}
-              />
-            ))}
-            <div>
-              <button className="AddDay" onClick={this.addDay}>
-                +
-              </button>
-              <hr style={{ margin: "0px 30px 30px 30px" }} />
+            <div className = "timelineCon">
+              {days.map(day => (
+                <Timeline
+                  {...this.state}
+                  {...this.props}
+                  trip_detail={trip_detail.filter(trip => trip.day === day)}
+                  addDay={this.addDay}
+                  delDay={this.delDay}
+                  day={day}
+                  key={day.toString()}
+                  changeOrder={this.changeOrder}
+                />
+              ))}
+              <div>
+                <button className="AddDay" onClick={this.addDay}>
+                  +
+                </button>
+                <hr style={{ margin: "0px 30px 30px 30px" }} />
+              </div>
             </div>
-          </DragDropContext>
 
-          <Request url={this.props.serverIP + ":3030/attraction"}>
-            {result => <AttBar {...result} />}
-          </Request>
+            <Request url={this.props.serverIP + ":3030/attraction"}>
+              {result => <AttBar {...result} />}
+            </Request>
+          </DragDropContext>
 
           <AttInfo {...this.state} />
         </div>
