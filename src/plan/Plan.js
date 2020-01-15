@@ -128,13 +128,34 @@ class Plan extends React.Component {
     });
   };
 
-  addCard = (source, destination) => {
+  addCard = async (source, destination) => {
     const { droppableId, index } = destination;
     const { trip_detail } = this.state;
     const { user_id, trip_id } = this.state.trip_overview;
     const toAdd = { trip_id, user_id };
     toAdd.day = Number(droppableId);
     toAdd.attraction_id = source.index;
+    console.log(!this.state.attraction.reduce((acc,place) => 
+      (place.attraction_id === source.index) ? false : acc
+    , true))
+    if (!this.state.attraction.reduce((acc,place) => 
+      place.attraction_id === source.index ? true : acc
+    , false)){
+    const { serverIP, jsonPort } = this.props;
+    const url =
+            serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
+          await axios
+            .get(url)
+            .then(result =>
+              this.setState({
+                attraction: [...this.state.attraction, ...result.data]
+              })
+            )
+            .catch(error => {
+              this.setState({ error });
+              console.error(error);
+            });
+          }
     if (index !== 0) {
       trip_detail.splice(index - 1, 0, toAdd);
       trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
@@ -273,7 +294,6 @@ class Plan extends React.Component {
                 this.reorderCards(source, destination);
               else this.addCard(source, destination);
             }}
-            onDragStart={this.onDragStart}
           >
             <div className = "timelineCon">
               {days.map(day => (
@@ -294,7 +314,7 @@ class Plan extends React.Component {
                 </button>
                 <hr style={{ margin: "0px 30px 30px 30px" }} />
               </div>
-            </div>
+              </div>
 
             <Request url={this.props.serverIP + ":3030/attraction"}>
               {result => <AttBar {...result} />}

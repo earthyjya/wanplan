@@ -14,12 +14,13 @@ class AttCardList extends Component {
           type={String}
           direction="vertical"
           isCombineEnabled={false}
+          style = {{overflow : "scroll"}}
         >
           {dropProvided => (
             <div {...dropProvided.droppableProps}>
               <div>
                 <div>
-                  <div ref={dropProvided.innerRef}>
+                  <div  ref={dropProvided.innerRef}>
                     {trip_detail.map(detail => (
                       <Draggable
                         key={detail.order.toString()}

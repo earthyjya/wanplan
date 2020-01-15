@@ -35,8 +35,7 @@ class App extends Component {
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
-
-        <div className= "container1">
+        <div className="container1">
           <BrowserRouter>
             <Route
               path="/home"

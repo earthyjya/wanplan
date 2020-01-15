@@ -290,13 +290,13 @@
 }
 
 .Timeline{
-  width: 66.7%;
+  width: 100%;
   overflow: hidden;
 }
 
 .timelineCon{
   position: absolute;
-  width: 100%;
+  width: 66.7%;
   top: 64px;
 }
 

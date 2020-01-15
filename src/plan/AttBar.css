@@ -3,9 +3,10 @@
   right: 0;
   top: 108px;
   bottom: 0px;
-  border-left: solid 1px;
   width: 33.3%;
   padding: 12px;
+  border-left: solid 1px;
+  overflow-y: scroll;
 }
 
 .AttBarCard {
@@ -33,16 +34,23 @@
 .attName2 {
   font-size: 16px;
   font-weight: bold;
-  width:200px;
+  width: 200px;
 }
 
 .attType2 {
   font-style: italic;
   line-height: 1em;
-  width:200px;
+  width: 200px;
 }
 
 .description {
   margin-top: 12px;
-  width:200px;
+  width: 200px;
+}
+
+.search {
+  position: fixed;
+  top: 108px;
+  right: 0px;
+  z-index: 1;
 }

@@ -6,26 +6,29 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 class AttBar extends Component {
   render() {
     return (
-      <div className="AttBar">
-        <input type="text" placeholder="search" />
-        <div style={{ overflow: "scroll", height: "100%" }}>
-          {this.props.isLoading ? (
-            <div>Loading...</div>
-          ) : this.props.error ? (
-            <div>{this.props.error.message}</div>
-          ) : (
-            <Droppable
-              droppableId={"bar"}
-              isDropDisabled={true}
-              type={String}
-              direction="vertical"
-              isCombineEnabled={false}
-            >
-              {dropProvided => (
-                <div {...dropProvided.droppableProps}>
+      <div >
+        <div className="search">
+          <input type="text" placeholder="search" />
+        </div>
+
+        {this.props.isLoading ? (
+          <div>Loading...</div>
+        ) : this.props.error ? (
+          <div>{this.props.error.message}</div>
+        ) : (
+          <Droppable
+            droppableId={"bar"}
+            isDropDisabled={true}
+            type={String}
+            direction="vertical"
+            isCombineEnabled={false}
+          >
+            {dropProvided => (
+              <div {...dropProvided.droppableProps}>
+                <div>
                   <div>
-                    <div>
-                      <div ref={dropProvided.innerRef}>
+                    <div ref={dropProvided.innerRef}>
+                      <div className="AttBar">
                         {this.props.data.map(dat => (
                           <Draggable
                             key={dat.attraction_id.toString() + "bar"}
@@ -59,10 +62,10 @@ class AttBar extends Component {
                     </div>
                   </div>
                 </div>
-              )}
-            </Droppable>
-          )}
-        </div>
+              </div>
+            )}
+          </Droppable>
+        )}
       </div>
     );
   }
