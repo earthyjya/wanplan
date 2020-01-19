@@ -1,7 +1,6 @@
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline";
-import AttInfo from "./AttInfo";
 import axios from "axios";
 import Request from "../lib/Request.js";
 import AttBar from "./AttBar.js";
@@ -321,7 +320,10 @@ class Plan extends React.Component {
             </Request>
           </DragDropContext>
 
-          <AttInfo {...this.state} />
+          <Request url = {this.props.serverIP + ":3030/attraction"}>
+            {result => <AttBar {...result}/>}
+          </Request>
+
         </div>
       );
   }
