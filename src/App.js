@@ -35,71 +35,72 @@ class App extends Component {
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
+        <div className="container1">
+          <BrowserRouter>
+            <Route
+              path="/home"
+              component={() => (
+                <div>
+                  <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
+                </div>
+              )}
+            />
 
-        <BrowserRouter>
-          <Route
-            path="/home"
-            component={() => (
-              <div>
-                <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
-              </div>
-            )}
-          />
+            <Route
+              path="/myplan"
+              component={() => (
+                <Request
+                  url={
+                    serverIP +
+                    ":" +
+                    jsonPort +
+                    "/trip_overview?user_id=" +
+                    user_id
+                  }
+                >
+                  {result => <MyPlan {...result} />}
+                </Request>
+              )}
+            />
 
-          <Route
-            path="/myplan"
-            component={() => (
-              <Request
-                url={
-                  serverIP +
-                  ":" +
-                  jsonPort +
-                  "/trip_overview?user_id=" +
-                  user_id
-                }
-              >
-                {result => <MyPlan {...result} />}
-              </Request>
-            )}
-          />
+            <Route
+              path="/plan/:trip_id"
+              component={({ match }) => (
+                <Plan trip_id={match.params.trip_id} {...this.state} />
+              )}
+            />
 
-          <Route
-            path="/plan/:trip_id"
-            component={({ match }) => (
-              <Plan trip_id={match.params.trip_id} {...this.state} />
-            )}
-          />
-
-          <Route
-            path="/users"
-            component={() => (
-              <Request url={serverIP + ":" + jsonPort + "/user"}>
-                {result => <User {...result} />}
-              </Request>
-            )}
-          />
-          <Route
-            path="/posts"
-            component={() => (
-              <Request url="https://jsonplaceholder.typicode.com/posts">
-                {result => <Posts {...result} />}
-              </Request>
-            )}
-          />
-          <Route
-            path="/count"
-            render={props => (
-              <Count {...props} serverIP={serverIP + ":" + nodePort} />
-            )}
-          />
-          <Route path="/chat" component={Chatform} />
-          <Route
-            path="/chatroom"
-            render={props => (
-              <Chatroom {...props} serverIP={serverIP + ":" + nodePort} />
-            )}
-          />
-        </BrowserRouter>
+            <Route
+              path="/users"
+              component={() => (
+                <Request url={serverIP + ":" + jsonPort + "/user"}>
+                  {result => <User {...result} />}
+                </Request>
+              )}
+            />
+            <Route
+              path="/posts"
+              component={() => (
+                <Request url="https://jsonplaceholder.typicode.com/posts">
+                  {result => <Posts {...result} />}
+                </Request>
+              )}
+            />
+            <Route
+              path="/count"
+              render={props => (
+                <Count {...props} serverIP={serverIP + ":" + nodePort} />
+              )}
+            />
+            <Route path="/chat" component={Chatform} />
+            <Route
+              path="/chatroom"
+              render={props => (
+                <Chatroom {...props} serverIP={serverIP + ":" + nodePort} />
+              )}
+            />
+          </BrowserRouter>
+        </div>
       </div>
     );
   }
