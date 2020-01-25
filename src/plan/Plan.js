@@ -132,7 +132,7 @@ class Plan extends React.Component {
     const { droppableId, index } = destination;
     const { trip_detail } = this.state;
     const { user_id, trip_id } = this.state.trip_overview;
-    const toAdd = { trip_id, user_id };
+    const toAdd = { trip_id, user_id, start_time : "00:00", end_time : "00:00" };
     toAdd.day = Number(droppableId);
     toAdd.attraction_id = source.index;
     console.log(!this.state.attraction.reduce((acc,place) => 
