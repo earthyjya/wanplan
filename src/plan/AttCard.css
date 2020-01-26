@@ -9,6 +9,7 @@
     max-width: 800px;
     border-radius: 10px;
     box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
+
 }
 .StartTime {
     font-family: sans-serif;
@@ -64,16 +65,26 @@
     margin-top: 14px;
     margin-left: 208px;
     font-family: sans-serif;
+    margin-bottom: 5px;
 }
 .AttDes {
     font-size: 10px;
     font-weight: 100;
+
 }
 .AttDesCont {
-    position: relative;
+    position: absolute;
+    top: 0px;
     font-size: 10px;
     width: auto;
-    height: auto;
+    height: 100px;
     padding: 41px 16px 16px 210px;
-}
 
+}
+.AttDesCont p {
+    white-space: normal;
+    text-overflow: ellipsis;
+    overflow: auto;
+    font-size: 12px;
+    height :200%;
+}
