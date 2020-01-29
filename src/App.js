@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import User from "./user/User";
 import Posts from "./posts/Posts";
+import PostDetail from "./posts/PostDetail";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
 import MyPlan from "./plan/MyPlan";
@@ -79,10 +80,19 @@ class App extends Component {
               )}
             />
             <Route
+              exact
               path="/posts"
               component={() => (
                 <Request url="https://jsonplaceholder.typicode.com/posts">
                   {result => <Posts {...result} />}
+                </Request>
+              )}
+            />
+            <Route
+              path="/posts/:post_id"
+              component={() => (
+                <Request url="https://jsonplaceholder.typicode.com/posts">
+                  {result => <PostDetail {...result} />}
                 </Request>
               )}
             />
