@@ -1,0 +1,40 @@
+.avatar-image{
+    height: 120px;
+    width: 120px;
+    align-self: center;
+    border-radius: 50%;
+}
+
+.card{
+  padding: 0.8rem;
+}
+
+.card-title{
+  font-size: 1.8em;
+  text-align: center;
+}
+
+.card-subtitle{
+  font-size: 0.8em;
+  color: grey;
+  text-align: center;
+}
+
+.tab-content{
+  padding: 0.6rem;
+}
+
+.overview-description-wrap{
+  padding: 0.6rem;
+  padding-top: 0;
+  text-align: justify;
+}
+
+.post-header{
+  min-height: 400px;
+  margin-bottom: -2.6rem;
+}
+
+.post-header-title{
+  bottom: 30px
+}
