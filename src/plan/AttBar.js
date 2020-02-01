@@ -6,7 +6,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 class AttBar extends Component {
   render() {
     return (
-      <div >
+      <div className="att-bar-wrap">
         <div className="search">
           <input type="text" placeholder="search" />
         </div>
@@ -25,41 +25,37 @@ class AttBar extends Component {
           >
             {dropProvided => (
               <div {...dropProvided.droppableProps}>
-                <div>
-                  <div>
-                    <div ref={dropProvided.innerRef}>
-                      <div className="AttBar">
-                        {this.props.data.map(dat => (
-                          <Draggable
-                            key={dat.attraction_id.toString() + "bar"}
-                            draggableId={dat.attraction_id.toString() + "bar"}
-                            index={dat.attraction_id}
+                <div ref={dropProvided.innerRef}>
+                  <div className="AttBar">
+                    {this.props.data.map(dat => (
+                      <Draggable
+                        key={dat.attraction_id.toString() + "bar"}
+                        draggableId={dat.attraction_id.toString() + "bar"}
+                        index={dat.attraction_id}
+                      >
+                        {dragProvided => (
+                          <div
+                            {...dragProvided.dragHandleProps}
+                            {...dragProvided.draggableProps}
+                            ref={dragProvided.innerRef}
                           >
-                            {dragProvided => (
-                              <div
-                                {...dragProvided.dragHandleProps}
-                                {...dragProvided.draggableProps}
-                                ref={dragProvided.innerRef}
-                              >
-                                <div>
-                                  <AttBarCard
-                                    {...dat}
-                                    key={dat.attraction_id.toString()}
-                                  />
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        <span
-                          style={{
-                            display: "none"
-                          }}
-                        >
-                          {dropProvided.placeholder}
-                        </span>
-                      </div>
-                    </div>
+                            <div>
+                              <AttBarCard
+                                {...dat}
+                                key={dat.attraction_id.toString()}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    <span
+                      style={{
+                        display: "none"
+                      }}
+                    >
+                      {dropProvided.placeholder}
+                    </span>
                   </div>
                 </div>
               </div>

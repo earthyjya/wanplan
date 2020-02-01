@@ -6,6 +6,7 @@ import axios from "axios";
 import Request from "../lib/Request.js";
 import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
+import { Row, Col, Container, Button } from "reactstrap";
 
 class Plan extends React.Component {
   state = {
@@ -135,10 +136,10 @@ class Plan extends React.Component {
     const toAdd = { trip_id, user_id };
     toAdd.day = Number(droppableId);
     toAdd.attraction_id = source.index;
-    console.log(!this.state.attraction.reduce((acc,place) => 
+    console.log(!this.state.attraction.reduce((acc,place) =>
       (place.attraction_id === source.index) ? false : acc
     , true))
-    if (!this.state.attraction.reduce((acc,place) => 
+    if (!this.state.attraction.reduce((acc,place) =>
       place.attraction_id === source.index ? true : acc
     , false)){
     const { serverIP, jsonPort } = this.props;
@@ -258,7 +259,11 @@ class Plan extends React.Component {
     if (error) return <div>Can't find the plan</div>;
     else
       return (
-        <div>
+        <React.Fragment>
+          <div
+  					className="post-header"
+  					style={{"backgroundImage": "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)"}}
+  				/>
           <div className="title-bar">
             <div className="city">{city.city_name}</div>
             <div className="title">{trip_overview.trip_name}</div>
@@ -295,34 +300,40 @@ class Plan extends React.Component {
               else this.addCard(source, destination);
             }}
           >
-            <div className = "timelineCon">
-              {days.map(day => (
-                <Timeline
-                  {...this.state}
-                  {...this.props}
-                  trip_detail={trip_detail.filter(trip => trip.day === day)}
-                  addDay={this.addDay}
-                  delDay={this.delDay}
-                  day={day}
-                  key={day.toString()}
-                  changeOrder={this.changeOrder}
-                />
-              ))}
-              <div>
-                <button className="AddDay" onClick={this.addDay}>
-                  +
-                </button>
-                <hr style={{ margin: "0px 30px 30px 30px" }} />
-              </div>
-              </div>
-
-            <Request url={this.props.serverIP + ":3030/attraction"}>
-              {result => <AttBar {...result} />}
-            </Request>
+            <Container fluid>
+              <Row>
+                <Col lg={8}>
+                  <div className = "timelineCon">
+                    {days.map(day => (
+                      <Timeline
+                        {...this.state}
+                        {...this.props}
+                        trip_detail={trip_detail.filter(trip => trip.day === day)}
+                        addDay={this.addDay}
+                        delDay={this.delDay}
+                        day={day}
+                        key={day.toString()}
+                        changeOrder={this.changeOrder}
+                        />
+                    ))}
+                    <div>
+                      <button className="AddDay" onClick={this.addDay}>
+                        +
+                      </button>
+                      <hr style={{ margin: "0px 30px 30px 30px" }} />
+                    </div>
+                  </div>
+                </Col>
+                <Col lg={4}>
+                  <Request url={this.props.serverIP + ":3030/attraction"}>
+                    {result => <AttBar {...result} />}
+                  </Request>
+                </Col>
+              </Row>
+            </Container>
           </DragDropContext>
-
           <AttInfo {...this.state} />
-        </div>
+        </React.Fragment>
       );
   }
 }

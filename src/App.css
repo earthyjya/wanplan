@@ -140,7 +140,7 @@
 }
 
 .title-bar {
-  position: fixed;
+  position: sticky;
   top: 52px;
   width: 100%;
   z-index: 1;
@@ -151,6 +151,8 @@
 
 .title-bar div {
   float: left;
+  position: sticky;
+  top: 52px;
   text-align: center;
   padding: 10px 20px;
   text-decoration: none;
@@ -281,7 +283,7 @@
   background-color: white;
   margin: 10px 5px 10px 25px;
   border: none;
-  font-weight: 700;  
+  font-weight: 700;
 }
 
 .DelDay:hover {
@@ -295,8 +297,6 @@
 }
 
 .timelineCon{
-  position: absolute;
-  width: 66.7%;
   top: 64px;
 }
 

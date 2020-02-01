@@ -25,7 +25,7 @@ class App extends Component {
   render() {
     const { user_id, serverIP, nodePort, jsonPort } = this.state;
     return (
-      <div className="mainpage">
+      <React.Fragment>
         <div className="topnav">
           <a className="wanplan" href="/home">
             WANPLAN
@@ -36,7 +36,6 @@ class App extends Component {
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
-        <div className="container1">
           <BrowserRouter>
             <Route
               path="/home"
@@ -110,8 +109,7 @@ class App extends Component {
               )}
             />
           </BrowserRouter>
-        </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

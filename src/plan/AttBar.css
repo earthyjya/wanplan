@@ -1,12 +1,8 @@
 .AttBar {
-  position: fixed;
   right: 0;
   top: 108px;
   bottom: 0px;
-  width: 33.3%;
   padding: 12px;
-  border-left: solid 1px;
-  overflow-y: scroll;
 }
 
 .AttBarCard {
@@ -49,8 +45,16 @@
 }
 
 .search {
-  position: fixed;
-  top: 108px;
+  position: sticky;
+  top: 20px;
   right: 0px;
   z-index: 1;
+}
+
+.att-bar-wrap{
+  position: sticky;
+  top: 104px;
+  height: calc(100vh - 104px);
+  overflow-y: scroll;
+  border-left: solid 1px;
 }
