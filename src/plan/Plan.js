@@ -132,30 +132,36 @@ class Plan extends React.Component {
     const { droppableId, index } = destination;
     const { trip_detail } = this.state;
     const { user_id, trip_id } = this.state.trip_overview;
-    const toAdd = { trip_id, user_id, start_time : "00:00", end_time : "00:00" };
+    const toAdd = { trip_id, user_id, start_time: "00:00", end_time: "00:00" };
     toAdd.day = Number(droppableId);
     toAdd.attraction_id = source.index;
-    console.log(!this.state.attraction.reduce((acc,place) => 
-      (place.attraction_id === source.index) ? false : acc
-    , true))
-    if (!this.state.attraction.reduce((acc,place) => 
-      place.attraction_id === source.index ? true : acc
-    , false)){
-    const { serverIP, jsonPort } = this.props;
-    const url =
-            serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
-          await axios
-            .get(url)
-            .then(result =>
-              this.setState({
-                attraction: [...this.state.attraction, ...result.data]
-              })
-            )
-            .catch(error => {
-              this.setState({ error });
-              console.error(error);
-            });
-          }
+    console.log(
+      !this.state.attraction.reduce(
+        (acc, place) => (place.attraction_id === source.index ? false : acc),
+        true
+      )
+    );
+    if (
+      !this.state.attraction.reduce(
+        (acc, place) => (place.attraction_id === source.index ? true : acc),
+        false
+      )
+    ) {
+      const { serverIP, jsonPort } = this.props;
+      const url =
+        serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
+      await axios
+        .get(url)
+        .then(result =>
+          this.setState({
+            attraction: [...this.state.attraction, ...result.data]
+          })
+        )
+        .catch(error => {
+          this.setState({ error });
+          console.error(error);
+        });
+    }
     if (index !== 0) {
       trip_detail.splice(index - 1, 0, toAdd);
       trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
@@ -240,7 +246,7 @@ class Plan extends React.Component {
         this.setState({ error, isloading: false });
         console.error(error);
       });
-    var [a, ...rest] = Array(this.state.trip_overview.duration + 1).keys();
+    let [a, ...rest] = Array(this.state.trip_overview.duration + 1).keys();
     this.setState({ days: rest });
   }
 
@@ -295,26 +301,13 @@ class Plan extends React.Component {
               else this.addCard(source, destination);
             }}
           >
-            <div className = "timelineCon">
-              {days.map(day => (
-                <Timeline
-                  {...this.state}
-                  {...this.props}
-                  trip_detail={trip_detail.filter(trip => trip.day === day)}
-                  addDay={this.addDay}
-                  delDay={this.delDay}
-                  day={day}
-                  key={day.toString()}
-                  changeOrder={this.changeOrder}
-                />
-              ))}
-              <div>
-                <button className="AddDay" onClick={this.addDay}>
-                  +
-                </button>
-                <hr style={{ margin: "0px 30px 30px 30px" }} />
-              </div>
-              </div>
+              <Timeline
+                {...this.state}
+                {...this.props}
+                addDay={this.addDay}
+                delDay={this.delDay}
+                changeOrder={this.changeOrder}
+              />
 
             <Request url={this.props.serverIP + ":3030/attraction"}>
               {result => <AttBar {...result} />}

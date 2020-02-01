@@ -2,13 +2,36 @@ import React, { Component } from "react";
 import AttCard from "./AttCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-class AttCardList extends Component {
+class DayTimeline extends Component {
+  addDay = () => {
+    this.props.addDay(this.props.day);
+  };
+
+  delDay = () => {
+    this.props.delDay(this.props.day);
+  };
+
   render() {
     const { isLoading, error, trip_detail, day, attraction } = this.props;
-    if (isLoading) return <div className="AttList">Loading...</div>;
-    if (error) return <div className="AttList">Something went wrong :(</div>;
+    if (isLoading) return <div className="DayTimeline">Loading...</div>;
+    if (error) return <div className="DayTimeline">Something went wrong :(</div>;
     return (
-      <div className="AttList">
+      <div className="DayTimeline">
+
+        <div>
+          <button className="AddDay" onClick={this.addDay}>
+            +
+          </button>
+          <hr style={{ margin: "0px 30px 30px 30px" }} />
+        </div>
+
+        <div>
+          <button className="DelDay" onClick={this.delDay}>
+            &#10005;
+          </button>
+          <h2>Day {day}</h2>
+        </div>
+
         <Droppable
           droppableId={day.toString()}
           type={String}
@@ -58,9 +81,10 @@ class AttCardList extends Component {
             </div>
           )}
         </Droppable>
+
       </div>
     );
   }
 }
 
-export default AttCardList;
+export default DayTimeline;

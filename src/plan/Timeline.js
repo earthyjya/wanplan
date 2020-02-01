@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AttCardList from "./AttCardList";
+import DayTimeline from "./DayTimeline";
 
 class Timeline extends Component {
   addDay = () => {
@@ -11,22 +11,28 @@ class Timeline extends Component {
   };
 
   render() {
-    const { day } = this.props;
+    const {
+      trip_detail,
+      days,
+    } = this.props;
     return (
       <div className="Timeline">
+        {days.map(day => (
+          <DayTimeline
+            {...this.state}
+            {...this.props}
+            trip_detail={trip_detail.filter(trip => trip.day === day)}
+            day={day}
+            key={day.toString()}
+          />
+        ))}
         <div>
           <button className="AddDay" onClick={this.addDay}>
             +
           </button>
           <hr style={{ margin: "0px 30px 30px 30px" }} />
         </div>
-        <div style={{}}>
-          <button className="DelDay" onClick={this.delDay}>
-            &#10005;
-          </button>
-          <h2>Day {day}</h2>
-        </div>
-        <AttCardList {...this.props} />
+
       </div>
     );
   }

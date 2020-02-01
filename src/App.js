@@ -29,7 +29,7 @@ class App extends Component {
           <a className="wanplan" href="/home">
             WANPLAN
           </a>
-          <a href="/myplan">Plan</a>
+          <a href="/plan">Plan</a>
           <a href="/users">Users</a>
           <a href="/posts/">Posts</a>
           <a href="/count">Count</a>
@@ -47,7 +47,8 @@ class App extends Component {
             />
 
             <Route
-              path="/myplan"
+              exact
+              path="/plan"
               component={() => (
                 <Request
                   url={
