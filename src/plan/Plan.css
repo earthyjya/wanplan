@@ -1,0 +1,24 @@
+.plan-header{
+  min-height: 400px;
+  display: flex;
+}
+
+.plan-description-title{
+  font-weight: 400;
+  font-size: 1.4em;
+}
+
+.plan-description{
+  font-size: 0.8em;
+  width: 50%;
+  left: 10px;
+}
+
+.plan-description-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  background-color: rgba(10,5,5,.2);
+  color: rgba(255, 245, 245, 0.9);
+}
