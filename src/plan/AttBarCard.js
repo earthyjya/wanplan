@@ -15,9 +15,10 @@ class AttBarCard extends Component {
         <div style={{ float: "left", margin: "12px" }}>
           <div className="attName2">{attraction_name}</div>
           <div className="attType2">{attraction_type}</div>
+          
           <div className="description">
             <div>
-              opening hours : {open_time} - {close_time}
+              <u> opening hours</u> : {open_time} - {close_time}
             </div>
             <div>{description}</div>
           </div>

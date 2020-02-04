@@ -6,9 +6,11 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 class AttBar extends Component {
   render() {
     return (
+      
       <div >
-        <div className="search">
-          <input type="text" placeholder="search" />
+
+        <div class="search">
+          <input class="search-text" type="text" placeholder="search" />
         </div>
 
         {this.props.isLoading ? (
