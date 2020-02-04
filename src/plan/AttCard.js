@@ -18,10 +18,10 @@ class AttCard extends Component {
       <div className="AttCard">
         <div className="StartTime">{start_time}</div>
         <div className="EndTime">{end_time}</div>
+        <div className="AttName">{attraction.attraction_name}</div>
         <div className="AttTypeCont">
           <div className="AttType">{attraction.attraction_type}</div>
         </div>
-        <div className="AttName">{attraction.attraction_name}</div>
         <img className="AttPhoto" />
 
         <div className="AttDesCont">

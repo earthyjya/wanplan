@@ -13,8 +13,6 @@ class DayTimeline extends Component {
 
   render() {
     const { isLoading, error, trip_detail, day, attraction } = this.props;
-    if (isLoading) return <div className="DayTimeline">Loading...</div>;
-    if (error) return <div className="DayTimeline">Something went wrong :(</div>;
     return (
       <div className="DayTimeline">
 

@@ -1,7 +1,6 @@
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline";
-import AttInfo from "./AttInfo";
 import axios from "axios";
 import Request from "../lib/Request.js";
 import AttBar from "./AttBar.js";
@@ -196,6 +195,7 @@ class Plan extends React.Component {
 
     url =
       serverIP + ":" + jsonPort + "/trip_detail?_sort=order&trip_id=" + trip_id;
+    let attList = [];
     await axios
       .get(url)
       .then(result => {
@@ -208,23 +208,24 @@ class Plan extends React.Component {
               : acc,
           []
         );
-        data.map(async detail => {
-          url =
-            serverIP + ":" + jsonPort + "/attraction?attraction_id=" + detail;
-
-          await axios
-            .get(url)
-            .then(result =>
-              this.setState({
-                attraction: [...this.state.attraction, ...result.data]
-              })
-            )
-            .catch(error => {
-              this.setState({ error });
-              console.error(error);
-            });
-        });
+        attList = data;
       })
+      .catch(error => {
+        this.setState({ error });
+        console.error(error);
+      });
+
+    url = serverIP + ":" + jsonPort + "/attraction?";
+    attList.map(detail => {
+      url = url + "&attraction_id=" + detail;
+    });
+    await axios
+      .get(url)
+      .then(async result =>
+        this.setState({
+          attraction: result.data
+        })
+      )
       .catch(error => {
         this.setState({ error });
         console.error(error);
@@ -243,11 +244,11 @@ class Plan extends React.Component {
         this.setState({ city, isLoading: false });
       })
       .catch(error => {
-        this.setState({ error, isloading: false });
+        this.setState({ error });
         console.error(error);
       });
     let [a, ...rest] = Array(this.state.trip_overview.duration + 1).keys();
-    this.setState({ days: rest });
+    await this.setState({ days: rest, isloading: false });
   }
 
   render() {
@@ -301,20 +302,18 @@ class Plan extends React.Component {
               else this.addCard(source, destination);
             }}
           >
-              <Timeline
-                {...this.state}
-                {...this.props}
-                addDay={this.addDay}
-                delDay={this.delDay}
-                changeOrder={this.changeOrder}
-              />
+            <Timeline
+              {...this.state}
+              {...this.props}
+              addDay={this.addDay}
+              delDay={this.delDay}
+              changeOrder={this.changeOrder}
+            />
 
             <Request url={this.props.serverIP + ":3030/attraction"}>
               {result => <AttBar {...result} />}
             </Request>
           </DragDropContext>
-
-          <AttInfo {...this.state} />
         </div>
       );
   }
