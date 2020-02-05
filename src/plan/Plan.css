@@ -1,6 +1,8 @@
-.plan-header{
-  min-height: 400px;
-  display: flex;
+.avatar-image{
+    height: 60px;
+    width: 60px;
+    align-self: center;
+    border-radius: 50%;
 }
 
 .plan-description-title{
@@ -9,16 +11,20 @@
 }
 
 .plan-description{
-  font-size: 0.8em;
-  width: 50%;
-  left: 10px;
+  font-size: 0.9em;
+  padding: 10px;
+  margin: 10px;
+  border-bottom: solid;
+  border-bottom-width: thin;
 }
 
 .plan-description-container{
+  min-height: 350px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 20px;
-  background-color: rgba(10,5,5,.2);
+  padding: 20px;
+  padding-top: 70px;
+  background-color: rgba(10,5,5,.8);
   color: rgba(255, 245, 245, 0.9);
+  justify-content: flex-end;
 }

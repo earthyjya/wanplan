@@ -7,6 +7,7 @@ import Request from "../lib/Request.js";
 import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Row, Col, Container, Button } from "reactstrap";
+import {Card, CardImg, CardTitle, CardText, CardBody, CardSubtitle} from "reactstrap";
 import "./Plan.css"
 
 class Plan extends React.Component {
@@ -261,15 +262,6 @@ class Plan extends React.Component {
     else
       return (
         <React.Fragment>
-          <div
-  					className="plan-header"
-  					style={{"backgroundImage": "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)"}}
-  				>
-            <Container fluid className="plan-description-container">
-              <div className="plan-description-title"> {trip_overview.trip_name} </div>
-              <div className="plan-description"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
-            </Container>
-          </div>
           <div className="title-bar">
             <div className="city">{city.city_name}</div>
             <div className="title">{trip_overview.trip_name}</div>
@@ -286,7 +278,31 @@ class Plan extends React.Component {
               </span>
             </button>
           </div>
-
+          <Container fluid
+            className="plan-description-container plan-header"
+            style={{"backgroundImage": "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)"}}>
+            <Row>
+              <Col lg={8}>
+                <div className="plan-description"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} lg={6}>
+                <Row style={{'padding':'10px'}}>
+                  <Col sm={'auto'} md={'auto'} lg={'auto'}>
+                      <img
+                        src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                        className="avatar-image"
+                        />
+                  </Col>
+                  <Col>
+                      <div>John Doe</div>
+                      <div>User description</div>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
           {modal ? (
             <div className="share-modal">
               <Share close={this.close} />
