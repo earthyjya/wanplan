@@ -16,8 +16,30 @@ class Plan extends React.Component {
     error: null,
     modal: false,
     days: [],
-    attraction: []
+    attraction: [],
   };
+
+  save = () => {
+    if(localStorage.getItem("triplist") === null)
+    {
+      console.log("meh")
+      var _triplist = [];
+      _triplist[0] = this.state.trip_overview
+      localStorage.setItem("triplist", JSON.stringify(_triplist));
+    }
+    else
+    {
+      console.log("yeah")
+      let _triplist = JSON.parse(localStorage.getItem("triplist"));
+      console.log(_triplist)
+      for (var i = 0; i < _triplist.length; i++) {
+        if (_triplist[i].trip_id == this.state.trip_overview.trip_id)
+          return;
+      }
+      _triplist.push(this.state.trip_overview)
+      localStorage.setItem("triplist", JSON.stringify(_triplist));
+    }
+  }
 
   toggle = () => this.setState({ modal: !this.state.modal });
 
@@ -190,7 +212,6 @@ class Plan extends React.Component {
       this.setState({ isLoading: false, error: true });
       return;
     }
-
     url =
       serverIP + ":" + jsonPort + "/trip_detail?_sort=order&trip_id=" + trip_id;
     await axios
@@ -270,6 +291,9 @@ class Plan extends React.Component {
                 ? trip_overview.duration + " Days Trip"
                 : "One Day Trip"}
             </div>
+            <button className="save" onClick={this.save}>
+              Save!
+            </button>
             <button className="share" onClick={this.toggle}>
               Share!
               <span style={{ fontSize: "15px" }}>
