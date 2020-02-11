@@ -15,7 +15,6 @@ class DayTimeline extends Component {
     const { isLoading, error, trip_detail, day, attraction } = this.props;
     return (
       <div className="DayTimeline">
-
         <div>
           <button className="AddDay" onClick={this.addDay}>
             +
@@ -35,13 +34,26 @@ class DayTimeline extends Component {
           type={String}
           direction="vertical"
           isCombineEnabled={false}
-          style = {{overflow : "scroll"}}
+          style={{ overflow: "scroll" }}
         >
           {dropProvided => (
             <div {...dropProvided.droppableProps}>
               <div>
                 <div>
-                  <div  ref={dropProvided.innerRef}>
+                  <div ref={dropProvided.innerRef}>
+                    <div>
+                      <div>transport</div>
+                      <div>
+                        From Hotel to{" "}
+                        {
+                          attraction.filter(
+                            attract =>
+                              attract.attraction_id ===
+                              trip_detail[0].attraction_id
+                          )[0].attraction_name
+                        }
+                      </div>
+                    </div>
                     {trip_detail.map(detail => (
                       <Draggable
                         key={detail.order.toString()}
@@ -68,6 +80,37 @@ class DayTimeline extends Component {
                                 }
                               />
                             </div>
+                            <div>
+                              <div>transport</div>
+                              <div>
+                                from
+                                {" " +
+                                  attraction.filter(
+                                    attract =>
+                                      attract.attraction_id ===
+                                      detail.attraction_id
+                                  )[0].attraction_name +
+                                  " to "}
+                                {(() => {
+                                  if (
+                                    detail !=
+                                    trip_detail[trip_detail.length - 1]
+                                  ) {
+                                    return attraction.filter(
+                                      attract =>
+                                        attract.attraction_id ===
+                                        trip_detail.filter(
+                                          det =>
+                                            Number(det.order) ===
+                                            Number(detail.order) + 1
+                                        )[0].attraction_id
+                                    )[0].attraction_name;
+                                  } else {
+                                    return "Hotel";
+                                  }
+                                })()}
+                              </div>
+                            </div>
                           </div>
                         )}
                       </Draggable>
@@ -79,7 +122,6 @@ class DayTimeline extends Component {
             </div>
           )}
         </Droppable>
-
       </div>
     );
   }
