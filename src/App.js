@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import User from "./user/User";
 import Posts from "./posts/Posts";
+import PostDetail from "./posts/PostDetail";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
 import MyPlan from "./plan/MyPlan";
@@ -24,7 +25,7 @@ class App extends Component {
   render() {
     const { user_id, serverIP, nodePort, jsonPort } = this.state;
     return (
-      <div className="mainpage">
+      <React.Fragment>
         <div className="topnav">
           <a className="wanplan" href="/home">
             WANPLAN
@@ -35,7 +36,6 @@ class App extends Component {
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
-        <div className="container1">
           <BrowserRouter>
             <Route
               path="/home"
@@ -80,10 +80,19 @@ class App extends Component {
               )}
             />
             <Route
+              exact
               path="/posts"
               component={() => (
                 <Request url="https://jsonplaceholder.typicode.com/posts">
                   {result => <Posts {...result} />}
+                </Request>
+              )}
+            />
+            <Route
+              path="/posts/:post_id"
+              component={() => (
+                <Request url="https://jsonplaceholder.typicode.com/posts">
+                  {result => <PostDetail {...result} />}
                 </Request>
               )}
             />
@@ -101,8 +110,7 @@ class App extends Component {
               )}
             />
           </BrowserRouter>
-        </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

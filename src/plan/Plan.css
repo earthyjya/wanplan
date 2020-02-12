@@ -1,0 +1,30 @@
+.avatar-image{
+    height: 60px;
+    width: 60px;
+    align-self: center;
+    border-radius: 50%;
+}
+
+.plan-description-title{
+  font-weight: 400;
+  font-size: 1.4em;
+}
+
+.plan-description{
+  font-size: 0.9em;
+  padding: 10px;
+  margin: 10px;
+  border-bottom: solid;
+  border-bottom-width: thin;
+}
+
+.plan-description-container{
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  padding-top: 70px;
+  background-color: rgba(10,5,5,.8);
+  color: rgba(255, 245, 245, 0.9);
+  justify-content: flex-end;
+}
