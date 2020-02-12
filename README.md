@@ -73,14 +73,14 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 ## Wanplan REST API Ver 1.0.0 Overview
 
-Table | Available Filter
------------- | -------------
-attraction | city, style
-city | prefecture, region, country
-country | None
-trip_detail | None
-trip_overview | user, city, style
-user | username, email
+Table | Primary Key | Available Filter
+------------ | ------------- | -------------
+attraction | attraction_id | city, style
+city | city_id | prefecture, region, country
+country | country_id | -
+trip_detail | - | -
+trip_overview | trip_id | user, city, style
+user | user_id | username, email
 
 The follow table is for all table except trip_detail.
 
