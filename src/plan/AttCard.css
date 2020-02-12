@@ -18,6 +18,8 @@
     font-size: large;
     font-weight: 700;
     color: grey;
+    border: none;
+    background: none;
 }
 
 .EndTime {

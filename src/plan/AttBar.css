@@ -1,14 +1,9 @@
 .AttBar {
   overflow-wrap: break-word;
-  position: fixed;
   right: 0;
   top: 108px;
   bottom: 0px;
-  width: 33.3%;
   padding: 12px;
-  border-left: 1px solid rgba(0,0,0,.1);
-  overflow-y: scroll;
-
 }
 
 .AttBarCard {
@@ -22,7 +17,6 @@
   width: auto;
   border-radius: 10px;
   box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
-  z-index: 0;
 }
 
 .attPhoto2 {
@@ -46,7 +40,7 @@
   letter-spacing: 0.1em;
   line-height: 0.7em;
   margin-top: 0.7em;
-  padding:5px;
+  padding: 5px;
   background: #fcd328;
   border-radius: 5px;
   float: left;
@@ -55,7 +49,7 @@
 .description {
   overflow-wrap: break-word;
   font-size: 0.8em;
-  margin-top:40px;
+  margin-top: 40px;
   width: 100%;
   line-height: 20px;
 }
@@ -68,20 +62,22 @@
 }
 .search-text {
   border: none;
-  background:none;
-  outline:none;
+  background: lightgrey;
+  outline: none;
   padding: 5px;
   margin-left: 5px;
-  color: white;
+  color: black;
+  border-radius: 10px;
+  width: 95%;
 }
 
-input[type=text]:focus {
+input[type="text"]:focus {
   outline: none !important;
-    border-color: 0px;
-    box-shadow: 0 0 0;
+  border-color: 0px;
+  box-shadow: 0 0 0;
 }
 
-.att-bar-wrap{
+.att-bar-wrap {
   position: sticky;
   top: 104px;
   height: calc(100vh - 104px);
