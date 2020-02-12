@@ -9,8 +9,8 @@ class AttBar extends Component {
       
       <div >
 
-        <div class="search">
-          <input class="search-text" type="text" placeholder="search" />
+        <div className="search">
+          <input className="search-text" type="text" placeholder="search" />
         </div>
 
         {this.props.isLoading ? (

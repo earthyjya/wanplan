@@ -131,22 +131,22 @@ class Plan extends React.Component {
     const { droppableId, index } = destination;
     const { trip_detail } = this.state;
     const { user_id, trip_id } = this.state.trip_overview;
-    const toAdd = { trip_id, user_id, start_time: "00:00", end_time: "00:00" };
+    const { serverIP, jsonPort } = this.props;
+    const toAdd = {
+      trip_id,
+      user_id,
+      start_time: "00:00",
+      end_time: "00:00",
+      time_spend: 0
+    };
     toAdd.day = Number(droppableId);
     toAdd.attraction_id = source.index;
-    console.log(
-      !this.state.attraction.reduce(
-        (acc, place) => (place.attraction_id === source.index ? false : acc),
-        true
-      )
-    );
     if (
       !this.state.attraction.reduce(
         (acc, place) => (place.attraction_id === source.index ? true : acc),
         false
       )
     ) {
-      const { serverIP, jsonPort } = this.props;
       const url =
         serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
       await axios
@@ -173,6 +173,8 @@ class Plan extends React.Component {
     this.setState({
       trip_detail
     });
+    const url = serverIP + ":" + jsonPort + "/trip_detail";
+    // await axios.post(url, trip_detail);
   };
 
   onDragStart = () => {};
@@ -262,7 +264,7 @@ class Plan extends React.Component {
       modal
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Can't find the plan</div>;
+    if (error) return <div>Something went wrong :(</div>;
     else
       return (
         <div>
