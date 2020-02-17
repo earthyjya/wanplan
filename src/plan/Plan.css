@@ -28,3 +28,22 @@
   color: rgba(255, 245, 245, 0.9);
   justify-content: flex-end;
 }
+
+.toast{
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+  border: none !important;
+  background-color: #000000 !important;
+  color: white;
+}
+
+.toast-header{
+  color: black !important;
+  background-color: rgb(255, 206, 0) !important;
+}
+
+.toast-body{
+  color: white !important;
+}

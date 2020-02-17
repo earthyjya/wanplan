@@ -8,6 +8,7 @@ import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Row, Col, Container, Button } from "reactstrap";
 import {Card, CardImg, CardTitle, CardText, CardBody, CardSubtitle} from "reactstrap";
+import {Toast, ToastBody, ToastHeader} from "reactstrap";
 import "./Plan.css"
 
 class Plan extends React.Component {
@@ -15,21 +16,21 @@ class Plan extends React.Component {
     isLoading: true,
     error: null,
     modal: false,
+    toastOpen: false,
     days: [],
     attraction: [],
   };
 
   save = () => {
+    this.openToast()
     if(localStorage.getItem("triplist") === null)
     {
-      console.log("meh")
       var _triplist = [];
       _triplist[0] = this.state.trip_overview
       localStorage.setItem("triplist", JSON.stringify(_triplist));
     }
     else
     {
-      console.log("yeah")
       let _triplist = JSON.parse(localStorage.getItem("triplist"));
       console.log(_triplist)
       for (var i = 0; i < _triplist.length; i++) {
@@ -42,6 +43,14 @@ class Plan extends React.Component {
   }
 
   toggle = () => this.setState({ modal: !this.state.modal });
+
+  openToast = () => {
+    this.setState({toastOpen: true});
+  }
+
+  closeToast = () => {
+    this.setState({toastOpen: false});
+  }
 
   close = () => {
     if (this.state.modal === true) {
@@ -283,6 +292,12 @@ class Plan extends React.Component {
     else
       return (
         <React.Fragment>
+          <Toast isOpen={this.state.toastOpen}>
+            <ToastHeader toggle={this.closeToast}>Plan saved!</ToastHeader>
+            <ToastBody>
+              The plan is saved to your device, view it in plan page!
+            </ToastBody>
+          </Toast>
           <div className="title-bar">
             <div className="city">{city.city_name}</div>
             <div className="title">{trip_overview.trip_name}</div>
