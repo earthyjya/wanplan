@@ -3,6 +3,7 @@ import Share from "./Share";
 import Timeline from "./Timeline";
 import axios from "axios";
 import Request from "../lib/Request.js";
+import { Int2Str } from "../lib/ConvertTime.js";
 import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Row, Col, Container, Button } from "reactstrap";
@@ -29,6 +30,28 @@ class Plan extends React.Component {
     attraction: []
   };
 
+  calPlan = () => {
+    //// Need to be updated when transportations are added
+
+    let _detail = this.state.trip_detail;
+    const { start_day } = this.state.trip_overview;
+    console.log(_detail, start_day);
+    let lastDay = 0,
+      lastTime = 0;
+    for (var i = 0; i < _detail.length; i++) {
+      if (_detail[i].day !== lastDay) {
+        lastDay = _detail[i].day;
+        lastTime = start_day[lastDay - 1];
+      }
+      console.log(lastTime);
+      _detail[i].start_time = Int2Str(lastTime);
+      _detail[i].end_time = Int2Str(lastTime + _detail[i].time_spend);
+      lastTime = lastTime + _detail[i].time_spend;
+    }
+
+    this.setState({ trip_detail: _detail });
+  };
+
   save = () => {
     this.openToast();
     if (localStorage.getItem("triplist") === null) {
@@ -46,8 +69,6 @@ class Plan extends React.Component {
     }
   };
 
-  toggleShareModal = () => this.setState({ modal: !this.state.modal });
-
   openToast = () => {
     this.setState({ toastOpen: true });
   };
@@ -56,10 +77,12 @@ class Plan extends React.Component {
     this.setState({ toastOpen: false });
   };
 
+  openShareModal = () => {
+    this.setState({ modal: true });
+  };
+
   closeShareModal = () => {
-    if (this.state.modal === true) {
-      this.setState({ modal: false });
-    }
+    this.setState({ modal: false });
   };
 
   addDay = day => {
@@ -216,9 +239,13 @@ class Plan extends React.Component {
     // await axios.post(url, trip_detail);
   };
 
-  changeDuration = (order, newDuration) => {
-    let { trip_detail } = this.state;
-  }
+  changeDuration = (source, newDuration) => {
+    let _detail = this.state.trip_detail;
+    console.log(source, newDuration);
+    _detail[source].time_spend = parseInt(newDuration);
+    this.setState({ trip_detail: _detail });
+    this.calPlan();
+  };
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
@@ -325,7 +352,7 @@ class Plan extends React.Component {
             <button className="save" onClick={this.save}>
               Save!
             </button>
-            <button className="share" onClick={this.toggleShareModal}>
+            <button className="share" onClick={this.openShareModal}>
               Share!
               <span style={{ fontSize: "15px" }}>
                 <br />

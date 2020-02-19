@@ -269,7 +269,7 @@
       "user_id": 1,
       "city_id": 2,
       "duration": 2,
-      "start_day": [540, 600],
+      "start_day": [540, 540],
       "trip_style": "Cultural",
       "star_rating": 5.0,
       "updated_time": ""
@@ -281,7 +281,7 @@
       "user_id": 1,
       "city_id": 3,
       "duration": 3,
-      "start_day": [540, 600, 540],
+      "start_day": [540, 540, 540],
       "trip_style": "Sightseeing",
       "star_rating": 1.0,
       "updated_time": ""
