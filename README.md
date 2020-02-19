@@ -70,3 +70,39 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+## Wanplan REST API Ver 1.0.0 Overview
+
+Table | Primary Key | Available Filter
+------------ | ------------- | -------------
+attraction | attraction_id | city, style
+city | city_id | prefecture, region, country
+country | country_id | -
+trip_detail | - | -
+trip_overview | trip_id | user, city, style
+user | user_id | username, email
+
+The follow table is for all table except trip_detail.
+
+HTTP Type | API URL | Comments
+------------ | ------------- | ------------- 
+GET | /api/tableName | Lists rows of table
+POST | /api/tableName | Create a new row
+GET | /api/tableName/:id | Retrieves a row by primary key (except country)
+PUT | /api/tableName/:id | Updates row element by primary key (except city, country)
+DELETE | /api/tableName/:id | Delete a row by primary key
+POST | /api/tableName/:tripId/:newuserId | Duplicates a row by primary key then change user_id (only trip_overview)
+GET | /api/tableName/filterName/:id | Retrieves rows by filter (except country)
+
+
+The follow table is for trip_detail only.
+
+HTTP Type | API URL | Comments
+------------ | ------------- | ------------- 
+POST | /api/tableName | Create a new row
+GET | /api/tableName/:id | Retrieves a row by trip_id
+PUT | /api/tableName/:tripId/:day/:order | Updates row element by composite primary key i.e. trip_id, day, and order
+POST | /api/tableName/:tripId/:newuserId/:newtripId | Duplicates a row by trip_id then change user_id and trip_id 
+DELETE | /api/tableName/trip/:id | Delete a row by trip_id
+DELETE | /api/tableName/trip/:id/:day/:order | Delete a row by composite primary key i.e. trip_id, day, and order
+DELETE | /api/tableName/user/:id | Delete a row by user_id
