@@ -22,7 +22,7 @@ class Share extends React.Component {
             fontSize: "15px",
             fontWeight: "900"
           }}
-          onClick={this.props.close}
+          onClick={this.props.closeShareModal}
         >
           &#10005;
         </div>

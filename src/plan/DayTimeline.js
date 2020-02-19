@@ -71,6 +71,7 @@ class DayTimeline extends Component {
                                 {...detail}
                                 key={detail.order.toString()}
                                 changeOrder={this.props.changeOrder}
+                                changeDuration={this.props.changeDuration}
                                 attraction={
                                   attraction.filter(
                                     attract =>
@@ -93,7 +94,7 @@ class DayTimeline extends Component {
                                   " to "}
                                 {(() => {
                                   if (
-                                    detail !=
+                                    detail !==
                                     trip_detail[trip_detail.length - 1]
                                   ) {
                                     return attraction.filter(

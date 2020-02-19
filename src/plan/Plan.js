@@ -30,37 +30,33 @@ class Plan extends React.Component {
   };
 
   save = () => {
-    this.openToast()
-    if(localStorage.getItem("triplist") === null)
-    {
+    this.openToast();
+    if (localStorage.getItem("triplist") === null) {
       var _triplist = [];
       _triplist[0] = this.state.trip_overview;
       localStorage.setItem("triplist", JSON.stringify(_triplist));
-    }
-    else
-    {
+    } else {
       let _triplist = JSON.parse(localStorage.getItem("triplist"));
       console.log(_triplist);
       for (var i = 0; i < _triplist.length; i++) {
-        if (_triplist[i].trip_id == this.state.trip_overview.trip_id)
-          return;
+        if (_triplist[i].trip_id == this.state.trip_overview.trip_id) return;
       }
       _triplist.push(this.state.trip_overview);
       localStorage.setItem("triplist", JSON.stringify(_triplist));
     }
   };
 
-  toggle = () => this.setState({ modal: !this.state.modal });
+  toggleShareModal = () => this.setState({ modal: !this.state.modal });
 
   openToast = () => {
-    this.setState({toastOpen: true});
-  }
+    this.setState({ toastOpen: true });
+  };
 
   closeToast = () => {
-    this.setState({toastOpen: false});
-  }
+    this.setState({ toastOpen: false });
+  };
 
-  close = () => {
+  closeShareModal = () => {
     if (this.state.modal === true) {
       this.setState({ modal: false });
     }
@@ -220,7 +216,9 @@ class Plan extends React.Component {
     // await axios.post(url, trip_detail);
   };
 
-  onDragStart = () => {};
+  changeDuration = (order, newDuration) => {
+    let { trip_detail } = this.state;
+  }
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
@@ -307,7 +305,7 @@ class Plan extends React.Component {
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
-    else
+    else {
       return (
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
@@ -327,7 +325,7 @@ class Plan extends React.Component {
             <button className="save" onClick={this.save}>
               Save!
             </button>
-            <button className="share" onClick={this.toggle}>
+            <button className="share" onClick={this.toggleShareModal}>
               Share!
               <span style={{ fontSize: "15px" }}>
                 <br />
@@ -379,7 +377,7 @@ class Plan extends React.Component {
           </Container>
           {modal ? (
             <div className="share-modal">
-              <Share close={this.close} />
+              <Share closeShareModal={this.closeShareModal} />
             </div>
           ) : (
             <div></div>
@@ -405,6 +403,7 @@ class Plan extends React.Component {
                     addDay={this.addDay}
                     delDay={this.delDay}
                     changeOrder={this.changeOrder}
+                    changeDuration={this.changeDuration}
                   />
                 </Col>
                 <Col lg={4}>
@@ -417,6 +416,7 @@ class Plan extends React.Component {
           </DragDropContext>
         </React.Fragment>
       );
+    }
   }
 }
 

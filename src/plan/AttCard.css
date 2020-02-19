@@ -9,12 +9,11 @@
     max-width: 800px;
     border-radius: 10px;
     box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
-
 }
 .StartTime {
     font-family: sans-serif;
     position: absolute;
-    margin-top: 10px;
+    top: 10px;
     font-size: large;
     font-weight: 700;
     color: grey;
@@ -25,7 +24,7 @@
 .EndTime {
     font-family: sans-serif;
     position: absolute;
-    margin-top: 30px;
+    top: 30px;
     font-size: medium;
     font-weight: 400;
     color: grey;
@@ -64,29 +63,32 @@
 }
 .AttName {
     position: absolute;
-    margin-top: 14px;
-    margin-left: 208px;
+    top: 14px;
+    left: 236px;
     font-family: sans-serif;
-    margin-bottom: 5px;
 }
 .AttDes {
     font-size: 10px;
     font-weight: 100;
-
 }
 .AttDesCont {
     position: absolute;
-    top: 0px;
+    top: 41px;
+    left: 238px;
     font-size: 10px;
     width: auto;
-    height: 100px;
-    padding: 41px 16px 16px 210px;
-
+    height: 109px;
+    padding: 0px 16px 16px 0px;
 }
 .AttDesCont p {
     white-space: normal;
     text-overflow: ellipsis;
     overflow: auto;
     font-size: 12px;
-    height :200%;
+    height: 100%;
+}
+
+.SelAttDura {
+    position: absolute;
+    top: 50px;
 }
