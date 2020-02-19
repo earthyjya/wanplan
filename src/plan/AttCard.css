@@ -29,6 +29,15 @@
     font-weight: 400;
     color: grey;
 }
+
+.SelAttDura {
+    position: absolute;
+    top: 50px;
+    background: none;
+    border: none;
+    color: grey;
+}
+
 .AttPhoto {
     position: absolute;
     top: 50%;
@@ -86,9 +95,4 @@
     overflow: auto;
     font-size: 12px;
     height: 100%;
-}
-
-.SelAttDura {
-    position: absolute;
-    top: 50px;
 }

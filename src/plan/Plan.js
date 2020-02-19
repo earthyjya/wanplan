@@ -35,8 +35,9 @@ class Plan extends React.Component {
 
     let _detail = this.state.trip_detail;
     const { start_day } = this.state.trip_overview;
-    let lastDay = 0,
-      lastTime = 0;
+    _detail.sort((a,b) => a.order < b.order)
+    let lastDay = 0;
+    let lastTime = 0;
     for (var i = 0; i < _detail.length; i++) {
       if (_detail[i].day !== lastDay) {
         lastDay = _detail[i].day;
@@ -122,12 +123,12 @@ class Plan extends React.Component {
     if (b !== 0) {
       if (a < b && source.droppableId !== droppableId) b -= 1;
       trip_detail.splice(b - 1, 0, removed);
-      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
+      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip)));
     } else {
       trip_detail.splice(0, 0, removed);
       trip_detail
         .sort((a, b) => a.day - b.day)
-        .map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
+        .map(trip => (trip.order = trip_detail.indexOf(trip)));
     }
 
     // unused, but might be useful when reordering start/end time
@@ -224,17 +225,18 @@ class Plan extends React.Component {
     }
     if (index !== 0) {
       trip_detail.splice(index - 1, 0, toAdd);
-      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
+      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip)));
     } else {
       trip_detail.splice(0, 0, toAdd);
       trip_detail
         .sort((a, b) => a.day - b.day)
-        .map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
+        .map(trip => (trip.order = trip_detail.indexOf(trip)));
     }
     this.setState({
       trip_detail
     });
-    const url = serverIP + ":" + jsonPort + "/trip_detail";
+    this.calPlan();
+    // const url = serverIP + ":" + jsonPort + "/trip_detail";
     // await axios.post(url, trip_detail);
   };
 
