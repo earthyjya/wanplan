@@ -35,7 +35,6 @@ class Plan extends React.Component {
 
     let _detail = this.state.trip_detail;
     const { start_day } = this.state.trip_overview;
-    console.log(_detail, start_day);
     let lastDay = 0,
       lastTime = 0;
     for (var i = 0; i < _detail.length; i++) {
@@ -43,7 +42,6 @@ class Plan extends React.Component {
         lastDay = _detail[i].day;
         lastTime = start_day[lastDay - 1];
       }
-      console.log(lastTime);
       _detail[i].start_time = Int2Str(lastTime);
       _detail[i].end_time = Int2Str(lastTime + _detail[i].time_spend);
       lastTime = lastTime + _detail[i].time_spend;
@@ -187,6 +185,7 @@ class Plan extends React.Component {
     this.setState({
       trip_detail
     });
+    this.calPlan();
   };
 
   addCard = async (source, destination) => {
@@ -241,7 +240,6 @@ class Plan extends React.Component {
 
   changeDuration = (source, newDuration) => {
     let _detail = this.state.trip_detail;
-    console.log(source, newDuration);
     _detail[source].time_spend = parseInt(newDuration);
     this.setState({ trip_detail: _detail });
     this.calPlan();
@@ -268,8 +266,8 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        this.setState({ trip_detail: result.data });
-        let { data } = result;
+        this.setState({ trip_detail: result.data[0].itinerary });
+        let data = result.data[0].itinerary;
         data = data.reduce(
           (acc, val) =>
             acc.indexOf(val.attraction_id) === -1

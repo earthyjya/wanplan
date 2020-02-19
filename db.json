@@ -1,7 +1,7 @@
 {
   "user": [
     {
-      "id" : 1,
+      "id": 1,
       "user_id": 1,
       "username": "earthy",
       "name": "",
@@ -13,7 +13,7 @@
       "updated_time": "2020-01-01"
     },
     {
-      "id" : 2,
+      "id": 2,
       "user_id": 2,
       "username": "janat",
       "name": "Janat",
@@ -51,202 +51,166 @@
   ],
   "trip_detail": [
     {
-      "id": 1,
       "trip_id": 1,
       "user_id": 1,
-      "day": 1,
-      "order": 0,
-      "start_time": "09:00",
-      "end_time": "10:00",
-      "time_spend": 60,
-      "attraction_id": 1
+      "itinerary": [
+        {
+          "day": 1,
+          "order": 0,
+          "start_time": "09:00",
+          "end_time": "10:00",
+          "time_spend": 60,
+          "attraction_id": 1
+        },
+        {
+          "day": 1,
+          "order": 1,
+          "start_time": "10:00",
+          "end_time": "12:00",
+          "time_spend": 120,
+          "attraction_id": 2
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "time_spend": 120,
+          "attraction_id": 3
+        }
+      ]
     },
     {
-      "id": 2,
-      "trip_id": 1,
-      "user_id": 1,
-      "day": 1,
-      "order": 1,
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "time_spend": 120,
-      "attraction_id": 2
-    },
-    {
-      "id": 3,
-      "trip_id": 1,
-      "user_id": 1,
-      "day": 1,
-      "order": 2,
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "time_spend": 120,
-      "attraction_id": 3
-    },
-    {
-      "id": 4,
       "trip_id": 2,
       "user_id": 1,
-      "day": 1,
-      "order": 0,
-      "start_time": "09:00",
-      "end_time": "10:00",
-      "time_spend": 60,
-      "attraction_id": 4
+      "itinerary": [
+        {
+          "day": 1,
+          "order": 0,
+          "start_time": "09:00",
+          "end_time": "10:00",
+          "time_spend": 60,
+          "attraction_id": 4
+        },
+        {
+          "day": 1,
+          "order": 1,
+          "start_time": "10:00",
+          "end_time": "12:00",
+          "time_spend": 120,
+          "attraction_id": 5
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "time_spend": 120,
+          "attraction_id": 6
+        },
+        {
+          "day": 2,
+          "order": 3,
+          "start_time": "09:00",
+          "end_time": "10:00",
+          "time_spend": 60,
+          "attraction_id": 1
+        },
+        {
+          "day": 2,
+          "order": 4,
+          "start_time": "10:00",
+          "end_time": "12:00",
+          "time_spend": 120,
+          "attraction_id": 2
+        },
+        {
+          "day": 2,
+          "order": 5,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "time_spend": 120,
+          "attraction_id": 3
+        }
+      ]
     },
     {
-      "id": 5,
-      "trip_id": 2,
-      "user_id": 1,
-      "day": 1,
-      "order": 1,
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "time_spend": 120,
-      "attraction_id": 5
-    },
-    {
-      "id": 6,
-      "trip_id": 2,
-      "user_id": 1,
-      "day": 1,
-      "order": 2,
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "time_spend": 120,
-      "attraction_id": 6
-    },
-    {
-      "id": 7,
-      "trip_id": 2,
-      "user_id": 1,
-      "day": 2,
-      "order": 3,
-      "start_time": "09:00",
-      "end_time": "10:00",
-      "time_spend": 60,
-      "attraction_id": 1
-    },
-    {
-      "id": 8,
-      "trip_id": 2,
-      "user_id": 1,
-      "day": 2,
-      "order": 4,
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "time_spend": 120,
-      "attraction_id": 2
-    },
-    {
-      "id": 9,
-      "trip_id": 2,
-      "user_id": 1,
-      "day": 2,
-      "order": 5,
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "time_spend": 120,
-      "attraction_id": 3
-    },
-    {
-      "id": 10,
       "trip_id": 3,
       "user_id": 1,
-      "day": 1,
-      "order": 0,
-      "start_time": "09:00",
-      "end_time": "10:00",
-      "time_spend": 60,
-      "attraction_id": 1
-    },
-    {
-      "id": 11,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 1,
-      "order": 1,
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "time_spend": 120,
-      "attraction_id": 2
-    },
-    {
-      "id": 12,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 1,
-      "order": 2,
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "time_spend": 120,
-      "attraction_id": 3
-    },
-    {
-      "id": 13,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 2,
-      "order": 3,
-      "start_time": "09:00",
-      "end_time": "10:00",
-      "time_spend": 60,
-      "attraction_id": 4
-    },
-    {
-      "id": 14,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 2,
-      "order": 4,
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "time_spend": 120,
-      "attraction_id": 5
-    },
-    {
-      "id": 15,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 2,
-      "order": 5,
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "time_spend": 120,
-      "attraction_id": 6
-    },
-    {
-      "id": 16,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 3,
-      "order": 6,
-      "start_time": "09:00",
-      "end_time": "10:00",
-      "time_spend": 60,
-      "attraction_id": 4
-    },
-    {
-      "id": 17,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 3,
-      "order": 7,
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "time_spend": 120,
-      "attraction_id": 3
-    },
-    {
-      "id": 18,
-      "trip_id": 3,
-      "user_id": 1,
-      "day": 3,
-      "order": 8,
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "time_spend": 120,
-      "attraction_id": 5
+      "itinerary": [
+        {
+          "day": 1,
+          "order": 0,
+          "start_time": "09:00",
+          "end_time": "10:00",
+          "time_spend": 60,
+          "attraction_id": 1
+        },
+        {
+          "day": 1,
+          "order": 1,
+          "start_time": "10:00",
+          "end_time": "12:00",
+          "time_spend": 120,
+          "attraction_id": 2
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "time_spend": 120,
+          "attraction_id": 3
+        },
+        {
+          "day": 2,
+          "order": 3,
+          "start_time": "09:00",
+          "end_time": "10:00",
+          "time_spend": 60,
+          "attraction_id": 4
+        },
+        {
+          "day": 2,
+          "order": 4,
+          "start_time": "10:00",
+          "end_time": "12:00",
+          "time_spend": 120,
+          "attraction_id": 5
+        },
+        {
+          "day": 2,
+          "order": 5,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "time_spend": 120,
+          "attraction_id": 6
+        },
+        {
+          "day": 3,
+          "order": 6,
+          "start_time": "09:00",
+          "end_time": "10:00",
+          "time_spend": 60,
+          "attraction_id": 4
+        },
+        {
+          "day": 3,
+          "order": 7,
+          "start_time": "10:00",
+          "end_time": "12:00",
+          "time_spend": 120,
+          "attraction_id": 3
+        },
+        {
+          "day": 3,
+          "order": 8,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "time_spend": 120,
+          "attraction_id": 5
+        }
+      ]
     }
   ],
   "trip_overview": [
