@@ -43,15 +43,17 @@ class DayTimeline extends Component {
                   <div ref={dropProvided.innerRef}>
                     <div>
                       <div>transport</div>
-                      <div>
+                      <div className="transport">
                         From Hotel to{" "}
-                        {
-                          attraction.filter(
-                            attract =>
-                              attract.attraction_id ===
-                              trip_detail[0].attraction_id
-                          )[0].attraction_name
-                        }
+                        {(() => {
+                          if (trip_detail.length) {
+                            return attraction.filter(
+                              attract =>
+                                attract.attraction_id ===
+                                trip_detail[0].attraction_id
+                            )[0].attraction_name;
+                          } else return "Nowhere";
+                        })()}
                       </div>
                     </div>
                     {trip_detail.map(detail => (
@@ -83,7 +85,7 @@ class DayTimeline extends Component {
                             </div>
                             <div>
                               <div>transport</div>
-                              <div>
+                              <div className="transport">
                                 from
                                 {" " +
                                   attraction.filter(

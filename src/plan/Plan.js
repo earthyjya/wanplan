@@ -30,12 +30,11 @@ class Plan extends React.Component {
     attraction: []
   };
 
-  calPlan = () => {
+  calPlan = _detail => {
     //// Need to be updated when transportations are added
 
-    let _detail = this.state.trip_detail;
     const { start_day } = this.state.trip_overview;
-    _detail.sort((a,b) => a.order < b.order)
+    _detail.map(trip => (trip.order = _detail.indexOf(trip)));
     let lastDay = 0;
     let lastTime = 0;
     for (var i = 0; i < _detail.length; i++) {
@@ -114,79 +113,19 @@ class Plan extends React.Component {
   };
 
   reorderCards = (source, destination) => {
-    const { droppableId, index } = destination;
-    const { trip_detail } = this.state;
-    const [removed] = trip_detail.splice(source.index - 1, 1);
     let a = source.index;
-    let b = index;
-    removed.day = Number(droppableId);
-    if (b !== 0) {
-      if (a < b && source.droppableId !== droppableId) b -= 1;
-      trip_detail.splice(b - 1, 0, removed);
-      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip)));
-    } else {
-      trip_detail.splice(0, 0, removed);
-      trip_detail
-        .sort((a, b) => a.day - b.day)
-        .map(trip => (trip.order = trip_detail.indexOf(trip)));
-    }
-
-    // unused, but might be useful when reordering start/end time
-
-    // const attA = trip_detail.filter(trip => trip.order === a)[0].attraction_id;
-    // if (index !== 0) {
-    //   if (a < b) {
-    //     if (source.droppableId !== droppableId) b -= 1;
-    //     trip_detail.map(detail => {
-    //       if (detail.order < b && detail.order >= a) {
-    //         console.log(
-    //           trip_detail.filter(trip => trip.order === detail.order + 1)[0]
-    //         );
-    //         let { attraction_id, day } = trip_detail.filter(
-    //           trip => trip.order === detail.order + 1
-    //         )[0];
-
-    //         detail.attraction_id = attraction_id;
-    //         detail.day = day;
-    //       }
-    //       if (detail.order === b) {
-    //         detail.attraction_id = attA;
-    //         detail.day = Number(droppableId);
-    //       }
-    //     });
-    //   }
-
-    //   if (a >= b) {
-    //     trip_detail.sort((a, b) => b.order - a.order);
-    //     trip_detail.map(detail => {
-    //       if (detail.order > b && detail.order <= a) {
-    //         console.log(
-    //           trip_detail.filter(trip => trip.order === detail.order - 1)[0]
-    //         );
-    //         let { attraction_id, day } = trip_detail.filter(
-    //           trip => trip.order === detail.order - 1
-    //         )[0];
-    //         detail.attraction_id = attraction_id;
-    //         detail.day = day;
-    //       }
-    //       if (detail.order === b) {
-    //         detail.attraction_id = attA;
-    //         detail.day = Number(droppableId);
-    //       }
-    //     });
-
-    //     trip_detail.sort((a, b) => a.order - b.order);
-    //   }
-    // } else {
-    //   trip_detail.map(detail => {
-    //     if (detail.order === a) detail.day = Number(droppableId);
-    //   });
-    // }
-
-    this.setState({
-      trip_detail
-    });
-    this.calPlan();
+    let b = destination.index;
+    const daya = Number(source.droppableId);
+    const dayb = Number(destination.droppableId);
+    let _detail = this.state.trip_detail;
+    let [removed] = _detail.splice(a, 1);
+    removed.day = dayb;
+    console.log(a, b, removed);
+    if (a < b && daya !== dayb && b !== 0) b -= 1;
+    _detail.splice(b, 0, removed);
+    console.log(_detail);
+    _detail.sort((a, b) => a.day - b.day);
+    this.calPlan(_detail);
   };
 
   addCard = async (source, destination) => {
@@ -232,12 +171,12 @@ class Plan extends React.Component {
         .sort((a, b) => a.day - b.day)
         .map(trip => (trip.order = trip_detail.indexOf(trip)));
     }
-    this.setState({
-      trip_detail
-    });
-    this.calPlan();
-    // const url = serverIP + ":" + jsonPort + "/trip_detail";
-    // await axios.post(url, trip_detail);
+    this.calPlan(trip_detail);
+  };
+
+  delCard = source => {
+    const { trip_detail } = this.state;
+    const [removed] = trip_detail.splice(source.index, 1);
   };
 
   changeDuration = (source, newDuration) => {

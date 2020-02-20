@@ -15,7 +15,7 @@ class App extends Component {
   state = {
     user_id: 1,
     isLoggedIn: true,
-    serverIP: "http://192.168.2.99",
+    serverIP: "http://localhost",
     nodePort: "8080",
     jsonPort: "3030"
   };
