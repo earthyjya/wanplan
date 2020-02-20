@@ -108,8 +108,8 @@ class Plan extends React.Component {
     this.setState({
       days,
       trip_overview,
-      trip_detail
     });
+    this.calPlan(trip_detail);
   };
 
   reorderCards = (source, destination) => {
@@ -117,36 +117,31 @@ class Plan extends React.Component {
     let b = destination.index;
     const daya = Number(source.droppableId);
     const dayb = Number(destination.droppableId);
-    let _detail = this.state.trip_detail;
-    let [removed] = _detail.splice(a, 1);
+    let { trip_detail } = this.state;
+    let [removed] = trip_detail.splice(a, 1);
     removed.day = dayb;
     console.log(a, b, removed);
     if (a < b && daya !== dayb && b !== 0) b -= 1;
-    _detail.splice(b, 0, removed);
-    console.log(_detail);
-    _detail.sort((a, b) => a.day - b.day);
-    this.calPlan(_detail);
+    trip_detail.splice(b, 0, removed);
+    console.log(trip_detail);
+    trip_detail.sort((a, b) => a.day - b.day);
+    this.calPlan(trip_detail);
   };
 
   addCard = async (source, destination) => {
-    const { droppableId, index } = destination;
+    let { droppableId, index } = destination;
     const { trip_detail } = this.state;
     const { user_id, trip_id } = this.state.trip_overview;
     const { serverIP, jsonPort } = this.props;
     const toAdd = {
       trip_id,
       user_id,
-      start_time: "00:00",
-      end_time: "00:00",
-      time_spend: 0
+      time_spend: 30,    //// Can be changed to "recommended time"
+      day: Number(droppableId),
+      attraction_id: source.index
     };
-    toAdd.day = Number(droppableId);
-    toAdd.attraction_id = source.index;
     if (
-      !this.state.attraction.reduce(
-        (acc, place) => (place.attraction_id === source.index ? true : acc),
-        false
-      )
+      !this.state.attraction.filter(att => att.attraction_id === source.index)
     ) {
       const url =
         serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
@@ -162,15 +157,7 @@ class Plan extends React.Component {
           console.error(error);
         });
     }
-    if (index !== 0) {
-      trip_detail.splice(index - 1, 0, toAdd);
-      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip)));
-    } else {
-      trip_detail.splice(0, 0, toAdd);
-      trip_detail
-        .sort((a, b) => a.day - b.day)
-        .map(trip => (trip.order = trip_detail.indexOf(trip)));
-    }
+    trip_detail.splice(index, 0, toAdd);
     this.calPlan(trip_detail);
   };
 
@@ -206,7 +193,11 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        this.setState({ trip_detail: result.data[0].itinerary });
+        this.setState({
+          trip_detail: result.data[0].itinerary.sort(
+            (a, b) => a.order - b.order
+          )
+        });
         let data = result.data[0].itinerary;
         data = data.reduce(
           (acc, val) =>
