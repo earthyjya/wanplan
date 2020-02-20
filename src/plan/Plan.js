@@ -182,8 +182,7 @@ class Plan extends React.Component {
   changeDuration = (source, newDuration) => {
     let _detail = this.state.trip_detail;
     _detail[source].time_spend = parseInt(newDuration);
-    this.setState({ trip_detail: _detail });
-    this.calPlan();
+    this.calPlan(_detail);
   };
 
   async componentDidMount() {
