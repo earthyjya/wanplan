@@ -1,98 +1,107 @@
 .AttCard {
-    position: relative;
-    background: #f5f6f3;
-    box-sizing: border-box;
-    padding-left: 28px;
-    margin: 30px 13% 30px 13%;
-    height: 150px;
-    width: auto;
-    max-width: 800px;
-    border-radius: 10px;
-    box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
+  position: relative;
+  background: #f5f6f3;
+  box-sizing: border-box;
+  padding-left: 28px;
+  margin: 30px 13% 30px 13%;
+  height: 150px;
+  width: auto;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
 }
+
+.DelCard {
+  color: grey;
+  float: right;
+  cursor: pointer;
+  font-style: 12px;
+  font-weight: 900;
+}
+
 .StartTime {
-    font-family: sans-serif;
-    position: absolute;
-    top: 10px;
-    font-size: large;
-    font-weight: 700;
-    color: grey;
-    border: none;
-    background: none;
+  font-family: sans-serif;
+  position: absolute;
+  top: 10px;
+  font-size: large;
+  font-weight: 700;
+  color: grey;
+  border: none;
+  background: none;
 }
 
 .EndTime {
-    font-family: sans-serif;
-    position: absolute;
-    top: 30px;
-    font-size: medium;
-    font-weight: 400;
-    color: grey;
+  font-family: sans-serif;
+  position: absolute;
+  top: 30px;
+  font-size: medium;
+  font-weight: 400;
+  color: grey;
 }
 
 .SelAttDura {
-    position: absolute;
-    top: 50px;
-    background: none;
-    border: none;
-    color: grey;
+  position: absolute;
+  top: 50px;
+  background: none;
+  border: none;
+  color: grey;
 }
 
 .AttPhoto {
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    height: 120px;
-    width: 120px;
-    left: 100px;
-    border-radius: 10px;
-    border: none;
-    background: #ffffff;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  height: 120px;
+  width: 120px;
+  left: 100px;
+  border-radius: 10px;
+  border: none;
+  background: #ffffff;
 }
 
 .AttTypeCont {
-    position: absolute;
-    margin-top: 84px;
-    background: #fcd328;
-    height: 18px;
-    width: 64px;
-    margin-left: 31px;
-    box-sizing: border-box;
-    border-radius: 7px 7px 0px 0px;
-    transform: rotate(-90deg);
-    text-align: center;
+  position: absolute;
+  margin-top: 84px;
+  background: #fcd328;
+  height: 18px;
+  width: 64px;
+  margin-left: 31px;
+  box-sizing: border-box;
+  border-radius: 7px 7px 0px 0px;
+  transform: rotate(-90deg);
+  text-align: center;
 }
 
 .AttType {
-    margin-top: 2px;
-    font-size: x-small;
+  margin-top: 2px;
+  font-size: x-small;
 
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 .AttName {
-    position: absolute;
-    top: 14px;
-    left: 236px;
-    font-family: sans-serif;
+  position: absolute;
+  top: 14px;
+  left: 236px;
+  font-family: sans-serif;
 }
 .AttDes {
-    font-size: 10px;
-    font-weight: 100;
+  font-size: 10px;
+  font-weight: 100;
 }
 .AttDesCont {
-    position: absolute;
-    top: 41px;
-    left: 238px;
-    font-size: 10px;
-    width: auto;
-    height: 109px;
-    padding: 0px 16px 16px 0px;
+  position: absolute;
+  top: 41px;
+  left: 238px;
+  font-size: 10px;
+  width: auto;
+  height: 109px;
+  padding: 0px 16px 16px 0px;
 }
 .AttDesCont p {
-    white-space: normal;
-    text-overflow: ellipsis;
-    overflow: auto;
-    font-size: 12px;
-    height: 100%;
+  white-space: normal;
+  text-overflow: ellipsis;
+  overflow: auto;
+  font-size: 12px;
+  height: 100%;
 }

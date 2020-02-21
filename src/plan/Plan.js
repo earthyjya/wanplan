@@ -159,6 +159,7 @@ class Plan extends React.Component {
   delCard = source => {
     const { trip_detail } = this.state;
     trip_detail.splice(source.index, 1);
+    this.calPlan(trip_detail);
   };
 
   changeDuration = (source, newDuration) => {
@@ -358,6 +359,7 @@ class Plan extends React.Component {
                     delDay={this.delDay}
                     changeOrder={this.changeOrder}
                     changeDuration={this.changeDuration}
+                    delCard={this.delCard}
                   />
                 </Col>
                 <Col lg={4}>

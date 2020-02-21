@@ -67,6 +67,7 @@ class DayTimeline extends Component {
                                   {...detail}
                                   changeOrder={this.props.changeOrder}
                                   changeDuration={this.props.changeDuration}
+                                  delCard={this.props.delCard}
                                   attraction={
                                     attraction.filter(
                                       attract =>

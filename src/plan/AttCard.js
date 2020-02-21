@@ -7,7 +7,9 @@ class AttCard extends Component {
     this.props.changeDuration(this.props.order, e.target.value);
   };
 
-  delCard = () => {};
+  delCard = () => {
+    this.props.delCard(this.props.order);
+  };
 
   render() {
     const {
@@ -22,6 +24,12 @@ class AttCard extends Component {
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
       <div className="AttCard">
+        <div className="DelCard"
+          
+          onClick={this.delCard}
+        >
+          &#10005;
+        </div>
         <div className="StartTime">{start_time}</div>
         <div className="EndTime">{end_time}</div>
         <div className="AttName">{attraction.attraction_name}</div>
