@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AttCard from "./AttCard";
+import TransCard from "./TransCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class DayTimeline extends Component {
@@ -13,6 +14,8 @@ class DayTimeline extends Component {
 
   render() {
     const { trip_detail, day, attraction } = this.props;
+    let start = "Hotel";
+    let destination = "Sensoji Temple";
     return (
       <div className="DayTimeline">
 
@@ -35,82 +38,72 @@ class DayTimeline extends Component {
               <div>
                 <div>
                   <div ref={dropProvided.innerRef}>
-                    <div>
-                      <div>transport</div>
-                      <div className="transport">
-                        From Hotel to{" "}
-                        {(() => {
-                          if (trip_detail.length) {
-                            return attraction.filter(
-                              attract =>
-                                attract.attraction_id ===
-                                trip_detail[0].attraction_id
-                            )[0].attraction_name;
-                          } else return "Nowhere";
-                        })()}
-                      </div>
-                    </div>
+                    {(() => {
+                      start = "Hotel";
+                      destination = attraction.filter(
+                        attract =>
+                          attract.attraction_id === trip_detail[0].attraction_id
+                      )[0].attraction_name;
+                    })()}
+                    <TransCard start={start} destination={destination} />
                     {trip_detail.map(detail => (
-                      <Draggable
-                        key={detail.order.toString()}
-                        draggableId={detail.order.toString()}
-                        index={detail.order}
-                      >
-                        {dragProvided => (
-                          <div
-                            {...dragProvided.dragHandleProps}
-                            {...dragProvided.draggableProps}
-                            ref={dragProvided.innerRef}
-                          >
-                            <div>
-                              <AttCard
-                                {...detail}
-                                key={detail.order.toString()}
-                                changeOrder={this.props.changeOrder}
-                                changeDuration={this.props.changeDuration}
-                                attraction={
-                                  attraction.filter(
-                                    attract =>
-                                      attract.attraction_id ===
-                                      detail.attraction_id
-                                  )[0]
-                                }
-                              />
-                            </div>
-                            <div>
-                              <div>transport</div>
-                              <div className="transport">
-                                from
-                                {" " +
-                                  attraction.filter(
-                                    attract =>
-                                      attract.attraction_id ===
-                                      detail.attraction_id
-                                  )[0].attraction_name +
-                                  " to "}
-                                {(() => {
-                                  if (
-                                    detail !==
-                                    trip_detail[trip_detail.length - 1]
-                                  ) {
-                                    return attraction.filter(
+                      <div>
+                        <Draggable
+                          key={detail.order.toString()}
+                          draggableId={detail.order.toString()}
+                          index={detail.order}
+                        >
+                          {dragProvided => (
+                            <div
+                              {...dragProvided.dragHandleProps}
+                              {...dragProvided.draggableProps}
+                              ref={dragProvided.innerRef}
+                            >
+                              <div>
+                                <AttCard
+                                  {...detail}
+                                  key={detail.order.toString()}
+                                  changeOrder={this.props.changeOrder}
+                                  attraction={
+                                    attraction.filter(
                                       attract =>
                                         attract.attraction_id ===
-                                        trip_detail.filter(
-                                          det =>
-                                            Number(det.order) ===
-                                            Number(detail.order) + 1
-                                        )[0].attraction_id
-                                    )[0].attraction_name;
-                                  } else {
-                                    return "Hotel";
+                                        detail.attraction_id
+                                    )[0]
                                   }
-                                })()}
+                                />
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </Draggable>
+                          )}
+                        </Draggable>
+                        <div>
+                          {(() => {
+                            start = " " +
+                            attraction.filter(
+                              attract =>
+                                attract.attraction_id === detail.attraction_id
+                            )[0].attraction_name;
+                            destination = (() => {
+                              if (
+                                detail != trip_detail[trip_detail.length - 1]
+                              ) {
+                                return attraction.filter(
+                                  attract =>
+                                    attract.attraction_id ===
+                                    trip_detail.filter(
+                                      det =>
+                                        Number(det.order) ===
+                                        Number(detail.order) + 1
+                                    )[0].attraction_id
+                                )[0].attraction_name;
+                              } else {
+                                return "Hotel";
+                              }
+                            })()
+                          })()}
+                          <TransCard start={start} destination={destination} />
+                        </div>
+                      </div>
                     ))}
                     {dropProvided.placeholder}
                   </div>
