@@ -15,12 +15,6 @@ class DayTimeline extends Component {
     const { trip_detail, day, attraction } = this.props;
     return (
       <div className="DayTimeline">
-        <div>
-          <button className="AddDay" onClick={this.addDay}>
-            +
-          </button>
-          <hr style={{ margin: "0px 30px 30px 30px" }} />
-        </div>
 
         <div>
           <button className="DelDay" onClick={this.delDay}>
@@ -125,6 +119,12 @@ class DayTimeline extends Component {
             </div>
           )}
         </Droppable>
+        <div>
+          <button className="AddDay" onClick={this.addDay}>
+            +
+          </button>
+          <hr style={{ margin: "0px 30px 30px 30px" }} />
+        </div>
       </div>
     );
   }

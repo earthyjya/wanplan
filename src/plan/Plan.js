@@ -87,27 +87,30 @@ class Plan extends React.Component {
     let { days, trip_overview, trip_detail } = this.state;
     days = days.concat(days.length + 1);
     trip_overview.duration += 1;
+    trip_overview.start_day.splice(day, 0, 480);
+    console.log(day);
     trip_detail.map(detail => {
-      if (detail.day >= day) detail.day += 1;
+      if (detail.day > day) detail.day += 1;
     });
     this.setState({
       days,
-      trip_overview,
-      trip_detail
+      trip_overview
     });
+    this.calPlan(trip_detail);
   };
 
   delDay = day => {
     let { days, trip_overview, trip_detail } = this.state;
     days.pop();
     trip_overview.duration -= 1;
+    trip_overview.start_day.splice(day - 1, 1);
     trip_detail = trip_detail.filter(trip => trip.day !== day);
     trip_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
     });
     this.setState({
       days,
-      trip_overview,
+      trip_overview
     });
     this.calPlan(trip_detail);
   };
@@ -136,7 +139,7 @@ class Plan extends React.Component {
     const toAdd = {
       trip_id,
       user_id,
-      time_spend: 30,    //// Can be changed to "recommended time"
+      time_spend: 30, //// Can be changed to "recommended time"
       day: Number(droppableId),
       attraction_id: source.index
     };
