@@ -3,17 +3,11 @@ import Share from "./Share";
 import Timeline from "./Timeline";
 import axios from "axios";
 import Request from "../lib/Request.js";
+import { Int2Str } from "../lib/ConvertTime.js";
 import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Row, Col, Container, Button } from "reactstrap";
-import {
-  Card,
-  CardImg,
-  CardTitle,
-  CardText,
-  CardBody,
-  CardSubtitle
-} from "reactstrap";
+import { Row, Col, Container } from "reactstrap";
+import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import "./Plan.css";
 
 class Plan extends React.Component {
@@ -21,159 +15,128 @@ class Plan extends React.Component {
     isLoading: true,
     error: null,
     modal: false,
+    toastOpen: false,
     days: [],
     attraction: []
   };
 
+  calPlan = _detail => {
+    //// Need to be updated when transportations are added
+
+    const { start_day } = this.state.trip_overview;
+    _detail.map(trip => (trip.order = _detail.indexOf(trip)));
+    let lastDay = 0;
+    let lastTime = 0;
+    for (var i = 0; i < _detail.length; i++) {
+      if (_detail[i].day !== lastDay) {
+        lastDay = _detail[i].day;
+        lastTime = start_day[lastDay - 1];
+      }
+      _detail[i].start_time = Int2Str(lastTime);
+      _detail[i].end_time = Int2Str(lastTime + _detail[i].time_spend);
+      lastTime = lastTime + _detail[i].time_spend;
+    }
+
+    this.setState({ trip_detail: _detail });
+  };
+
   save = () => {
+    this.openToast();
     if (localStorage.getItem("triplist") === null) {
-      console.log("meh");
       var _triplist = [];
       _triplist[0] = this.state.trip_overview;
       localStorage.setItem("triplist", JSON.stringify(_triplist));
     } else {
-      console.log("yeah");
       let _triplist = JSON.parse(localStorage.getItem("triplist"));
       console.log(_triplist);
       for (var i = 0; i < _triplist.length; i++) {
-        if (_triplist[i].trip_id == this.state.trip_overview.trip_id) return;
+        if (_triplist[i].trip_id === this.state.trip_overview.trip_id) return;
       }
       _triplist.push(this.state.trip_overview);
       localStorage.setItem("triplist", JSON.stringify(_triplist));
     }
   };
 
-  toggle = () => this.setState({ modal: !this.state.modal });
+  openToast = () => {
+    this.setState({ toastOpen: true });
+  };
 
-  close = () => {
-    if (this.state.modal === true) {
-      this.setState({ modal: false });
-    }
+  closeToast = () => {
+    this.setState({ toastOpen: false });
+  };
+
+  openShareModal = () => {
+    this.setState({ modal: true });
+  };
+
+  closeShareModal = () => {
+    this.setState({ modal: false });
   };
 
   addDay = day => {
     let { days, trip_overview, trip_detail } = this.state;
     days = days.concat(days.length + 1);
     trip_overview.duration += 1;
+    trip_overview.start_day.splice(day, 0, 480);
+    console.log(day);
     trip_detail.map(detail => {
-      if (detail.day >= day) detail.day += 1;
+      if (detail.day > day) detail.day += 1;
+      return null;
     });
     this.setState({
       days,
-      trip_overview,
-      trip_detail
+      trip_overview
     });
+    this.calPlan(trip_detail);
   };
 
   delDay = day => {
     let { days, trip_overview, trip_detail } = this.state;
     days.pop();
     trip_overview.duration -= 1;
+    trip_overview.start_day.splice(day - 1, 1);
     trip_detail = trip_detail.filter(trip => trip.day !== day);
     trip_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
+      return null;
     });
     this.setState({
       days,
-      trip_overview,
-      trip_detail
+      trip_overview
     });
+    this.calPlan(trip_detail);
   };
 
   reorderCards = (source, destination) => {
-    const { droppableId, index } = destination;
-    const { trip_detail } = this.state;
-    const [removed] = trip_detail.splice(source.index - 1, 1);
     let a = source.index;
-    let b = index;
-    removed.day = Number(droppableId);
-    if (b !== 0) {
-      if (a < b && source.droppableId !== droppableId) b -= 1;
-      trip_detail.splice(b - 1, 0, removed);
-      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
-    } else {
-      trip_detail.splice(0, 0, removed);
-      trip_detail
-        .sort((a, b) => a.day - b.day)
-        .map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
-    }
-
-    // unused, but might be useful when reordering start/end time
-
-    // const attA = trip_detail.filter(trip => trip.order === a)[0].attraction_id;
-    // if (index !== 0) {
-    //   if (a < b) {
-    //     if (source.droppableId !== droppableId) b -= 1;
-    //     trip_detail.map(detail => {
-    //       if (detail.order < b && detail.order >= a) {
-    //         console.log(
-    //           trip_detail.filter(trip => trip.order === detail.order + 1)[0]
-    //         );
-    //         let { attraction_id, day } = trip_detail.filter(
-    //           trip => trip.order === detail.order + 1
-    //         )[0];
-
-    //         detail.attraction_id = attraction_id;
-    //         detail.day = day;
-    //       }
-    //       if (detail.order === b) {
-    //         detail.attraction_id = attA;
-    //         detail.day = Number(droppableId);
-    //       }
-    //     });
-    //   }
-
-    //   if (a >= b) {
-    //     trip_detail.sort((a, b) => b.order - a.order);
-    //     trip_detail.map(detail => {
-    //       if (detail.order > b && detail.order <= a) {
-    //         console.log(
-    //           trip_detail.filter(trip => trip.order === detail.order - 1)[0]
-    //         );
-    //         let { attraction_id, day } = trip_detail.filter(
-    //           trip => trip.order === detail.order - 1
-    //         )[0];
-    //         detail.attraction_id = attraction_id;
-    //         detail.day = day;
-    //       }
-    //       if (detail.order === b) {
-    //         detail.attraction_id = attA;
-    //         detail.day = Number(droppableId);
-    //       }
-    //     });
-
-    //     trip_detail.sort((a, b) => a.order - b.order);
-    //   }
-    // } else {
-    //   trip_detail.map(detail => {
-    //     if (detail.order === a) detail.day = Number(droppableId);
-    //   });
-    // }
-
-    this.setState({
-      trip_detail
-    });
+    let b = destination.index;
+    const daya = Number(source.droppableId);
+    const dayb = Number(destination.droppableId);
+    let { trip_detail } = this.state;
+    let [removed] = trip_detail.splice(a, 1);
+    removed.day = dayb;
+    console.log(a, b, removed);
+    if (a < b && daya !== dayb && b !== 0) b -= 1;
+    trip_detail.splice(b, 0, removed);
+    console.log(trip_detail);
+    trip_detail.sort((a, b) => a.day - b.day);
+    this.calPlan(trip_detail);
   };
 
   addCard = async (source, destination) => {
-    const { droppableId, index } = destination;
+    let { droppableId, index } = destination;
     const { trip_detail } = this.state;
     const { user_id, trip_id } = this.state.trip_overview;
     const { serverIP, jsonPort } = this.props;
     const toAdd = {
       trip_id,
       user_id,
-      start_time: "00:00",
-      end_time: "00:00",
-      time_spend: 0
+      time_spend: 30, //// Can be changed to "recommended time"
+      day: Number(droppableId),
+      attraction_id: source.index
     };
-    toAdd.day = Number(droppableId);
-    toAdd.attraction_id = source.index;
     if (
-      !this.state.attraction.reduce(
-        (acc, place) => (place.attraction_id === source.index ? true : acc),
-        false
-      )
+      !this.state.attraction.filter(att => att.attraction_id === source.index)
     ) {
       const url =
         serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
@@ -189,23 +152,21 @@ class Plan extends React.Component {
           console.error(error);
         });
     }
-    if (index !== 0) {
-      trip_detail.splice(index - 1, 0, toAdd);
-      trip_detail.map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
-    } else {
-      trip_detail.splice(0, 0, toAdd);
-      trip_detail
-        .sort((a, b) => a.day - b.day)
-        .map(trip => (trip.order = trip_detail.indexOf(trip) + 1));
-    }
-    this.setState({
-      trip_detail
-    });
-    const url = serverIP + ":" + jsonPort + "/trip_detail";
-    // await axios.post(url, trip_detail);
+    trip_detail.splice(index, 0, toAdd);
+    this.calPlan(trip_detail);
   };
 
-  onDragStart = () => {};
+  delCard = source => {
+    const { trip_detail } = this.state;
+    trip_detail.splice(source.index, 1);
+    this.calPlan(trip_detail);
+  };
+
+  changeDuration = (source, newDuration) => {
+    let _detail = this.state.trip_detail;
+    _detail[source].time_spend = parseInt(newDuration);
+    this.calPlan(_detail);
+  };
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
@@ -214,7 +175,7 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        const [trip_overview, ...rest] = result.data;
+        const trip_overview = result.data[0];
         this.setState({ trip_overview });
       })
       .catch(error => this.setState({ error }));
@@ -228,8 +189,12 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        this.setState({ trip_detail: result.data });
-        let { data } = result;
+        this.setState({
+          trip_detail: result.data[0].itinerary.sort(
+            (a, b) => a.order - b.order
+          )
+        });
+        let data = result.data[0].itinerary;
         data = data.reduce(
           (acc, val) =>
             acc.indexOf(val.attraction_id) === -1
@@ -247,6 +212,7 @@ class Plan extends React.Component {
     url = serverIP + ":" + jsonPort + "/attraction?";
     attList.map(detail => {
       url = url + "&attraction_id=" + detail;
+      return null;
     });
     await axios
       .get(url)
@@ -269,15 +235,18 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        const [city, ...rest] = result.data;
+        const city = result.data[0];
         this.setState({ city, isLoading: false });
       })
       .catch(error => {
         this.setState({ error });
         console.error(error);
       });
-    let [a, ...rest] = Array(this.state.trip_overview.duration + 1).keys();
-    await this.setState({ days: rest, isloading: false });
+    let days = [];
+    for (var i = 1; i <= this.state.trip_overview.duration; i++) {
+      days.push(i);
+    }
+    await this.setState({ days: days, isloading: false });
   }
 
   render() {
@@ -286,15 +255,19 @@ class Plan extends React.Component {
       error,
       city,
       trip_overview,
-      trip_detail,
-      days,
       modal
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
-    else
+    else {
       return (
         <React.Fragment>
+          <Toast isOpen={this.state.toastOpen}>
+            <ToastHeader toggle={this.closeToast}>Plan saved!</ToastHeader>
+            <ToastBody>
+              The plan is saved to your device, view it in plan page!
+            </ToastBody>
+          </Toast>
           <div className="title-bar">
             <div className="city">{city.city_name}</div>
             <div className="title">{trip_overview.trip_name}</div>
@@ -306,7 +279,7 @@ class Plan extends React.Component {
             <button className="save" onClick={this.save}>
               Save!
             </button>
-            <button className="share" onClick={this.toggle}>
+            <button className="share" onClick={this.openShareModal}>
               Share!
               <span style={{ fontSize: "15px" }}>
                 <br />
@@ -346,6 +319,7 @@ class Plan extends React.Component {
                     <img
                       src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
                       className="avatar-image"
+                      alt="author"
                     />
                   </Col>
                   <Col>
@@ -358,7 +332,7 @@ class Plan extends React.Component {
           </Container>
           {modal ? (
             <div className="share-modal">
-              <Share close={this.close} />
+              <Share closeShareModal={this.closeShareModal} />
             </div>
           ) : (
             <div></div>
@@ -384,6 +358,8 @@ class Plan extends React.Component {
                     addDay={this.addDay}
                     delDay={this.delDay}
                     changeOrder={this.changeOrder}
+                    changeDuration={this.changeDuration}
+                    delCard={this.delCard}
                   />
                 </Col>
                 <Col lg={4}>
@@ -396,6 +372,7 @@ class Plan extends React.Component {
           </DragDropContext>
         </React.Fragment>
       );
+    }
   }
 }
 

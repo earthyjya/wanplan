@@ -3,11 +3,7 @@ import DayTimeline from "./DayTimeline";
 
 class Timeline extends Component {
   addDay = () => {
-    this.props.addDay(this.props.day);
-  };
-
-  delDay = () => {
-    this.props.delDay(this.props.day);
+    this.props.addDay(0);
   };
 
   render() {
@@ -21,6 +17,12 @@ class Timeline extends Component {
     if (error) return <div className="Timeline">Something went wrong :(</div>;
     return (
       <div className="Timeline">
+        <div>
+          <button className="AddDay" onClick={this.addDay}>
+            +
+          </button>
+          <hr style={{ margin: "0px 30px 30px 30px" }} />
+        </div>
         {days.map(day => (
           <DayTimeline
             {...this.state}
@@ -30,12 +32,6 @@ class Timeline extends Component {
             key={day.toString()}
           />
         ))}
-        <div>
-          <button className="AddDay" onClick={this.addDay}>
-            +
-          </button>
-          <hr style={{ margin: "0px 30px 30px 30px" }} />
-        </div>
 
       </div>
     );

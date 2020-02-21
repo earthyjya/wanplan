@@ -22,12 +22,12 @@ class Share extends React.Component {
             fontSize: "15px",
             fontWeight: "900"
           }}
-          onClick={this.props.close}
+          onClick={this.props.closeShareModal}
         >
           &#10005;
         </div>
         <div>
-          <div style={{margin: "10px"}} >Here is your link!</div>
+          <div style={{ margin: "10px" }}>Here is your link!</div>
           <div style={{ display: "inline-flex" }}>
             <input
               value={URL}
@@ -63,8 +63,12 @@ class Share extends React.Component {
             ) : null}
           </div>
           <div>
-            <a href="" className="fa fa-facebook" />
-            <a href="" className="fa fa-twitter" />
+            <a href="www.facebook.com" className="fa fa-facebook">
+              {" "}
+            </a>
+            <a href="www.twitter.com" className="fa fa-twitter">
+              {" "}
+            </a>
           </div>
         </div>
       </div>
