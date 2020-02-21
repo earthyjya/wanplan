@@ -6,18 +6,8 @@ import Request from "../lib/Request.js";
 import { Int2Str } from "../lib/ConvertTime.js";
 import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Row, Col, Container, Button } from "reactstrap";
-import {
-  Card,
-  CardImg,
-  CardTitle,
-  CardText,
-  CardBody,
-  CardSubtitle,
-  Toast,
-  ToastBody,
-  ToastHeader
-} from "reactstrap";
+import { Row, Col, Container } from "reactstrap";
+import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import "./Plan.css";
 
 class Plan extends React.Component {
@@ -60,7 +50,7 @@ class Plan extends React.Component {
       let _triplist = JSON.parse(localStorage.getItem("triplist"));
       console.log(_triplist);
       for (var i = 0; i < _triplist.length; i++) {
-        if (_triplist[i].trip_id == this.state.trip_overview.trip_id) return;
+        if (_triplist[i].trip_id === this.state.trip_overview.trip_id) return;
       }
       _triplist.push(this.state.trip_overview);
       localStorage.setItem("triplist", JSON.stringify(_triplist));
@@ -91,6 +81,7 @@ class Plan extends React.Component {
     console.log(day);
     trip_detail.map(detail => {
       if (detail.day > day) detail.day += 1;
+      return null;
     });
     this.setState({
       days,
@@ -107,6 +98,7 @@ class Plan extends React.Component {
     trip_detail = trip_detail.filter(trip => trip.day !== day);
     trip_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
+      return null;
     });
     this.setState({
       days,
@@ -166,7 +158,7 @@ class Plan extends React.Component {
 
   delCard = source => {
     const { trip_detail } = this.state;
-    const [removed] = trip_detail.splice(source.index, 1);
+    trip_detail.splice(source.index, 1);
   };
 
   changeDuration = (source, newDuration) => {
@@ -182,7 +174,7 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        const [trip_overview, ...rest] = result.data;
+        const trip_overview = result.data[0];
         this.setState({ trip_overview });
       })
       .catch(error => this.setState({ error }));
@@ -219,6 +211,7 @@ class Plan extends React.Component {
     url = serverIP + ":" + jsonPort + "/attraction?";
     attList.map(detail => {
       url = url + "&attraction_id=" + detail;
+      return null;
     });
     await axios
       .get(url)
@@ -241,15 +234,18 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(result => {
-        const [city, ...rest] = result.data;
+        const city = result.data[0];
         this.setState({ city, isLoading: false });
       })
       .catch(error => {
         this.setState({ error });
         console.error(error);
       });
-    let [a, ...rest] = Array(this.state.trip_overview.duration + 1).keys();
-    await this.setState({ days: rest, isloading: false });
+    let days = [];
+    for (var i = 1; i <= this.state.trip_overview.duration; i++) {
+      days.push(i);
+    }
+    await this.setState({ days: days, isloading: false });
   }
 
   render() {
@@ -258,8 +254,6 @@ class Plan extends React.Component {
       error,
       city,
       trip_overview,
-      trip_detail,
-      days,
       modal
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
@@ -324,6 +318,7 @@ class Plan extends React.Component {
                     <img
                       src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
                       className="avatar-image"
+                      alt="author"
                     />
                   </Col>
                   <Col>

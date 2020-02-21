@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class TransCard extends Component {
   render() {

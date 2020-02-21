@@ -18,7 +18,6 @@ class DayTimeline extends Component {
     let destination = "Sensoji Temple";
     return (
       <div className="DayTimeline">
-
         <div>
           <button className="DelDay" onClick={this.delDay}>
             &#10005;
@@ -39,17 +38,21 @@ class DayTimeline extends Component {
                 <div>
                   <div ref={dropProvided.innerRef}>
                     {(() => {
-                      start = "Hotel";
-                      destination = attraction.filter(
-                        attract =>
-                          attract.attraction_id === trip_detail[0].attraction_id
-                      )[0].attraction_name;
+                      if (trip_detail.length) {
+                        destination = attraction.filter(
+                          attract =>
+                            attract.attraction_id ===
+                            trip_detail[0].attraction_id
+                        )[0].attraction_name;
+                        return (
+                          <TransCard start={start} destination={destination} />
+                        );
+                      }
                     })()}
-                    <TransCard start={start} destination={destination} />
                     {trip_detail.map(detail => (
-                      <div>
+                      <div key={detail.order.toString()}>
                         <Draggable
-                          key={detail.order.toString()}
+                          
                           draggableId={detail.order.toString()}
                           index={detail.order}
                         >
@@ -62,8 +65,8 @@ class DayTimeline extends Component {
                               <div>
                                 <AttCard
                                   {...detail}
-                                  key={detail.order.toString()}
                                   changeOrder={this.props.changeOrder}
+                                  changeDuration={this.props.changeDuration}
                                   attraction={
                                     attraction.filter(
                                       attract =>
@@ -76,33 +79,30 @@ class DayTimeline extends Component {
                             </div>
                           )}
                         </Draggable>
-                        <div>
-                          {(() => {
-                            start = " " +
+                        {(() => {
+                          start =
+                            " " +
                             attraction.filter(
                               attract =>
                                 attract.attraction_id === detail.attraction_id
                             )[0].attraction_name;
-                            destination = (() => {
-                              if (
-                                detail != trip_detail[trip_detail.length - 1]
-                              ) {
-                                return attraction.filter(
-                                  attract =>
-                                    attract.attraction_id ===
-                                    trip_detail.filter(
-                                      det =>
-                                        Number(det.order) ===
-                                        Number(detail.order) + 1
-                                    )[0].attraction_id
-                                )[0].attraction_name;
-                              } else {
-                                return "Hotel";
-                              }
-                            })()
-                          })()}
-                          <TransCard start={start} destination={destination} />
-                        </div>
+                          destination = (() => {
+                            if (detail !== trip_detail[trip_detail.length - 1]) {
+                              return attraction.filter(
+                                attract =>
+                                  attract.attraction_id ===
+                                  trip_detail.filter(
+                                    det =>
+                                      Number(det.order) ===
+                                      Number(detail.order) + 1
+                                  )[0].attraction_id
+                              )[0].attraction_name;
+                            } else {
+                              return "Hotel";
+                            }
+                          })();
+                        })()}
+                        <TransCard start={start} destination={destination} />
                       </div>
                     ))}
                     {dropProvided.placeholder}

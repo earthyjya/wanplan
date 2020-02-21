@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./AttCard.css";
 import { LoremIpsum } from "react-lorem-ipsum";
-import { Input } from "reactstrap";
 
 class AttCard extends Component {
-
-  changeDuration = e =>{
+  changeDuration = e => {
     this.props.changeDuration(this.props.order, e.target.value);
-  }
+  };
+
+  delCard = () => {};
 
   render() {
     const {
@@ -16,8 +16,7 @@ class AttCard extends Component {
       attraction,
       start_time,
       end_time,
-      time_spend,
-      order
+      time_spend
     } = this.props;
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
@@ -29,7 +28,7 @@ class AttCard extends Component {
         <div className="AttTypeCont">
           <div className="AttType">{attraction.attraction_type}</div>
         </div>
-        <img className="AttPhoto" />
+        <img className="AttPhoto" alt={attraction.attraction_name} />
 
         <div className="AttDesCont">
           <LoremIpsum
@@ -38,7 +37,11 @@ class AttCard extends Component {
             avgWordsPerSentence={4}
           />
         </div>
-        <select className="SelAttDura" value={time_spend} onChange={this.changeDuration} >
+        <select
+          className="SelAttDura"
+          value={time_spend}
+          onChange={this.changeDuration}
+        >
           <option>0</option>
           <option>10</option>
           <option>20</option>
