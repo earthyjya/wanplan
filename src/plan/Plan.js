@@ -23,8 +23,8 @@ class Plan extends React.Component {
   calPlan = _detail => {
     //// Need to be updated when transportations are added
 
-    const { start_day } = this.state.trip_overview;
-    _detail.map(trip => (trip.order = _detail.indexOf(trip)));
+    const { start_day } = this.state.plan_overview;
+    _detail.map(plan => (plan.order = _detail.indexOf(plan)));
     let lastDay = 0;
     let lastTime = 0;
     for (var i = 0; i < _detail.length; i++) {
@@ -37,23 +37,23 @@ class Plan extends React.Component {
       lastTime = lastTime + _detail[i].time_spend;
     }
 
-    this.setState({ trip_detail: _detail });
+    this.setState({ plan_detail: _detail });
   };
 
   save = () => {
     this.openToast();
-    if (localStorage.getItem("triplist") === null) {
-      var _triplist = [];
-      _triplist[0] = this.state.trip_overview;
-      localStorage.setItem("triplist", JSON.stringify(_triplist));
+    if (localStorage.getItem("planlist") === null) {
+      var _planlist = [];
+      _planlist[0] = this.state.plan_overview;
+      localStorage.setItem("planlist", JSON.stringify(_planlist));
     } else {
-      let _triplist = JSON.parse(localStorage.getItem("triplist"));
-      console.log(_triplist);
-      for (var i = 0; i < _triplist.length; i++) {
-        if (_triplist[i].trip_id === this.state.trip_overview.trip_id) return;
+      let _planlist = JSON.parse(localStorage.getItem("planlist"));
+      console.log(_planlist);
+      for (var i = 0; i < _planlist.length; i++) {
+        if (_planlist[i].plan_id === this.state.plan_overview.plan_id) return;
       }
-      _triplist.push(this.state.trip_overview);
-      localStorage.setItem("triplist", JSON.stringify(_triplist));
+      _planlist.push(this.state.plan_overview);
+      localStorage.setItem("planlist", JSON.stringify(_planlist));
     }
   };
 
@@ -74,37 +74,37 @@ class Plan extends React.Component {
   };
 
   addDay = day => {
-    let { days, trip_overview, trip_detail } = this.state;
+    let { days, plan_overview, plan_detail } = this.state;
     days = days.concat(days.length + 1);
-    trip_overview.duration += 1;
-    trip_overview.start_day.splice(day, 0, 480);
+    plan_overview.duration += 1;
+    plan_overview.start_day.splice(day, 0, 480);
     console.log(day);
-    trip_detail.map(detail => {
+    plan_detail.map(detail => {
       if (detail.day > day) detail.day += 1;
       return null;
     });
     this.setState({
       days,
-      trip_overview
+      plan_overview
     });
-    this.calPlan(trip_detail);
+    this.calPlan(plan_detail);
   };
 
   delDay = day => {
-    let { days, trip_overview, trip_detail } = this.state;
+    let { days, plan_overview, plan_detail } = this.state;
     days.pop();
-    trip_overview.duration -= 1;
-    trip_overview.start_day.splice(day - 1, 1);
-    trip_detail = trip_detail.filter(trip => trip.day !== day);
-    trip_detail.map(detail => {
+    plan_overview.duration -= 1;
+    plan_overview.start_day.splice(day - 1, 1);
+    plan_detail = plan_detail.filter(plan => plan.day !== day);
+    plan_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
       return null;
     });
     this.setState({
       days,
-      trip_overview
+      plan_overview
     });
-    this.calPlan(trip_detail);
+    this.calPlan(plan_detail);
   };
 
   reorderCards = (source, destination) => {
@@ -112,24 +112,24 @@ class Plan extends React.Component {
     let b = destination.index;
     const daya = Number(source.droppableId);
     const dayb = Number(destination.droppableId);
-    let { trip_detail } = this.state;
-    let [removed] = trip_detail.splice(a, 1);
+    let { plan_detail } = this.state;
+    let [removed] = plan_detail.splice(a, 1);
     removed.day = dayb;
     console.log(a, b, removed);
     if (a < b && daya !== dayb && b !== 0) b -= 1;
-    trip_detail.splice(b, 0, removed);
-    console.log(trip_detail);
-    trip_detail.sort((a, b) => a.day - b.day);
-    this.calPlan(trip_detail);
+    plan_detail.splice(b, 0, removed);
+    console.log(plan_detail);
+    plan_detail.sort((a, b) => a.day - b.day);
+    this.calPlan(plan_detail);
   };
 
   addCard = async (source, destination) => {
     let { droppableId, index } = destination;
-    const { trip_detail } = this.state;
-    const { user_id, trip_id } = this.state.trip_overview;
+    const { plan_detail } = this.state;
+    const { user_id, plan_id } = this.state.plan_overview;
     const { serverIP, jsonPort } = this.props;
     const toAdd = {
-      trip_id,
+      plan_id,
       user_id,
       time_spend: 30, //// Can be changed to "recommended time"
       day: Number(droppableId),
@@ -152,45 +152,45 @@ class Plan extends React.Component {
           console.error(error);
         });
     }
-    trip_detail.splice(index, 0, toAdd);
-    this.calPlan(trip_detail);
+    plan_detail.splice(index, 0, toAdd);
+    this.calPlan(plan_detail);
   };
 
   delCard = index => {
-    const { trip_detail } = this.state;
-    trip_detail.splice(index, 1);
-    this.calPlan(trip_detail);
+    const { plan_detail } = this.state;
+    plan_detail.splice(index, 1);
+    this.calPlan(plan_detail);
   };
 
   changeDuration = (source, newDuration) => {
-    let _detail = this.state.trip_detail;
+    let _detail = this.state.plan_detail;
     _detail[source].time_spend = parseInt(newDuration);
     this.calPlan(_detail);
   };
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { serverIP, jsonPort, trip_id } = this.props;
-    let url = serverIP + ":" + jsonPort + "/trip_overview?trip_id=" + trip_id;
+    const { serverIP, jsonPort, plan_id } = this.props;
+    let url = serverIP + ":" + jsonPort + "/plan_overview?plan_id=" + plan_id;
     await axios
       .get(url)
       .then(result => {
-        const trip_overview = result.data[0];
-        this.setState({ trip_overview });
+        const plan_overview = result.data[0];
+        this.setState({ plan_overview });
       })
       .catch(error => this.setState({ error }));
-    if (!this.state.trip_overview) {
+    if (!this.state.plan_overview) {
       this.setState({ isLoading: false, error: true });
       return;
     }
     url =
-      serverIP + ":" + jsonPort + "/trip_detail?_sort=order&trip_id=" + trip_id;
+      serverIP + ":" + jsonPort + "/plan_detail?_sort=order&plan_id=" + plan_id;
     let attList = [];
     await axios
       .get(url)
       .then(result => {
         this.setState({
-          trip_detail: result.data.sort(
+          plan_detail: result.data.sort(
             (a, b) => a.order - b.order
           )
         });
@@ -231,7 +231,7 @@ class Plan extends React.Component {
       ":" +
       jsonPort +
       "/city?city_id=" +
-      this.state.trip_overview.city_id;
+      this.state.plan_overview.city_id;
     await axios
       .get(url)
       .then(result => {
@@ -243,7 +243,7 @@ class Plan extends React.Component {
         console.error(error);
       });
     let days = [];
-    for (var i = 1; i <= this.state.trip_overview.duration; i++) {
+    for (var i = 1; i <= this.state.plan_overview.duration; i++) {
       days.push(i);
     }
     await this.setState({ days: days, isloading: false });
@@ -254,7 +254,7 @@ class Plan extends React.Component {
       isLoading,
       error,
       city,
-      trip_overview,
+      plan_overview,
       modal
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
@@ -270,11 +270,11 @@ class Plan extends React.Component {
           </Toast>
           <div className="title-bar">
             <div className="city">{city.city_name}</div>
-            <div className="title">{trip_overview.trip_name}</div>
+            <div className="title">{plan_overview.plan_name}</div>
             <div className="days">
-              {trip_overview.duration > 1
-                ? trip_overview.duration + " Days Trip"
-                : "One Day Trip"}
+              {plan_overview.duration > 1
+                ? plan_overview.duration + " Days plan"
+                : "One Day plan"}
             </div>
             <button className="save" onClick={this.save}>
               Save!

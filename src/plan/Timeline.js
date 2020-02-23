@@ -8,7 +8,7 @@ class Timeline extends Component {
 
   render() {
     const {
-      trip_detail,
+      plan_detail,
       days,
       isLoading,
       error
@@ -27,7 +27,7 @@ class Timeline extends Component {
           <DayTimeline
             {...this.state}
             {...this.props}
-            trip_detail={trip_detail.filter(trip => trip.day === day)}
+            plan_detail={plan_detail.filter(plan => plan.day === day)}
             day={day}
             key={day.toString()}
           />

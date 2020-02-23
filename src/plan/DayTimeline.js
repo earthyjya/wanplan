@@ -13,7 +13,7 @@ class DayTimeline extends Component {
   };
 
   render() {
-    const { trip_detail, day, attraction } = this.props;
+    const { plan_detail, day, attraction } = this.props;
     let start = "Hotel";
     let destination = "Sensoji Temple";
     return (
@@ -38,18 +38,18 @@ class DayTimeline extends Component {
                 <div>
                   <div ref={dropProvided.innerRef}>
                     {(() => {
-                      if (trip_detail.length) {
+                      if (plan_detail.length) {
                         destination = attraction.filter(
                           attract =>
                             attract.attraction_id ===
-                            trip_detail[0].attraction_id
+                            plan_detail[0].attraction_id
                         )[0].attraction_name;
                         return (
                           <TransCard start={start} destination={destination} />
                         );
                       }
                     })()}
-                    {trip_detail.map(detail => (
+                    {plan_detail.map(detail => (
                       <div key={detail.order.toString()}>
                         <Draggable
                           
@@ -88,11 +88,11 @@ class DayTimeline extends Component {
                                 attract.attraction_id === detail.attraction_id
                             )[0].attraction_name;
                           destination = (() => {
-                            if (detail !== trip_detail[trip_detail.length - 1]) {
+                            if (detail !== plan_detail[plan_detail.length - 1]) {
                               return attraction.filter(
                                 attract =>
                                   attract.attraction_id ===
-                                  trip_detail.filter(
+                                  plan_detail.filter(
                                     det =>
                                       Number(det.order) ===
                                       Number(detail.order) + 1

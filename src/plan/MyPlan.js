@@ -3,12 +3,12 @@ import React, { Component } from "react";
 class MyPlan extends Component {
 
 	savedPlan(){
-		let _planlist = JSON.parse(localStorage.getItem("triplist"));
+		let _planlist = JSON.parse(localStorage.getItem("planlist"));
 		if(_planlist !== null){
 			return(
-				_planlist.map(trip => (
+				_planlist.map(plan => (
 				<div>
-					<a href={"/plan/" + trip.trip_id}>{trip.trip_name}</a>
+					<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
 				</div>
 				))
 			)
@@ -25,9 +25,9 @@ class MyPlan extends Component {
 		return (
 			<React.Fragment>
 				<div>
-					{data.map(trip => (
+					{data.map(plan => (
 						<div>
-							<a href={"/plan/" + trip.trip_id}>{trip.trip_name}</a>
+							<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
 						</div>
 					))}
 				</div>

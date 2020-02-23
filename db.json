@@ -34,9 +34,9 @@
       "updated_time": "2020-01-01"
     }
   ],
-  "trip_detail": [
+  "plan_detail": [
     {
-      "trip_id": 1,
+      "plan_id": 1,
       "user_id": 1,
       "day": 1,
       "order": 0,
@@ -46,7 +46,7 @@
       "attraction_id": 1
     },
     {
-      "trip_id": 1,
+      "plan_id": 1,
       "user_id": 1,
       "day": 1,
       "order": 1,
@@ -56,7 +56,7 @@
       "attraction_id": 2
     },
     {
-      "trip_id": 1,
+      "plan_id": 1,
       "user_id": 1,
       "day": 1,
       "order": 2,
@@ -66,7 +66,7 @@
       "attraction_id": 3
     },
     {
-      "trip_id": 2,
+      "plan_id": 2,
       "user_id": 1,
       "day": 1,
       "order": 0,
@@ -76,7 +76,7 @@
       "attraction_id": 4
     },
     {
-      "trip_id": 2,
+      "plan_id": 2,
       "user_id": 1,
       "day": 1,
       "order": 1,
@@ -86,7 +86,7 @@
       "attraction_id": 5
     },
     {
-      "trip_id": 2,
+      "plan_id": 2,
       "user_id": 1,
       "day": 1,
       "order": 2,
@@ -96,7 +96,7 @@
       "attraction_id": 6
     },
     {
-      "trip_id": 2,
+      "plan_id": 2,
       "user_id": 1,
       "day": 2,
       "order": 3,
@@ -106,7 +106,7 @@
       "attraction_id": 1
     },
     {
-      "trip_id": 2,
+      "plan_id": 2,
       "user_id": 1,
       "day": 2,
       "order": 4,
@@ -116,7 +116,7 @@
       "attraction_id": 2
     },
     {
-      "trip_id": 2,
+      "plan_id": 2,
       "user_id": 1,
       "day": 2,
       "order": 5,
@@ -126,7 +126,7 @@
       "attraction_id": 3
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 1,
       "order": 0,
@@ -136,7 +136,7 @@
       "attraction_id": 1
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 1,
       "order": 1,
@@ -146,7 +146,7 @@
       "attraction_id": 2
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 1,
       "order": 2,
@@ -156,7 +156,7 @@
       "attraction_id": 3
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 2,
       "order": 3,
@@ -166,7 +166,7 @@
       "attraction_id": 4
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 2,
       "order": 4,
@@ -176,7 +176,7 @@
       "attraction_id": 5
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 2,
       "order": 5,
@@ -186,7 +186,7 @@
       "attraction_id": 6
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 3,
       "order": 6,
@@ -196,7 +196,7 @@
       "attraction_id": 4
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 3,
       "order": 7,
@@ -206,7 +206,7 @@
       "attraction_id": 3
     },
     {
-      "trip_id": 3,
+      "plan_id": 3,
       "user_id": 1,
       "day": 3,
       "order": 8,
@@ -216,37 +216,37 @@
       "attraction_id": 5
     }
   ],
-  "trip_overview": [
+  "plan_overview": [
     {
-      "trip_id": 1,
-      "trip_name": "東京 แบบประหยัด",
+      "plan_id": 1,
+      "plan_name": "東京 แบบประหยัด",
       "user_id": 1,
       "city_id": 1,
       "duration": 1,
       "start_day": [540],
-      "trip_style": "Cultural",
+      "plan_style": "Cultural",
       "star_rating": 3.0,
       "updated_time": ""
     },
     {
-      "trip_id": 2,
-      "trip_name": "Osaka hahaha",
+      "plan_id": 2,
+      "plan_name": "Osaka hahaha",
       "user_id": 1,
       "city_id": 2,
       "duration": 2,
       "start_day": [540, 540],
-      "trip_style": "Cultural",
+      "plan_style": "Cultural",
       "star_rating": 5.0,
       "updated_time": ""
     },
     {
-      "trip_id": 3,
-      "trip_name": "FUKUOOOOOOKA",
+      "plan_id": 3,
+      "plan_name": "FUKUOOOOOOKA",
       "user_id": 1,
       "city_id": 3,
       "duration": 3,
       "start_day": [540, 540, 540],
-      "trip_style": "Sightseeing",
+      "plan_style": "Sightseeing",
       "star_rating": 1.0,
       "updated_time": ""
     }

@@ -55,7 +55,7 @@ class App extends Component {
                     serverIP +
                     ":" +
                     jsonPort +
-                    "/trip_overview?user_id=" +
+                    "/plan_overview?user_id=" +
                     user_id
                   }
                 >
@@ -65,9 +65,9 @@ class App extends Component {
             />
 
             <Route
-              path="/plan/:trip_id"
+              path="/plan/:plan_id"
               component={({ match }) => (
-                <Plan trip_id={match.params.trip_id} {...this.state} />
+                <Plan plan_id={match.params.plan_id} {...this.state} />
               )}
             />
 
