@@ -1,7 +1,6 @@
 {
   "user": [
     {
-      "id": 1,
       "user_id": 1,
       "username": "earthy",
       "name": "",
@@ -13,7 +12,6 @@
       "updated_time": "2020-01-01"
     },
     {
-      "id": 2,
       "user_id": 2,
       "username": "janat",
       "name": "Janat",
@@ -25,7 +23,6 @@
       "updated_time": "2020-01-01"
     },
     {
-      "id": 3,
       "user_id": 3,
       "username": "oatsty",
       "name": "",
@@ -39,174 +36,188 @@
   ],
   "trip_detail": [
     {
-      "id": 1,
       "trip_id": 1,
       "user_id": 1,
-      "itinerary": [
-        {
-          "day": 1,
-          "order": 0,
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "time_spend": 60,
-          "attraction_id": 1
-        },
-        {
-          "day": 1,
-          "order": 1,
-          "start_time": "10:00",
-          "end_time": "12:00",
-          "time_spend": 120,
-          "attraction_id": 2
-        },
-        {
-          "day": 1,
-          "order": 2,
-          "start_time": "14:00",
-          "end_time": "16:00",
-          "time_spend": 120,
-          "attraction_id": 3
-        }
-      ]
+      "day": 1,
+      "order": 0,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 1
     },
     {
-      "id": 2,
+      "trip_id": 1,
+      "user_id": 1,
+      "day": 1,
+      "order": 1,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 2
+    },
+    {
+      "trip_id": 1,
+      "user_id": 1,
+      "day": 1,
+      "order": 2,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 3
+    },
+    {
       "trip_id": 2,
       "user_id": 1,
-      "itinerary": [
-        {
-          "day": 1,
-          "order": 0,
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "time_spend": 60,
-          "attraction_id": 4
-        },
-        {
-          "day": 1,
-          "order": 1,
-          "start_time": "10:00",
-          "end_time": "12:00",
-          "time_spend": 120,
-          "attraction_id": 5
-        },
-        {
-          "day": 1,
-          "order": 2,
-          "start_time": "14:00",
-          "end_time": "16:00",
-          "time_spend": 120,
-          "attraction_id": 6
-        },
-        {
-          "day": 2,
-          "order": 3,
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "time_spend": 60,
-          "attraction_id": 1
-        },
-        {
-          "day": 2,
-          "order": 4,
-          "start_time": "10:00",
-          "end_time": "12:00",
-          "time_spend": 120,
-          "attraction_id": 2
-        },
-        {
-          "day": 2,
-          "order": 5,
-          "start_time": "14:00",
-          "end_time": "16:00",
-          "time_spend": 120,
-          "attraction_id": 3
-        }
-      ]
+      "day": 1,
+      "order": 0,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4
     },
     {
-      "id": 3,
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 1,
+      "order": 1,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 5
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 1,
+      "order": 2,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 6
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 2,
+      "order": 3,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 1
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 2,
+      "order": 4,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 2
+    },
+    {
+      "trip_id": 2,
+      "user_id": 1,
+      "day": 2,
+      "order": 5,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 3
+    },
+    {
       "trip_id": 3,
       "user_id": 1,
-      "itinerary": [
-        {
-          "day": 1,
-          "order": 0,
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "time_spend": 60,
-          "attraction_id": 1
-        },
-        {
-          "day": 1,
-          "order": 1,
-          "start_time": "10:00",
-          "end_time": "12:00",
-          "time_spend": 120,
-          "attraction_id": 2
-        },
-        {
-          "day": 1,
-          "order": 2,
-          "start_time": "14:00",
-          "end_time": "16:00",
-          "time_spend": 120,
-          "attraction_id": 3
-        },
-        {
-          "day": 2,
-          "order": 3,
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "time_spend": 60,
-          "attraction_id": 4
-        },
-        {
-          "day": 2,
-          "order": 4,
-          "start_time": "10:00",
-          "end_time": "12:00",
-          "time_spend": 120,
-          "attraction_id": 5
-        },
-        {
-          "day": 2,
-          "order": 5,
-          "start_time": "14:00",
-          "end_time": "16:00",
-          "time_spend": 120,
-          "attraction_id": 6
-        },
-        {
-          "day": 3,
-          "order": 6,
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "time_spend": 60,
-          "attraction_id": 4
-        },
-        {
-          "day": 3,
-          "order": 7,
-          "start_time": "10:00",
-          "end_time": "12:00",
-          "time_spend": 120,
-          "attraction_id": 3
-        },
-        {
-          "day": 3,
-          "order": 8,
-          "start_time": "14:00",
-          "end_time": "16:00",
-          "time_spend": 120,
-          "attraction_id": 5
-        }
-      ]
+      "day": 1,
+      "order": 0,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 1
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 1,
+      "order": 1,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 2
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 1,
+      "order": 2,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 3
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 2,
+      "order": 3,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 2,
+      "order": 4,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 5
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 2,
+      "order": 5,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 6
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 6,
+      "start_time": "09:00",
+      "end_time": "10:00",
+      "time_spend": 60,
+      "attraction_id": 4
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 7,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "time_spend": 120,
+      "attraction_id": 3
+    },
+    {
+      "trip_id": 3,
+      "user_id": 1,
+      "day": 3,
+      "order": 8,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "time_spend": 120,
+      "attraction_id": 5
     }
   ],
   "trip_overview": [
     {
-      "id": 1,
       "trip_id": 1,
       "trip_name": "東京 แบบประหยัด",
       "user_id": 1,
@@ -218,7 +229,6 @@
       "updated_time": ""
     },
     {
-      "id": 2,
       "trip_id": 2,
       "trip_name": "Osaka hahaha",
       "user_id": 1,
@@ -230,7 +240,6 @@
       "updated_time": ""
     },
     {
-      "id": 3,
       "trip_id": 3,
       "trip_name": "FUKUOOOOOOKA",
       "user_id": 1,
@@ -244,7 +253,6 @@
   ],
   "attraction": [
     {
-      "id": 1,
       "attraction_id": 1,
       "attraction_name": "Sensoji Temple",
       "attraction_type": "cultural",
@@ -255,7 +263,6 @@
       "updated_time": ""
     },
     {
-      "id": 2,
       "attraction_id": 2,
       "attraction_name": "Ueno Park",
       "attraction_type": "relax",
@@ -266,7 +273,6 @@
       "updated_time": ""
     },
     {
-      "id": 3,
       "attraction_id": 3,
       "attraction_name": "Tokyo Tower",
       "attraction_type": "sightseeing",
@@ -277,7 +283,6 @@
       "updated_time": ""
     },
     {
-      "id": 4,
       "attraction_id": 4,
       "attraction_name": "Odaiba Kaihin Park",
       "attraction_type": "sightseeing",
@@ -288,7 +293,6 @@
       "updated_time": ""
     },
     {
-      "id": 5,
       "attraction_id": 5,
       "attraction_name": "Tsukiji fish market",
       "attraction_type": "food",
@@ -299,7 +303,6 @@
       "updated_time": ""
     },
     {
-      "id": 6,
       "attraction_id": 6,
       "attraction_name": "Shibuya",
       "attraction_type": "shopping",
@@ -312,261 +315,296 @@
   ],
   "transport": [
     {
-      "id": 1,
       "src_id": 1,
-      "time": [
-        {
-          "des_id": 1,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 2,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 3,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 4,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 5,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 6,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        }
-      ]
+      "des_id": 1,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
     },
     {
-      "id": 2,
+      "src_id": 1,
+      "des_id": 2,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 1,
+      "des_id": 3,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 1,
+      "des_id": 4,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 1,
+      "des_id": 5,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 1,
+      "des_id": 6,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
       "src_id": 2,
-      "time": [
-        {
-          "des_id": 1,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 2,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 3,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 4,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 5,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 6,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        }
-      ]
+      "des_id": 1,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
     },
     {
-      "id": 3,
+      "src_id": 2,
+      "des_id": 2,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 2,
+      "des_id": 3,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 2,
+      "des_id": 4,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 2,
+      "des_id": 5,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 2,
+      "des_id": 6,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
       "src_id": 3,
-      "time": [
-        {
-          "des_id": 1,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 2,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 3,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 4,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 5,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 6,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        }
-      ]
+      "des_id": 1,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
     },
     {
-      "id": 4,
+      "src_id": 3,
+      "des_id": 2,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 3,
+      "des_id": 3,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 3,
+      "des_id": 4,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 3,
+      "des_id": 5,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 3,
+      "des_id": 6,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
       "src_id": 4,
-      "time": [
-        {
-          "des_id": 1,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 2,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 3,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 4,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 5,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 6,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        }
-      ]
+      "des_id": 1,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
     },
     {
-      "id": 5,
+      "src_id": 4,
+      "des_id": 2,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 4,
+      "des_id": 3,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 4,
+      "des_id": 4,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 4,
+      "des_id": 5,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 4,
+      "des_id": 6,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
       "src_id": 5,
-      "time": [
-        {
-          "des_id": 1,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 2,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 3,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 4,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 5,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 6,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        }
-      ]
+      "des_id": 1,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
     },
     {
-      "id": 6,
+      "src_id": 5,
+      "des_id": 2,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 5,
+      "des_id": 3,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 5,
+      "des_id": 4,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 5,
+      "des_id": 5,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 5,
+      "des_id": 6,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
       "src_id": 6,
-      "time": [
-        {
-          "des_id": 1,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 2,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 3,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 4,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 5,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        },
-        {
-          "des_id": 6,
-          "walk": 20,
-          "train": 10,
-          "car": 5
-        }
-      ]
+      "des_id": 1,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 6,
+      "des_id": 2,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 6,
+      "des_id": 3,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 6,
+      "des_id": 4,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 6,
+      "des_id": 5,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
+    },
+    {
+      "src_id": 6,
+      "des_id": 6,
+      "walk": 20,
+      "bicycle": 10,
+      "train": 10,
+      "car": 5
     }
   ],
   "city": [
     {
-      "id": 1,
       "city_id": 1,
       "city_name": "Tokyo",
       "prefecture": "Tokyo",
@@ -575,7 +613,6 @@
       "updated_time": ""
     },
     {
-      "id": 2,
       "city_id": 2,
       "city_name": "Osaka",
       "prefecture": "Osaka",
@@ -584,7 +621,6 @@
       "updated_time": ""
     },
     {
-      "id": 3,
       "city_id": 3,
       "city_name": "Fukuoka",
       "prefecture": "Fukuoka",
@@ -594,7 +630,6 @@
     },
 
     {
-      "id": 4,
       "city_id": 4,
       "city_name": "Kyoto",
       "prefecture": "Kyoto",
@@ -604,7 +639,6 @@
     },
 
     {
-      "id": 5,
       "city_id": 5,
       "city_name": "Takayama",
       "prefecture": "Gifu",
@@ -614,7 +648,6 @@
     },
 
     {
-      "id": 6,
       "city_id": 6,
       "city_name": "Kobe",
       "prefecture": "Hyogo",
@@ -624,7 +657,6 @@
     },
 
     {
-      "id": 7,
       "city_id": 7,
       "city_name": "Yokohama",
       "prefecture": "Kanagawa",
@@ -635,13 +667,11 @@
   ],
   "country": [
     {
-      "id": 1,
       "country_id": 1,
       "country_name": "Japan",
       "continent": "Asia"
     },
     {
-      "id": 2,
       "country_id": 2,
       "country_name": "Thailand",
       "continent": "Asia"

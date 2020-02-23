@@ -190,11 +190,11 @@ class Plan extends React.Component {
       .get(url)
       .then(result => {
         this.setState({
-          trip_detail: result.data[0].itinerary.sort(
+          trip_detail: result.data.sort(
             (a, b) => a.order - b.order
           )
         });
-        let data = result.data[0].itinerary;
+        let {data} = result;
         data = data.reduce(
           (acc, val) =>
             acc.indexOf(val.attraction_id) === -1
