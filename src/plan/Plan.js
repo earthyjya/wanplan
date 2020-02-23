@@ -210,10 +210,14 @@ class Plan extends React.Component {
 
     url = APIServer + "/attraction/";
     attList.map(async detail => {
-      _url = url + detail;
+      let _url = url + detail;
       await axios
         .get(_url)
-        .then(async result => this.setState({ attraction: [...this.state.attraction, ...result.data] }))
+        .then(async result =>
+          this.setState({
+            attraction: [...this.state.attraction, ...result.data]
+          })
+        )
         .catch(error => {
           this.setState({ error });
           console.error(error);
