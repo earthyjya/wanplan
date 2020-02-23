@@ -136,7 +136,7 @@ class Plan extends React.Component {
       attraction_id: source.index
     };
     if (
-      !this.state.attraction.filter(att => att.attraction_id === source.index)
+      this.state.attraction.filter(att => att.attraction_id === source.index).length === 0 
     ) {
       const url =
         serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
@@ -156,9 +156,9 @@ class Plan extends React.Component {
     this.calPlan(trip_detail);
   };
 
-  delCard = source => {
+  delCard = index => {
     const { trip_detail } = this.state;
-    trip_detail.splice(source.index, 1);
+    trip_detail.splice(index, 1);
     this.calPlan(trip_detail);
   };
 

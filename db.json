@@ -35,22 +35,11 @@
       "city": "",
       "origin": "Thailand",
       "updated_time": "2020-01-01"
-    },
-    {
-      "id": 4,
-      "user_id": 4,
-      "username": "jelq",
-      "name": "",
-      "surname": "",
-      "email": "jel.kewcharoen@gmail.com ",
-      "nationality": "Thai",
-      "city": "",
-      "origin": "Thailand",
-      "updated_time": "2020-01-01"
     }
   ],
   "trip_detail": [
     {
+      "id": 1,
       "trip_id": 1,
       "user_id": 1,
       "itinerary": [
@@ -81,6 +70,7 @@
       ]
     },
     {
+      "id": 2,
       "trip_id": 2,
       "user_id": 1,
       "itinerary": [
@@ -135,6 +125,7 @@
       ]
     },
     {
+      "id": 3,
       "trip_id": 3,
       "user_id": 1,
       "itinerary": [
