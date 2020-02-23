@@ -1,5 +1,6 @@
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import "./Share.css";
 
 class Share extends React.Component {
   state = {
@@ -15,52 +16,20 @@ class Share extends React.Component {
     const { URL, copied } = this.state;
     return (
       <div className="share-modal-content">
-        <div
-          style={{
-            float: "right",
-            cursor: "pointer",
-            fontSize: "15px",
-            fontWeight: "900"
-          }}
-          onClick={this.props.closeShareModal}
-        >
+        <div className="close-share-modal" onClick={this.props.closeShareModal}>
           &#10005;
         </div>
         <div>
-          <div style={{ margin: "10px" }}>Here is your link!</div>
-          <div style={{ display: "inline-flex" }}>
-            <input
-              value={URL}
-              style={{
-                border: "none",
-                borderRadius: "4px 0px 0px 4px",
-                width: "300px",
-                height: "35px",
-                padding: "10px"
-              }}
-            />
+          <div>Here is your link!</div>
+          <div className="copy-bar">
+            <input className="url-box" value={"" + URL} readOnly />
             <CopyToClipboard
               text={URL}
               onCopy={() => this.setState({ copied: true })}
             >
-              <button
-                style={{
-                  border: "none",
-                  borderRadius: "0px 4px 4px 0px",
-                  backgroundColor: "lightgray",
-                  height: "35px"
-                }}
-              >
-                Copy
-              </button>
+              <button className="copy-button">Copy</button>
             </CopyToClipboard>
-            {copied ? (
-              <span
-                style={{ color: "lightgray", height: "35px", padding: "5px" }}
-              >
-                Copied.
-              </span>
-            ) : null}
+            {copied ? <span className="copied">Copied</span> : null}
           </div>
           <div>
             <a href="www.facebook.com" className="fa fa-facebook">

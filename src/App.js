@@ -32,9 +32,6 @@ class App extends Component {
           </a>
           <a href="/plan">Plan</a>
           <a href="/users">Users</a>
-          <a href="/posts/">Posts</a>
-          <a href="/count">Count</a>
-          <a href="/chat">Chat</a>
         </div>
         <BrowserRouter>
           <Route

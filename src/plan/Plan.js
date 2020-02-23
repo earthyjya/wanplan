@@ -21,24 +21,24 @@ class Plan extends React.Component {
     attraction: []
   };
 
-  calPlan = _detail => {
+  calPlan = plan_detail => {
     //// Need to be updated when transportations are added
 
     const { start_day } = this.state.plan_overview;
-    _detail.map(plan => (plan.order = _detail.indexOf(plan)));
+    plan_detail.map(plan => (plan.order = plan_detail.indexOf(plan)));
     let lastDay = 0;
     let lastTime = 0;
-    for (var i = 0; i < _detail.length; i++) {
-      if (_detail[i].day !== lastDay) {
-        lastDay = _detail[i].day;
+    for (var i = 0; i < plan_detail.length; i++) {
+      if (plan_detail[i].day !== lastDay) {
+        lastDay = plan_detail[i].day;
         lastTime = start_day[lastDay - 1];
       }
-      _detail[i].start_time = Int2Str(lastTime);
-      _detail[i].end_time = Int2Str(lastTime + _detail[i].time_spend);
-      lastTime = lastTime + _detail[i].time_spend;
+      plan_detail[i].start_time = Int2Str(lastTime);
+      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
+      lastTime = lastTime + plan_detail[i].time_spend;
     }
 
-    this.setState({ plan_detail: _detail });
+    this.setState({ plan_detail });
   };
 
   save = () => {
@@ -49,7 +49,6 @@ class Plan extends React.Component {
       localStorage.setItem("planlist", JSON.stringify(_planlist));
     } else {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
-      console.log(_planlist);
       for (var i = 0; i < _planlist.length; i++) {
         if (_planlist[i].plan_id === this.state.plan_overview.plan_id) return;
       }
@@ -79,7 +78,6 @@ class Plan extends React.Component {
     days = days.concat(days.length + 1);
     plan_overview.duration += 1;
     plan_overview.start_day.splice(day, 0, 480);
-    console.log(day);
     plan_detail.map(detail => {
       if (detail.day > day) detail.day += 1;
       return null;
@@ -116,10 +114,8 @@ class Plan extends React.Component {
     let { plan_detail } = this.state;
     let [removed] = plan_detail.splice(a, 1);
     removed.day = dayb;
-    console.log(a, b, removed);
     if (a < b && daya !== dayb && b !== 0) b -= 1;
     plan_detail.splice(b, 0, removed);
-    console.log(plan_detail);
     plan_detail.sort((a, b) => a.day - b.day);
     this.calPlan(plan_detail);
   };
@@ -165,9 +161,9 @@ class Plan extends React.Component {
   };
 
   changeDuration = (source, newDuration) => {
-    let _detail = this.state.plan_detail;
-    _detail[source].time_spend = parseInt(newDuration);
-    this.calPlan(_detail);
+    const { plan_detail } = this.state;
+    plan_detail[source].time_spend = parseInt(newDuration);
+    this.calPlan(plan_detail);
   };
 
   async componentDidMount() {

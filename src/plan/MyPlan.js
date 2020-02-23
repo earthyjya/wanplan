@@ -5,7 +5,7 @@ class MyPlan extends Component {
 		let _planlist = JSON.parse(localStorage.getItem("planlist"));
 		if (_planlist !== null) {
 			return _planlist.map(plan => (
-				<div>
+				<div key={plan.plan_id}>
 					<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
 				</div>
 			));
@@ -22,7 +22,7 @@ class MyPlan extends Component {
 			<React.Fragment>
 				<div>
 					{data.map(plan => (
-						<div>
+						<div key={plan.plan_id}>
 							<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
 						</div>
 					))}
