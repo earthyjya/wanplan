@@ -15,7 +15,7 @@ class DayTimeline extends Component {
   render() {
     const { plan_detail, day, attraction } = this.props;
     let start = "Hotel";
-    let destination = "Sensoji Temple";
+    let destination = " ";
     return (
       <div className="DayTimeline">
         <div>

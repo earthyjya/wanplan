@@ -124,7 +124,7 @@ class Plan extends React.Component {
     let { droppableId, index } = destination;
     const { plan_detail } = this.state;
     const { user_id, plan_id } = this.state.plan_overview;
-    const { serverIP, jsonPort } = this.props;
+    const { APIServer } = this.props;
     const toAdd = {
       plan_id,
       user_id,
@@ -136,8 +136,7 @@ class Plan extends React.Component {
       this.state.attraction.filter(att => att.attraction_id === source.index)
         .length === 0
     ) {
-      const url =
-        serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
+      const url = APIServer + "/attraction/" + source.index;
       await axios
         .get(url)
         .then(result =>
@@ -168,8 +167,8 @@ class Plan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { serverIP, jsonPort, plan_id, user_id } = this.props;
-    let url = serverIP + ":" + jsonPort + "/plan_overview?plan_id=" + plan_id;
+    const { APIServer, plan_id, user_id } = this.props;
+    let url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .get(url)
       .then(result => {
@@ -182,12 +181,11 @@ class Plan extends React.Component {
       return;
     }
 
-    url = serverIP + ":" + jsonPort + "/user?user_id=" + user_id;
+    url = APIServer + "/user/" + user_id;
     await axios.get(url).then(result => {
       this.setState({ user: result.data[0] });
     });
-    url =
-      serverIP + ":" + jsonPort + "/plan_detail?_sort=order&plan_id=" + plan_id;
+    url = APIServer + "/plan_detail/" + plan_id;
     let attList = [];
     await axios
       .get(url)
@@ -210,29 +208,20 @@ class Plan extends React.Component {
         console.error(error);
       });
 
-    url = serverIP + ":" + jsonPort + "/attraction?";
-    attList.map(detail => {
-      url = url + "&attraction_id=" + detail;
+    url = APIServer + "/attraction/";
+    attList.map(async detail => {
+      _url = url + detail;
+      await axios
+        .get(_url)
+        .then(async result => this.setState({ attraction: [...this.state.attraction, ...result.data] }))
+        .catch(error => {
+          this.setState({ error });
+          console.error(error);
+        });
       return null;
     });
-    await axios
-      .get(url)
-      .then(async result =>
-        this.setState({
-          attraction: result.data
-        })
-      )
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
 
-    url =
-      serverIP +
-      ":" +
-      jsonPort +
-      "/city?city_id=" +
-      this.state.plan_overview.city_id;
+    url = APIServer + "/city/" + this.state.plan_overview.city_id;
     await axios
       .get(url)
       .then(result => {
@@ -316,7 +305,7 @@ class Plan extends React.Component {
                   />
                 </Col>
                 <Col lg={4}>
-                  <Request url={this.props.serverIP + ":3030/attraction"}>
+                  <Request url={this.props.APIServer + "/attraction"}>
                     {result => <AttBar {...result} />}
                   </Request>
                 </Col>
