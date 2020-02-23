@@ -23,6 +23,6 @@ require("./routes/country.routes.js")(app);
 require("./routes/trip_detail.routes.js")(app);
 
 // set port, listen for requests
-app.listen(3000, () => {
-  console.log("Server is running on port 3000.");
+app.listen(3030, () => {
+  console.log("Server is running on port 3030.");
 });
