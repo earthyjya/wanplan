@@ -36,80 +36,80 @@ class App extends Component {
           <a href="/count">Count</a>
           <a href="/chat">Chat</a>
         </div>
-          <BrowserRouter>
-            <Route
-              path="/home"
-              component={() => (
-                <div>
-                  <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
-                </div>
-              )}
-            />
+        <BrowserRouter>
+          <Route
+            path="/home"
+            component={() => (
+              <div>
+                <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
+              </div>
+            )}
+          />
 
-            <Route
-              exact
-              path="/plan"
-              component={() => (
-                <Request
-                  url={
-                    serverIP +
-                    ":" +
-                    jsonPort +
-                    "/plan_overview?user_id=" +
-                    user_id
-                  }
-                >
-                  {result => <MyPlan {...result} />}
-                </Request>
-              )}
-            />
+          <Route
+            exact
+            path="/plan"
+            component={() => (
+              <Request
+                url={
+                  serverIP +
+                  ":" +
+                  jsonPort +
+                  "/plan_overview?user_id=" +
+                  user_id
+                }
+              >
+                {result => <MyPlan {...result} />}
+              </Request>
+            )}
+          />
 
-            <Route
-              path="/plan/:plan_id"
-              component={({ match }) => (
-                <Plan plan_id={match.params.plan_id} {...this.state} />
-              )}
-            />
+          <Route
+            path="/plan/:plan_id"
+            component={({ match }) => (
+              <Plan plan_id={match.params.plan_id} {...this.state} />
+            )}
+          />
 
-            <Route
-              path="/users"
-              component={() => (
-                <Request url={serverIP + ":" + jsonPort + "/user"}>
-                  {result => <User {...result} />}
-                </Request>
-              )}
-            />
-            <Route
-              exact
-              path="/posts"
-              component={() => (
-                <Request url="https://jsonplaceholder.typicode.com/posts">
-                  {result => <Posts {...result} />}
-                </Request>
-              )}
-            />
-            <Route
-              path="/posts/:post_id"
-              component={() => (
-                <Request url="https://jsonplaceholder.typicode.com/posts">
-                  {result => <PostDetail {...result} />}
-                </Request>
-              )}
-            />
-            <Route
-              path="/count"
-              render={props => (
-                <Count {...props} serverIP={serverIP + ":" + nodePort} />
-              )}
-            />
-            <Route path="/chat" component={Chatform} />
-            <Route
-              path="/chatroom"
-              render={props => (
-                <Chatroom {...props} serverIP={serverIP + ":" + nodePort} />
-              )}
-            />
-          </BrowserRouter>
+          <Route
+            path="/users"
+            component={() => (
+              <Request url={serverIP + ":" + jsonPort + "/user"}>
+                {result => <User {...result} />}
+              </Request>
+            )}
+          />
+          <Route
+            exact
+            path="/posts"
+            component={() => (
+              <Request url="https://jsonplaceholder.typicode.com/posts">
+                {result => <Posts {...result} />}
+              </Request>
+            )}
+          />
+          <Route
+            path="/posts/:post_id"
+            component={() => (
+              <Request url="https://jsonplaceholder.typicode.com/posts">
+                {result => <PostDetail {...result} />}
+              </Request>
+            )}
+          />
+          <Route
+            path="/count"
+            render={props => (
+              <Count {...props} serverIP={serverIP + ":" + nodePort} />
+            )}
+          />
+          <Route path="/chat" component={Chatform} />
+          <Route
+            path="/chatroom"
+            render={props => (
+              <Chatroom {...props} serverIP={serverIP + ":" + nodePort} />
+            )}
+          />
+        </BrowserRouter>
       </React.Fragment>
     );
   }

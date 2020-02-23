@@ -7,12 +7,7 @@ class Timeline extends Component {
   };
 
   render() {
-    const {
-      plan_detail,
-      days,
-      isLoading,
-      error
-    } = this.props;
+    const { plan_detail, days, isLoading, error } = this.props;
     if (isLoading) return <div className="Timeline">Loading...</div>;
     if (error) return <div className="Timeline">Something went wrong :(</div>;
     return (
@@ -32,7 +27,6 @@ class Timeline extends Component {
             key={day.toString()}
           />
         ))}
-
       </div>
     );
   }

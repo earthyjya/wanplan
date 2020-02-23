@@ -24,10 +24,7 @@ class AttCard extends Component {
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
       <div className="AttCard">
-        <div className="DelCard"
-          
-          onClick={this.delCard}
-        >
+        <div className="DelCard" onClick={this.delCard}>
           &#10005;
         </div>
         <div className="StartTime">{start_time}</div>

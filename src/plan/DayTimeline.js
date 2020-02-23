@@ -52,7 +52,6 @@ class DayTimeline extends Component {
                     {plan_detail.map(detail => (
                       <div key={detail.order.toString()}>
                         <Draggable
-                          
                           draggableId={detail.order.toString()}
                           index={detail.order}
                         >
@@ -88,7 +87,9 @@ class DayTimeline extends Component {
                                 attract.attraction_id === detail.attraction_id
                             )[0].attraction_name;
                           destination = (() => {
-                            if (detail !== plan_detail[plan_detail.length - 1]) {
+                            if (
+                              detail !== plan_detail[plan_detail.length - 1]
+                            ) {
                               return attraction.filter(
                                 attract =>
                                   attract.attraction_id ===

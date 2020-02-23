@@ -3,8 +3,9 @@
     {
       "user_id": 1,
       "username": "earthy",
-      "name": "",
-      "surname": "",
+      "name": "Earthy",
+      "surname": "Jya",
+      "user_description": "I'm CEO of wanplan",
       "email": "earthyinw@gmail.com",
       "nationality": "Thai",
       "city": "",
@@ -16,6 +17,7 @@
       "username": "janat",
       "name": "Janat",
       "surname": "Taerakul",
+      "user_description": "",
       "email": "janat.taerakul@gmail.com",
       "nationality": "Thai",
       "city": "",
@@ -25,8 +27,9 @@
     {
       "user_id": 3,
       "username": "oatsty",
-      "name": "",
-      "surname": "",
+      "name": "Oat",
+      "surname": "Sty",
+      "user_description": "",
       "email": "parinayoksatayu@gmail.com",
       "nationality": "Thai",
       "city": "",
@@ -225,6 +228,7 @@
       "duration": 1,
       "start_day": [540],
       "plan_style": "Cultural",
+      "plan_description": "This is a trip to Tokyo that will take you to see three attractions in one day. blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
       "star_rating": 3.0,
       "updated_time": ""
     },
@@ -236,6 +240,7 @@
       "duration": 2,
       "start_day": [540, 540],
       "plan_style": "Cultural",
+      "plan_description": "This is a trip to Osaka that will take you to see six attractions in two days. blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
       "star_rating": 5.0,
       "updated_time": ""
     },
@@ -247,6 +252,7 @@
       "duration": 3,
       "start_day": [540, 540, 540],
       "plan_style": "Sightseeing",
+      "plan_description": "This is a trip to Fukuoka that will take you to see nine attractions in three days. blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
       "star_rating": 1.0,
       "updated_time": ""
     }

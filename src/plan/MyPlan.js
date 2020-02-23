@@ -1,20 +1,16 @@
 import React, { Component } from "react";
 
 class MyPlan extends Component {
-
-	savedPlan(){
+	savedPlan() {
 		let _planlist = JSON.parse(localStorage.getItem("planlist"));
-		if(_planlist !== null){
-			return(
-				_planlist.map(plan => (
+		if (_planlist !== null) {
+			return _planlist.map(plan => (
 				<div>
 					<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
 				</div>
-				))
-			)
-		}
-		else {
-			return(<div>No saved plan yet!</div>)
+			));
+		} else {
+			return <div>No saved plan yet!</div>;
 		}
 	}
 	render() {
@@ -32,11 +28,7 @@ class MyPlan extends Component {
 					))}
 				</div>
 				<div> Saved Plan </div>
-				<div>
-					{
-						this.savedPlan()
-					}
-				</div>
+				<div>{this.savedPlan()}</div>
 			</React.Fragment>
 		);
 	}

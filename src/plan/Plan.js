@@ -1,6 +1,7 @@
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline";
+import PlanOverview from "./PlanOverview";
 import axios from "axios";
 import Request from "../lib/Request.js";
 import { Int2Str } from "../lib/ConvertTime.js";
@@ -136,7 +137,8 @@ class Plan extends React.Component {
       attraction_id: source.index
     };
     if (
-      this.state.attraction.filter(att => att.attraction_id === source.index).length === 0 
+      this.state.attraction.filter(att => att.attraction_id === source.index)
+        .length === 0
     ) {
       const url =
         serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
@@ -170,7 +172,7 @@ class Plan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { serverIP, jsonPort, plan_id } = this.props;
+    const { serverIP, jsonPort, plan_id, user_id } = this.props;
     let url = serverIP + ":" + jsonPort + "/plan_overview?plan_id=" + plan_id;
     await axios
       .get(url)
@@ -183,6 +185,11 @@ class Plan extends React.Component {
       this.setState({ isLoading: false, error: true });
       return;
     }
+
+    url = serverIP + ":" + jsonPort + "/user?user_id=" + user_id;
+    await axios.get(url).then(result => {
+      this.setState({ user: result.data[0] });
+    });
     url =
       serverIP + ":" + jsonPort + "/plan_detail?_sort=order&plan_id=" + plan_id;
     let attList = [];
@@ -190,11 +197,9 @@ class Plan extends React.Component {
       .get(url)
       .then(result => {
         this.setState({
-          plan_detail: result.data.sort(
-            (a, b) => a.order - b.order
-          )
+          plan_detail: result.data.sort((a, b) => a.order - b.order)
         });
-        let {data} = result;
+        let { data } = result;
         data = data.reduce(
           (acc, val) =>
             acc.indexOf(val.attraction_id) === -1
@@ -250,13 +255,7 @@ class Plan extends React.Component {
   }
 
   render() {
-    const {
-      isLoading,
-      error,
-      city,
-      plan_overview,
-      modal
-    } = this.state;
+    const { isLoading, error, city, plan_overview, modal } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -273,8 +272,8 @@ class Plan extends React.Component {
             <div className="title">{plan_overview.plan_name}</div>
             <div className="days">
               {plan_overview.duration > 1
-                ? plan_overview.duration + " Days plan"
-                : "One Day plan"}
+                ? plan_overview.duration + " Days Plan"
+                : "One Day Plan"}
             </div>
             <button className="save" onClick={this.save}>
               Save!
@@ -287,49 +286,7 @@ class Plan extends React.Component {
               </span>
             </button>
           </div>
-          <Container
-            fluid
-            className="plan-description-container plan-header"
-            style={{
-              backgroundImage:
-                "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)"
-            }}
-          >
-            <Row>
-              <Col lg={8}>
-                <div className="plan-description">
-                  {" "}
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={6} md={6} lg={6}>
-                <Row style={{ padding: "10px" }}>
-                  <Col sm={"auto"} md={"auto"} lg={"auto"}>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                      className="avatar-image"
-                      alt="author"
-                    />
-                  </Col>
-                  <Col>
-                    <div>John Doe</div>
-                    <div>User description</div>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Container>
+          <PlanOverview {...this.state} />
           {modal ? (
             <div className="share-modal">
               <Share closeShareModal={this.closeShareModal} />
