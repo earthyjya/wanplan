@@ -23,6 +23,7 @@ class App extends Component {
   componentDidMount() {}
 
   render() {
+    // eslint-disable-next-line
     const { user_id, APIServer, jsonServer, nodeServer } = this.state;
     return (
       <React.Fragment>

@@ -4,7 +4,7 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty."
     });
   }
 
@@ -28,7 +28,7 @@ exports.findAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Country."
+          err.message || "Some error occurred while retrieving countries."
       });
     else res.send(data);
   });
@@ -39,13 +39,13 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Country with id ${req.params.countryId}.`
+          message: `Not found the country with country_id ${req.params.countryId}.`
         });
       } else {
         res.status(500).send({
-          message: "Could not delete Country with id " + req.params.countryId
+          message: "Could not delete the country with country_id " + req.params.countryId
         });
       }
-    } else res.send({ message: `Country was deleted successfully!` });
+    } else res.send({ message: `The country with country_id ${req.params.countryId} was deleted successfully!` });
   });
 };

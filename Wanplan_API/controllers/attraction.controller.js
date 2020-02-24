@@ -1,9 +1,8 @@
 const Attraction = require("../models/attraction.model.js");
 exports.create = (req, res) => {
-  // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty."
     });
   }
 
@@ -20,7 +19,7 @@ exports.create = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Attraction."
+          err.message || "Some error occurred while creating the attraction."
       });
     else res.send(data);
   });
@@ -31,11 +30,11 @@ exports.findId = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Attraction with id ${req.params.attractionId}.`
+          message: `Not found the attraction with attraction_id ${req.params.attractionId}.`
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving Attraction with id " + req.params.attractionId
+          message: "Error retrieving the attraction with attraction_id " + req.params.attractionId
         });
       }
     } else res.send(data);
@@ -47,11 +46,11 @@ exports.findStyle = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Attraction of style ${req.params.style}.`
+          message: `Not found style ${req.params.style} attraction.`
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving Attraction of style " + req.params.style
+          message: "Error retrieving style " + req.params.style + " attraction."
         });
       }
     } else res.send(data);
@@ -63,11 +62,11 @@ exports.findCity = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Attraction of city with id ${req.params.cityId}.`
+          message: `Not found attraction in the city with city_id ${req.params.cityId}.`
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving Attraction of city with id " + req.params.cityId
+          message: "Error retrieving attraction in the city with city_id " + req.params.cityId
         });
       }
     } else res.send(data);
@@ -79,17 +78,16 @@ exports.findAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Attraction."
+          err.message || "Some error occurred while retrieving attraction."
       });
     else res.send(data);
   });
 };
 
 exports.update = (req, res) => {
-  // Validate Request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty."
     });
   }
 
@@ -100,11 +98,11 @@ exports.update = (req, res) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Attraction with id ${req.params.attractionId}.`
+            message: `Not found the attraction with attraction_id ${req.params.attractionId}.`
           });
         } else {
           res.status(500).send({
-            message: "Error updating Attraction with id " + req.params.attractionId
+            message: "Error updating the attraction with attraction_id " + req.params.attractionId
           });
         }
       } else res.send(data);
@@ -117,13 +115,13 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Attraction with id ${req.params.attractionId}.`
+          message: `Not found the attraction with attraction_id ${req.params.attractionId}.`
         });
       } else {
         res.status(500).send({
-          message: "Could not delete Attraction with id " + req.params.attractionId
+          message: "Could not delete the attraction with attraction_id " + req.params.attractionId
         });
       }
-    } else res.send({ message: `Attraction was deleted successfully!` });
+    } else res.send({ message: `The attraction with attraction_id ${req.params.attractionId} was deleted successfully!` });
   });
 };

@@ -50,10 +50,10 @@ class DayTimeline extends Component {
                       }
                     })()}
                     {plan_detail.map(detail => (
-                      <div key={detail.order.toString()}>
+                      <div key={detail.attraction_order.toString()}>
                         <Draggable
-                          draggableId={detail.order.toString()}
-                          index={detail.order}
+                          draggableId={detail.attraction_order.toString()}
+                          index={detail.attraction_order}
                         >
                           {dragProvided => (
                             <div
@@ -95,8 +95,8 @@ class DayTimeline extends Component {
                                   attract.attraction_id ===
                                   plan_detail.filter(
                                     det =>
-                                      Number(det.order) ===
-                                      Number(detail.order) + 1
+                                      Number(det.attraction_order) ===
+                                      Number(detail.attraction_order) + 1
                                   )[0].attraction_id
                               )[0].attraction_name;
                             } else {

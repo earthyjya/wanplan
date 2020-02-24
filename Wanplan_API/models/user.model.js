@@ -1,14 +1,14 @@
 const sql = require("./db.js");
-// constructor
+
 const User = function(user) {
   this.username = user.username;
   this.name = user.name;
   this.surname = user.surname;
+  this.user_description = user.user_description;
   this.email = user.email;
   this.nationality = user.nationality;
   this.city = user.city;
   this.origin = user.origin;
-  //this.updated_time = user.updated_time;
 };
 
 User.create = (newUser, result) => {
@@ -38,7 +38,6 @@ User.findById = (id, result) => {
       return;
     }
 
-    // not found User with the id
     result({ kind: "not_found" }, null);
   });
 };
@@ -96,8 +95,8 @@ User.getAll = result => {
 
 User.updateById = (id, user, result) => {
   sql.query(
-    "UPDATE user SET username = ?, name = ?, surname = ?, email = ?, nationality = ?, city = ?, origin = ? WHERE user_id = ?",
-    [user.username, user.name, user.surname, user.email, user.nationality, user.city, user.origin, id],
+    "UPDATE user SET username = ?, name = ?, surname = ?, user_description = ?, email = ?, nationality = ?, city = ?, origin = ? WHERE user_id = ?",
+    [user.username, user.name, user.surname, user.user_description, user.email, user.nationality, user.city, user.origin, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);

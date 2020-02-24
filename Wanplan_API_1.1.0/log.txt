@@ -1,7 +1,0 @@
-24 Feb 2020
-- Added column "user_description" in the table "user"
-- Added column "plan_description" in the table "plan_overview"
-- Updated API for table "user" and "plan_overview"
-- Implemented API for table "transport" and "start_day"
-- Changed the word "trip" to "plan" and "Trip" to "Plan" in the API and mysql database
-- Updated error messages

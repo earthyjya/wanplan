@@ -3,7 +3,7 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty."
     });
   }
 
@@ -18,7 +18,7 @@ exports.create = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the City."
+          err.message || "Some error occurred while creating the city."
       });
     else res.send(data);
   });
@@ -40,11 +40,11 @@ exports.findId = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found city with id ${req.params.cityId}.`
+          message: `Not found the city with city_id ${req.params.cityId}.`
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving city with id " + req.params.cityId
+          message: "Error retrieving the city with city_id " + req.params.cityId
         });
       }
     } else res.send(data);
@@ -60,7 +60,7 @@ exports.findPrefecture = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving city in prefecture " + req.params.prefecture
+          message: "Error retrieving cities in " + req.params.prefecture + " prefecture."
         });
       }
     } else res.send(data);
@@ -76,7 +76,7 @@ exports.findRegion = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving city in region " + req.params.region
+          message: "Error retrieving cities in " + req.params.region + " region."
         });
       }
     } else res.send(data);
@@ -92,7 +92,7 @@ exports.findCountry = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving city in country " + req.params.countryId
+          message: "Error retrieving cities in country " + req.params.countryId
         });
       }
     } else res.send(data);
@@ -104,13 +104,13 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found City with id ${req.params.cityId}.`
+          message: `Not found the city with city_id ${req.params.cityId}.`
         });
       } else {
         res.status(500).send({
-          message: "Could not delete City with id " + req.params.cityId
+          message: "Could not delete the city with city_id " + req.params.cityId
         });
       }
-    } else res.send({ message: `City was deleted successfully!` });
+    } else res.send({ message: `The city with city_id ${req.params.cityId} was deleted successfully!` });
   });
 };

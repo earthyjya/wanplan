@@ -23,6 +23,17 @@ exports.create = (req, res) => {
   });
 };
 
+exports.findAll = (req, res) => {
+  Plan_startday.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving plan_startday."
+      });
+    else res.send(data);
+  });
+};
+
 exports.findPlanId = (req, res) => {
   Plan_startday.findByPlanId(req.params.planId, (err, data) => {
     if (err) {

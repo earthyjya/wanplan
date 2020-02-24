@@ -1,5 +1,5 @@
 const sql = require("./db.js");
-// constructor
+
 const City = function(city) {
   this.city_id = city.city_id;
   this.city_name = city.city_name;
@@ -29,7 +29,7 @@ City.getAll = result => {
       return;
     }
 
-    console.log("citys: ", res);
+    console.log("cities: ", res);
     result(null, res);
   });
 };

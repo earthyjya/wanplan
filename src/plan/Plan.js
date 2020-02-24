@@ -177,14 +177,20 @@ class Plan extends React.Component {
       })
       .catch(error => this.setState({ error }));
     if (!this.state.plan_overview) {
-      this.setState({ isLoading: false, error: true });
+      this.setState({ error: true });
       return;
     }
 
     url = APIServer + "/user/" + user_id;
-    await axios.get(url).then(result => {
-      this.setState({ user: result.data[0] });
-    });
+    await axios
+      .get(url)
+      .then(result => {
+        this.setState({ user: result.data });
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.error(error);
+      });
     url = APIServer + "/plan_detail/" + plan_id;
     let attList = [];
     await axios
@@ -209,7 +215,7 @@ class Plan extends React.Component {
       });
 
     url = APIServer + "/attraction/";
-    attList.map(async detail => {
+    await attList.map(async detail => {
       let _url = url + detail;
       await axios
         .get(_url)
@@ -230,7 +236,7 @@ class Plan extends React.Component {
       .get(url)
       .then(result => {
         const city = result.data[0];
-        this.setState({ city, isLoading: false });
+        this.setState({ city });
       })
       .catch(error => {
         this.setState({ error });
@@ -238,9 +244,12 @@ class Plan extends React.Component {
       });
     let days = [];
     for (var i = 1; i <= this.state.plan_overview.duration; i++) {
-      days.push(i);
+      await days.push(i);
     }
-    await this.setState({ days: days, isloading: false });
+
+    await this.setState({ days: days, isLoading: false });
+
+    console.log("Fetching done...");
   }
 
   render() {
@@ -309,7 +318,7 @@ class Plan extends React.Component {
                   />
                 </Col>
                 <Col lg={4}>
-                  <Request url={this.props.APIServer + "/attraction"}>
+                  <Request url={this.props.APIServer + "/attraction/city/" + city.city_id}>
                     {result => <AttBar {...result} />}
                   </Request>
                 </Col>

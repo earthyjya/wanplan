@@ -20,12 +20,14 @@ app.get("/", (req, res) => {
 
 require("./routes/city.routes.js")(app);
 require("./routes/user.routes.js")(app);
-require("./routes/trip_overview.routes.js")(app);
+require("./routes/plan_overview.routes.js")(app);
 require("./routes/attraction.routes.js")(app);
 require("./routes/country.routes.js")(app);
-require("./routes/trip_detail.routes.js")(app);
+require("./routes/plan_detail.routes.js")(app);
+require("./routes/plan_startday.routes.js")(app);
+require("./routes/transport.routes.js")(app);
 
 // set port, listen for requests
 app.listen(3030, () => {
-	console.log("Server is running on port 3030.");
+  console.log("Server is running on port 3030.");
 });
