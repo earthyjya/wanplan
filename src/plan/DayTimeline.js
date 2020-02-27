@@ -13,9 +13,9 @@ class DayTimeline extends Component {
   };
 
   render() {
-    const { plan_detail, day, attraction } = this.props;
-    let start = "Hotel";
-    let destination = " ";
+    const { plan_detail, day } = this.props;
+    let start = "";
+    let destination = "";
     return (
       <div className="DayTimeline">
         <div>
@@ -39,15 +39,9 @@ class DayTimeline extends Component {
                   <div ref={dropProvided.innerRef}>
                     {(() => {
                       if (plan_detail.length) {
-                        let des = attraction.filter(
-                          attract =>
-                            attract.attraction_id ===
-                            plan_detail[0].attraction_id
-                        );
-                        if (des.length) destination = des[0].attraction_name;
-                        else destination = "Loading...";
+                        destination = plan_detail[0].attraction_name;
                         return (
-                          <TransCard start={start} destination={destination} />
+                          <TransCard start="Hotel" destination={destination} />
                         );
                       }
                     })()}
@@ -69,40 +63,22 @@ class DayTimeline extends Component {
                                   changeOrder={this.props.changeOrder}
                                   changeDuration={this.props.changeDuration}
                                   delCard={this.props.delCard}
-                                  attraction={
-                                    attraction.filter(
-                                      attract =>
-                                        attract.attraction_id ===
-                                        detail.attraction_id
-                                    )[0]
-                                  }
                                 />
                               </div>
                             </div>
                           )}
                         </Draggable>
                         {(() => {
-                          let st = attraction.filter(
-                            attract =>
-                              attract.attraction_id === detail.attraction_id
-                          );
-                          if (st.length) start = st[0].attraction_name;
-                          else start = "Loading..."
+                          start = detail.attraction_name;
                           destination = (() => {
                             if (
                               detail !== plan_detail[plan_detail.length - 1]
                             ) {
-                              let att = attraction.filter(
-                                attract =>
-                                  attract.attraction_id ===
-                                  plan_detail.filter(
-                                    det =>
-                                      Number(det.attraction_order) ===
-                                      Number(detail.attraction_order) + 1
-                                  )[0].attraction_id
-                              );
-                              if (att.length === 0) return "Loading...";
-                              return att[0].attraction_name;
+                              return plan_detail.filter(
+                                det =>
+                                  det.attraction_order ===
+                                  detail.attraction_order + 1
+                              )[0].attraction_name;
                             } else {
                               return "Hotel";
                             }

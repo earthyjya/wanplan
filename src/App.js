@@ -20,8 +20,6 @@ class App extends Component {
     nodeServer: "http://localhost:8080"
   };
 
-  componentDidMount() {}
-
   render() {
     // eslint-disable-next-line
     const { user_id, APIServer, jsonServer, nodeServer } = this.state;

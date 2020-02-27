@@ -14,7 +14,6 @@ import "./Plan.css";
 class Plan extends React.Component {
   state = {
     isLoading: true,
-    isLoadingOverview: true,
     error: null,
     modal: false,
     toastOpen: false,
@@ -31,7 +30,7 @@ class Plan extends React.Component {
     } else {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
       for (var i = 0; i < _planlist.length; i++) {
-        if (_planlist[i].plan_id === this.state.plan_overview.plan_id) return;
+        if (_planlist[i].plan_id === this.props.plan_id) return;
       }
       _planlist.push(this.state.plan_overview);
       localStorage.setItem("planlist", JSON.stringify(_planlist));
@@ -60,7 +59,7 @@ class Plan extends React.Component {
     const { plan_startday } = this.state;
     var i = 0;
     for (i = 0; i < plan_detail.length; i++) {
-      plan_detail[i].order = i;
+      plan_detail[i].attraction_order = i;
     }
     for (i = 0; i < plan_startday.length; i++) {
       plan_startday[i].day = i + 1;
@@ -77,30 +76,35 @@ class Plan extends React.Component {
       lastTime = lastTime + plan_detail[i].time_spend;
     }
 
-    await this.setState({ plan_detail });
+    await this.setState({ plan_detail, plan_startday });
   };
 
   addDay = day => {
-    let { days, plan_overview, plan_detail } = this.state;
+    let { days, plan_overview, plan_detail, plan_startday } = this.state;
     days = days.concat(days.length + 1);
     plan_overview.duration += 1;
-    plan_overview.start_day.splice(day, 0, 480);
+    plan_startday.splice(day, 0, {
+      plan_id: this.props.plan_id,
+      day: day,
+      start_day: "09:00"
+    });
     plan_detail.map(detail => {
       if (detail.day > day) detail.day += 1;
       return null;
     });
     this.setState({
       days,
-      plan_overview
+      plan_overview,
+      plan_startday
     });
     this.calPlan(plan_detail);
   };
 
   delDay = day => {
-    let { days, plan_overview, plan_detail } = this.state;
+    let { days, plan_overview, plan_detail, plan_startday } = this.state;
     days.pop();
     plan_overview.duration -= 1;
-    plan_overview.start_day.splice(day - 1, 1);
+    plan_startday.splice(day - 1, 1);
     plan_detail = plan_detail.filter(plan => plan.day !== day);
     plan_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
@@ -108,7 +112,8 @@ class Plan extends React.Component {
     });
     this.setState({
       days,
-      plan_overview
+      plan_overview,
+      plan_startday
     });
     this.calPlan(plan_detail);
   };
@@ -130,34 +135,23 @@ class Plan extends React.Component {
   addCard = async (source, destination) => {
     let { droppableId, index } = destination;
     const { plan_detail } = this.state;
-    const { user_id, plan_id } = this.state.plan_overview;
-    const { APIServer } = this.props;
-    const toAdd = {
+    const { APIServer, plan_id } = this.props;
+    let toAdd = {
       plan_id,
-      user_id,
       time_spend: 30, //// Can be changed to "recommended time"
-      day: Number(droppableId),
-      attraction_id: source.index
+      day: Number(droppableId)
     };
-    if (
-      this.state.attraction.filter(att => att.attraction_id === source.index)
-        .length === 0
-    ) {
-      const url = APIServer + "/attraction/" + source.index;
-      await axios
-        .get(url)
-        .then(result =>
-          this.setState({
-            attraction: [...this.state.attraction, ...result.data]
-          })
-        )
-        .catch(error => {
-          this.setState({ error });
-          console.error(error);
-        });
-    }
+    const url = APIServer + "/attraction/" + source.index;
+    await axios
+      .get(url)
+      .then(result => (toAdd = { ...toAdd, ...result.data[0] }))
+      .catch(error => {
+        this.setState({ error });
+        console.error(error);
+      });
+
     plan_detail.splice(index, 0, toAdd);
-    await this.calPlan(plan_detail);
+    this.calPlan(plan_detail);
   };
 
   delCard = index => {
@@ -168,20 +162,20 @@ class Plan extends React.Component {
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
-    plan_detail[source].time_spend = parseInt(newDuration);
+    console.log(plan_detail[source]);
+    plan_detail[source].time_spend = Number(newDuration);
     this.calPlan(plan_detail);
   };
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { APIServer, plan_id, user_id } = this.props;
-    let url = APIServer + "/plan_overview/" + plan_id;
+    const { APIServer, plan_id } = this.props;
+    let url = APIServer + "/load_plan/" + plan_id;
     let i = 0;
     await axios
       .get(url)
       .then(result => {
-        const plan_overview = result.data[0];
-        this.setState({ plan_overview });
+        this.setState({ ...result.data });
       })
       .catch(error => {
         this.setState({ error });
@@ -192,82 +186,6 @@ class Plan extends React.Component {
       return;
     }
 
-    url = APIServer + "/user/" + user_id;
-    await axios
-      .get(url)
-      .then(async result => {
-        await this.setState({ user: result.data });
-        this.setState({ isLoadingOverview: false });
-      })
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
-    url = APIServer + "/plan_startday/" + plan_id;
-    await axios
-      .get(url)
-      .then(result => {
-        this.setState({
-          plan_startday: result.data.sort((a, b) => a.day - b.day)
-        });
-      })
-      .catch(error => {
-        this.setState({ error });
-        console.log(error);
-      });
-
-    url = APIServer + "/plan_detail/" + plan_id;
-    let attList = [];
-    await axios
-      .get(url)
-      .then(result => {
-        this.setState({
-          plan_detail: result.data.sort((a, b) => a.order - b.order)
-        });
-        let { data } = result;
-        data = data.reduce(
-          (acc, val) =>
-            acc.indexOf(val.attraction_id) === -1
-              ? [...acc, val.attraction_id]
-              : acc,
-          []
-        );
-        attList = data;
-      })
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
-
-    url = APIServer + "/attraction/";
-    console.log("fetching attraction");
-    for (i = 0; i < attList.length; i++) {
-      let _url = url + attList[i];
-      await axios
-        .get(_url)
-        .then(result =>
-          this.setState({
-            attraction: [...this.state.attraction, ...result.data]
-          })
-        )
-        .catch(error => {
-          this.setState({ error });
-          console.error(error);
-        });
-    }
-    console.log("attraction fetched");
-
-    url = APIServer + "/city/" + this.state.plan_overview.city_id;
-    await axios
-      .get(url)
-      .then(result => {
-        const city = result.data[0];
-        this.setState({ city });
-      })
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
     let days = [];
     for (i = 1; i <= this.state.plan_overview.duration; i++) {
       await days.push(i);
@@ -279,7 +197,7 @@ class Plan extends React.Component {
   }
 
   render() {
-    const { isLoading, error, city, plan_overview, modal } = this.state;
+    const { isLoading, error, plan_overview, modal } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -292,7 +210,7 @@ class Plan extends React.Component {
             </ToastBody>
           </Toast>
           <div className="title-bar">
-            <div className="city">{city.city_name}</div>
+            <div className="city">{plan_overview.city_name}</div>
             <div className="title">{plan_overview.plan_name}</div>
             <div className="days">
               {plan_overview.duration > 1
@@ -346,7 +264,9 @@ class Plan extends React.Component {
                 <Col lg={4}>
                   <Request
                     url={
-                      this.props.APIServer + "/attraction/city/" + city.city_id
+                      this.props.APIServer +
+                      "/attraction/city/" +
+                      plan_overview.city_id
                     }
                   >
                     {result => <AttBar {...result} />}

@@ -3,10 +3,7 @@ import { Row, Col, Container } from "reactstrap";
 
 class PlanOverview extends Component {
 	render() {
-		const { plan_overview, user, isLoadingOverview } = this.props;
-		if (isLoadingOverview) {
-			return <div>Loading...</div>;
-		}
+		const { plan_overview } = this.props;
 		return (
 			<Container
 				fluid
@@ -34,8 +31,8 @@ class PlanOverview extends Component {
 								/>
 							</Col>
 							<Col>
-								<div>{user.name + " " + user.surname}</div>
-								<div>{user.user_description}</div>
+								<div>{plan_overview.name + " " + plan_overview.surname}</div>
+								<div>{plan_overview.user_description}</div>
 							</Col>
 						</Row>
 					</Col>
