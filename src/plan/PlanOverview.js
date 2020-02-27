@@ -3,7 +3,10 @@ import { Row, Col, Container } from "reactstrap";
 
 class PlanOverview extends Component {
 	render() {
-		const { plan_overview, user } = this.props;
+		const { plan_overview, user, isLoadingOverview } = this.props;
+		if (isLoadingOverview) {
+			return <div>Loading...</div>;
+		}
 		return (
 			<Container
 				fluid

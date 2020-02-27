@@ -39,11 +39,13 @@ class DayTimeline extends Component {
                   <div ref={dropProvided.innerRef}>
                     {(() => {
                       if (plan_detail.length) {
-                        destination = attraction.filter(
+                        let des = attraction.filter(
                           attract =>
                             attract.attraction_id ===
                             plan_detail[0].attraction_id
-                        )[0].attraction_name;
+                        );
+                        if (des.length) destination = des[0].attraction_name;
+                        else destination = "Loading...";
                         return (
                           <TransCard start={start} destination={destination} />
                         );
@@ -80,17 +82,17 @@ class DayTimeline extends Component {
                           )}
                         </Draggable>
                         {(() => {
-                          start =
-                            " " +
-                            attraction.filter(
-                              attract =>
-                                attract.attraction_id === detail.attraction_id
-                            )[0].attraction_name;
+                          let st = attraction.filter(
+                            attract =>
+                              attract.attraction_id === detail.attraction_id
+                          );
+                          if (st.length) start = st[0].attraction_name;
+                          else start = "Loading..."
                           destination = (() => {
                             if (
                               detail !== plan_detail[plan_detail.length - 1]
                             ) {
-                              return attraction.filter(
+                              let att = attraction.filter(
                                 attract =>
                                   attract.attraction_id ===
                                   plan_detail.filter(
@@ -98,7 +100,9 @@ class DayTimeline extends Component {
                                       Number(det.attraction_order) ===
                                       Number(detail.attraction_order) + 1
                                   )[0].attraction_id
-                              )[0].attraction_name;
+                              );
+                              if (att.length === 0) return "Loading...";
+                              return att[0].attraction_name;
                             } else {
                               return "Hotel";
                             }

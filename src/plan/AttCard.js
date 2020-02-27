@@ -13,14 +13,13 @@ class AttCard extends Component {
 
   render() {
     const {
-      isLoading,
       error,
       attraction,
       start_time,
       end_time,
       time_spend
     } = this.props;
-    if (isLoading) return <div className="AttCard">Loading...</div>;
+    if (attraction.length === 0) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
       <div className="AttCard">
