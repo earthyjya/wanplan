@@ -4,21 +4,22 @@ import { LoremIpsum } from "react-lorem-ipsum";
 
 class AttCard extends Component {
   changeDuration = e => {
-    this.props.changeDuration(this.props.order, e.target.value);
+    this.props.changeDuration(this.props.attraction_order, e.target.value);
   };
 
   delCard = () => {
-    this.props.delCard(this.props.order);
+    this.props.delCard(this.props.attraction_order);
   };
 
   render() {
     const {
-      isLoading,
       error,
-      attraction,
+      isLoading,
       start_time,
       end_time,
-      time_spend
+      time_spend,
+      attraction_name,
+      attraction_type
     } = this.props;
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
@@ -29,11 +30,11 @@ class AttCard extends Component {
         </div>
         <div className="StartTime">{start_time}</div>
         <div className="EndTime">{end_time}</div>
-        <div className="AttName">{attraction.attraction_name}</div>
+        <div className="AttName">{attraction_name}</div>
         <div className="AttTypeCont">
-          <div className="AttType">{attraction.attraction_type}</div>
+          <div className="AttType">{attraction_type}</div>
         </div>
-        <img className="AttPhoto" alt={attraction.attraction_name} />
+        <img className="AttPhoto" alt={attraction_name} />
 
         <div className="AttDesCont">
           <LoremIpsum

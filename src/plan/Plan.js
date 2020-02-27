@@ -4,7 +4,7 @@ import Timeline from "./Timeline";
 import PlanOverview from "./PlanOverview";
 import axios from "axios";
 import Request from "../lib/Request.js";
-import { Int2Str } from "../lib/ConvertTime.js";
+import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import AttBar from "./AttBar.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Row, Col, Container } from "reactstrap";
@@ -21,26 +21,6 @@ class Plan extends React.Component {
     attraction: []
   };
 
-  calPlan = plan_detail => {
-    //// Need to be updated when transportations are added
-
-    const { start_day } = this.state.plan_overview;
-    plan_detail.map(plan => (plan.order = plan_detail.indexOf(plan)));
-    let lastDay = 0;
-    let lastTime = 0;
-    for (var i = 0; i < plan_detail.length; i++) {
-      if (plan_detail[i].day !== lastDay) {
-        lastDay = plan_detail[i].day;
-        lastTime = start_day[lastDay - 1];
-      }
-      plan_detail[i].start_time = Int2Str(lastTime);
-      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-      lastTime = lastTime + plan_detail[i].time_spend;
-    }
-
-    this.setState({ plan_detail });
-  };
-
   save = () => {
     this.openToast();
     if (localStorage.getItem("planlist") === null) {
@@ -50,7 +30,7 @@ class Plan extends React.Component {
     } else {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
       for (var i = 0; i < _planlist.length; i++) {
-        if (_planlist[i].plan_id === this.state.plan_overview.plan_id) return;
+        if (_planlist[i].plan_id === this.props.plan_id) return;
       }
       _planlist.push(this.state.plan_overview);
       localStorage.setItem("planlist", JSON.stringify(_planlist));
@@ -73,27 +53,58 @@ class Plan extends React.Component {
     this.setState({ modal: false });
   };
 
+  calPlan = async plan_detail => {
+    //// Need to be updated when transportations are added
+
+    const { plan_startday } = this.state;
+    var i = 0;
+    for (i = 0; i < plan_detail.length; i++) {
+      plan_detail[i].attraction_order = i;
+    }
+    for (i = 0; i < plan_startday.length; i++) {
+      plan_startday[i].day = i + 1;
+    }
+    let lastDay = 0;
+    let lastTime = 0;
+    for (i = 0; i < plan_detail.length; i++) {
+      if (plan_detail[i].day !== lastDay) {
+        lastDay = plan_detail[i].day;
+        lastTime = Str2Int(plan_startday[lastDay - 1].start_day);
+      }
+      plan_detail[i].start_time = Int2Str(lastTime);
+      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
+      lastTime = lastTime + plan_detail[i].time_spend;
+    }
+
+    await this.setState({ plan_detail, plan_startday });
+  };
+
   addDay = day => {
-    let { days, plan_overview, plan_detail } = this.state;
+    let { days, plan_overview, plan_detail, plan_startday } = this.state;
     days = days.concat(days.length + 1);
     plan_overview.duration += 1;
-    plan_overview.start_day.splice(day, 0, 480);
+    plan_startday.splice(day, 0, {
+      plan_id: this.props.plan_id,
+      day: day,
+      start_day: "09:00"
+    });
     plan_detail.map(detail => {
       if (detail.day > day) detail.day += 1;
       return null;
     });
     this.setState({
       days,
-      plan_overview
+      plan_overview,
+      plan_startday
     });
     this.calPlan(plan_detail);
   };
 
   delDay = day => {
-    let { days, plan_overview, plan_detail } = this.state;
+    let { days, plan_overview, plan_detail, plan_startday } = this.state;
     days.pop();
     plan_overview.duration -= 1;
-    plan_overview.start_day.splice(day - 1, 1);
+    plan_startday.splice(day - 1, 1);
     plan_detail = plan_detail.filter(plan => plan.day !== day);
     plan_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
@@ -101,12 +112,13 @@ class Plan extends React.Component {
     });
     this.setState({
       days,
-      plan_overview
+      plan_overview,
+      plan_startday
     });
     this.calPlan(plan_detail);
   };
 
-  reorderCards = (source, destination) => {
+  reorderCards = async (source, destination) => {
     let a = source.index;
     let b = destination.index;
     const daya = Number(source.droppableId);
@@ -117,39 +129,27 @@ class Plan extends React.Component {
     if (a < b && daya !== dayb && b !== 0) b -= 1;
     plan_detail.splice(b, 0, removed);
     plan_detail.sort((a, b) => a.day - b.day);
-    this.calPlan(plan_detail);
+    await this.calPlan(plan_detail);
   };
 
   addCard = async (source, destination) => {
     let { droppableId, index } = destination;
     const { plan_detail } = this.state;
-    const { user_id, plan_id } = this.state.plan_overview;
-    const { serverIP, jsonPort } = this.props;
-    const toAdd = {
+    const { APIServer, plan_id } = this.props;
+    let toAdd = {
       plan_id,
-      user_id,
       time_spend: 30, //// Can be changed to "recommended time"
-      day: Number(droppableId),
-      attraction_id: source.index
+      day: Number(droppableId)
     };
-    if (
-      this.state.attraction.filter(att => att.attraction_id === source.index)
-        .length === 0
-    ) {
-      const url =
-        serverIP + ":" + jsonPort + "/attraction?attraction_id=" + source.index;
-      await axios
-        .get(url)
-        .then(result =>
-          this.setState({
-            attraction: [...this.state.attraction, ...result.data]
-          })
-        )
-        .catch(error => {
-          this.setState({ error });
-          console.error(error);
-        });
-    }
+    const url = APIServer + "/attraction/" + source.index;
+    await axios
+      .get(url)
+      .then(result => (toAdd = { ...toAdd, ...result.data[0] }))
+      .catch(error => {
+        this.setState({ error });
+        console.error(error);
+      });
+
     plan_detail.splice(index, 0, toAdd);
     this.calPlan(plan_detail);
   };
@@ -162,96 +162,42 @@ class Plan extends React.Component {
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
-    plan_detail[source].time_spend = parseInt(newDuration);
+    console.log(plan_detail[source]);
+    plan_detail[source].time_spend = Number(newDuration);
     this.calPlan(plan_detail);
   };
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { serverIP, jsonPort, plan_id, user_id } = this.props;
-    let url = serverIP + ":" + jsonPort + "/plan_overview?plan_id=" + plan_id;
+    const { APIServer, plan_id } = this.props;
+    let url = APIServer + "/load_plan/" + plan_id;
+    let i = 0;
     await axios
       .get(url)
       .then(result => {
-        const plan_overview = result.data[0];
-        this.setState({ plan_overview });
+        this.setState({ ...result.data });
       })
-      .catch(error => this.setState({ error }));
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
     if (!this.state.plan_overview) {
-      this.setState({ isLoading: false, error: true });
+      this.setState({ error: true });
       return;
     }
 
-    url = serverIP + ":" + jsonPort + "/user?user_id=" + user_id;
-    await axios.get(url).then(result => {
-      this.setState({ user: result.data[0] });
-    });
-    url =
-      serverIP + ":" + jsonPort + "/plan_detail?_sort=order&plan_id=" + plan_id;
-    let attList = [];
-    await axios
-      .get(url)
-      .then(result => {
-        this.setState({
-          plan_detail: result.data.sort((a, b) => a.order - b.order)
-        });
-        let { data } = result;
-        data = data.reduce(
-          (acc, val) =>
-            acc.indexOf(val.attraction_id) === -1
-              ? [...acc, val.attraction_id]
-              : acc,
-          []
-        );
-        attList = data;
-      })
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
-
-    url = serverIP + ":" + jsonPort + "/attraction?";
-    attList.map(detail => {
-      url = url + "&attraction_id=" + detail;
-      return null;
-    });
-    await axios
-      .get(url)
-      .then(async result =>
-        this.setState({
-          attraction: result.data
-        })
-      )
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
-
-    url =
-      serverIP +
-      ":" +
-      jsonPort +
-      "/city?city_id=" +
-      this.state.plan_overview.city_id;
-    await axios
-      .get(url)
-      .then(result => {
-        const city = result.data[0];
-        this.setState({ city, isLoading: false });
-      })
-      .catch(error => {
-        this.setState({ error });
-        console.error(error);
-      });
     let days = [];
-    for (var i = 1; i <= this.state.plan_overview.duration; i++) {
-      days.push(i);
+    for (i = 1; i <= this.state.plan_overview.duration; i++) {
+      await days.push(i);
     }
-    await this.setState({ days: days, isloading: false });
+
+    await this.setState({ days: days, isLoading: false });
+
+    console.log("Fetching done...");
   }
 
   render() {
-    const { isLoading, error, city, plan_overview, modal } = this.state;
+    const { isLoading, error, plan_overview, modal } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -264,7 +210,7 @@ class Plan extends React.Component {
             </ToastBody>
           </Toast>
           <div className="title-bar">
-            <div className="city">{city.city_name}</div>
+            <div className="city">{plan_overview.city_name}</div>
             <div className="title">{plan_overview.plan_name}</div>
             <div className="days">
               {plan_overview.duration > 1
@@ -316,7 +262,13 @@ class Plan extends React.Component {
                   />
                 </Col>
                 <Col lg={4}>
-                  <Request url={this.props.serverIP + ":3030/attraction"}>
+                  <Request
+                    url={
+                      this.props.APIServer +
+                      "/attraction/city/" +
+                      plan_overview.city_id
+                    }
+                  >
                     {result => <AttBar {...result} />}
                   </Request>
                 </Col>

@@ -4,6 +4,12 @@ import { Table } from "reactstrap";
 
 class User extends Component {
 	render() {
+		if (this.props.isLoading) {
+			return <div>Loading...</div>;
+		}
+		if (this.props.error) {
+			return <div>Something Went Wrong :(</div>;
+		}
 		return (
 			<div>
 				<Table>
@@ -15,19 +21,13 @@ class User extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.isLoading ? (
-							<div>Loading...</div>
-						) : this.props.error ? (
-							<div>{this.props.error.response.status}</div>
-						) : (
-							this.props.data.map(user => (
-								<tr key={user.user_id}>
-									<th scope="row">{user.user_id}</th>
-									<td>{user.username}</td>
-									<td>{user.email}</td>
-								</tr>
-							))
-						)}
+						{this.props.data.map(user => (
+							<tr key={user.user_id}>
+								<th scope="row">{user.user_id}</th>
+								<td>{user.username}</td>
+								<td>{user.email}</td>
+							</tr>
+						))}
 					</tbody>
 				</Table>
 			</div>

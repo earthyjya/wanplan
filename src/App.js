@@ -15,15 +15,14 @@ class App extends Component {
   state = {
     user_id: 1,
     isLoggedIn: true,
-    serverIP: "http://localhost",
-    nodePort: "8080",
-    jsonPort: "3030"
+    APIServer: "http://localhost:3030/api",
+    jsonServer: "http://localhost:3030",
+    nodeServer: "http://localhost:8080"
   };
 
-  componentDidMount() {}
-
   render() {
-    const { user_id, serverIP, nodePort, jsonPort } = this.state;
+    // eslint-disable-next-line
+    const { user_id, APIServer, jsonServer, nodeServer } = this.state;
     return (
       <React.Fragment>
         <div className="topnav">
@@ -47,15 +46,7 @@ class App extends Component {
             exact
             path="/plan"
             component={() => (
-              <Request
-                url={
-                  serverIP +
-                  ":" +
-                  jsonPort +
-                  "/plan_overview?user_id=" +
-                  user_id
-                }
-              >
+              <Request url={APIServer + "/plan_overview/user/" + user_id}>
                 {result => <MyPlan {...result} />}
               </Request>
             )}
@@ -71,7 +62,7 @@ class App extends Component {
           <Route
             path="/users"
             component={() => (
-              <Request url={serverIP + ":" + jsonPort + "/user"}>
+              <Request url={APIServer + "/user"}>
                 {result => <User {...result} />}
               </Request>
             )}
@@ -95,16 +86,12 @@ class App extends Component {
           />
           <Route
             path="/count"
-            render={props => (
-              <Count {...props} serverIP={serverIP + ":" + nodePort} />
-            )}
+            render={props => <Count {...props} serverIP={nodeServer} />}
           />
           <Route path="/chat" component={Chatform} />
           <Route
             path="/chatroom"
-            render={props => (
-              <Chatroom {...props} serverIP={serverIP + ":" + nodePort} />
-            )}
+            render={props => <Chatroom {...props} serverIP={nodeServer} />}
           />
         </BrowserRouter>
       </React.Fragment>

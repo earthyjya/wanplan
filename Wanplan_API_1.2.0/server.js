@@ -26,6 +26,7 @@ require("./routes/country.routes.js")(app);
 require("./routes/plan_detail.routes.js")(app);
 require("./routes/plan_startday.routes.js")(app);
 require("./routes/transport.routes.js")(app);
+require("./routes/load_plan.routes.js")(app);
 
 // set port, listen for requests
 app.listen(3030, () => {

@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /Wanplan_API/node_modules
+/Wanplan_API_1.2.0/node_modules
 /.pnp
 .pnp.js
 
