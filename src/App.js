@@ -16,8 +16,7 @@ class App extends Component {
     user_id: 1,
     isLoggedIn: true,
     APIServer: "http://ec2-18-219-209-29.us-east-2.compute.amazonaws.com:3030/api",
-    jsonServer: "http://localhost:3030",
-    nodeServer: "http://localhost:8080"
+    nodeServer: "http://ec2-18-219-209-29.us-east-2.compute.amazonaws.com:8080"
   };
 
   render() {
@@ -37,7 +36,7 @@ class App extends Component {
             path="/home"
             component={() => (
               <div>
-                <font style={{ fontSize: 110 }}>Welcome to Wanplan!</font>
+                <font style={{ fontSize: 100 }}>Welcome to Wanplan!</font>
               </div>
             )}
           />

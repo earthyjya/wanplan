@@ -6,7 +6,7 @@ class MyPlan extends Component {
 		if (_planlist !== null) {
 			return _planlist.map(plan => (
 				<div key={plan.plan_id}>
-					<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
+					<a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
 				</div>
 			));
 		} else {
@@ -23,7 +23,7 @@ class MyPlan extends Component {
 				<div>
 					{data.map(plan => (
 						<div key={plan.plan_id}>
-							<a href={"/plan/" + plan.plan_id}>{plan.plan_name}</a>
+							<a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
 						</div>
 					))}
 				</div>

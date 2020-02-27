@@ -1,7 +1,7 @@
 .Transcard {
     position: relative;
-    background: #FF5086;
-    opacity:0.8;
+    background: #ff5086;
+    opacity: 0.8;
     box-sizing: border-box;
     padding-left: 18px;
     margin: 30px 13% 30px 13%;
@@ -11,32 +11,25 @@
     max-width: 800px;
     border-radius: 10px;
     box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
-
 }
-.transport{
+.transport {
     display: inline-block;
     margin-top: 12.5px;
-    
 }
-.from{
+.from {
     display: inline-block;
     margin-left: 7px;
-    
-
-    
 }
-.start{
+.start {
     display: inline-block;
     margin-left: 7px;
     color: yellow;
-    
 }
-.to{
-    display: inline-block; 
+.to {
+    display: inline-block;
     margin-left: 7px;
-    
 }
-.destination{
+.destination {
     display: inline-block;
     margin-left: 7px;
     color: yellow;
