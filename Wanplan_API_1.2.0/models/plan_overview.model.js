@@ -12,45 +12,6 @@ const Plan_overview = function(plan_overview) {
   this.star_rating = plan_overview.star_rating;
 };
 
-Plan_overview.loadPlanId = (id, result) => {
-  sql.query(`SELECT * FROM plan_overview 
-  INNER JOIN user ON plan_overview.user_id = user.user_id 
-  INNER JOIN city ON plan_overview.city_id = city.city_id 
-  INNER JOIN country ON city.country_id = country.country_id 
-  WHERE plan_overview.plan_id = ${id}`, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-    if (res.length) {
-      console.log("found plan: ", res);
-      result(null, res);
-      return;
-    }
-    result({ kind: "not_found" }, null);
-  });
-};
-
-Plan_overview.loadDetailId = (id, result) => {
-  sql.query(`SELECT * FROM plan_detail 
-  INNER JOIN plan_startday ON plan_detail.plan_id = plan_startday.plan_id AND plan_detail.day = plan_startday.day 
-  INNER JOIN attraction ON plan_detail.attraction_id = attraction.attraction_id 
-  WHERE plan_detail.plan_id = ${id}`, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-    if (res.length) {
-      console.log("found plan: ", res);
-      result(null, res);
-      return;
-    }
-    result({ kind: "not_found" }, null);
-  });
-};
-
 Plan_overview.create = (newPlan, result) => {
   sql.query("INSERT INTO plan_overview SET ?", newPlan, (err, res) => {
     if (err) {

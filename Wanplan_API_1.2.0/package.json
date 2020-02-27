@@ -1,6 +1,6 @@
 {
   "name": "wanplan_api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Node.js REST API",
   "main": "server.js",
   "scripts": {
@@ -13,5 +13,9 @@
     "restapi"
   ],
   "author": "Chinchuthakun Worameth",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "mysql": "^2.18.1"
+  }
 }
