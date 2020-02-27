@@ -15,7 +15,7 @@ class App extends Component {
   state = {
     user_id: 1,
     isLoggedIn: true,
-    APIServer: "http://localhost:3030/api",
+    APIServer: "http://ec2-18-219-209-29.us-east-2.compute.amazonaws.com:3030/api",
     jsonServer: "http://localhost:3030",
     nodeServer: "http://localhost:8080"
   };
