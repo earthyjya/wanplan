@@ -71,7 +71,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
-## Wanplan REST API Ver 1.1.0 Overview
+## Wanplan REST API Ver 1.2.0 Overview
 
 Table | Primary Key | Available Filter
 ------------ | ------------- | -------------
@@ -88,6 +88,7 @@ The follow table is for all table except plan_detail.
 
 HTTP Type | API URL | Comments
 ------------ | ------------- | ------------- 
+GET | /api/plan/:planId | Retrieves information from table attraction, city, country, plan_detail, plan_overview, plan_startday, and user by plan_id
 GET | /api/tableName | Lists rows of table
 POST | /api/tableName | Create a new row
 GET | /api/tableName/:id | Retrieves a row by primary key (except country)
@@ -104,10 +105,9 @@ HTTP Type | API URL | Comments
 POST | /api/plan_detail | Create a new row
 GET | /api/plan_detail/:id | Retrieves a row by plan_id
 PUT | /api/plan_detail/:planId/:day/:order | Updates row element by composite primary key i.e. plan_id, day, and order
-POST | /api/plan_detail/:planId/:newuserId/:newplanId | Duplicates a row by plan_id then change user_id and plan_id 
-DELETE | /api/plan_detail/delete/plan/:id | Delete a row by plan_id
-DELETE | /api/plan_detail/delete/plan/:id/:day/:order | Delete a row by composite primary key i.e. plan_id, day, and order
-DELETE | /api/plan_detail/delete/user/:id | Delete a row by user_id
+POST | /api/plan_detail/:planId/:newplanId | Duplicates a row by plan_id then change user_id and plan_id 
+DELETE | /api/plan_detail/delete/:id | Delete a row by plan_id
+DELETE | /api/plan_detail/delete/:id/:day/:order | Delete a row by composite primary key i.e. plan_id, day, and order
 
 The follow table is for transport only.
 
@@ -130,5 +130,5 @@ POST | /api/plan_startday | Create a new row
 GET | /api/plan_startday/:planId | Retrieves a row by plan_id
 PUT | /api/plan_startday/:planId/:day | Updates row element by composite primary key i.e. plan_id and day 
 POST | /api/plan_startday/:planId/:newPlanId | Duplicates a row by plan_id then change plan_id 
-DELETE | /api/plan_startday/delete/plan/:planId | Delete rows by plan_id
-DELETE | /api/plan_startday/delete/plan/:planId/:day | Delete a row by composite primary key i.e. plan_id and day
+DELETE | /api/plan_startday/delete/:planId | Delete rows by plan_id
+DELETE | /api/plan_startday/delete/:planId/:day | Delete a row by composite primary key i.e. plan_id and day
