@@ -1,0 +1,5 @@
+27 Feb 2020
+- Added column "available" in the table "plan_overview"
+- Added column "original_id" in the table "plan_overview"
+- Remove column "user_id" in the table "plan_detail"
+- Updated API for table "plan_overview", "plan_detail", and "plan_startday"
