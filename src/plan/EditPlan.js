@@ -17,7 +17,7 @@ class EditPlan extends React.Component {
     error: null,
     modal: false,
     editPlan: false,
-    saveToastOpen: false,
+    updateToastOpen: false,
     publishToastOpen: false,
     days: [],
     attraction: []
@@ -25,7 +25,7 @@ class EditPlan extends React.Component {
 
   updatePlan = () =>{
     //update current plan
-    this.saveToastOpen();
+    this.updateToastOpen();
   }
 
   publishPlan = () =>{
@@ -33,12 +33,12 @@ class EditPlan extends React.Component {
     this.publishToastOpen();
   }
 
-  saveToastOpen = () => {
-    this.setState({ saveToastOpen: true });
+  updateToastOpen = () => {
+    this.setState({ updateToastOpen: true });
   };
 
-  saveToastClose = () => {
-    this.setState({ saveToastOpen: false });
+  updateToastClose = () => {
+    this.setState({ updateToastOpen: false });
   };
 
   publishToastOpen = () => {
@@ -212,10 +212,11 @@ class EditPlan extends React.Component {
     else {
       return (
         <React.Fragment>
-          <Toast isOpen={this.state.saveToastOpen}>
-            <ToastHeader toggle={this.saveToastClose}>Plan saved!</ToastHeader>
+          <Toast isOpen={this.state.updateToastOpen}>
+            <ToastHeader toggle={this.updateToastClose}>Plan updated!</ToastHeader>
             <ToastBody>
-              The plan is saved to your device, view it in plan page!
+              If you want to save this plan, please sign-in or copy the url.
+              This plan will now show on 'My plan'.
             </ToastBody>
           </Toast>
           <Toast isOpen={this.state.publishToastOpen}>
