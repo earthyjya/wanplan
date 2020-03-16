@@ -10,6 +10,7 @@ import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
+import { Redirect } from 'react-router-dom';
 import "./Plan.css";
 
 class Plan extends React.Component {
@@ -20,7 +21,9 @@ class Plan extends React.Component {
     editPlan: false,
     toastOpen: false,
     days: [],
-    attraction: []
+    attraction: [],
+    redirect: false,
+    redirectTo: '/',
   };
 
   save = () => {
@@ -55,6 +58,23 @@ class Plan extends React.Component {
     this.setState({ modal: false });
   };
 
+  checkEdit = () =>{
+    //If user already edit the plan before, go to the edit plan page on the same url
+    if(true){
+      this.setState({redirect: true, redirectTo: "/plan/"+this.props.plan_id+"/edit_plan"});
+    }
+    //Else if user not edit the plan before, create new url and go to that url edit plan page
+    else{
+      //createNewUrl()
+      this.setState({redirect: true, redirectTo: "/plan/"+this.props.plan_id+"/edit_plan"});
+    }
+  }
+
+  renderEditRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to = {this.state.redirectTo} />
+    }
+  }
 
   setPlanOverview = plan_overview => {
     this.setState({ plan_overview });
@@ -225,7 +245,7 @@ class Plan extends React.Component {
                 : "One Day Plan"}
             </div>
             <div>
-              <a href={this.props.plan_id+'/edit_plan'}>
+              <a onClick = {this.checkEdit}>
                 {/* eslint-disable-next-line */}
                 <img
                   className="edit"
@@ -234,6 +254,7 @@ class Plan extends React.Component {
                   />
               </a>
             </div>
+            {this.renderEditRedirect()}
             <button className="save" onClick={this.save}>
               Save!
               <span style={{ fontSize: "15px" }}>
