@@ -33,3 +33,22 @@
 	height: 35px;
 	padding: 5px;
 }
+
+.publish-button{
+	font-weight: bold;
+  font-size: 20px;
+  line-height: 14px;
+  float: right;
+  background-color: #28aefc;
+  border: none;
+  color: #0a090c;
+  height: 56px;
+  width: 100px;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.publish-div{
+	position: absolute;
+	top: 150px;
+	right: 50px;
+}

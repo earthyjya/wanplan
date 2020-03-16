@@ -236,6 +236,10 @@ class Plan extends React.Component {
             </div>
             <button className="save" onClick={this.save}>
               Save!
+              <span style={{ fontSize: "15px" }}>
+                <br />
+                to device
+              </span>
             </button>
             <button className="share" onClick={this.openShareModal}>
               Share!

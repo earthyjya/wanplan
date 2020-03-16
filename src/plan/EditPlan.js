@@ -17,21 +17,36 @@ class EditPlan extends React.Component {
     error: null,
     modal: false,
     editPlan: false,
-    toastOpen: false,
+    saveToastOpen: false,
+    publishToastOpen: false,
     days: [],
     attraction: []
   };
 
   updatePlan = () =>{
     //update current plan
+    this.saveToastOpen();
   }
 
-  openToast = () => {
-    this.setState({ toastOpen: true });
+  publishPlan = () =>{
+    //publish current plan
+    this.publishToastOpen();
+  }
+
+  saveToastOpen = () => {
+    this.setState({ saveToastOpen: true });
   };
 
-  closeToast = () => {
-    this.setState({ toastOpen: false });
+  saveToastClose = () => {
+    this.setState({ saveToastOpen: false });
+  };
+
+  publishToastOpen = () => {
+    this.setState({ publishToastOpen: true });
+  };
+
+  publishToastClose = () => {
+    this.setState({ publishToastOpen: false });
   };
 
   openShareModal = () => {
@@ -197,10 +212,16 @@ class EditPlan extends React.Component {
     else {
       return (
         <React.Fragment>
-          <Toast isOpen={this.state.toastOpen}>
-            <ToastHeader toggle={this.closeToast}>Plan saved!</ToastHeader>
+          <Toast isOpen={this.state.saveToastOpen}>
+            <ToastHeader toggle={this.saveToastClose}>Plan saved!</ToastHeader>
             <ToastBody>
               The plan is saved to your device, view it in plan page!
+            </ToastBody>
+          </Toast>
+          <Toast isOpen={this.state.publishToastOpen}>
+            <ToastHeader toggle={this.publishToastClose}>Plan published!</ToastHeader>
+            <ToastBody>
+              The plan is opended to public. It will be available for other user
             </ToastBody>
           </Toast>
           <div className="title-bar">
@@ -224,6 +245,11 @@ class EditPlan extends React.Component {
                 <br />
                 this plan
               </span>
+            </button>
+          </div>
+          <div className = "publish-div">
+            <button onClick={this.publishPlan} className = "publish-button">
+              Publish
             </button>
           </div>
           <PlanOverview {...this.state} />
