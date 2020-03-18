@@ -1,8 +1,42 @@
-.share-modal-content > .close-share-modal {
+.share-modal-content {
+  background-color: #0a090c;
+  color: white;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  height: 300px;
+  width: 450px;
+}
+
+.close-share-modal {
 	float: right;
 	cursor: pointer;
 	font-size: 15px;
 	font-weight: 900;
+}
+
+.fa {
+  padding: 10px;
+  font-size: 20px;
+  width: 40px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+}
+
+.fa:hover {
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+.fa-facebook {
+  background: #3b5998;
+  color: white;
+}
+
+.fa-twitter {
+  background: #55acee;
+  color: white;
 }
 
 .div {

@@ -1,7 +1,7 @@
 const sql = require("./db.js");
 
 const Load_plan = function(plan_overview) {
-  this.plan_name = plan_overview.plan_name;
+  this.plan_title = plan_overview.plan_title;
   this.user_id = plan_overview.user_id;
   this.city_id = plan_overview.city_id;
   this.duration = plan_overview.duration;
