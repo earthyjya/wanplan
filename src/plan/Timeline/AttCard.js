@@ -21,6 +21,7 @@ class AttCard extends Component {
       attraction_name,
       attraction_type
     } = this.props;
+    let minutes = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300]
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
@@ -48,37 +49,7 @@ class AttCard extends Component {
           value={time_spend}
           onChange={this.changeDuration}
         >
-          <option>0</option>
-          <option>10</option>
-          <option>20</option>
-          <option>30</option>
-          <option>40</option>
-          <option>50</option>
-          <option>60</option>
-          <option>70</option>
-          <option>80</option>
-          <option>90</option>
-          <option>100</option>
-          <option>110</option>
-          <option>120</option>
-          <option>130</option>
-          <option>140</option>
-          <option>150</option>
-          <option>160</option>
-          <option>170</option>
-          <option>180</option>
-          <option>190</option>
-          <option>200</option>
-          <option>210</option>
-          <option>220</option>
-          <option>230</option>
-          <option>240</option>
-          <option>250</option>
-          <option>260</option>
-          <option>270</option>
-          <option>280</option>
-          <option>290</option>
-          <option>300</option>
+          {minutes.map((min) => {return <option>{min}</option>})}
         </select>
       </div>
     );
