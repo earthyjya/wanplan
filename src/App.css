@@ -130,6 +130,7 @@
   background-color: #ddd;
   text-decoration: none;
   color: black;
+  cursor: pointer;
 }
 
 .topnav > a.wanplan {

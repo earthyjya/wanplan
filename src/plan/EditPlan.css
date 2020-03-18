@@ -88,6 +88,18 @@
   cursor: default;
 }
 
+.fa-pencil-square-o {
+  color: lightgray;
+  padding: 19px 0px;
+  height: 55px;
+  width: 55px;
+  margin: 0px;
+}
+
+.fa-pencil-square-o:hover {
+  opacity: 0.5;
+}
+
 .title-bar > button.yellow-button {
   font-weight: bold;
   font-size: 20px;
@@ -104,7 +116,6 @@
   background-color: #fcc626;
   color: #000000;
 }
-
 
 .DayTimeline {
   width: 100%;
@@ -130,13 +141,25 @@
   background-color: #fcc626;
 }
 
-.Block {
+.DelDay {
   position: relative;
   float: left;
   height: 20px;
   width: 20px;
+  border-radius: 10px;
+  font-size: 11px;
+  align-content: center;
   text-indent: -1px;
+  color: white;
+  background-color: white;
   margin: 10px 5px 10px 25px;
+  border: none;
+  font-weight: 700;
+}
+
+.DelDay:hover {
+  color: white;
+  background-color: lightgrey;
 }
 
 .Timeline {
@@ -148,4 +171,23 @@
 .container1 {
   position: relative;
   top: 52px;
+}
+
+.publish-button{
+	font-weight: bold;
+  font-size: 20px;
+  line-height: 14px;
+  float: right;
+  background-color: #28aefc;
+  border: none;
+  color: #0a090c;
+  height: 56px;
+  width: 100px;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.publish-div{
+	position: absolute;
+	top: 150px;
+	right: 50px;
 }

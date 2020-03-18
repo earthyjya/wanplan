@@ -13,6 +13,12 @@ class MyPlan extends Component {
 			return <div>No saved plan yet!</div>;
 		}
 	}
+
+	createNewPlan(){
+    // Create new url then redirect to the editPlan page of that url
+    console.log("CREATE NEW PLAN HERE")
+  }
+
 	render() {
 		const { isLoading, error, data } = this.props;
 		if (isLoading) return <div>Loading...</div>;
@@ -20,6 +26,9 @@ class MyPlan extends Component {
 
 		return (
 			<React.Fragment>
+				<button className="new_plan_button" onclick={this.createNewPlan}>
+					Create new plan
+				</button>
 				<div>
 					{data.map(plan => (
 						<div key={plan.plan_id}>

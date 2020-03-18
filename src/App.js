@@ -5,6 +5,7 @@ import Posts from "./posts/Posts";
 import PostDetail from "./posts/PostDetail";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
+import EditPlan from "./plan/EditPlan";
 import MyPlan from "./plan/MyPlan";
 import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
@@ -50,14 +51,19 @@ class App extends Component {
               </Request>
             )}
           />
-
           <Route
+            exact
             path="/plan/:plan_id"
             component={({ match }) => (
-              <Plan plan_id={match.params.plan_id} {...this.state} />
+              <Plan plan_id = {match.params.plan_id} {...this.state} />
             )}
           />
-
+          <Route
+            path="/plan/:plan_id/edit_plan"
+            component={({ match }) => (
+              <EditPlan plan_id = {match.params.plan_id} {...this.state} />
+            )}
+          />
           <Route
             path="/users"
             component={() => (
