@@ -1,6 +1,7 @@
 import React from "react";
 import "./EditPlan.css";
 import Share from "./Share";
+import EditPlanContent from "./EditPlanContent";
 import PlanOverview from "./PlanOverview";
 import Timeline from "./Timeline/Timeline";
 import AttBar from "./AttBar/AttBar";
@@ -16,22 +17,41 @@ class EditPlan extends React.Component {
     isLoading: true,
     error: null,
     modal: false,
-    editPlan: false,
+    editTitle: false,
     updateToastOpen: false,
     publishToastOpen: false,
     days: [],
     attraction: []
   };
 
-  updatePlan = () =>{
+  updatePlan = () => {
     //update current plan
     this.updateToastOpen();
-  }
+  };
 
-  publishPlan = () =>{
+  updatePlanOverview = async plan_overview => {
+    const { APIServer, plan_id } = this.props;
+    const url = APIServer + "/plan_overview/" + plan_id;
+    await axios
+      .put(url, plan_overview)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+    if (this.state.error) alert(this.state.error);
+    else
+      this.setState({
+        plan_overview: { ...this.state.plan_overview, ...plan_overview }
+      });
+  };
+
+  publishPlan = () => {
     //publish current plan
     this.publishToastOpen();
-  }
+  };
 
   updateToastOpen = () => {
     this.setState({ updateToastOpen: true });
@@ -57,9 +77,12 @@ class EditPlan extends React.Component {
     this.setState({ modal: false });
   };
 
+  openEditPlanContent = () => {
+    this.setState({ editTitle: true });
+  };
 
-  setPlanOverview = plan_overview => {
-    this.setState({ plan_overview });
+  closeEditPlanContent = () => {
+    this.setState({ editTitle: false });
   };
 
   calPlan = async plan_detail => {
@@ -206,21 +229,25 @@ class EditPlan extends React.Component {
   }
 
   render() {
-    const { isLoading, error, plan_overview, modal, editPlan } = this.state;
+    const { isLoading, error, plan_overview, modal, editTitle } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
       return (
         <React.Fragment>
           <Toast isOpen={this.state.updateToastOpen}>
-            <ToastHeader toggle={this.updateToastClose}>Plan updated!</ToastHeader>
+            <ToastHeader toggle={this.updateToastClose}>
+              Plan updated!
+            </ToastHeader>
             <ToastBody>
               If you want to save this plan, please sign-in or copy the url.
               This plan will now show on 'My plan'.
             </ToastBody>
           </Toast>
           <Toast isOpen={this.state.publishToastOpen}>
-            <ToastHeader toggle={this.publishToastClose}>Plan published!</ToastHeader>
+            <ToastHeader toggle={this.publishToastClose}>
+              Plan published!
+            </ToastHeader>
             <ToastBody>
               The plan is opended to public. It will be available for other user
             </ToastBody>
@@ -233,27 +260,34 @@ class EditPlan extends React.Component {
                 ? plan_overview.duration + " Days Plan"
                 : "One Day Plan"}
             </div>
-            <button className="share" onClick={this.openShareModal}>
+            <div>
+              {/* eslint-disable-next-line */}
+              <i
+                className="fa fa-pencil-square-o fa-fw"
+                aria-hidden="true"
+                onClick={this.openEditPlanContent}
+              />
+            </div>
+            <button className="yellow-button" onClick={this.openShareModal}>
               Share!
               <span style={{ fontSize: "15px" }}>
                 <br />
                 this plan
               </span>
             </button>
-            <button className="share" onClick={this.updatePlan}>
-              Update
+            <button className="yellow-button" onClick={this.updatePlan}>
+              Update!
               <span style={{ fontSize: "15px" }}>
                 <br />
                 this plan
               </span>
             </button>
           </div>
-          <div className = "publish-div">
-            <button onClick={this.publishPlan} className = "publish-button">
+          <div className="publish-div">
+            <button onClick={this.publishPlan} className="publish-button">
               Publish
             </button>
           </div>
-          <PlanOverview {...this.state} />
           {modal ? (
             <div className="share-modal">
               <Share closeShareModal={this.closeShareModal} />
@@ -261,6 +295,19 @@ class EditPlan extends React.Component {
           ) : (
             <div></div>
           )}
+          {editTitle ? (
+            <div className="edit-plan-modal">
+              <EditPlanContent
+                {...this.state}
+                closeEditPlanContent={this.closeEditPlanContent}
+                updatePlanOverview={this.updatePlanOverview}
+              />
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          <PlanOverview {...this.state} />
           <DragDropContext
             onDragEnd={({ destination, source }) => {
               if (!destination) {
@@ -283,6 +330,7 @@ class EditPlan extends React.Component {
                     changeOrder={this.changeOrder}
                     changeDuration={this.changeDuration}
                     delCard={this.delCard}
+                    editing={true}
                   />
                 </Col>
                 <Col lg={4}>

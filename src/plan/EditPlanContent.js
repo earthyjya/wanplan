@@ -55,7 +55,7 @@ class EditPlanContent extends React.Component {
 
   onSave = () => {
     this.props.updatePlanOverview(this.state.plan_overview);
-    this.props.closeEditPlan();
+    this.props.closeEditPlanContent();
   };
 
   async componentDidMount() {
@@ -69,7 +69,7 @@ class EditPlanContent extends React.Component {
     if (isLoading) return <div></div>;
     return (
       <div className="edit-plan-content">
-        <div className="close-edit-plan" onClick={this.props.closeEditPlan}>
+        <div className="close-edit-plan" onClick={this.props.closeEditPlanContent}>
           &#10005;
         </div>
         <div>
@@ -116,7 +116,7 @@ class EditPlanContent extends React.Component {
         <button className="save" onClick={this.onSave}>
           Save
         </button>
-        <button className="cancel" onClick={this.props.closeEditPlan}>
+        <button className="cancel" onClick={this.props.closeEditPlanContent}>
           Cancel
         </button>
       </div>

@@ -88,18 +88,7 @@
   cursor: default;
 }
 
-.fa-pencil-square-o {
-  color: white;
-  padding: 19px 0px;
-  height: 55px;
-  margin: 0px;
-}
-
-.fa-pencil-square-o:hover {
-  opacity: 0.7;
-}
-
-.title-bar > button.share {
+.title-bar > button.yellow-button {
   font-weight: bold;
   font-size: 20px;
   line-height: 14px;
@@ -111,49 +100,9 @@
   width: 100px;
 }
 
-.title-bar > button.save {
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 14px;
-  float: right;
-  background-color: #fcd328;
-  border: none;
-  color: #0a090c;
-  height: 55px;
-  width: 100px;
-}
-
-.title-bar > button.share:hover {
+.title-bar > button.yellow-button:hover {
   background-color: #fcc626;
   color: #000000;
-}
-
-.share-modal {
-  display: block;
-  position: fixed;
-  z-index: 1;
-  padding-top: 15%;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-  border: none;
-}
-
-.edit-plan-modal {
-  display: block;
-  position: fixed;
-  z-index: 1;
-  padding-top: 15%;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-  border: none;
 }
 
 .DayTimeline {
@@ -180,25 +129,13 @@
   background-color: #fcc626;
 }
 
-.DelDay {
+.Block {
   position: relative;
   float: left;
   height: 20px;
   width: 20px;
-  border-radius: 10px;
-  font-size: 11px;
-  align-content: center;
   text-indent: -1px;
-  color: white;
-  background-color: white;
   margin: 10px 5px 10px 25px;
-  border: none;
-  font-weight: 700;
-}
-
-.DelDay:hover {
-  color: white;
-  background-color: lightgrey;
 }
 
 .Timeline {
