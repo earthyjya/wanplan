@@ -1,7 +1,7 @@
 const sql = require("./db.js");
 
 const Plan_overview = function(plan_overview) {
-  this.plan_name = plan_overview.plan_name;
+  this.plan_title = plan_overview.plan_title;
   this.user_id = plan_overview.user_id;
   this.city_id = plan_overview.city_id;
   this.duration = plan_overview.duration;
@@ -112,8 +112,8 @@ Plan_overview.getAll = result => {
 
 Plan_overview.updateById = (id, plan_overview, result) => {
   sql.query(
-    "UPDATE plan_overview SET plan_name = ?, user_id = ?, city_id = ?, duration = ?, plan_style = ?, plan_description = ?, original_id = ?, available = ?, star_rating = ? WHERE plan_id = ?",
-    [plan_overview.plan_name, plan_overview.user_id, plan_overview.city_id, plan_overview.duration, plan_overview.plan_style, plan_overview.plan_description, plan_overview.original_id, plan_overview.available, plan_overview.star_rating, id],
+    "UPDATE plan_overview SET plan_title = ?, user_id = ?, city_id = ?, duration = ?, plan_style = ?, plan_description = ?, original_id = ?, available = ?, star_rating = ? WHERE plan_id = ?",
+    [plan_overview.plan_title, plan_overview.user_id, plan_overview.city_id, plan_overview.duration, plan_overview.plan_style, plan_overview.plan_description, plan_overview.original_id, plan_overview.available, plan_overview.star_rating, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
