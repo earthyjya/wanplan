@@ -17,8 +17,8 @@ class App extends Component {
     user_id: 1,
     isLoggedIn: true,
     APIServer:
-      "http://ec2-18-219-209-29.us-east-2.compute.amazonaws.com:3030/api",
-    nodeServer: "http://ec2-18-219-209-29.us-east-2.compute.amazonaws.com:8080"
+      "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:3030/api",
+    nodeServer: "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:8080"
   };
 
   render() {
