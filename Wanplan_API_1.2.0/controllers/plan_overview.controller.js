@@ -8,7 +8,7 @@ exports.create = (req, res) => {
   }
 
   const plan_overview = new Plan_overview({
-    plan_name: req.body.plan_name,
+    plan_title: req.body.plan_title,
     user_id: req.body.user_id,
     city_id: req.body.city_id,
     duration: req.body.duration,
@@ -172,7 +172,7 @@ exports.duplicate = (req, res) => {
       }
     } else {
       const plan_overview = new Plan_overview({
-        plan_name: data[0].plan_name,
+        plan_title: data[0].plan_title,
         user_id: req.params.userId,
         city_id: data[0].city_id,
         duration: data[0].duration,
