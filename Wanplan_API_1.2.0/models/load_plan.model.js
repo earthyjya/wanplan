@@ -45,13 +45,8 @@ Load_plan.loadStartDay = (id, result) => {
         return;
       }
 
-      if (res.length) {
-        console.log("found plan_startday: ", res);
-        result(null, res);
-        return;
-      }
-
-      result({ kind: "not_found" }, null);
+      console.log("found plan_startday: ", res);
+      result(null, res);
     }
   );
 };
@@ -67,12 +62,9 @@ Load_plan.loadDetailId = (id, result) => {
         result(err, null);
         return;
       }
-      if (res.length) {
-        console.log("found plan: ", res);
-        result(null, res);
-        return;
-      }
-      result({ kind: "not_found" }, null);
+
+      console.log("found plan: ", res);
+      result(null, res);
     }
   );
 };
