@@ -163,30 +163,7 @@ class Plan extends React.Component {
               The plan is saved to your device, view it in plan page!
             </ToastBody>
           </Toast>
-          <div className="title-bar">
-            <div className="title">{plan_overview.plan_title}</div>
-            <div className="city">{plan_overview.city_name}</div>
-            <div className="days">
-              {plan_overview.duration > 1
-                ? plan_overview.duration + " Days Plan"
-                : "One Day Plan"}
-            </div>
-            {this.renderEditRedirect()}
-            <button className="yellow-button" onClick={this.save}>
-              Save!
-              <span style={{ fontSize: "15px" }}>
-                <br />
-                to device
-              </span>
-            </button>
-            <button className="yellow-button" onClick={this.checkEdit}>
-              Edit!
-              <span style={{ fontSize: "15px" }}>
-                <br />
-                this plan
-              </span>
-            </button>
-          </div>
+
           {modal ? (
             <div className="share-modal">
               <Share closeShareModal={this.closeShareModal} />
@@ -196,7 +173,30 @@ class Plan extends React.Component {
           )}
 
           <PlanOverview {...this.state} />
-
+            <div className="title-bar">
+              <div className="title">{plan_overview.plan_title}</div>
+              <div className="city">{plan_overview.city_name}</div>
+              <div className="days">
+                {plan_overview.duration > 1
+                  ? plan_overview.duration + " Days Plan"
+                  : "One Day Plan"}
+              </div>
+              {this.renderEditRedirect()}
+              <button className="yellow-button" onClick={this.save}>
+                Save!
+                <span style={{ fontSize: "15px" }}>
+                  <br />
+                  to device
+                </span>
+              </button>
+              <button className="yellow-button" onClick={this.checkEdit}>
+                Edit!
+                <span style={{ fontSize: "15px" }}>
+                  <br />
+                  this plan
+                </span>
+              </button>
+            </div>
           <Container fluid>
             <Row>
               <Col lg={12}>
