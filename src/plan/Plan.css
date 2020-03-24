@@ -1,21 +1,20 @@
 .avatar-image {
-  height: 60px;
-  width: 60px;
+  height: 40px;
+  width: 40px;
   align-self: center;
   border-radius: 50%;
 }
 
 .plan-description-title {
-  font-weight: 400;
-  font-size: 1.4em;
+  font-weight: 600;
+  font-size: 3.2em;
 }
 
 .plan-description {
-  font-size: 0.9em;
-  padding: 10px;
-  margin: 10px;
-  border-bottom: solid;
-  border-bottom-width: thin;
+  font-size: 1.2em;
+  padding-left: 10%;
+  padding-right: 10%;
+  text-align: center;
 }
 
 .plan-description-container {
@@ -23,10 +22,21 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  padding-top: 70px;
   background-color: rgba(10, 5, 5, 0.8);
   color: rgba(255, 245, 245, 0.9);
-  justify-content: flex-end;
+  justify-content: center;
+}
+
+.plan-description-picture {
+  position: absolute;
+  min-height: 350px;
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}
+
+.plan-description-container > .row {
+  justify-content: center;
+    z-index: 1;
 }
 
 .toast {
@@ -52,7 +62,7 @@
   position: sticky;
   top: 52px;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
   overflow: hidden;
   background-color: #0a090c;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.4);
@@ -60,7 +70,6 @@
 
 .title-bar div {
   float: left;
-  position: sticky;
   top: 52px;
   text-align: center;
   text-decoration: none;

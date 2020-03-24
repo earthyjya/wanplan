@@ -1,34 +1,3 @@
-.avatar-image {
-  height: 60px;
-  width: 60px;
-  align-self: center;
-  border-radius: 50%;
-}
-
-.plan-description-title {
-  font-weight: 400;
-  font-size: 1.4em;
-}
-
-.plan-description {
-  font-size: 0.9em;
-  padding: 10px;
-  margin: 10px;
-  border-bottom: solid;
-  border-bottom-width: thin;
-}
-
-.plan-description-container {
-  min-height: 350px;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  padding-top: 70px;
-  background-color: rgba(10, 5, 5, 0.8);
-  color: rgba(255, 245, 245, 0.9);
-  justify-content: flex-end;
-}
-
 .toast {
   position: fixed;
   bottom: 20px;
@@ -48,46 +17,6 @@
   color: white !important;
 }
 
-.title-bar {
-  position: sticky;
-  top: 52px;
-  width: 100%;
-  z-index: 1;
-  overflow: hidden;
-  background-color: #0a090c;
-  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.4);
-}
-
-.title-bar div {
-  float: left;
-  position: sticky;
-  top: 52px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.title-bar > div.title {
-  font-weight: bold;
-  font-size: 24px;
-  height: 55px;
-  color: #fcd328;
-  padding: 10px 20px 10px 40px;
-  cursor: default;
-}
-
-.title-bar > div.city {
-  color: #f47;
-  padding: 15px 20px 13px 20px;
-  cursor: default;
-}
-
-.title-bar > div.days {
-  color: #f47;
-  padding: 15px 20px 13px 20px;
-  cursor: default;
-}
-
 .fa-pencil-square-o {
   color: lightgray;
   padding: 19px 0px;
@@ -98,23 +27,6 @@
 
 .fa-pencil-square-o:hover {
   opacity: 0.5;
-}
-
-.title-bar > button.yellow-button {
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 14px;
-  float: right;
-  background-color: #fcd328;
-  border: none;
-  color: #0a090c;
-  height: 55px;
-  width: 100px;
-}
-
-.title-bar > button.yellow-button:hover {
-  background-color: #fcc626;
-  color: #000000;
 }
 
 .DayTimeline {
