@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./scss/App.scss";
 import User from "./user/User";
 import Posts from "./posts/Posts";
 import PostDetail from "./posts/PostDetail";

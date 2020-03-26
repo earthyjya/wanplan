@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./AttCard.css";
+import "../../scss/AttCard.scss";
 import { LoremIpsum } from "react-lorem-ipsum";
 
 class AttCard extends Component {

@@ -1,5 +1,5 @@
 import React from "react";
-import "./EditPlanContent.css";
+import "../scss/EditPlanContent.scss";
 
 class EditPlanContent extends React.Component {
   state = {

@@ -1,5 +1,5 @@
 import React from "react";
-import "./EditPlan.css";
+import "../scss/EditPlan.scss";
 import Share from "./Share";
 import EditPlanContent from "./EditPlanContent";
 import PlanOverview from "./PlanOverview";

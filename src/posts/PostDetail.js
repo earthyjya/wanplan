@@ -13,7 +13,7 @@ import {
 	Col
 } from "reactstrap";
 import classnames from "classnames";
-import "./PostDetail.css";
+import "../scss/PostDetail.scss";
 
 class PostDetail extends Component {
 	constructor(props) {

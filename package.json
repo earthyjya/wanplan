@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^10.0.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-copy-to-clipboard": "^5.0.2",

@@ -1,6 +1,6 @@
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import "./Share.css";
+import "../scss/Share.scss";
 
 class Share extends React.Component {
   state = {

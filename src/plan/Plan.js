@@ -1,5 +1,5 @@
 import React from "react";
-import "./Plan.css";
+import "../scss/Plan.scss";
 import Share from "./Share";
 import PlanOverview from "./PlanOverview";
 import Timeline from "./Timeline/Timeline";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./TransCard.css";
+import "../../scss/TransCard.scss";
 
 class TransCard extends Component {
   render() {
