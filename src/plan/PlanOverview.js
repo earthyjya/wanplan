@@ -20,20 +20,22 @@ class PlanOverview extends Component {
 				className="plan-description-container plan-header"
 			>
 				<Row>
-						<Col style={{"textAlign": "end"}}>
+					<div className = "author-card-container">
+						<div style={{"textAlign": "end", alignSelf:"center"}}>
 							<img
 								src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
 								className="avatar-image"
 								alt="author"
 								/>
-						</Col>
-						<Col>
-							<Row>{plan_overview.name + " " + plan_overview.surname}</Row>
-							<Row>{plan_overview.user_description}</Row>
-						</Col>
+						</div>
+						<div className = "author-card-details">
+							<div className = "author-card-title"> {plan_overview.name + " " + plan_overview.surname} </div>
+							<div className = "author-card-description"> {plan_overview.user_description} </div>
+						</div>
+					</div>
 				</Row>
 				<Row className="plan-description-title">
-						Plan Title
+						Long Plan Title
 				</Row>
 				<Row className="plan-description">
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec fringilla purus, egestas convallis diam.

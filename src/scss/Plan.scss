@@ -1,5 +1,23 @@
 @import './Style.scss';
 
+.author-card-container{
+  display: flex;
+  margin-bottom: -10px;
+}
+
+.author-card-details{
+  margin-left: 20px;
+}
+
+.author-card-title{
+  font-size: 1.2em;
+}
+
+.author-card-description{
+  font-size: 0.8em;
+}
+
+
 .avatar-image {
   height: 40px;
   width: 40px;
@@ -9,29 +27,30 @@
 
 .plan-description-title {
   font-weight: 600;
-  font-size: 3.2em;
+  font-size: 3.6em;
 }
 
 .plan-description {
   font-size: 1.2em;
-  padding-left: 10%;
-  padding-right: 10%;
+  padding-left: 16%;
+  padding-right: 16%;
   text-align: center;
 }
 
 .plan-description-container {
-  min-height: 350px;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   padding: 20px;
   background-color: rgba(10, 5, 5, 0.8);
   color: rgba(255, 245, 245, 0.9);
   justify-content: center;
+  padding-bottom: 50px;
 }
 
 .plan-description-picture {
   position: absolute;
-  min-height: 350px;
+  min-height: 450px;
   filter: blur(2px);
   -webkit-filter: blur(2px);
 }
