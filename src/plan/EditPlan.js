@@ -235,6 +235,82 @@ class EditPlan extends React.Component {
     else {
       return (
         <React.Fragment>
+          <DragDropContext
+            onDragEnd={({ destination, source }) => {
+              if (!destination) {
+                return;
+              }
+
+              if (source.droppableId !== "bar")
+                this.reorderCards(source, destination);
+              else this.addCard(source, destination);
+            }}
+          >
+          <Container fluid className="p-0">
+            <Row className="m-0">
+            <Col lg={8}  className="p-0">
+              <PlanOverview {...this.state} />
+                <div className="title-bar">
+                  <div className="title">{plan_overview.plan_title}</div>
+                  <div className="city">{plan_overview.city_name}</div>
+                  <div className="days">
+                    {plan_overview.duration > 1
+                      ? plan_overview.duration + " Days Plan"
+                      : "One Day Plan"}
+                  </div>
+                  <div>
+                    {/* eslint-disable-next-line */}
+                    <i
+                      className="fa fa-pencil-square-o fa-fw"
+                      aria-hidden="true"
+                      onClick={this.openEditPlanContent}
+                    />
+                  </div>
+                  <button className="yellow-button" onClick={this.openShareModal}>
+                    Share!
+                    <span style={{ fontSize: "15px" }}>
+                      <br />
+                      this plan
+                    </span>
+                  </button>
+                  <button style={{marginLeft: "10px"}} className="yellow-button" onClick={this.updatePlan}>
+                    Update!
+                    <span style={{ fontSize: "15px" }}>
+                      <br />
+                      this plan
+                    </span>
+                  </button>
+                </div>
+                <div className="publish-div">
+                  <button onClick={this.publishPlan} className="publish-button">
+                    Publish
+                  </button>
+                </div>
+                <Timeline
+                  {...this.state}
+                  {...this.props}
+                  addDay={this.addDay}
+                  delDay={this.delDay}
+                  changeOrder={this.changeOrder}
+                  changeDuration={this.changeDuration}
+                  delCard={this.delCard}
+                  editing={true}
+                />
+            </Col>
+            <Col className="p-0">
+              <Request
+                url={
+                  this.props.APIServer +
+                  "/attraction/city/" +
+                  plan_overview.city_id
+                }
+              >
+                {result => <AttBar {...result} />}
+              </Request>
+            </Col>
+          </Row>
+          </Container>
+          </DragDropContext>
           <Toast isOpen={this.state.updateToastOpen}>
             <ToastHeader toggle={this.updateToastClose}>
               Plan updated!
@@ -252,42 +328,7 @@ class EditPlan extends React.Component {
               The plan is opended to public. It will be available for other user
             </ToastBody>
           </Toast>
-          <div className="title-bar">
-            <div className="title">{plan_overview.plan_title}</div>
-            <div className="city">{plan_overview.city_name}</div>
-            <div className="days">
-              {plan_overview.duration > 1
-                ? plan_overview.duration + " Days Plan"
-                : "One Day Plan"}
-            </div>
-            <div>
-              {/* eslint-disable-next-line */}
-              <i
-                className="fa fa-pencil-square-o fa-fw"
-                aria-hidden="true"
-                onClick={this.openEditPlanContent}
-              />
-            </div>
-            <button className="yellow-button" onClick={this.openShareModal}>
-              Share!
-              <span style={{ fontSize: "15px" }}>
-                <br />
-                this plan
-              </span>
-            </button>
-            <button className="yellow-button" onClick={this.updatePlan}>
-              Update!
-              <span style={{ fontSize: "15px" }}>
-                <br />
-                this plan
-              </span>
-            </button>
-          </div>
-          <div className="publish-div">
-            <button onClick={this.publishPlan} className="publish-button">
-              Publish
-            </button>
-          </div>
+
           {modal ? (
             <div className="share-modal">
               <Share closeShareModal={this.closeShareModal} />
@@ -295,6 +336,7 @@ class EditPlan extends React.Component {
           ) : (
             <div></div>
           )}
+
           {editTitle ? (
             <div className="edit-plan-modal">
               <EditPlanContent
@@ -306,47 +348,6 @@ class EditPlan extends React.Component {
           ) : (
             <div></div>
           )}
-
-          <PlanOverview {...this.state} />
-          <DragDropContext
-            onDragEnd={({ destination, source }) => {
-              if (!destination) {
-                return;
-              }
-
-              if (source.droppableId !== "bar")
-                this.reorderCards(source, destination);
-              else this.addCard(source, destination);
-            }}
-          >
-            <Container fluid>
-              <Row>
-                <Col lg={8}>
-                  <Timeline
-                    {...this.state}
-                    {...this.props}
-                    addDay={this.addDay}
-                    delDay={this.delDay}
-                    changeOrder={this.changeOrder}
-                    changeDuration={this.changeDuration}
-                    delCard={this.delCard}
-                    editing={true}
-                  />
-                </Col>
-                <Col lg={4}>
-                  <Request
-                    url={
-                      this.props.APIServer +
-                      "/attraction/city/" +
-                      plan_overview.city_id
-                    }
-                  >
-                    {result => <AttBar {...result} />}
-                  </Request>
-                </Col>
-              </Row>
-            </Container>
-          </DragDropContext>
         </React.Fragment>
       );
     }
