@@ -189,7 +189,7 @@ class Plan extends React.Component {
                   to device
                 </span>
               </button>
-              <button className="yellow-button" onClick={this.checkEdit}>
+              <button style={{marginLeft: "10px"}} className="yellow-button" onClick={this.checkEdit}>
                 Edit!
                 <span style={{ fontSize: "15px" }}>
                   <br />
