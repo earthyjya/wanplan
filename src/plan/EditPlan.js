@@ -11,6 +11,7 @@ import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
+import { Redirect } from "react-router-dom";
 
 class EditPlan extends React.Component {
   state = {
@@ -20,13 +21,96 @@ class EditPlan extends React.Component {
     editTitle: false,
     updateToastOpen: false,
     publishToastOpen: false,
+    plan_detail: [],
     days: [],
-    attraction: []
+    daysBefUpdate: 0,
+    orders: 0,
+    attraction: [],
+    redirect: false,
+    redirectTo: "/"
   };
 
-  updatePlan = () => {
+  updatePlan = async () => {
     //update current plan
     this.updateToastOpen();
+    const { APIServer, plan_id } = this.props;
+    let url = ""
+
+    if (this.state.daysBefUpdate !== 0) {
+      url =
+        APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
+
+      await axios
+        .delete(url)
+        .then(result => {
+          if (result.data === null) alert("Could not update plan :(");
+          console.log(result);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+    this.state.plan_startday.map(async day => {
+      url = APIServer + "/plan_startday/";
+      await axios
+        .post(url, day)
+        .then(result => {
+          if (result.data === null) alert("Could not update plan :(");
+          console.log(result);
+        })
+        .catch(error => {
+          this.setState({ error });
+          console.log(error);
+        });
+    });
+
+    if (this.state.orders !== 0) {
+      url =
+        APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
+
+      await axios
+        .delete(url)
+        .then(result => {
+          if (result.data === null) alert("Could not update plan :(");
+          console.log(result);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+    this.state.plan_detail.map(async plan => {
+      url = APIServer + "/plan_detail/";
+      await axios
+        .post(url, this.state.plan_detail[plan.attraction_order])
+        .then(result => {
+          if (result.data === null) alert("Could not update plan :(");
+          console.log(result);
+        })
+        .catch(error => {
+          this.setState({ error });
+          console.log(error);
+        });
+    });
+
+    url = APIServer + "/plan_overview/" + plan_id;
+    await axios
+      .put(url, this.state.plan_overview)
+      .then(result => {
+        if (result.data === null) alert("Could not update plan :(");
+        else this.setState({
+          redirect: true,
+          redirectTo: "/plan/" + this.state.plan_overview.plan_id
+        });
+        console.log(result);
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+
+    
   };
 
   updatePlanOverview = async plan_overview => {
@@ -199,6 +283,12 @@ class EditPlan extends React.Component {
     this.calPlan(plan_detail);
   };
 
+  renderOverviewRedirect =  () => {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+  };
+
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
     const { APIServer, plan_id } = this.props;
@@ -223,8 +313,12 @@ class EditPlan extends React.Component {
       await days.push(i);
     }
 
-    await this.setState({ days: days, isLoading: false });
-
+    await this.setState({
+      days: days,
+      daysBefUpdate: days.length,
+      orders: this.state.plan_detail.length,
+      isLoading: false
+    });
     console.log("Fetching done...");
   }
 
@@ -246,70 +340,80 @@ class EditPlan extends React.Component {
               else this.addCard(source, destination);
             }}
           >
-          <Container fluid className="p-0">
-            <Row className="m-0">
-            <Col lg={8}  className="p-0">
-              <PlanOverview {...this.state} />
-                <div className="title-bar">
-                  <div className="title">{plan_overview.plan_title}</div>
-                  <div className="city">{plan_overview.city_name}</div>
-                  <div className="days">
-                    {plan_overview.duration > 1
-                      ? plan_overview.duration + " Days Plan"
-                      : "One Day Plan"}
+            <Container fluid className="p-0">
+              <Row className="m-0">
+                <Col lg={8} className="p-0">
+                  <PlanOverview {...this.state} />
+                  <div className="title-bar">
+                    <div className="title">{plan_overview.plan_title}</div>
+                    <div className="city">{plan_overview.city_name}</div>
+                    <div className="days">
+                      {plan_overview.duration > 1
+                        ? plan_overview.duration + " Days Plan"
+                        : "One Day Plan"}
+                    </div>
+                    <div>
+                      {/* eslint-disable-next-line */}
+                      <i
+                        className="fa fa-pencil-square-o fa-fw"
+                        aria-hidden="true"
+                        onClick={this.openEditPlanContent}
+                      />
+                    </div>
+                    <button
+                      className="yellow-button"
+                      onClick={this.openShareModal}
+                    >
+                      Share!
+                      <span style={{ fontSize: "15px" }}>
+                        <br />
+                        this plan
+                      </span>
+                    </button>
+                    <button
+                      style={{ marginLeft: "10px" }}
+                      className="yellow-button"
+                      onClick={this.updatePlan}
+                    >
+                      Update!
+                      <span style={{ fontSize: "15px" }}>
+                        <br />
+                        this plan
+                      </span>
+                    </button>
                   </div>
-                  <div>
-                    {/* eslint-disable-next-line */}
-                    <i
-                      className="fa fa-pencil-square-o fa-fw"
-                      aria-hidden="true"
-                      onClick={this.openEditPlanContent}
-                    />
+                  <div className="publish-div">
+                    <button
+                      onClick={this.publishPlan}
+                      className="publish-button"
+                    >
+                      Publish
+                    </button>
                   </div>
-                  <button className="yellow-button" onClick={this.openShareModal}>
-                    Share!
-                    <span style={{ fontSize: "15px" }}>
-                      <br />
-                      this plan
-                    </span>
-                  </button>
-                  <button style={{marginLeft: "10px"}} className="yellow-button" onClick={this.updatePlan}>
-                    Update!
-                    <span style={{ fontSize: "15px" }}>
-                      <br />
-                      this plan
-                    </span>
-                  </button>
-                </div>
-                <div className="publish-div">
-                  <button onClick={this.publishPlan} className="publish-button">
-                    Publish
-                  </button>
-                </div>
-                <Timeline
-                  {...this.state}
-                  {...this.props}
-                  addDay={this.addDay}
-                  delDay={this.delDay}
-                  changeOrder={this.changeOrder}
-                  changeDuration={this.changeDuration}
-                  delCard={this.delCard}
-                  editing={true}
-                />
-            </Col>
-            <Col className="p-0">
-              <Request
-                url={
-                  this.props.APIServer +
-                  "/attraction/city/" +
-                  plan_overview.city_id
-                }
-              >
-                {result => <AttBar {...result} />}
-              </Request>
-            </Col>
-          </Row>
-          </Container>
+                  <Timeline
+                    {...this.state}
+                    {...this.props}
+                    addDay={this.addDay}
+                    delDay={this.delDay}
+                    changeOrder={this.changeOrder}
+                    changeDuration={this.changeDuration}
+                    delCard={this.delCard}
+                    editing={true}
+                  />
+                </Col>
+                <Col className="p-0">
+                  <Request
+                    url={
+                      this.props.APIServer +
+                      "/attraction/city/" +
+                      plan_overview.city_id
+                    }
+                  >
+                    {result => <AttBar {...result} />}
+                  </Request>
+                </Col>
+              </Row>
+            </Container>
           </DragDropContext>
           <Toast isOpen={this.state.updateToastOpen}>
             <ToastHeader toggle={this.updateToastClose}>
@@ -348,6 +452,7 @@ class EditPlan extends React.Component {
           ) : (
             <div></div>
           )}
+          {this.renderOverviewRedirect()}
         </React.Fragment>
       );
     }

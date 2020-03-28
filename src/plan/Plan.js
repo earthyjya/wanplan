@@ -8,6 +8,7 @@ import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import { Redirect } from "react-router-dom";
+import { username } from "react-lorem-ipsum/dist/user";
 
 class Plan extends React.Component {
   state = {
@@ -21,19 +22,75 @@ class Plan extends React.Component {
     redirectTo: "/"
   };
 
-  save = () => {
+  save = async () => {
     this.openToast();
-    if (localStorage.getItem("planlist") === null) {
-      var _planlist = [];
-      _planlist[0] = this.state.plan_overview;
-      localStorage.setItem("planlist", JSON.stringify(_planlist));
-    } else {
-      let _planlist = JSON.parse(localStorage.getItem("planlist"));
-      for (var i = 0; i < _planlist.length; i++) {
-        if (_planlist[i].plan_id === this.props.plan_id) return;
+    const { user_id, APIServer } = this.props;
+    if (this.props.isLoggedIn) {
+      if (user_id !== this.state.plan_overview.user_id) {
+        let url = APIServer + "/plan_overview";
+        let savedplan = this.state.plan_overview;
+        let planId = this.state.plan_overview.plan_id;
+        savedplan.user_id = user_id;
+        await axios
+          .post(url, savedplan)
+          .then(result => {
+            if (result.data === null) alert("Could not save plan :(");
+            console.log(result);
+            planId = result.data.id;
+          })
+          .catch(error => {
+            this.setState({ error });
+          });
+        this.state.plan_startday.map(async day => {
+          url = APIServer + "/plan_startday/";
+          let newDay = day;
+          newDay.plan_id = planId;
+          await axios
+            .post(url, newDay)
+            .then(result => {
+              if (result.data === null) alert("Could not save plan :(");
+              console.log(result);
+            })
+            .catch(error => {
+              this.setState({ error });
+              console.log(error);
+            });
+        });
+
+        this.state.plan_detail.map(async plan => {
+          url = APIServer + "/plan_detail/";
+          let newPlan = plan;
+          newPlan.plan_id = planId;
+          await axios
+            .post(url, newPlan)
+            .then(result => {
+              if (result.data === null) alert("Could not save plan :(");
+              else this.setState({
+                redirect: true,
+                redirectTo: "/plan/" + planId
+              });
+              console.log(result);
+            })
+            .catch(error => {
+              this.setState({ error });
+              console.log(error);
+            });
+        });
+        
       }
-      _planlist.push(this.state.plan_overview);
-      localStorage.setItem("planlist", JSON.stringify(_planlist));
+    } else {
+      if (localStorage.getItem("planlist") === null) {
+        var _planlist = [];
+        _planlist[0] = this.state.plan_overview;
+        localStorage.setItem("planlist", JSON.stringify(_planlist));
+      } else {
+        let _planlist = JSON.parse(localStorage.getItem("planlist"));
+        for (var i = 0; i < _planlist.length; i++) {
+          if (_planlist[i].plan_id === this.props.plan_id) return;
+        }
+        _planlist.push(this.state.plan_overview);
+        localStorage.setItem("planlist", JSON.stringify(_planlist));
+      }
     }
   };
 
@@ -72,9 +129,10 @@ class Plan extends React.Component {
     this.setState({ modal: false });
   };
 
-  checkEdit = () => {
+  checkEdit = async () => {
     //If user already edit the plan before, go to the edit plan page on the same url
-    if (true) {
+    const { user_id, APIServer } = this.props;
+    if (user_id === this.state.plan_overview.user_id) {
       this.setState({
         redirect: true,
         redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
@@ -82,11 +140,59 @@ class Plan extends React.Component {
     }
     //Else if user not edit the plan before, create new url and go to that url edit plan page
     else {
-      //createNewUrl()
-      this.setState({
-        redirect: true,
-        redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
-      });
+      const { user_id, APIServer } = this.props;
+      if (this.props.isLoggedIn) {
+        let url = APIServer + "/plan_overview";
+        let savedplan = this.state.plan_overview;
+        let planId = this.state.plan_overview.plan_id;
+        savedplan.user_id = user_id;
+        await axios
+          .post(url, savedplan)
+          .then(result => {
+            if (result.data === null) alert("Could not save plan :(");
+            console.log(result);
+            planId = result.data.id;
+          })
+          .catch(error => {
+            this.setState({ error });
+          });
+        this.state.plan_startday.map(async day => {
+          url = APIServer + "/plan_startday/";
+          let newDay = day;
+          newDay.plan_id = planId;
+          await axios
+            .post(url, newDay)
+            .then(result => {
+              if (result.data === null) alert("Could not save plan :(");
+              console.log(result);
+            })
+            .catch(error => {
+              this.setState({ error });
+              console.log(error);
+            });
+        });
+
+        this.state.plan_detail.map(async plan => {
+          url = APIServer + "/plan_detail/";
+          let newPlan = plan;
+          newPlan.plan_id = planId;
+          await axios
+            .post(url, newPlan)
+            .then(result => {
+              if (result.data === null) alert("Could not save plan :(");
+              else this.setState({
+                redirect: true,
+                redirectTo: "/plan/" + planId + "/edit_plan"
+              });
+              console.log(result);
+            })
+            .catch(error => {
+              this.setState({ error });
+              console.log(error);
+            });
+        });
+        
+      }
     }
   };
 
@@ -173,30 +279,34 @@ class Plan extends React.Component {
           )}
 
           <PlanOverview {...this.state} />
-            <div className="title-bar">
-              <div className="title">{plan_overview.plan_title}</div>
-              <div className="city">{plan_overview.city_name}</div>
-              <div className="days">
-                {plan_overview.duration > 1
-                  ? plan_overview.duration + " Days Plan"
-                  : "One Day Plan"}
-              </div>
-              {this.renderEditRedirect()}
-              <button className="yellow-button" onClick={this.save}>
-                Save!
-                <span style={{ fontSize: "15px" }}>
-                  <br />
-                  to device
-                </span>
-              </button>
-              <button style={{marginLeft: "10px"}} className="yellow-button" onClick={this.checkEdit}>
-                Edit!
-                <span style={{ fontSize: "15px" }}>
-                  <br />
-                  this plan
-                </span>
-              </button>
+          <div className="title-bar">
+            <div className="title">{plan_overview.plan_title}</div>
+            <div className="city">{plan_overview.city_name}</div>
+            <div className="days">
+              {plan_overview.duration > 1
+                ? plan_overview.duration + " Days Plan"
+                : "One Day Plan"}
             </div>
+            {this.renderEditRedirect()}
+            <button className="yellow-button" onClick={this.save}>
+              Save!
+              <span style={{ fontSize: "15px" }}>
+                <br />
+                to device
+              </span>
+            </button>
+            <button
+              style={{ marginLeft: "10px" }}
+              className="yellow-button"
+              onClick={this.checkEdit}
+            >
+              Edit!
+              <span style={{ fontSize: "15px" }}>
+                <br />
+                this plan
+              </span>
+            </button>
+          </div>
           <Container fluid>
             <Row>
               <Col lg={12}>

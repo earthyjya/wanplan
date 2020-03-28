@@ -47,7 +47,7 @@ class App extends Component {
             exact
             path="/plan"
             component={() => (
-              <Request url={APIServer + "/plan_overview/user/" + user_id}>
+              <Request url={APIServer + "/plan_overview" /*+"/user/" + user_id*/}>
                 {result => <MyPlan {...result} {...this.state} />}
               </Request>
             )}
