@@ -132,6 +132,12 @@ class EditPlan extends React.Component {
       });
   };
 
+  renderOverviewRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+  };
+
   publishPlan = () => {
     //publish current plan
     this.publishToastOpen();
@@ -281,12 +287,6 @@ class EditPlan extends React.Component {
     console.log(plan_detail[source]);
     plan_detail[source].time_spend = Number(newDuration);
     this.calPlan(plan_detail);
-  };
-
-  renderOverviewRedirect =  () => {
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirectTo} />;
-    }
   };
 
   async componentDidMount() {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Container } from "reactstrap";
+import { Row, Container } from "reactstrap";
 
 class PlanOverview extends Component {
 	render() {
@@ -35,12 +35,10 @@ class PlanOverview extends Component {
 					</div>
 				</Row>
 				<Row className="plan-description-title">
-						Long Plan Title
+						{plan_overview.plan_title}
 				</Row>
 				<Row className="plan-description">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec fringilla purus, egestas convallis diam.
-					In vitae risus vel lacus vehicula malesuada. Aenean condimentum erat a ligula cursus, hendrerit faucibus nunc mollis.
-					In venenatis varius felis rhoncus mollis.
+					{plan_overview.plan_description}
 				</Row>
 			</Container>
 		</React.Fragment>

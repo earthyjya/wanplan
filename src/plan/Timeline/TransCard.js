@@ -10,9 +10,9 @@ class TransCard extends Component {
         <div className="from">
            From
         </div>
-        <div className="start">{start} </div>
+        <div className="start">{start.attraction_name} </div>
         <div className="to">  to </div>
-        <div className="destination">{" " + destination}</div>
+        <div className="destination">{" " + destination.attraction_name}</div>
 
 
       </div>
