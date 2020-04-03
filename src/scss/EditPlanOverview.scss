@@ -1,0 +1,68 @@
+@import './Style.scss';
+@import './PlanOverview.scss';
+
+#privacy-dropdown{
+  background-color: transparent;
+  border: transparent;
+  padding: 0;
+  background: none;
+}
+
+#title-input{
+  font-size: 3.2em;
+  color: white;
+  background-color: transparent;
+  border: transparent;
+  border-bottom: solid;
+  border-bottom-color: white;
+  text-align: center;
+  transition: 0.2s ease-out;
+}
+
+#title-input::placeholder {
+  color: rgba( $gray4, .7 );
+}
+
+#title-input:focus {
+    outline: none !important;
+    outline-offset: none !important;
+    border-bottom-color: $primary !important;
+}
+
+.privacy-dropdown{
+  display: flex;
+  justify-content: center;
+  color: rgba(white, 0.6);
+  transition: 0.2s ease-out;
+}
+
+.privacy-dropdown:hover{
+  cursor: pointer;
+  color: rgba(white, 1);
+}
+
+
+.privacy-dropdown-toggle{
+  display: flex;
+  background: none;
+  background-color: transparent;
+  width: 100px;
+  justify-content: space-between;
+  align-self: center;
+  text-align: center;
+}
+
+.choose-photo-container{
+  font-size: 1.1em;
+  height: auto;
+  left: 20px;
+  top: 20px;
+  position: absolute;
+  color: rgba(white, 0.5)
+}
+
+.title-input-icon{
+  margin-left: -30px;
+  align-self: center;
+  color: $gray4;
+}

@@ -376,11 +376,7 @@ class EditPlan extends React.Component {
                       </span>
                     </button>
                   </div>
-                  <div className="publish-div">
-                    <button onClick={this.publishPlan} className="publish-button">
-                      Publish
-                    </button>
-                  </div>
+
                   <Timeline
                     {...this.state}
                     {...this.props}

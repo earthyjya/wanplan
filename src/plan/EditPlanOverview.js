@@ -1,8 +1,20 @@
 import React, { Component } from "react";
 import { Row, Col, Container } from "reactstrap";
-import { Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { CustomInput } from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
+import "../scss/EditPlanOverview.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class EditPlanOverview extends Component {
+
+	state = {
+		dropdownOpen: false,
+	}
+
+	toggleDropDown = () => {
+		this.setState({dropdownOpen: !this.state.dropdownOpen});
+	}
+
 	render() {
 		const { plan_overview } = this.props;
 		return (
@@ -20,21 +32,32 @@ class EditPlanOverview extends Component {
 				fluid
 				className="plan-description-container plan-header"
 			>
-				<Form style={{zIndex:1}}>
-					<Row form>
-						<FormGroup>
-							<Input type="select" name="select" id="exampleSelect">
-								<option>1</option>
-								<option>2</option>
-							</Input>
-						</FormGroup>
+				<div className="choose-photo-container">
+					<FontAwesomeIcon icon="camera" size="lg"/>
+					<span style={{marginLeft:"8px"}}>choose a cover photo</span>
+				</div>
+					<Row>
+						<Dropdown className="privacy-dropdown" isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
+				      <DropdownToggle
+								tag="div"
+				        data-toggle="dropdown"
+								className="privacy-dropdown-toggle">
+								<div style={{width:"auto"}}><FontAwesomeIcon  icon="globe-asia" size="lg"/></div>
+				        <span>public</span>
+								<div style={{width:"auto"}}><FontAwesomeIcon icon="angle-down" size="lg"/></div>
+				      </DropdownToggle>
+				      <DropdownMenu style={{zIndex:3}}>
+				        <div onClick={this.toggleDropDown}>public</div>
+				        <div onClick={this.toggleDropDown}>private</div>
+				      </DropdownMenu>
+				    </Dropdown>
 					</Row>
-					<Row form>
-						<FormGroup>
-							<Input placeholder="lg" bsSize="lg" />
-						</FormGroup>
+					<Row>
+						<div>
+							<CustomInput id="title-input" placeholder={plan_overview.plan_title} onfocus={(e) => e.target.placeholder = ""} />
+							<FontAwesomeIcon className="title-input-icon" icon="pencil-alt" />
+						</div>
 					</Row>
-				</Form>
 			</Container>
 		</React.Fragment>
 		);

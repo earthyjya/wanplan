@@ -11,6 +11,9 @@ import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
 import { Route, BrowserRouter } from "react-router-dom";
 import Request from "./lib/Request";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faPencilAlt, faCamera, faGlobeAsia, faAngleDown} from '@fortawesome/free-solid-svg-icons'
+library.add(faPencilAlt, faCamera, faGlobeAsia, faAngleDown)
 
 class App extends Component {
   state = {
