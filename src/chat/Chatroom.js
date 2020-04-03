@@ -30,14 +30,14 @@ class Chatroom extends Component {
 	}
 
 	connectServer = () => {
-		console.log(this.props.serverIP)
+		console.log(this.props.serverIP);
 		const socket = socketIOClient(this.props.serverIP);
 		this.setState({ socket: socket });
 		socket.on("message", this.addMessage);
 	};
 
 	onMessageSend = message => {
-		if(this.state.socket == null) return;
+		if (this.state.socket == null) return;
 		this.state.socket.emit("emit", message);
 		this.addMessage(message);
 	};
@@ -56,10 +56,7 @@ class Chatroom extends Component {
 		return (
 			<div>
 				<MessageList messages={this.state.messages} />
-				<MessageForm
-					onMessageSend={this.onMessageSend}
-					currentUser={username}
-				/>
+				<MessageForm onMessageSend={this.onMessageSend} currentUser={username} />
 			</div>
 		);
 	}

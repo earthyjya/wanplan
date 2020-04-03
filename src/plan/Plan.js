@@ -8,7 +8,6 @@ import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import { Redirect } from "react-router-dom";
-import { username } from "react-lorem-ipsum/dist/user";
 
 class Plan extends React.Component {
   state = {
@@ -65,10 +64,11 @@ class Plan extends React.Component {
             .post(url, newPlan)
             .then(result => {
               if (result.data === null) alert("Could not save plan :(");
-              else this.setState({
-                redirect: true,
-                redirectTo: "/plan/" + planId
-              });
+              else
+                this.setState({
+                  redirect: true,
+                  redirectTo: "/plan/" + planId
+                });
               console.log(result);
             })
             .catch(error => {
@@ -76,7 +76,6 @@ class Plan extends React.Component {
               console.log(error);
             });
         });
-
       }
     } else {
       if (localStorage.getItem("planlist") === null) {
@@ -140,11 +139,10 @@ class Plan extends React.Component {
     }
     //Else if user not edit the plan before, create new url and go to that url edit plan page
     else {
-      const { user_id, APIServer } = this.props;
       if (this.props.isLoggedIn) {
         let url = APIServer + "/plan_overview";
-        let savedplan = this.state.plan_overview;
         let planId = this.state.plan_overview.plan_id;
+        let savedplan = { ...this.state.plan_overview, original_id: planId };
         savedplan.user_id = user_id;
         await axios
           .post(url, savedplan)
@@ -180,10 +178,11 @@ class Plan extends React.Component {
             .post(url, newPlan)
             .then(result => {
               if (result.data === null) alert("Could not save plan :(");
-              else this.setState({
-                redirect: true,
-                redirectTo: "/plan/" + planId + "/edit_plan"
-              });
+              else
+                this.setState({
+                  redirect: true,
+                  redirectTo: "/plan/" + planId + "/edit_plan"
+                });
               console.log(result);
             })
             .catch(error => {
@@ -191,7 +190,6 @@ class Plan extends React.Component {
               console.log(error);
             });
         });
-
       }
     }
   };
@@ -265,9 +263,7 @@ class Plan extends React.Component {
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
             <ToastHeader toggle={this.closeToast}>Plan saved!</ToastHeader>
-            <ToastBody>
-              The plan is saved to your device, view it in plan page!
-            </ToastBody>
+            <ToastBody>The plan is saved to your device, view it in plan page!</ToastBody>
           </Toast>
 
           {modal ? (
@@ -284,7 +280,7 @@ class Plan extends React.Component {
             <div className="city">Plan</div>
             <div className="days">Map</div>
             {this.renderEditRedirect()}
-            <button className="yellow-button" onClick={this.save}>
+            <button className="white-button" onClick={this.save}>
               Save!
               <span style={{ fontSize: "15px" }}>
                 <br />
@@ -293,7 +289,7 @@ class Plan extends React.Component {
             </button>
             <button
               style={{ marginLeft: "10px" }}
-              className="yellow-button"
+              className="white-button"
               onClick={this.checkEdit}
             >
               Edit!

@@ -38,9 +38,15 @@ class Count extends Component {
 	render() {
 		return (
 			<div>
-				<h4><Badge color="secondary">Count : {this.state.count}</Badge></h4>
-				<Button color="success" onClick={this.clickCount}>Count</Button>{" "}
-				<Button color="warning" onClick={this.clickReset}>Reset</Button>
+				<h4>
+					<Badge color="secondary">Count : {this.state.count}</Badge>
+				</h4>
+				<Button color="success" onClick={this.clickCount}>
+					Count
+				</Button>{" "}
+				<Button color="warning" onClick={this.clickReset}>
+					Reset
+				</Button>
 			</div>
 		);
 	}

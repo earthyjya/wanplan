@@ -21,7 +21,7 @@ class User extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.data.map(user => (
+						{this.props.data.map((user) => (
 							<tr key={user.user_id}>
 								<th scope="row">{user.user_id}</th>
 								<td>{user.username}</td>

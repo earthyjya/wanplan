@@ -1,4 +1,4 @@
-@import './Style.scss';
+@import "./Style.scss";
 
 .toast {
   position: fixed;
@@ -62,22 +62,22 @@
   border-left: solid;
 }
 
-.title-bar > button.yellow-button {
+.title-bar > button.white-button {
   font-weight: bold;
   font-size: 20px;
   line-height: 14px;
   float: right;
   border: none;
+  background-color: white;
   color: #0a090c;
   height: 55px;
   width: 100px;
   margin-left: auto;
 }
 
-.title-bar > button.yellow-button:hover {
+.title-bar > button.white-button:hover {
   color: #000000;
 }
-
 
 .DayTimeline {
   width: 100%;

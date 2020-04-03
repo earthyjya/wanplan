@@ -34,11 +34,10 @@ class EditPlan extends React.Component {
     //update current plan
     this.updateToastOpen();
     const { APIServer, plan_id } = this.props;
-    let url = ""
+    let url = "";
 
     if (this.state.daysBefUpdate !== 0) {
-      url =
-        APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
+      url = APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
 
       await axios
         .delete(url)
@@ -66,8 +65,7 @@ class EditPlan extends React.Component {
     });
 
     if (this.state.orders !== 0) {
-      url =
-        APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
+      url = APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
 
       await axios
         .delete(url)
@@ -99,18 +97,17 @@ class EditPlan extends React.Component {
       .put(url, this.state.plan_overview)
       .then(result => {
         if (result.data === null) alert("Could not update plan :(");
-        else this.setState({
-          redirect: true,
-          redirectTo: "/plan/" + this.state.plan_overview.plan_id
-        });
+        else
+          this.setState({
+            redirect: true,
+            redirectTo: "/plan/" + this.state.plan_overview.plan_id
+          });
         console.log(result);
       })
       .catch(error => {
         this.setState({ error });
         console.log(error);
       });
-
-
   };
 
   updatePlanOverview = async plan_overview => {
@@ -130,6 +127,12 @@ class EditPlan extends React.Component {
       this.setState({
         plan_overview: { ...this.state.plan_overview, ...plan_overview }
       });
+  };
+
+  renderOverviewRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
   };
 
   publishPlan = () => {
@@ -278,15 +281,14 @@ class EditPlan extends React.Component {
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
-    console.log(plan_detail[source]);
     plan_detail[source].time_spend = Number(newDuration);
     this.calPlan(plan_detail);
   };
 
-  renderOverviewRedirect =  () => {
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirectTo} />;
-    }
+  updateDescription = (source, newDescription) => {
+    const { plan_detail } = this.state;
+    plan_detail[source].description = newDescription;
+    this.setState({ plan_detail });
   };
 
   async componentDidMount() {
@@ -334,8 +336,8 @@ class EditPlan extends React.Component {
               if (!destination) {
                 return;
               }
-              if (source.droppableId !== "bar")
-                this.reorderCards(source, destination);
+
+              if (source.droppableId !== "bar") this.reorderCards(source, destination);
               else this.addCard(source, destination);
             }}
           >
@@ -355,10 +357,7 @@ class EditPlan extends React.Component {
                         onClick={this.openEditPlanContent}
                       />
                     </div>
-                    <button
-                      className="yellow-button"
-                      onClick={this.openShareModal}
-                    >
+                    <button className="white-button" onClick={this.openShareModal}>
                       Share!
                       <span style={{ fontSize: "15px" }}>
                         <br />
@@ -367,7 +366,7 @@ class EditPlan extends React.Component {
                     </button>
                     <button
                       style={{ marginLeft: "10px" }}
-                      className="yellow-button"
+                      className="white-button"
                       onClick={this.updatePlan}
                     >
                       Update!
@@ -377,6 +376,11 @@ class EditPlan extends React.Component {
                       </span>
                     </button>
                   </div>
+                  <div className="publish-div">
+                    <button onClick={this.publishPlan} className="publish-button">
+                      Publish
+                    </button>
+                  </div>
                   <Timeline
                     {...this.state}
                     {...this.props}
@@ -384,18 +388,13 @@ class EditPlan extends React.Component {
                     delDay={this.delDay}
                     changeOrder={this.changeOrder}
                     changeDuration={this.changeDuration}
+                    updateDescription={this.updateDescription}
                     delCard={this.delCard}
                     editing={true}
                   />
                 </Col>
                 <Col className="p-0">
-                  <Request
-                    url={
-                      this.props.APIServer +
-                      "/attraction/city/" +
-                      plan_overview.city_id
-                    }
-                  >
+                  <Request url={this.props.APIServer + "/attraction/city/" + plan_overview.city_id}>
                     {result => <AttBar {...result} />}
                   </Request>
                 </Col>
@@ -403,18 +402,14 @@ class EditPlan extends React.Component {
             </Container>
           </DragDropContext>
           <Toast isOpen={this.state.updateToastOpen}>
-            <ToastHeader toggle={this.updateToastClose}>
-              Plan updated!
-            </ToastHeader>
+            <ToastHeader toggle={this.updateToastClose}>Plan updated!</ToastHeader>
             <ToastBody>
-              If you want to save this plan, please sign-in or copy the url.
-              This plan will now show on 'My plan'.
+              If you want to save this plan, please sign-in or copy the url. This plan will now show
+              on 'My plan'.
             </ToastBody>
           </Toast>
           <Toast isOpen={this.state.publishToastOpen}>
-            <ToastHeader toggle={this.publishToastClose}>
-              Plan published!
-            </ToastHeader>
+            <ToastHeader toggle={this.publishToastClose}>Plan published!</ToastHeader>
             <ToastBody>
               The plan is opended to public. It will be available for other user
             </ToastBody>

@@ -3,6 +3,10 @@ import "../../scss/AttCard.scss";
 import { LoremIpsum } from "react-lorem-ipsum";
 
 class AttCard extends Component {
+  state = {
+    description: ""
+  };
+
   changeDuration = e => {
     this.props.changeDuration(this.props.attraction_order, e.target.value);
   };
@@ -10,6 +14,18 @@ class AttCard extends Component {
   delCard = () => {
     this.props.delCard(this.props.attraction_order);
   };
+
+  onChange = e => {
+    this.setState({ description: e.target.value });
+  };
+
+  updateDescription = () => {
+    this.props.updateDescription(this.props.attraction_order, this.state.description);
+  };
+
+  componentDidMount() {
+    this.setState({ description: this.props.description });
+  }
 
   render() {
     const {
@@ -20,7 +36,8 @@ class AttCard extends Component {
       end_time,
       time_spend,
       attraction_name,
-      attraction_type
+      attraction_type,
+      description
     } = this.props;
     let minutes = [
       0,
@@ -76,25 +93,28 @@ class AttCard extends Component {
         </div>
         <img className="AttPhoto" alt={attraction_name} />
 
-        <div className="AttDesCont">
-          <LoremIpsum
-            className="AttDes"
-            avgSentencesPerParagraph={8}
-            avgWordsPerSentence={4}
-          />
-        </div>
         {(() => {
           if (editing)
             return (
-              <select
-                className="SelAttDura"
-                value={time_spend}
-                onChange={this.changeDuration}
-              >
-                {minutes.map(min => {
-                  return <option>{min}</option>;
-                })}
-              </select>
+              <React.Fragment>
+                <input
+                  className="AttDesCont"
+                  value={this.state.description}
+                  onChange={this.onChange}
+                  onBlur={this.updateDescription}
+                />
+                <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
+                  {minutes.map(min => {
+                    return <option>{min}</option>;
+                  })}
+                </select>
+              </React.Fragment>
+            );
+          else
+            return (
+              <React.Fragment>
+                <div className="AttDesCont">{description}</div>
+              </React.Fragment>
             );
         })()}
       </div>

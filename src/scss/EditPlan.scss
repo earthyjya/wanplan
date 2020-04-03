@@ -1,4 +1,4 @@
-@import './Style.scss';
+@import "./Style.scss";
 
 .toast {
   position: fixed;
@@ -87,8 +87,8 @@
   top: 52px;
 }
 
-.publish-button{
-	font-weight: bold;
+.publish-button {
+  font-weight: bold;
   font-size: 20px;
   line-height: 14px;
   float: right;
@@ -100,9 +100,9 @@
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
-.publish-div{
-	position: absolute;
-	top: 350px;
-	right: 50px;
+.publish-div {
+  position: absolute;
+  top: 350px;
+  right: 50px;
   z-index: 1;
 }
