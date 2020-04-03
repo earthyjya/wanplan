@@ -1,22 +1,21 @@
-@import './Style.scss';
+@import "./Style.scss";
 
-.author-card-container{
+.author-card-container {
   display: flex;
   margin-bottom: -10px;
 }
 
-.author-card-details{
+.author-card-details {
   margin-left: 20px;
 }
 
-.author-card-title{
+.author-card-title {
   font-size: 1.2em;
 }
 
-.author-card-description{
+.author-card-description {
   font-size: 0.8em;
 }
-
 
 .avatar-image {
   height: 40px;
@@ -123,22 +122,22 @@
   border-left: solid;
 }
 
-.title-bar > button.yellow-button {
+.title-bar > button.white-button {
   font-weight: bold;
   font-size: 20px;
   line-height: 14px;
   float: right;
   border: none;
+  background-color: white;
   color: #0a090c;
   height: 55px;
   width: 100px;
   margin-left: auto;
 }
 
-.title-bar > button.yellow-button:hover {
+.title-bar > button.white-button:hover {
   color: #000000;
 }
-
 
 .DayTimeline {
   width: 100%;

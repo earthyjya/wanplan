@@ -23,10 +23,7 @@ class Share extends React.Component {
           <div>Here is your link!</div>
           <div className="copy-bar">
             <input className="url-box" value={"" + URL} readOnly />
-            <CopyToClipboard
-              text={URL}
-              onCopy={() => this.setState({ copied: true })}
-            >
+            <CopyToClipboard text={URL} onCopy={() => this.setState({ copied: true })}>
               <button className="copy-button">Copy</button>
             </CopyToClipboard>
             {copied ? <span className="copied">Copied</span> : null}

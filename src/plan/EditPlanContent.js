@@ -104,9 +104,7 @@ class EditPlanContent extends React.Component {
           <span className="input-title">Privacy : </span>
           <select
             className="input-box"
-            value={
-              this.state.plan_overview.available === 0 ? "Unlisted" : "Public"
-            }
+            value={this.state.plan_overview.available === 0 ? "Unlisted" : "Public"}
             onChange={this.onPrivacyChange}
           >
             <option>Unlisted</option>

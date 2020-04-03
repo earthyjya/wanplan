@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
 class Chatform extends Component {
 	state = {
@@ -20,21 +20,30 @@ class Chatform extends Component {
 	};
 
 	displayWarning = () => {
-		if(this.state.invalidName)
-			return <div>Invalid Username!</div>;
-		return <div />
-	}
+		if (this.state.invalidName) return <div>Invalid Username!</div>;
+		return <div />;
+	};
 
 	render() {
 		const { username } = this.state;
-		if (this.state.redirect)
-			return <Redirect to={{ pathname: "/chatroom", username: username }} />;
+		if (this.state.redirect) return <Redirect to={{ pathname: "/chatroom", username: username }} />;
 		return (
 			<Form onSubmit={this.onSubmit}>
 				<FormGroup>
-        	<Label for="username"><h3><b>Login</b></h3></Label>
-        	<Input type="text" name="username" id="username" placeholder="Please enter your name" value={username} onChange={this.onChange}/>
-     		</FormGroup>
+					<Label for="username">
+						<h3>
+							<b>Login</b>
+						</h3>
+					</Label>
+					<Input
+						type="text"
+						name="username"
+						id="username"
+						placeholder="Please enter your name"
+						value={username}
+						onChange={this.onChange}
+					/>
+				</FormGroup>
 				<Button color="warning">Join</Button>
 				{this.displayWarning()}
 			</Form>

@@ -1,34 +1,34 @@
-@import './Style.scss';
+@import "./Style.scss";
 
-.card{
+.card {
   padding: 0.8rem;
 }
 
-.card-title{
+.card-title {
   font-size: 1.8em;
   text-align: center;
 }
 
-.card-subtitle{
+.card-subtitle {
   font-size: 0.8em;
   color: grey;
   text-align: center;
 }
 
-.tab-content{
+.tab-content {
   padding: 0.6rem;
 }
 
-.overview-description-wrap{
+.overview-description-wrap {
   padding: 0.6rem;
   padding-top: 0;
   text-align: justify;
 }
 
-.post-header{
+.post-header {
   min-height: 400px;
 }
 
-.post-header-title{
-  bottom: 30px
+.post-header-title {
+  bottom: 30px;
 }

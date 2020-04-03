@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Message from "./Message"
+import Message from "./Message";
 
 class MessageList extends Component {
 	render() {
-		const {messages} = this.props;
+		const { messages } = this.props;
 		return messages.map(message => (
 			<ul className="Messages-list">
 				<Message message={message} />

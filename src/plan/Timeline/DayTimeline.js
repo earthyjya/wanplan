@@ -41,10 +41,7 @@ class DayTimeline extends Component {
                       destination = plan_detail[0];
                       //
                       return (
-                        <TransCard
-                          start={{ attraction_name: "Hotel" }}
-                          destination={destination}
-                        />
+                        <TransCard start={{ attraction_name: "Hotel" }} destination={destination} />
                       );
                     }
                   })()}
@@ -64,6 +61,7 @@ class DayTimeline extends Component {
                               {...detail}
                               changeOrder={this.props.changeOrder}
                               changeDuration={this.props.changeDuration}
+                              updateDescription={this.props.updateDescription}
                               delCard={this.props.delCard}
                               editing={this.props.editing}
                             />
@@ -75,9 +73,7 @@ class DayTimeline extends Component {
                         destination = (() => {
                           if (detail !== plan_detail[plan_detail.length - 1]) {
                             return plan_detail.filter(
-                              det =>
-                                det.attraction_order ===
-                                detail.attraction_order + 1
+                              det => det.attraction_order === detail.attraction_order + 1
                             )[0];
                           } else {
                             return { attraction_name: "Hotel" };
@@ -110,12 +106,7 @@ class DayTimeline extends Component {
           {(() => {
             if (plan_detail.length) {
               destination = plan_detail[0];
-              return (
-                <TransCard
-                  start={{ attraction_name: "Hotel" }}
-                  destination={destination}
-                />
-              );
+              return <TransCard start={{ attraction_name: "Hotel" }} destination={destination} />;
             }
           })()}
           {plan_detail.map(detail => (
@@ -132,8 +123,7 @@ class DayTimeline extends Component {
                 destination = (() => {
                   if (detail !== plan_detail[plan_detail.length - 1]) {
                     return plan_detail.filter(
-                      det =>
-                        det.attraction_order === detail.attraction_order + 1
+                      det => det.attraction_order === detail.attraction_order + 1
                     )[0];
                   } else {
                     return { attraction_name: "Hotel" };

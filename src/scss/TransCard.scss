@@ -1,8 +1,8 @@
-@import './Style.scss';
+@import "./Style.scss";
 
 .Transcard {
     position: relative;
-    background: #ff5086;
+    background: black;
     opacity: 0.8;
     box-sizing: border-box;
     padding-left: 18px;
@@ -17,10 +17,12 @@
 .transport {
     display: inline-block;
     margin-top: 12.5px;
+    color: #e5e5e5;
 }
 .from {
     display: inline-block;
     margin-left: 7px;
+    color: #e5e5e5;
 }
 .start {
     display: inline-block;
@@ -30,6 +32,7 @@
 .to {
     display: inline-block;
     margin-left: 7px;
+    color: #e5e5e5;
 }
 .destination {
     display: inline-block;

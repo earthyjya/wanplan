@@ -1,4 +1,4 @@
-@import './Style.scss';
+@import "./Style.scss";
 
 .share-modal {
   display: block;
@@ -26,10 +26,10 @@
 }
 
 .close-share-modal {
-	float: right;
-	cursor: pointer;
-	font-size: 15px;
-	font-weight: 900;
+  float: right;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .fa {
@@ -57,30 +57,30 @@
 }
 
 .div {
-	margin: 10px;
+  margin: 10px;
 }
 
 .copy-bar {
-	display: inline-flex;
+  display: inline-flex;
 }
 
 .copy-bar > .url-box {
-	border: none;
-	border-radius: 4px 0px 0px 4px;
-	width: 300px;
-	height: 35px;
-	padding: 10px;
+  border: none;
+  border-radius: 4px 0px 0px 4px;
+  width: 300px;
+  height: 35px;
+  padding: 10px;
 }
 
 .copy-bar > .copy-button {
-	border: none;
-	border-radius: 0px 4px 4px 0px;
-	background-color: lightgray;
-	height: 35px;
+  border: none;
+  border-radius: 0px 4px 4px 0px;
+  background-color: lightgray;
+  height: 35px;
 }
 
 .copied {
-	color: lightgray;
-	height: 35px;
-	padding: 5px;
+  color: lightgray;
+  height: 35px;
+  padding: 5px;
 }

@@ -16,8 +16,7 @@ class App extends Component {
   state = {
     user_id: 1,
     isLoggedIn: true,
-    APIServer:
-      "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:3030/api",
+    APIServer: "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:3030/api",
     nodeServer: "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:8080"
   };
 
@@ -48,29 +47,23 @@ class App extends Component {
             path="/plan"
             component={() => (
               <Request url={APIServer + "/plan_overview" /*+"/user/" + user_id*/}>
-                {result => <MyPlan {...result} {...this.state} />}
+                {(result) => <MyPlan {...result} {...this.state} />}
               </Request>
             )}
           />
           <Route
             exact
             path="/plan/:plan_id"
-            component={({ match }) => (
-              <Plan plan_id={match.params.plan_id} {...this.state} />
-            )}
+            component={({ match }) => <Plan plan_id={match.params.plan_id} {...this.state} />}
           />
           <Route
             path="/plan/:plan_id/edit_plan"
-            component={({ match }) => (
-              <EditPlan plan_id={match.params.plan_id} {...this.state} />
-            )}
+            component={({ match }) => <EditPlan plan_id={match.params.plan_id} {...this.state} />}
           />
           <Route
             path="/users"
             component={() => (
-              <Request url={APIServer + "/user"}>
-                {result => <User {...result} />}
-              </Request>
+              <Request url={APIServer + "/user"}>{(result) => <User {...result} />}</Request>
             )}
           />
           <Route
@@ -78,7 +71,7 @@ class App extends Component {
             path="/posts"
             component={() => (
               <Request url="https://jsonplaceholder.typicode.com/posts">
-                {result => <Posts {...result} />}
+                {(result) => <Posts {...result} />}
               </Request>
             )}
           />
@@ -86,18 +79,15 @@ class App extends Component {
             path="/posts/:post_id"
             component={() => (
               <Request url="https://jsonplaceholder.typicode.com/posts">
-                {result => <PostDetail {...result} />}
+                {(result) => <PostDetail {...result} />}
               </Request>
             )}
           />
-          <Route
-            path="/count"
-            render={props => <Count {...props} serverIP={nodeServer} />}
-          />
+          <Route path="/count" render={(props) => <Count {...props} serverIP={nodeServer} />} />
           <Route path="/chat" component={Chatform} />
           <Route
             path="/chatroom"
-            render={props => <Chatroom {...props} serverIP={nodeServer} />}
+            render={(props) => <Chatroom {...props} serverIP={nodeServer} />}
           />
         </BrowserRouter>
       </React.Fragment>

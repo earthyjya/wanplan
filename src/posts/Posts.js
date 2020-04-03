@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Table } from "reactstrap";
 // import withRequest from "../lib/withRequest"
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class Posts extends Component {
 	render() {
@@ -27,9 +27,7 @@ class Posts extends Component {
 									<th scope="row">{post.id}</th>
 									<td>{post.userId}</td>
 									<td>
-										<Link to = {`${post.id}`}>
-											{post.title}
-										</Link>
+										<Link to={`${post.id}`}>{post.title}</Link>
 									</td>
 									<td>{post.body}</td>
 								</tr>
