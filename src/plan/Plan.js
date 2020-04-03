@@ -76,7 +76,7 @@ class Plan extends React.Component {
               console.log(error);
             });
         });
-        
+
       }
     } else {
       if (localStorage.getItem("planlist") === null) {
@@ -191,7 +191,7 @@ class Plan extends React.Component {
               console.log(error);
             });
         });
-        
+
       }
     }
   };
@@ -281,12 +281,8 @@ class Plan extends React.Component {
           <PlanOverview {...this.state} />
           <div className="title-bar">
             <div className="title">{plan_overview.plan_title}</div>
-            <div className="city">{plan_overview.city_name}</div>
-            <div className="days">
-              {plan_overview.duration > 1
-                ? plan_overview.duration + " Days Plan"
-                : "One Day Plan"}
-            </div>
+            <div className="city">Plan</div>
+            <div className="days">Map</div>
             {this.renderEditRedirect()}
             <button className="yellow-button" onClick={this.save}>
               Save!

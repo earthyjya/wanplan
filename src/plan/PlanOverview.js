@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Container } from "reactstrap";
+import "../scss/PlanOverview.scss";
 
 class PlanOverview extends Component {
 	render() {

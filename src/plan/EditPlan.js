@@ -2,7 +2,7 @@ import React from "react";
 import "../scss/EditPlan.scss";
 import Share from "./Share";
 import EditPlanContent from "./EditPlanContent";
-import PlanOverview from "./PlanOverview";
+import EditPlanOverview from "./EditPlanOverview";
 import Timeline from "./Timeline/Timeline";
 import AttBar from "./AttBar/AttBar";
 import axios from "axios";
@@ -110,7 +110,7 @@ class EditPlan extends React.Component {
         console.log(error);
       });
 
-    
+
   };
 
   updatePlanOverview = async plan_overview => {
@@ -334,7 +334,6 @@ class EditPlan extends React.Component {
               if (!destination) {
                 return;
               }
-
               if (source.droppableId !== "bar")
                 this.reorderCards(source, destination);
               else this.addCard(source, destination);
@@ -343,15 +342,11 @@ class EditPlan extends React.Component {
             <Container fluid className="p-0">
               <Row className="m-0">
                 <Col lg={8} className="p-0">
-                  <PlanOverview {...this.state} />
+                  <EditPlanOverview {...this.state} />
                   <div className="title-bar">
                     <div className="title">{plan_overview.plan_title}</div>
-                    <div className="city">{plan_overview.city_name}</div>
-                    <div className="days">
-                      {plan_overview.duration > 1
-                        ? plan_overview.duration + " Days Plan"
-                        : "One Day Plan"}
-                    </div>
+                    <div className="city">Plan</div>
+                    <div className="days">Map</div>
                     <div>
                       {/* eslint-disable-next-line */}
                       <i
@@ -380,14 +375,6 @@ class EditPlan extends React.Component {
                         <br />
                         this plan
                       </span>
-                    </button>
-                  </div>
-                  <div className="publish-div">
-                    <button
-                      onClick={this.publishPlan}
-                      className="publish-button"
-                    >
-                      Publish
                     </button>
                   </div>
                   <Timeline
