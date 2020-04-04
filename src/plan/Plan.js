@@ -21,75 +21,99 @@ class Plan extends React.Component {
     redirectTo: "/"
   };
 
-  save = async () => {
-    this.openToast();
-    const { user_id, APIServer } = this.props;
-    if (this.props.isLoggedIn) {
-      if (user_id !== this.state.plan_overview.user_id) {
-        let url = APIServer + "/plan_overview";
-        let savedplan = this.state.plan_overview;
-        let planId = this.state.plan_overview.plan_id;
-        savedplan.user_id = user_id;
+  saveToUser = async (user_id, redirect) => {
+    const { APIServer, isLoggedIn } = this.props;
+    let url = APIServer + "/plan_overview";
+    let planId = this.state.plan_overview.plan_id;
+    let savedplan = {
+      ...this.state.plan_overview,
+      original_id: planId,
+      user_id: user_id
+    };
+    if (!isLoggedIn) {
+      if (localStorage.getItem("planlist") !== null && localStorage.getItem("planlist") !== []) {
+        let _planlist = JSON.parse(localStorage.getItem("planlist"));
+        console.log(_planlist)
+        for (var i = 0; i < _planlist.length; i++) {
+          if (_planlist[i].plan_id == this.props.plan_id) {
+            this.setState({
+              redirect: true,
+              redirectTo: "/plan/" + this.props.plan_id + redirect
+            });
+            return;
+          }
+        }
+      }
+    }
+    if (user_id !== this.state.plan_overview.user_id || user_id == 6) {
+      await axios
+        .post(url, savedplan)
+        .then(result => {
+          if (result.data === null) alert("Could not save plan :(");
+          console.log(result);
+          planId = result.data.id;
+        })
+        .catch(error => {
+          this.setState({ error });
+        });
+      this.state.plan_startday.map(async day => {
+        url = APIServer + "/plan_startday/";
+        let newDay = day;
+        newDay.plan_id = planId;
         await axios
-          .post(url, savedplan)
+          .post(url, newDay)
           .then(result => {
             if (result.data === null) alert("Could not save plan :(");
             console.log(result);
-            planId = result.data.id;
           })
           .catch(error => {
             this.setState({ error });
+            console.log(error);
           });
-        this.state.plan_startday.map(async day => {
-          url = APIServer + "/plan_startday/";
-          let newDay = day;
-          newDay.plan_id = planId;
-          await axios
-            .post(url, newDay)
-            .then(result => {
-              if (result.data === null) alert("Could not save plan :(");
-              console.log(result);
-            })
-            .catch(error => {
-              this.setState({ error });
-              console.log(error);
-            });
-        });
+      });
 
-        this.state.plan_detail.map(async plan => {
-          url = APIServer + "/plan_detail/";
-          let newPlan = plan;
-          newPlan.plan_id = planId;
-          await axios
-            .post(url, newPlan)
-            .then(result => {
-              if (result.data === null) alert("Could not save plan :(");
-              else
-                this.setState({
-                  redirect: true,
-                  redirectTo: "/plan/" + planId
-                });
-              console.log(result);
-            })
-            .catch(error => {
-              this.setState({ error });
-              console.log(error);
-            });
-        });
-      }
-    } else {
-      if (localStorage.getItem("planlist") === null) {
+      this.state.plan_detail.map(async plan => {
+        url = APIServer + "/plan_detail/";
+        let newPlan = plan;
+        newPlan.plan_id = planId;
+        await axios
+          .post(url, newPlan)
+          .then(result => {
+            if (result.data === null) alert("Could not save plan :(");
+            else
+              this.setState({
+                redirect: true,
+                redirectTo: "/plan/" + planId + redirect
+              });
+            console.log(result);
+          })
+          .catch(error => {
+            this.setState({ error });
+            console.log(error);
+          });
+      });
+    }
+    if (!isLoggedIn) {
+      savedplan.plan_id = planId;
+      if (localStorage.getItem("planlist") === null || localStorage.getItem("planlist") === []) {
         var _planlist = [];
-        _planlist[0] = this.state.plan_overview;
+        _planlist[0] = savedplan;
         localStorage.setItem("planlist", JSON.stringify(_planlist));
       } else {
         let _planlist = JSON.parse(localStorage.getItem("planlist"));
-        for (var i = 0; i < _planlist.length; i++) {
-          if (_planlist[i].plan_id === this.props.plan_id) return;
-        }
-        _planlist.push(this.state.plan_overview);
+        _planlist.push(savedplan);
         localStorage.setItem("planlist", JSON.stringify(_planlist));
       }
+    }
+  };
+
+  save = async () => {
+    this.openToast();
+    const { user_id } = this.props;
+    if (this.props.isLoggedIn) {
+      this.saveToUser(user_id);
+    } else {
+      this.saveToUser(6);
     }
   };
 
@@ -130,65 +154,22 @@ class Plan extends React.Component {
 
   checkEdit = async () => {
     //If user already edit the plan before, go to the edit plan page on the same url
-    const { user_id, APIServer } = this.props;
-    if (user_id === this.state.plan_overview.user_id) {
-      this.setState({
-        redirect: true,
-        redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
-      });
-    }
-    //Else if user not edit the plan before, create new url and go to that url edit plan page
-    else {
-      if (this.props.isLoggedIn) {
-        let url = APIServer + "/plan_overview";
-        let planId = this.state.plan_overview.plan_id;
-        let savedplan = { ...this.state.plan_overview, original_id: planId };
-        savedplan.user_id = user_id;
-        await axios
-          .post(url, savedplan)
-          .then(result => {
-            if (result.data === null) alert("Could not save plan :(");
-            console.log(result);
-            planId = result.data.id;
-          })
-          .catch(error => {
-            this.setState({ error });
-          });
-        this.state.plan_startday.map(async day => {
-          url = APIServer + "/plan_startday/";
-          let newDay = day;
-          newDay.plan_id = planId;
-          await axios
-            .post(url, newDay)
-            .then(result => {
-              if (result.data === null) alert("Could not save plan :(");
-              console.log(result);
-            })
-            .catch(error => {
-              this.setState({ error });
-              console.log(error);
-            });
+    const { user_id } = this.props;
+    if (!this.props.isLoggedIn) {
+      this.saveToUser(6, "/edit_plan");
+    } else {
+      if (user_id === this.state.plan_overview.user_id) {
+        this.setState({
+          redirect: true,
+          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
         });
-
-        this.state.plan_detail.map(async plan => {
-          url = APIServer + "/plan_detail/";
-          let newPlan = plan;
-          newPlan.plan_id = planId;
-          await axios
-            .post(url, newPlan)
-            .then(result => {
-              if (result.data === null) alert("Could not save plan :(");
-              else
-                this.setState({
-                  redirect: true,
-                  redirectTo: "/plan/" + planId + "/edit_plan"
-                });
-              console.log(result);
-            })
-            .catch(error => {
-              this.setState({ error });
-              console.log(error);
-            });
+      }
+      //Else if user not edit the plan before, create new url and go to that url edit plan page
+      else {
+        this.saveToUser(user_id, "/edit_plan");
+        this.setState({
+          redirect: true,
+          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
         });
       }
     }
@@ -234,6 +215,7 @@ class Plan extends React.Component {
       .get(url)
       .then(result => {
         this.setState({ ...result.data });
+        console.log(result)
       })
       .catch(error => {
         this.setState({ error });
@@ -263,7 +245,9 @@ class Plan extends React.Component {
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
             <ToastHeader toggle={this.closeToast}>Plan saved!</ToastHeader>
-            <ToastBody>The plan is saved to your device, view it in plan page!</ToastBody>
+            <ToastBody>
+              The plan is saved to your device, view it in plan page!
+            </ToastBody>
           </Toast>
 
           {modal ? (

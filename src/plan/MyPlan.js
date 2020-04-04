@@ -36,10 +36,12 @@ class MyPlan extends Component {
   };
 
   createNewPlan = () => {
-    const { user_id, APIServer } = this.props;
+    const { user_id, APIServer, isLoggedIn } = this.props;
+    let newUserId = 6;
+    if (this.props.isLoggedIn) newUserId = user_id;
     const newPlan = {
       plan_title: "untitled",
-      user_id: user_id,
+      user_id: newUserId,
       city_id: 2,
       duration: 0,
       plan_style: "",
@@ -54,12 +56,26 @@ class MyPlan extends Component {
       .post(url, newPlan)
       .then(result => {
         if (result.data === null) alert("Could not create new plan :(");
-        else
+        else {
+          newPlan.plan_id = result.data.id;
+          if (!this.props.isLoggedIn) {
+            if (localStorage.getItem("planlist") === null ||localStorage.getItem("planlist") === [] ) {
+              var _planlist = [];
+              _planlist[0] = newPlan;
+              localStorage.setItem("planlist", JSON.stringify(_planlist));
+            } else {
+              let _planlist = JSON.parse(localStorage.getItem("planlist"));
+              _planlist.push(newPlan);
+              console.log(_planlist)
+              localStorage.setItem("planlist", JSON.stringify(_planlist));
+            }
+          }
           this.setState({
             redirect: true,
             redirectTo: "/plan/" + result.data.id + "/edit_plan"
           });
-        console.log(result);
+          console.log(result);
+        }
       })
       .catch(error => {
         this.setState({ error });

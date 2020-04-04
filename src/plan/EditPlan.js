@@ -37,7 +37,8 @@ class EditPlan extends React.Component {
     let url = "";
 
     if (this.state.daysBefUpdate !== 0) {
-      url = APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
+      url =
+        APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
 
       await axios
         .delete(url)
@@ -65,7 +66,8 @@ class EditPlan extends React.Component {
     });
 
     if (this.state.orders !== 0) {
-      url = APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
+      url =
+        APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
 
       await axios
         .delete(url)
@@ -127,6 +129,19 @@ class EditPlan extends React.Component {
       this.setState({
         plan_overview: { ...this.state.plan_overview, ...plan_overview }
       });
+    if (localStorage.getItem("planlist") !== [] && localStorage.getItem("planlist") !== null) {
+      let _planlist = JSON.parse(localStorage.getItem("planlist"));
+      localStorage.setItem(
+        "planlist",
+        JSON.stringify(
+          _planlist.map(plan => {
+            if (plan.plan_id == plan_id) plan = plan_overview;
+            return plan
+          })
+        )
+
+      );
+    }
   };
 
   renderOverviewRedirect = () => {
@@ -337,7 +352,8 @@ class EditPlan extends React.Component {
                 return;
               }
 
-              if (source.droppableId !== "bar") this.reorderCards(source, destination);
+              if (source.droppableId !== "bar")
+                this.reorderCards(source, destination);
               else this.addCard(source, destination);
             }}
           >
@@ -357,7 +373,10 @@ class EditPlan extends React.Component {
                         onClick={this.openEditPlanContent}
                       />
                     </div>
-                    <button className="white-button" onClick={this.openShareModal}>
+                    <button
+                      className="white-button"
+                      onClick={this.openShareModal}
+                    >
                       Share!
                       <span style={{ fontSize: "15px" }}>
                         <br />
@@ -390,7 +409,13 @@ class EditPlan extends React.Component {
                   />
                 </Col>
                 <Col className="p-0">
-                  <Request url={this.props.APIServer + "/attraction/city/" + plan_overview.city_id}>
+                  <Request
+                    url={
+                      this.props.APIServer +
+                      "/attraction/city/" +
+                      plan_overview.city_id
+                    }
+                  >
                     {result => <AttBar {...result} />}
                   </Request>
                 </Col>
@@ -398,14 +423,18 @@ class EditPlan extends React.Component {
             </Container>
           </DragDropContext>
           <Toast isOpen={this.state.updateToastOpen}>
-            <ToastHeader toggle={this.updateToastClose}>Plan updated!</ToastHeader>
+            <ToastHeader toggle={this.updateToastClose}>
+              Plan updated!
+            </ToastHeader>
             <ToastBody>
-              If you want to save this plan, please sign-in or copy the url. This plan will now show
-              on 'My plan'.
+              If you want to save this plan, please sign-in or copy the url.
+              This plan will now show on 'My plan'.
             </ToastBody>
           </Toast>
           <Toast isOpen={this.state.publishToastOpen}>
-            <ToastHeader toggle={this.publishToastClose}>Plan published!</ToastHeader>
+            <ToastHeader toggle={this.publishToastClose}>
+              Plan published!
+            </ToastHeader>
             <ToastBody>
               The plan is opended to public. It will be available for other user
             </ToastBody>
