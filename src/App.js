@@ -6,6 +6,7 @@ import PostDetail from "./posts/PostDetail";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
 import EditPlan from "./plan/EditPlan";
+import Homepage from "./Homepage";
 import MyPlan from "./plan/MyPlan";
 import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
@@ -171,9 +172,11 @@ class App extends Component {
           <Route
             path="/home"
             component={() => (
-              <div>
-                <font style={{ fontSize: 100 }}>Welcome to Wanplan!</font>
-              </div>
+              <Request
+                url={APIServer + "/plan_overview" /*+"/user/" + user_id*/}
+              >
+                {result => <Homepage {...result} {...this.state} />}
+              </Request>
             )}
           />
 

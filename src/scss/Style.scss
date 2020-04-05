@@ -16,19 +16,20 @@ $titlefont: "Raleway", sans-serif;
   input[type='checkbox'],
   input[type='radio'],
   input[type=text],
-  textarea {
+  textarea,
+  {
     -webkit-appearance: none;
   }
 }
 
-input[type=text], textarea{
+input, textarea, select{
   text-align: left;
-  padding: 0.6em;
   box-sizing: border-box;
   border-radius: 4px;
   background-color: #FFF;
   border: 1px solid $gray3;
   color: $gray1;
+  outline: none;
   transition: 0.2s ease-out;
   &:hover{
     border: 1px solid $gray2;
@@ -42,8 +43,12 @@ input[type=text], textarea{
   }
 }
 
+input, button, submit {
+  border: none;
+  outline: none;
+}
+
 textarea {
     background-color: white;
     resize: none !important;
-    outline: none;
 }
