@@ -66,3 +66,13 @@
   align-self: center;
   color: $gray4;
 }
+
+#title-input:-webkit-autofill,
+#title-input:-webkit-autofill::selection,
+#title-input:-webkit-autofill:hover,
+#title-input:-webkit-autofill:focus {
+  -webkit-text-size-adjust: none;
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 0;
+  transition: background-color 5000s ease-in-out 0s;
+}

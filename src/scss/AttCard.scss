@@ -19,6 +19,7 @@
   cursor: pointer;
   font-style: 12px;
   font-weight: 900;
+  margin: 5px 8px 0  0;
 }
 
 .StartTime {
@@ -95,11 +96,10 @@
   position: absolute;
   top: 41px;
   left: 238px;
-  font-size: 10px;
-  width: auto;
-  height: 109px;
-  padding: 0px 16px 16px 0px;
+  width: 50%;
+  height: 92px;
 }
+
 .AttDesCont p {
   white-space: normal;
   text-overflow: ellipsis;
