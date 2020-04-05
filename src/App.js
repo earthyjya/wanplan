@@ -156,16 +156,16 @@ class App extends Component {
       <React.Fragment>
         <div className="topnav">
           <a className="wanplan" href="/home">
-            WANPLAN
+            Oneplan
           </a>
-          <a href="/plan">Plan</a>
-          <a href="/users">Users</a>
           <button className="white-button" onClick={this.logInlogOut}>
             {(() => (this.state.isLoggedIn ? "Log out" : "Log in"))()}
           </button>
           <button className="white-button" onClick={this.delete}>
             delete cache
           </button>
+          <a href="/plan" style={{marginLeft:"auto"}}>Plan</a>
+          <a href="/users">Users</a>
         </div>
         <BrowserRouter>
           <Route
