@@ -17,10 +17,11 @@ import {
   faPencilAlt,
   faCamera,
   faGlobeAsia,
-  faAngleDown
+  faAngleDown,
+  faShareAlt
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-library.add(faPencilAlt, faCamera, faGlobeAsia, faAngleDown);
+library.add(faPencilAlt, faCamera, faGlobeAsia, faAngleDown,faShareAlt);
 
 class App extends Component {
   state = {
@@ -167,7 +168,7 @@ class App extends Component {
           <button className="white-button" onClick={this.delete}>
             delete cache
           </button> */}
-          
+
         </div>
         <BrowserRouter>
           <Route

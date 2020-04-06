@@ -1,12 +1,33 @@
 import React, { Component } from "react";
 import { Row, Container } from "reactstrap";
 import "../scss/PlanOverview.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Share from "./Share";
 
 class PlanOverview extends Component {
+	state = {
+    modal: false,
+  };
+
+	openShareModal = () => {
+		this.setState({ modal: true });
+	};
+
+	closeShareModal = () => {
+		this.setState({ modal: false });
+	};
+
 	render() {
 		const { plan_overview } = this.props;
 		return (
 			<React.Fragment>
+				{this.state.modal ? (
+					<div className="share-modal">
+						<Share closeShareModal={this.closeShareModal} />
+					</div>
+				) : (
+					<div></div>
+				)}
 				<Container
 					fluid
 					className="plan-description-picture"
@@ -16,6 +37,9 @@ class PlanOverview extends Component {
 					}}
 				></Container>
 				<Container fluid className="plan-description-container plan-header">
+					<div className = "share-banner" onClick={this.openShareModal}>
+						<FontAwesomeIcon icon="share-alt" size="2x"/>
+					</div>
 					<Row>
 						<div className="author-card-container">
 							<div style={{ textAlign: "end", alignSelf: "center" }}>
