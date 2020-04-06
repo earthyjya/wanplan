@@ -54,7 +54,7 @@ class EditPlanOverview extends Component {
 					</Row>
 					<Row>
 						<div>
-							<CustomInput id="title-input" placeholder={plan_overview.plan_title} onfocus={(e) => e.target.placeholder = ""} />
+							<input type="textarea" id="title-input" placeholder={plan_overview.plan_title} />
 							<FontAwesomeIcon className="title-input-icon" icon="pencil-alt" />
 						</div>
 					</Row>

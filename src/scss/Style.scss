@@ -11,3 +11,44 @@ $gray4: #f5f6f3;
 $engfont: "Noto Sans", sans-serif;
 $jpfont: "Noto Sans JP", sans-serif;
 $titlefont: "Raleway", sans-serif;
+
+@supports(-webkit-appearance: none) {
+  input[type='checkbox'],
+  input[type='radio'],
+  input[type=text],
+  textarea,
+  {
+    -webkit-appearance: none;
+  }
+}
+
+input, textarea, select{
+  text-align: left;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #FFF;
+  border: 1px solid $gray3;
+  color: $gray1;
+  outline: none;
+  transition: 0.2s ease-out;
+  &:hover{
+    border: 1px solid $gray2;
+  }
+  &:focus{
+    color: $secondary;
+    border: 1px solid $primary;
+  }
+  &::placeholder {
+    color: rgba( $gray3, .5 );
+  }
+}
+
+input, button, submit {
+  border: none;
+  outline: none;
+}
+
+textarea {
+    background-color: white;
+    resize: none !important;
+}

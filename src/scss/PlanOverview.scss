@@ -17,7 +17,6 @@
   font-size: 0.8em;
 }
 
-
 .avatar-image {
   height: 40px;
   width: 40px;
@@ -28,6 +27,7 @@
 .plan-description-title {
   font-weight: 600;
   font-size: 3.6em;
+  color: white;
 }
 
 .plan-description {
@@ -43,7 +43,7 @@
   flex-direction: column;
   padding: 20px;
   background-color: rgba(10, 5, 5, 0.8);
-  color: rgba(255, 245, 245, 0.9);
+  color: white;
   justify-content: center;
   padding-bottom: 50px;
   width: 100%;

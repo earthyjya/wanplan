@@ -6,6 +6,7 @@ import PostDetail from "./posts/PostDetail";
 import Count from "./count/Count";
 import Plan from "./plan/Plan";
 import EditPlan from "./plan/EditPlan";
+import Homepage from "./Homepage";
 import MyPlan from "./plan/MyPlan";
 import Chatroom from "./chat/Chatroom";
 import Chatform from "./chat/Chatform";
@@ -156,25 +157,37 @@ class App extends Component {
       <React.Fragment>
         <div className="topnav">
           <a className="wanplan" href="/home">
-            WANPLAN
+            Oneplan
           </a>
+<<<<<<< HEAD
           <a href="/plan">Plan</a>
           <a href="/users">Users</a>
           {/* <button className="white-button" onClick={this.logInlogOut}>
+=======
+          <button className="white-button" onClick={this.logInlogOut}>
+>>>>>>> b7cba2c83841c48d4b8ed0df20043cf277257290
             {(() => (this.state.isLoggedIn ? "Log out" : "Log in"))()}
           </button>
           <button className="white-button" onClick={this.delete}>
             delete cache
+<<<<<<< HEAD
           </button> */}
           
+=======
+          </button>
+          <a href="/plan" style={{marginLeft:"auto"}}>Plan</a>
+          <a href="/users">Users</a>
+>>>>>>> b7cba2c83841c48d4b8ed0df20043cf277257290
         </div>
         <BrowserRouter>
           <Route
             path="/home"
             component={() => (
-              <div>
-                <font style={{ fontSize: 100 }}>Welcome to Wanplan!</font>
-              </div>
+              <Request
+                url={APIServer + "/plan_overview" /*+"/user/" + user_id*/}
+              >
+                {result => <Homepage {...result} {...this.state} />}
+              </Request>
             )}
           />
 

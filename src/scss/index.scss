@@ -9,3 +9,8 @@ body {
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+@font-face {
+  font-family: 'Noto Sans TH';
+  src: local('Noto Sans TH'), url(./fonts/NotoSansThai-Regular.ttf) format('truetype');
+}

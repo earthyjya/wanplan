@@ -97,11 +97,12 @@ class AttCard extends Component {
           if (editing)
             return (
               <React.Fragment>
-                <input
+                <textarea
                   className="AttDesCont"
                   value={this.state.description}
                   onChange={this.onChange}
                   onBlur={this.updateDescription}
+                  type="textarea"
                 />
                 <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
                   {minutes.map(min => {
