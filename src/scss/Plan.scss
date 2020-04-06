@@ -28,7 +28,7 @@
   background-color: white;
   display: flex;
   align-items: center;
-  padding: 0 10px 0 10px;
+  padding: 0 0px 0 10px;
 }
 
 .title-bar div {
@@ -68,7 +68,7 @@
   line-height: 14px;
   float: right;
   border: none;
-  background-color: white;
+  background-color: #ffffff;
   color: #0a090c;
   height: 55px;
   width: 100px;
@@ -76,8 +76,29 @@
 }
 
 .title-bar > button.white-button:hover {
+  background-color: #fcd328;
   color: #000000;
 }
+
+.title-bar > button.white-button2 {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 14px;
+  float: right;
+  border: none;
+  background-color: #ffffff;
+  color: #0a090c;
+  height: 55px;
+  width: 100px;
+  margin: 0px !important;
+  border-left: solid;
+}
+
+.title-bar > button.white-button2:hover {
+  background-color: #fcd328;
+  color: #000000;
+}
+
 
 .DayTimeline {
   width: 100%;

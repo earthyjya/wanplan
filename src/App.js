@@ -160,12 +160,13 @@ class App extends Component {
           </a>
           <a href="/plan">Plan</a>
           <a href="/users">Users</a>
-          <button className="white-button" onClick={this.logInlogOut}>
+          {/* <button className="white-button" onClick={this.logInlogOut}>
             {(() => (this.state.isLoggedIn ? "Log out" : "Log in"))()}
           </button>
           <button className="white-button" onClick={this.delete}>
             delete cache
-          </button>
+          </button> */}
+          
         </div>
         <BrowserRouter>
           <Route

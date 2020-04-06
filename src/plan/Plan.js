@@ -273,7 +273,7 @@ class Plan extends React.Component {
             </button>
             <button
               style={{ marginLeft: "10px" }}
-              className="white-button"
+              className="white-button2"
               onClick={this.checkEdit}
             >
               Edit!
