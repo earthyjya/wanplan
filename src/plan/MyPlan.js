@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import "../scss/MyPlan.scss";
+
 
 class MyPlan extends Component {
   state = {
@@ -94,18 +96,21 @@ class MyPlan extends Component {
     return (
       <React.Fragment>
         <button className="new_plan_button" onClick={this.createNewPlan}>
-          Create new plan
+          สร้าง plan ใหม่
         </button>
         {this.RenderRedirect()}
-        <div>
+        <div className="MyPlan-text">My Plan</div>
+        <div className="Plan-list-div">{this.savedPlan()}</div>
+        <div style={{top:"25px",position:"relative"}}>All Plan</div>
+        <div style={{top:"20px",position:"relative"}}>
           {data.map(plan => (
-            <div key={plan.plan_id}>
+            <div  key={plan.plan_id}>
               <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
             </div>
           ))}
         </div>
-        <div> Saved Plan </div>
-        <div>{this.savedPlan()}</div>
+        
+        
       </React.Fragment>
     );
   }

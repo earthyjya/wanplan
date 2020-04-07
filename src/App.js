@@ -161,7 +161,7 @@ class App extends Component {
             Oneplan
           </a>
           <a href="/plan">Plan</a>
-          <a href="/users">Users</a>
+          <a href="/howto">How to use?</a>
           {/* <button className="white-button" onClick={this.logInlogOut}>
             {(() => (this.state.isLoggedIn ? "Log out" : "Log in"))()}
           </button>

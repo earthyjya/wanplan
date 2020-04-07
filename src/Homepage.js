@@ -6,12 +6,18 @@ import { CustomInput } from 'reactstrap';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 import "./scss/Homepage.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Myplan from "./plan/MyPlan.js"
+import Request from "./lib/Request";
 
 class Homepage extends Component {
   state = {
     error: null,
     redirect: false,
-    redirectTo: "/"
+    redirectTo: "/",
+    APIServer:
+      "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:3030/api",
+      nodeServer: "http://ec2-18-222-207-98.us-east-2.compute.amazonaws.com:8080"
+
   };
 
   savedPlan = () => {
@@ -92,6 +98,7 @@ class Homepage extends Component {
   };
 
   render() {
+    const { user_id, APIServer, jsonServer, nodeServer } = this.state;
     const { isLoading, error, data } = this.props;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Can't find the plan</div>;
@@ -101,33 +108,49 @@ class Homepage extends Component {
 
       <Container
         fluid
-        className="plan-description-picture"
+        className="plan-description-picture-home"
         style={{
         backgroundImage:
-        "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)"
+        "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"
         }}
       />
-        <Container
+       <Container
         fluid
-        className="plan-description-container plan-header"
+        className="plan-description-container-home"
         >
-          <div className="plan-search-container">
-            <select className="plan-search-city" placeholder="choose a city...">
+          <div className="plan-search-container-home">
+            <select className="plan-search-city-home" placeholder="choose a city...">
+            <option value="0">เลือกเมืองที่คุณสนใจ</option>
+            <option value="1">Tokyo</option>
+            <option value="2">Kyoto</option>
+            <option value="3">Osaka</option>
+            <option value="4">Fukuoka</option>
+    
             </select >
-            <select  className="plan-search-date" placeholder="select date">
+            {/* <select  className="plan-search-date" placeholder="select date">
             </select >
             <select className="plan-search-people" placeholder="people">
-            </select >
-            <button className="plan-search-button">
+            </select > */}
+            <button className="plan-search-button-home">
               Search!
             </button>
           </div>
         </Container>
-        <Container fluid className="intro-container">
-          <div>เลือก plan ที่ตรงกับสไตล์การท่องเที่ยวของคุณ</div>
-          <div style={{alignSelf:"center", textAlign:"center"}}>OR</div>
-          <div style={{alignSelf:"flex-end", textAlign:"right"}}>สร้าง plan ของคุณเอง</div>
+        <Container fluid className="intro-container-home">
+          <div>
+            <span >เลือก </span>
+            <span className="intro-plan-home" >plan</span>
+            <span > ที่ตรงกับสไตล์การท่องเที่ยวของคุณ</span>
+          </div>
+          <div className="intro-plan-home" style={{alignSelf:"center", textAlign:"center"}}>O R</div>
+          <div onClick={this.createNewPlan} style={{alignSelf:"flex-end", textAlign:"right"}}>
+            <span>สร้าง </span>
+            <span className="intro-plan-home">plan</span>
+            <span> ของคุณเอง</span>
+          </div>
         </Container>
+        <Myplan data={this.props.data} {...this.state} {...this.props} />
+        
       </React.Fragment>
     );
   }

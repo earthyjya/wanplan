@@ -3,15 +3,15 @@
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans&display=swap");
 
 //duplicate!
-.plan-description-picture{
+.plan-description-picture-home{
   position: absolute;
-  min-height: 450px;
+  min-height: 400px;
   filter: blur(2px);
-  -webkit-filter: blur(2px);
+  -webkit-filter: blur(1px);
 }
 
-.plan-description-container {
-  min-height: 450px;
+.plan-description-container-home {
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -24,55 +24,78 @@
 }
 //
 
-.plan-search-container{
+.plan-search-container-home {
   height: 72px;
-  width: 1167px;
-  border-radius: 8px;
+  width: 767px;
+  border-radius: 10px;
   background-color: #FFF;
   z-index: 1;
   display: flex;
   padding: 15px;
+  
   align-self: center;
+  
   justify-content: space-between;
 }
 
-.plan-search-container > select,
-.plan-search-container > button{
+.plan-search-container-home  > select,
+.plan-search-container-home  > button{
   height: 45px;
   margin-right: 10px;
 }
 
-.plan-search-city{
-  width: 400px;
+.plan-search-city-home {
+  
+  position: relative;
+  width: 60%;
+  font-family: "Noto Sans TH", sans-serif;
+  	
+
+}
+.plan-search-city-home ::-ms-expand {
+  display: none;
+}
+.plan-search-city-home :hover {
+  border-color: #888;
+  color: #fcc626;
 }
 
-.plan-search-date{
-  width: 300px;
-}
 
-.plan-search-people{
-  width: 160px;
-}
 
-.plan-search-button{
+// .plan-search-date{
+//   width: 300px;
+// }
+
+// .plan-search-people{
+//   width: 160px;
+// }
+
+.plan-search-button-home {
   width: 180px;
   border-radius: 8px;
-  background-color: #FBD127;
+  background-color: #fcd328;
 }
-
-.intro-container{
+.plan-search-button-home :hover{
+  background-color: #fcc626;
+}
+.intro-container-home {
   display: flex;
-  height: 528px;
+  height: 298px;
   width: 100%;
   background-color: #F5F6F3;
   flex-direction: column;
   padding: 30px !important;
+  padding-left: 100px !important;
+  padding-right: 100px !important;
+}
+.intro-plan-home {
+  color: #fcd328;
 }
 
-.intro-container > div{
+.intro-container-home  > div{
   font-family: "Noto Sans TH", sans-serif;
   height: 200px;
   width: 500px;
-  font-size: 2.8em;
+  font-size: 2.6em;
   font-weight: 800;
 }
