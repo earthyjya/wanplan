@@ -1,6 +1,5 @@
-import React, { Component } from "react";
 import "../../scss/AttCard.scss";
-import { LoremIpsum } from "react-lorem-ipsum";
+import React, { Component } from "react";
 
 class AttCard extends Component {
   state = {
@@ -111,12 +110,7 @@ class AttCard extends Component {
                 </select>
               </React.Fragment>
             );
-          else
-            return (
-              <React.Fragment>
-                <div className="AttDesCont">{description}</div>
-              </React.Fragment>
-            );
+          else return <div className="AttDesCont">{description}</div>;
         })()}
       </div>
     );

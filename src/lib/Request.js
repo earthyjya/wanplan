@@ -10,7 +10,7 @@ export class Request extends Component {
 	};
 
 	async componentDidMount() {
-		console.log("Getting from " + this.props.url);
+		// console.log("Getting from " + this.props.url);
 		await axios
 			.get(this.props.url)
 			.then(result => this.setState({ data: result.data, isLoading: false }))

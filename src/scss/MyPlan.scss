@@ -1,6 +1,6 @@
-.new_plan_button{
+.new_plan_button {
   font-family: "Noto Sans TH", sans-serif;
-  background-color: #0a090c; 
+  background-color: #0a090c;
   position: absolute;
   right: 13%;
   color: white;
@@ -9,17 +9,22 @@
   text-decoration: none;
   display: inline-block;
   font-size: 26px;
+  z-index: 3;
 }
 
-.MyPlan-text{
-    font-family: "Noto Sans TH", sans-serif;
-    color: #0a090c;
-    position: absolute;
+.MyPlan-text {
+  top: 10px;
+  left: 10px;
+  font-family: "Noto Sans TH", sans-serif;
+  color: #0a090c;
+  position: relative;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-.Plan-list-div{
-    top: 22px;
-    position: relative;
-    font-family: "Noto Sans TH", sans-serif;
-    
+.Plan-list-div {
+  left: 10px;
+  top: 10px;
+  position: relative;
+  font-family: "Noto Sans TH", sans-serif;
 }

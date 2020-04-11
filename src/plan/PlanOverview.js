@@ -1,20 +1,16 @@
-import React, { Component } from "react";
-import { Row, Container } from "reactstrap";
 import "../scss/PlanOverview.scss";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { Component } from "react";
 import Share from "./Share";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Row, Container } from "reactstrap";
 
 class PlanOverview extends Component {
 	state = {
-    modal: false,
-  };
-
-	openShareModal = () => {
-		this.setState({ modal: true });
+		modal: false
 	};
 
-	closeShareModal = () => {
-		this.setState({ modal: false });
+	toggleShareModal = () => {
+		this.setState({ modal: !this.state.modal });
 	};
 
 	render() {
@@ -23,7 +19,7 @@ class PlanOverview extends Component {
 			<React.Fragment>
 				{this.state.modal ? (
 					<div className="share-modal">
-						<Share closeShareModal={this.closeShareModal} />
+						<Share toggleShareModal={this.toggleShareModal} />
 					</div>
 				) : (
 					<div></div>
@@ -37,8 +33,8 @@ class PlanOverview extends Component {
 					}}
 				></Container>
 				<Container fluid className="plan-description-container plan-header">
-					<div className = "share-banner" onClick={this.openShareModal}>
-						<FontAwesomeIcon icon="share-alt" size="2x"/>
+					<div className="share-banner" onClick={this.toggleShareModal}>
+						<FontAwesomeIcon icon="share-alt" size="2x" />
 					</div>
 					<Row>
 						<div className="author-card-container">

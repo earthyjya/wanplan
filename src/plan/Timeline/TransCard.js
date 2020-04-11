@@ -1,9 +1,10 @@
-import React, { Component } from "react";
 import "../../scss/TransCard.scss";
+import React, { Component } from "react";
 
 class TransCard extends Component {
   render() {
     const { start, destination } = this.props;
+    if (!start || !destination) return <div></div>;
     return (
       <div className="Transcard">
         <div className="transport">Transport </div>

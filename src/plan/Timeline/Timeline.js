@@ -1,5 +1,5 @@
-import React, { Component } from "react";
 import DayTimeline from "./DayTimeline";
+import React, { Component } from "react";
 
 class Timeline extends Component {
   addDay = () => {

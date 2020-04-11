@@ -1,6 +1,6 @@
+import "../scss/Share.scss";
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import "../scss/Share.scss";
 
 class Share extends React.Component {
   state = {
@@ -16,7 +16,7 @@ class Share extends React.Component {
     const { URL, copied } = this.state;
     return (
       <div className="share-modal-content">
-        <div className="close-share-modal" onClick={this.props.closeShareModal}>
+        <div className="close-share-modal" onClick={this.props.toggleShareModal}>
           &#10005;
         </div>
         <div>
@@ -28,7 +28,7 @@ class Share extends React.Component {
             </CopyToClipboard>
             {copied ? <span className="copied">Copied</span> : null}
           </div>
-          <div>
+          <div className="sns">
             <a href="www.facebook.com" className="fa fa-facebook">
               {" "}
             </a>

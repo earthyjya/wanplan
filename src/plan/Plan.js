@@ -1,13 +1,13 @@
-import React from "react";
 import "../scss/Plan.scss";
-import Share from "./Share";
-import PlanOverview from "./PlanOverview";
-import Timeline from "./Timeline/Timeline";
 import axios from "axios";
+import PlanOverview from "./PlanOverview";
+import React from "react";
+import Share from "./Share";
+import Timeline from "./Timeline/Timeline";
 import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
+import { Redirect } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
-import { Redirect } from "react-router-dom";
 
 class Plan extends React.Component {
   state = {
@@ -21,82 +21,71 @@ class Plan extends React.Component {
     redirectTo: "/"
   };
 
+  save = async () => {
+    this.toggleToast();
+    const { user_id } = this.props;
+    if (this.props.isLoggedIn) {
+      this.saveToUser(user_id, "/");
+    } else {
+      this.saveToUser(0, "/");
+    }
+  };
+
   saveToUser = async (user_id, redirect) => {
     const { APIServer, isLoggedIn } = this.props;
-    let url = APIServer + "/plan_overview";
-    let planId = this.state.plan_overview.plan_id;
-    let savedplan = {
-      ...this.state.plan_overview,
-      original_id: planId,
-      user_id: user_id
-    };
-    if (!isLoggedIn) {
-      if (localStorage.getItem("planlist") !== null && localStorage.getItem("planlist") !== []) {
-        let _planlist = JSON.parse(localStorage.getItem("planlist"));
-        console.log(_planlist)
-        for (var i = 0; i < _planlist.length; i++) {
-          if (_planlist[i].plan_id == this.props.plan_id) {
-            this.setState({
-              redirect: true,
-              redirectTo: "/plan/" + this.props.plan_id + redirect
-            });
-            return;
-          }
-        }
-      }
-    }
-    if (user_id !== this.state.plan_overview.user_id || user_id == 6) {
+    let oldPlanId = this.state.plan_overview.plan_id;
+    let newPlanId = 0;
+    let savedplan = {};
+    if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
+      // Duplicate plan_overview
+      let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
       await axios
-        .post(url, savedplan)
+        .post(url)
         .then(result => {
-          if (result.data === null) alert("Could not save plan :(");
-          console.log(result);
-          planId = result.data.id;
+          if (result.data === null) alert("Could not duplicate plan :(");
+          // console.log(result);
+          newPlanId = result.data.id;
+          savedplan = { ...result.data, plan_id: newPlanId };
         })
         .catch(error => {
           this.setState({ error });
         });
-      this.state.plan_startday.map(async day => {
-        url = APIServer + "/plan_startday/";
-        let newDay = day;
-        newDay.plan_id = planId;
-        await axios
-          .post(url, newDay)
-          .then(result => {
-            if (result.data === null) alert("Could not save plan :(");
-            console.log(result);
-          })
-          .catch(error => {
-            this.setState({ error });
-            console.log(error);
-          });
-      });
 
-      this.state.plan_detail.map(async plan => {
-        url = APIServer + "/plan_detail/";
-        let newPlan = plan;
-        newPlan.plan_id = planId;
-        await axios
-          .post(url, newPlan)
-          .then(result => {
-            if (result.data === null) alert("Could not save plan :(");
-            else
-              this.setState({
-                redirect: true,
-                redirectTo: "/plan/" + planId + redirect
-              });
-            console.log(result);
-          })
-          .catch(error => {
-            this.setState({ error });
-            console.log(error);
-          });
-      });
+      // Duplicate plan_startday
+      url = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
+      await axios
+        .post(url)
+        .then(result => {
+          if (result.data === null) alert("Could not duplicate plan_startday :(");
+          // console.log(result);
+        })
+        .catch(error => {
+          this.setState({ error });
+          console.log(error);
+        });
+
+      // Duplicate plan_detail
+      url = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
+      await axios
+        .post(url)
+        .then(result => {
+          if (result.data === null) alert("Could not duplicate plan_detail :(");
+          else
+            this.setState({
+              redirect: true,
+              redirectTo: "/plan/" + newPlanId + redirect
+            });
+          // console.log(result);
+        })
+        .catch(error => {
+          this.setState({ error });
+          console.log(error);
+        });
     }
     if (!isLoggedIn) {
-      savedplan.plan_id = planId;
+      savedplan.plan_id = newPlanId;
       if (localStorage.getItem("planlist") === null || localStorage.getItem("planlist") === []) {
-        var _planlist = [];
+        var _planlist = [savedplan];
         _planlist[0] = savedplan;
         localStorage.setItem("planlist", JSON.stringify(_planlist));
       } else {
@@ -107,23 +96,13 @@ class Plan extends React.Component {
     }
   };
 
-  save = async () => {
-    this.openToast();
-    const { user_id } = this.props;
-    if (this.props.isLoggedIn) {
-      this.saveToUser(user_id);
-    } else {
-      this.saveToUser(6);
-    }
-  };
-
   updatePlanOverview = async plan_overview => {
     const { APIServer, plan_id } = this.props;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
-      .then(response => {
-        console.log(response);
+      .then(result => {
+        // console.log(result);
       })
       .catch(error => {
         this.setState({ error });
@@ -136,27 +115,19 @@ class Plan extends React.Component {
       });
   };
 
-  openToast = () => {
-    this.setState({ toastOpen: true });
+  toggleToast = () => {
+    this.setState({ toastOpen: !this.state.toastOpen });
   };
 
-  closeToast = () => {
-    this.setState({ toastOpen: false });
-  };
-
-  openShareModal = () => {
-    this.setState({ modal: true });
-  };
-
-  closeShareModal = () => {
-    this.setState({ modal: false });
+  toggleShareModal = () => {
+    this.setState({ modal: !this.state.modal });
   };
 
   checkEdit = async () => {
     //If user already edit the plan before, go to the edit plan page on the same url
     const { user_id } = this.props;
     if (!this.props.isLoggedIn) {
-      this.saveToUser(6, "/edit_plan");
+      this.saveToUser(0, "/edit_plan");
     } else {
       if (user_id === this.state.plan_overview.user_id) {
         this.setState({
@@ -167,10 +138,6 @@ class Plan extends React.Component {
       //Else if user not edit the plan before, create new url and go to that url edit plan page
       else {
         this.saveToUser(user_id, "/edit_plan");
-        this.setState({
-          redirect: true,
-          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
-        });
       }
     }
   };
@@ -181,32 +148,6 @@ class Plan extends React.Component {
     }
   };
 
-  calPlan = async plan_detail => {
-    //// Need to be updated when transportations are added
-
-    const { plan_startday } = this.state;
-    var i = 0;
-    for (i = 0; i < plan_detail.length; i++) {
-      plan_detail[i].attraction_order = i;
-    }
-    for (i = 0; i < plan_startday.length; i++) {
-      plan_startday[i].day = i + 1;
-    }
-    let lastDay = 0;
-    let lastTime = 0;
-    for (i = 0; i < plan_detail.length; i++) {
-      if (plan_detail[i].day !== lastDay) {
-        lastDay = plan_detail[i].day;
-        lastTime = Str2Int(plan_startday[lastDay - 1].start_day);
-      }
-      plan_detail[i].start_time = Int2Str(lastTime);
-      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-      lastTime = lastTime + plan_detail[i].time_spend;
-    }
-
-    await this.setState({ plan_detail, plan_startday });
-  };
-
   async componentDidMount() {
     const { APIServer, plan_id } = this.props;
     let url = APIServer + "/load_plan/" + plan_id;
@@ -215,14 +156,14 @@ class Plan extends React.Component {
       .get(url)
       .then(result => {
         this.setState({ ...result.data });
-        console.log(result)
+        // console.log(result);
       })
       .catch(error => {
         this.setState({ error });
         console.log(error);
       });
     if (!this.state.plan_overview) {
-      this.setState({ error: true });
+      this.setState({ error: true, isLoading: false });
       return;
     }
 
@@ -233,7 +174,7 @@ class Plan extends React.Component {
 
     await this.setState({ days: days, isLoading: false });
 
-    console.log("Fetching done...");
+    // console.log("Fetching done...");
   }
 
   render() {
@@ -244,26 +185,24 @@ class Plan extends React.Component {
       return (
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
-            <ToastHeader toggle={this.closeToast}>Plan saved!</ToastHeader>
-            <ToastBody>
-              The plan is saved to your device, view it in plan page!
-            </ToastBody>
+            <ToastHeader toggle={this.toggleToast}>Plan saved!</ToastHeader>
+            <ToastBody>The plan is saved to your device, view it in plan page!</ToastBody>
           </Toast>
 
           {modal ? (
             <div className="share-modal">
-              <Share closeShareModal={this.closeShareModal} />
+              <Share toggleShareModal={this.toggleShareModal} />
             </div>
           ) : (
             <div></div>
           )}
 
+          {this.renderEditRedirect()}
           <PlanOverview {...this.state} />
           <div className="title-bar">
-            <div className="title">{plan_overview.plan_title}</div>
+            <div className="title">{plan_overview.city}</div>
             <div className="city">Plan</div>
             <div className="days">Map</div>
-            {this.renderEditRedirect()}
             <button className="white-button" onClick={this.save}>
               Save!
               <span style={{ fontSize: "15px" }}>

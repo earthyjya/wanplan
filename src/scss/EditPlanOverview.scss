@@ -1,14 +1,14 @@
-@import './Style.scss';
-@import './PlanOverview.scss';
+@import "./Style.scss";
+@import "./PlanOverview.scss";
 
-#privacy-dropdown{
+#privacy-dropdown {
   background-color: transparent;
   border: transparent;
   padding: 0;
   background: none;
 }
 
-#title-input{
+#title-input {
   font-size: 3.2em;
   color: white;
   background-color: transparent;
@@ -20,29 +20,28 @@
 }
 
 #title-input::placeholder {
-  color: rgba( $gray4, .7 );
+  color: rgba($gray4, 0.7);
 }
 
 #title-input:focus {
-    outline: none !important;
-    outline-offset: none !important;
-    border-bottom-color: $primary !important;
+  outline: none !important;
+  outline-offset: none !important;
+  border-bottom-color: $primary !important;
 }
 
-.privacy-dropdown{
+.privacy-dropdown {
   display: flex;
   justify-content: center;
   color: rgba(white, 0.6);
   transition: 0.2s ease-out;
 }
 
-.privacy-dropdown:hover{
+.privacy-dropdown:hover {
   cursor: pointer;
   color: rgba(white, 1);
 }
 
-
-.privacy-dropdown-toggle{
+.privacy-dropdown-toggle {
   display: flex;
   background: none;
   background-color: transparent;
@@ -52,16 +51,16 @@
   text-align: center;
 }
 
-.choose-photo-container{
+.choose-photo-container {
   font-size: 1.1em;
   height: auto;
   left: 20px;
   top: 20px;
   position: absolute;
-  color: rgba(white, 0.5)
+  color: rgba(white, 0.5);
 }
 
-.title-input-icon{
+.title-input-icon {
   margin-left: -30px;
   align-self: center;
   color: $gray4;

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
 import "../../scss/AttBar.scss";
 import AttBarCard from "./AttBarCard.js";
+import React, { Component } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class AttBar extends Component {

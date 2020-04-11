@@ -1,50 +1,49 @@
-import React from "react";
 import "../scss/EditPlan.scss";
-import Share from "./Share";
-import EditPlanContent from "./EditPlanContent";
-import EditPlanOverview from "./EditPlanOverview";
-import Timeline from "./Timeline/Timeline";
 import AttBar from "./AttBar/AttBar";
 import axios from "axios";
+import EditPlanContent from "./EditPlanContent";
+import EditPlanOverview from "./EditPlanOverview";
+import React from "react";
 import Request from "../lib/Request.js";
-import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
+import Share from "./Share";
+import Timeline from "./Timeline/Timeline";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Row, Col, Container } from "reactstrap";
-import { Toast, ToastBody, ToastHeader } from "reactstrap";
+import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
+import { Row, Col, Container, Toast, ToastBody, ToastHeader } from "reactstrap";
 
 class EditPlan extends React.Component {
   state = {
-    isLoading: true,
-    error: null,
-    modal: false,
-    editTitle: false,
-    updateToastOpen: false,
-    publishToastOpen: false,
-    plan_detail: [],
+    attraction: [],
     days: [],
     daysBefUpdate: 0,
+    dropdownOpen: false,
+    editTitle: false,
+    error: null,
+    isLoading: true,
+    modal: false,
     orders: 0,
-    attraction: [],
+    plan_detail: [],
+    publishToast: false,
     redirect: false,
-    redirectTo: "/"
+    redirectTo: "/",
+    updateToast: false
   };
 
   updatePlan = async () => {
     //update current plan
-    this.updateToastOpen();
+    this.toggleUpdateToast();
     const { APIServer, plan_id } = this.props;
     let url = "";
 
     if (this.state.daysBefUpdate !== 0) {
-      url =
-        APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
+      url = APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
 
       await axios
         .delete(url)
         .then(result => {
           if (result.data === null) alert("Could not update plan :(");
-          console.log(result);
+          // console.log(result);
         })
         .catch(error => {
           console.log(error);
@@ -57,7 +56,7 @@ class EditPlan extends React.Component {
         .post(url, day)
         .then(result => {
           if (result.data === null) alert("Could not update plan :(");
-          console.log(result);
+          // console.log(result);
         })
         .catch(error => {
           this.setState({ error });
@@ -66,14 +65,13 @@ class EditPlan extends React.Component {
     });
 
     if (this.state.orders !== 0) {
-      url =
-        APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
+      url = APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
 
       await axios
         .delete(url)
         .then(result => {
           if (result.data === null) alert("Could not update plan :(");
-          console.log(result);
+          // console.log(result);
         })
         .catch(error => {
           console.log(error);
@@ -86,7 +84,7 @@ class EditPlan extends React.Component {
         .post(url, this.state.plan_detail[plan.attraction_order])
         .then(result => {
           if (result.data === null) alert("Could not update plan :(");
-          console.log(result);
+          // console.log(result);
         })
         .catch(error => {
           this.setState({ error });
@@ -104,7 +102,7 @@ class EditPlan extends React.Component {
             redirect: true,
             redirectTo: "/plan/" + this.state.plan_overview.plan_id
           });
-        console.log(result);
+        // console.log(result);
       })
       .catch(error => {
         this.setState({ error });
@@ -118,7 +116,7 @@ class EditPlan extends React.Component {
     await axios
       .put(url, plan_overview)
       .then(response => {
-        console.log(response);
+        // console.log(response);
       })
       .catch(error => {
         this.setState({ error });
@@ -135,56 +133,37 @@ class EditPlan extends React.Component {
         "planlist",
         JSON.stringify(
           _planlist.map(plan => {
-            if (plan.plan_id == plan_id) plan = plan_overview;
-            return plan
+            if (plan.plan_id === plan_id) plan = plan_overview;
+            return plan;
           })
         )
-
       );
-    }
-  };
-
-  renderOverviewRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirectTo} />;
     }
   };
 
   publishPlan = () => {
     //publish current plan
-    this.publishToastOpen();
+    this.togglePublishToast();
   };
 
-  updateToastOpen = () => {
-    this.setState({ updateToastOpen: true });
+  toggleUpdateToast = () => {
+    this.setState({ updateToast: !this.state.updateToast });
   };
 
-  updateToastClose = () => {
-    this.setState({ updateToastOpen: false });
+  togglePublishToast = () => {
+    this.setState({ publishToast: !this.state.publishToast });
   };
 
-  publishToastOpen = () => {
-    this.setState({ publishToastOpen: true });
+  toggleShareModal = () => {
+    this.setState({ modal: !this.state.modal });
   };
 
-  publishToastClose = () => {
-    this.setState({ publishToastOpen: false });
+  toggleEditPlanContent = () => {
+    this.setState({ editTitle: !this.state.editTitle });
   };
 
-  openShareModal = () => {
-    this.setState({ modal: true });
-  };
-
-  closeShareModal = () => {
-    this.setState({ modal: false });
-  };
-
-  openEditPlanContent = () => {
-    this.setState({ editTitle: true });
-  };
-
-  closeEditPlanContent = () => {
-    this.setState({ editTitle: false });
+  toggleDropDown = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
   calPlan = async plan_detail => {
@@ -281,7 +260,7 @@ class EditPlan extends React.Component {
       .then(result => (toAdd = { ...toAdd, ...result.data[0] }))
       .catch(error => {
         this.setState({ error });
-        console.error(error);
+        // console.error(error);
       });
 
     plan_detail.splice(index, 0, toAdd);
@@ -306,6 +285,12 @@ class EditPlan extends React.Component {
     this.setState({ plan_detail });
   };
 
+  renderEditRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+  };
+
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
     const { APIServer, plan_id } = this.props;
@@ -321,9 +306,19 @@ class EditPlan extends React.Component {
         console.log(error);
       });
     if (!this.state.plan_overview) {
-      this.setState({ error: true });
+      this.setState({ error: true, isLoading: false });
       return;
     }
+    url = APIServer + "/city";
+    await axios
+      .get(url)
+      .then(result => {
+        this.setState({ cities: result.data });
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
 
     let days = [];
     for (i = 1; i <= this.state.plan_overview.duration; i++) {
@@ -352,17 +347,16 @@ class EditPlan extends React.Component {
                 return;
               }
 
-              if (source.droppableId !== "bar")
-                this.reorderCards(source, destination);
+              if (source.droppableId !== "bar") this.reorderCards(source, destination);
               else this.addCard(source, destination);
             }}
           >
             <Container fluid className="p-0">
               <Row className="m-0">
                 <Col lg={8} className="p-0">
-                  <EditPlanOverview {...this.state} />
+                  <EditPlanOverview {...this.state} updatePlanOverview={this.updatePlanOverview} />
                   <div className="title-bar">
-                    <div className="title">{plan_overview.plan_title}</div>
+                    <div className="title">{plan_overview.city}</div>
                     <div className="city">Plan</div>
                     <div className="days">Map</div>
                     <div>
@@ -370,13 +364,10 @@ class EditPlan extends React.Component {
                       <i
                         className="fa fa-pencil-square-o fa-fw"
                         aria-hidden="true"
-                        onClick={this.openEditPlanContent}
+                        onClick={this.toggleEditPlanContent}
                       />
                     </div>
-                    <button
-                      className="white-button"
-                      onClick={this.openShareModal}
-                    >
+                    <button className="white-button" onClick={this.toggleShareModal}>
                       Share!
                       <span style={{ fontSize: "15px" }}>
                         <br />
@@ -395,7 +386,7 @@ class EditPlan extends React.Component {
                       </span>
                     </button>
                   </div>
-
+                  {this.renderEditRedirect()}
                   <Timeline
                     {...this.state}
                     {...this.props}
@@ -409,32 +400,22 @@ class EditPlan extends React.Component {
                   />
                 </Col>
                 <Col className="p-0">
-                  <Request
-                    url={
-                      this.props.APIServer +
-                      "/attraction/city/" +
-                      plan_overview.city_id
-                    }
-                  >
+                  <Request url={this.props.APIServer + "/attraction/city/" + plan_overview.city_id}>
                     {result => <AttBar {...result} />}
                   </Request>
                 </Col>
               </Row>
             </Container>
           </DragDropContext>
-          <Toast isOpen={this.state.updateToastOpen}>
-            <ToastHeader toggle={this.updateToastClose}>
-              Plan updated!
-            </ToastHeader>
+          <Toast isOpen={this.state.updateToast}>
+            <ToastHeader toggle={this.toggleUpdateToast}>Plan updated!</ToastHeader>
             <ToastBody>
-              If you want to save this plan, please sign-in or copy the url.
-              This plan will now show on 'My plan'.
+              If you want to save this plan, please sign-in or copy the url. This plan will now show
+              on 'My plan'.
             </ToastBody>
           </Toast>
-          <Toast isOpen={this.state.publishToastOpen}>
-            <ToastHeader toggle={this.publishToastClose}>
-              Plan published!
-            </ToastHeader>
+          <Toast isOpen={this.state.publishToast}>
+            <ToastHeader toggle={this.togglePublishToast}>Plan published!</ToastHeader>
             <ToastBody>
               The plan is opended to public. It will be available for other user
             </ToastBody>
@@ -442,7 +423,7 @@ class EditPlan extends React.Component {
 
           {modal ? (
             <div className="share-modal">
-              <Share closeShareModal={this.closeShareModal} />
+              <Share toggleShareModal={this.toggleShareModal} />
             </div>
           ) : (
             <div></div>
@@ -452,14 +433,13 @@ class EditPlan extends React.Component {
             <div className="edit-plan-modal">
               <EditPlanContent
                 {...this.state}
-                closeEditPlanContent={this.closeEditPlanContent}
+                toggleEditPlanContent={this.toggleEditPlanContent}
                 updatePlanOverview={this.updatePlanOverview}
               />
             </div>
           ) : (
             <div></div>
           )}
-          {this.renderOverviewRedirect()}
         </React.Fragment>
       );
     }

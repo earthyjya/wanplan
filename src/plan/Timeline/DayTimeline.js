@@ -1,5 +1,5 @@
-import React, { Component } from "react";
 import AttCard from "./AttCard";
+import React, { Component } from "react";
 import TransCard from "./TransCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -37,7 +37,7 @@ class DayTimeline extends Component {
               <div {...dropProvided.droppableProps}>
                 <div ref={dropProvided.innerRef}>
                   {(() => {
-                    if (plan_detail.length) {
+                    if (plan_detail) {
                       destination = plan_detail[0];
                       //
                       return (

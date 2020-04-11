@@ -22,92 +22,6 @@
   color: white;
 }
 
-.Messages-list {
-  padding: 10px 0;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  list-style: none;
-  padding-left: 0;
-  flex-grow: 1;
-  overflow: auto;
-}
-
-.Messages-message {
-  display: flex;
-  margin-top: 10px;
-}
-
-.Messages-message.currentMember {
-  justify-content: flex-end;
-  flex-direction: row-reverse;
-  text-align: right;
-}
-
-.Message-content {
-  display: inline-block;
-}
-
-.currentMember > .Message-content {
-  align-items: flex-end;
-}
-
-.Messages-message > .avatar {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 0 10px -10px;
-}
-
-.Message-content > .username {
-  display: block;
-  color: #444444;
-  font-size: 16px;
-  padding-bottom: 4px;
-  padding-left: 10px;
-}
-
-.Message-content > .text {
-  padding: 10px;
-  max-width: 400px;
-  margin: 0;
-  border-radius: 12px;
-  background-color: cornflowerblue;
-  color: white;
-  display: inline-block;
-}
-
-.currentMember > .Message-content .text {
-  background-color: orangered;
-}
-
-.MessageForm {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  max-width: 900px;
-  margin: 0 auto 40px;
-}
-
-.MessageInput {
-  padding: 5px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 2px solid yellowgreen;
-  flex-grow: 1;
-}
-
-.MessageButton {
-  padding: 5px 10px;
-  font-size: 16px;
-  background-color: yellowgreen;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  margin-left: 10px;
-}
-
 .topnav {
   display: flex;
   flex-direction: row;
@@ -138,10 +52,9 @@
   text-decoration: none;
   color: $gray2;
   cursor: pointer;
-
 }
 
-.topnav > a.wanplan {
+.topnav > a.oneplan {
   border: none;
   color: $primary;
   font-size: 1.5em;

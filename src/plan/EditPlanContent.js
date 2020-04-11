@@ -1,5 +1,5 @@
-import React from "react";
 import "../scss/EditPlanContent.scss";
+import React from "react";
 
 class EditPlanContent extends React.Component {
   state = {
@@ -34,7 +34,7 @@ class EditPlanContent extends React.Component {
   };
 
   onPrivacyChange = e => {
-    var available = 0;
+    let available = 0;
     switch (e.target.value) {
       case "Unlisted":
         available = 0;
@@ -53,23 +53,36 @@ class EditPlanContent extends React.Component {
     });
   };
 
+  onCityChange = e => {
+    const { cities } = this.props;
+    const city_id = Number(e.target.value);
+    const city = cities.filter(city => city.city_id === city_id)[0].city;
+    this.setState({
+      plan_overview: {
+        ...this.state.plan_overview,
+        city_id,
+        city
+      }
+    });
+  };
+
   onSave = () => {
     this.props.updatePlanOverview(this.state.plan_overview);
-    this.props.closeEditPlanContent();
+    this.props.toggleEditPlanContent();
   };
 
   async componentDidMount() {
-    this.setState({ plan_overview: this.props.plan_overview });
-    this.setState({ isLoading: false });
+    this.setState({ plan_overview: this.props.plan_overview, isLoading: false });
   }
 
   render() {
     const { isLoading, plan_overview } = this.state;
+    const { cities } = this.props;
     let styles = ["Sightseeing", "Cultural", "Adventure"];
     if (isLoading) return <div></div>;
     return (
       <div className="edit-plan-content">
-        <div className="close-edit-plan" onClick={this.props.closeEditPlanContent}>
+        <div className="close-edit-plan" onClick={this.props.toggleEditPlanContent}>
           &#10005;
         </div>
         <div>
@@ -79,6 +92,22 @@ class EditPlanContent extends React.Component {
             value={plan_overview.plan_title}
             onChange={this.onTitleChange}
           />
+        </div>
+        <div>
+          <span className="input-title">City : </span>
+          <select
+            className="input-box"
+            value={this.state.plan_overview.city_id}
+            onChange={this.onCityChange}
+          >
+            {cities.map(city => {
+              return (
+                <option value={city.city_id} className={city.city}>
+                  {city.city}
+                </option>
+              );
+            })}
+          </select>
         </div>
         <div>
           <span className="input-description">Plan Description* : </span>
@@ -100,6 +129,7 @@ class EditPlanContent extends React.Component {
             })}
           </select>
         </div>
+        {/*
         <div>
           <span className="input-title">Privacy : </span>
           <select
@@ -111,10 +141,11 @@ class EditPlanContent extends React.Component {
             <option>Public</option>
           </select>
         </div>
+      */}
         <button className="save" onClick={this.onSave}>
           Save
         </button>
-        <button className="cancel" onClick={this.props.closeEditPlanContent}>
+        <button className="cancel" onClick={this.props.toggleEditPlanContent}>
           Cancel
         </button>
       </div>
