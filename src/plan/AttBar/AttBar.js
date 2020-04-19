@@ -40,7 +40,11 @@ class AttBar extends Component {
                             ref={dragProvided.innerRef}
                           >
                             <div>
-                              <AttBarCard {...dat} key={dat.attraction_id.toString()} />
+                              <AttBarCard
+                                {...dat}
+                                APIServer={this.props.APIServer}
+                                key={dat.attraction_id.toString()}
+                              />
                             </div>
                           </div>
                         )}

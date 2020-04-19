@@ -22,7 +22,9 @@ class App extends Component {
   state = {
     user_id: 0,
     isLoggedIn: false,
-    APIServer: "https://api.oneplan.in.th/api"
+    APIServer: "https://api.oneplan.in.th/api",
+    // APIServer: "http://localhost:3030/api",
+    googleAPIKey: "AIzaSyA914X_JZe6WuOVsIT1XCYlAr19fcrFNjc"
   };
 
   delete = () => {

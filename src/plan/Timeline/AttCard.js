@@ -1,9 +1,11 @@
 import "../../scss/AttCard.scss";
+import axios from "axios";
 import React, { Component } from "react";
 
 class AttCard extends Component {
   state = {
-    description: ""
+    description: "",
+    photoUrls: []
   };
 
   changeDuration = e => {
@@ -22,8 +24,18 @@ class AttCard extends Component {
     this.props.updateDescription(this.props.attraction_order, this.state.description);
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({ description: this.props.description });
+    const { APIServer, google_place_id } = this.props;
+    let url = APIServer + "/googlephotos/" + google_place_id;
+    await axios
+      .get(url)
+      .then(res => {
+        this.setState({ photoUrls: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -38,6 +50,7 @@ class AttCard extends Component {
       attraction_type,
       description
     } = this.props;
+    const { photoUrls } = this.state;
     let minutes = [
       0,
       10,
@@ -83,14 +96,20 @@ class AttCard extends Component {
               </div>
             );
         })()}
-
         <div className="StartTime">{start_time}</div>
         <div className="EndTime">{end_time}</div>
         <div className="AttName">{attraction_name}</div>
         <div className="AttTypeCont">
           <div className="AttType">{attraction_type}</div>
         </div>
-        <img className="AttPhoto" alt={attraction_name} />
+        <img
+          src={(() => {
+            if (photoUrls) return photoUrls[0];
+            return "/";
+          })()}
+          className="AttPhoto"
+          alt={attraction_name}
+        />
 
         {(() => {
           if (editing)

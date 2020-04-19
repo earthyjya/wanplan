@@ -1,11 +1,36 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 class AttBarCard extends Component {
+  state = {
+    photoUrls: []
+  };
+
+  async componentDidMount() {
+    const { APIServer, google_place_id } = this.props;
+    let url = APIServer + "/googlephotos/" + google_place_id;
+    await axios
+      .get(url)
+      .then(res => {
+        this.setState({ photoUrls: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
   render() {
     const { attraction_name, attraction_type, open_time, close_time, description } = this.props;
+    const { photoUrls } = this.state;
     return (
       <div className="AttBarCard">
-        <div className="attPhoto2"></div>
+        <img
+          src={(() => {
+            if (photoUrls) return photoUrls[0];
+            return "/";
+          })()}
+          className="attPhoto2"
+          alt={attraction_name}
+        />
         <div style={{ float: "left", margin: "12px" }}>
           <div className="attName2">{attraction_name}</div>
           <div className="attType2">{attraction_type}</div>

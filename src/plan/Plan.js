@@ -4,7 +4,6 @@ import PlanOverview from "./PlanOverview";
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline/Timeline";
-import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";

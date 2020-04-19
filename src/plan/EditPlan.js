@@ -401,7 +401,7 @@ class EditPlan extends React.Component {
                 </Col>
                 <Col className="p-0">
                   <Request url={this.props.APIServer + "/attraction/city/" + plan_overview.city_id}>
-                    {result => <AttBar {...result} />}
+                    {result => <AttBar {...result} APIServer={this.props.APIServer} />}
                   </Request>
                 </Col>
               </Row>
