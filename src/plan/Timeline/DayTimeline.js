@@ -59,7 +59,6 @@ class DayTimeline extends Component {
                           >
                             <AttCard
                               {...detail}
-                              APIServer={this.props.APIServer}
                               changeOrder={this.props.changeOrder}
                               changeDuration={this.props.changeDuration}
                               updateDescription={this.props.updateDescription}
@@ -114,7 +113,6 @@ class DayTimeline extends Component {
             <div key={detail.attraction_order.toString()}>
               <AttCard
                 {...detail}
-                APIServer={this.props.APIServer}
                 changeOrder={this.props.changeOrder}
                 changeDuration={this.props.changeDuration}
                 delCard={this.props.delCard}

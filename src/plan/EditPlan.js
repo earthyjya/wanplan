@@ -33,7 +33,8 @@ class EditPlan extends React.Component {
   updatePlan = async () => {
     //update current plan
     this.toggleUpdateToast();
-    const { APIServer, plan_id } = this.props;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     let url = "";
 
     if (this.state.daysBefUpdate !== 0) {
@@ -111,7 +112,8 @@ class EditPlan extends React.Component {
   };
 
   updatePlanOverview = async plan_overview => {
-    const { APIServer, plan_id } = this.props;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
@@ -248,7 +250,8 @@ class EditPlan extends React.Component {
   addCard = async (source, destination) => {
     let { droppableId, index } = destination;
     const { plan_detail } = this.state;
-    const { APIServer, plan_id } = this.props;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     let toAdd = {
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
@@ -293,7 +296,8 @@ class EditPlan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { APIServer, plan_id } = this.props;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/load_plan/" + plan_id;
     let i = 0;
     await axios
@@ -336,6 +340,7 @@ class EditPlan extends React.Component {
 
   render() {
     const { isLoading, error, plan_overview, modal, editTitle } = this.state;
+    const APIServer = process.env.REACT_APP_APIServer;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -400,8 +405,8 @@ class EditPlan extends React.Component {
                   />
                 </Col>
                 <Col className="p-0">
-                  <Request url={this.props.APIServer + "/attraction/city/" + plan_overview.city_id}>
-                    {result => <AttBar {...result} APIServer={this.props.APIServer} />}
+                  <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
+                    {result => <AttBar {...result} />}
                   </Request>
                 </Col>
               </Row>

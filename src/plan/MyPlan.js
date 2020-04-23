@@ -24,7 +24,8 @@ class MyPlan extends Component {
   };
 
   onClickNewPlan = () => {
-    const { APIServer, user_id, isLoggedIn } = this.props;
+    const { user_id, isLoggedIn } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 

@@ -31,7 +31,8 @@ class Plan extends React.Component {
   };
 
   saveToUser = async (user_id, redirect) => {
-    const { APIServer, isLoggedIn } = this.props;
+    const { isLoggedIn } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     let oldPlanId = this.state.plan_overview.plan_id;
     let newPlanId = 0;
     let savedplan = {};
@@ -96,7 +97,8 @@ class Plan extends React.Component {
   };
 
   updatePlanOverview = async plan_overview => {
-    const { APIServer, plan_id } = this.props;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
@@ -148,7 +150,8 @@ class Plan extends React.Component {
   };
 
   async componentDidMount() {
-    const { APIServer, plan_id } = this.props;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/load_plan/" + plan_id;
     let i = 0;
     await axios

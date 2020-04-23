@@ -21,10 +21,7 @@ library.add(faPencilAlt, faCamera, faGlobeAsia, faAngleDown, faShareAlt);
 class App extends Component {
   state = {
     user_id: 0,
-    isLoggedIn: false,
-    APIServer: "https://api.oneplan.in.th/api",
-    // APIServer: "http://localhost:3030/api",
-    googleAPIKey: "AIzaSyA914X_JZe6WuOVsIT1XCYlAr19fcrFNjc"
+    isLoggedIn: false
   };
 
   delete = () => {
@@ -35,7 +32,8 @@ class App extends Component {
     if (this.state.isLoggedIn) {
       this.setState({ isLoggedIn: false });
     } else {
-      const { APIServer, user_id } = this.state;
+      const { user_id } = this.state;
+      const APIServer = process.env.REACT_APP_APIServer;
       this.setState({ isLoggedIn: true });
       if (localStorage.getItem("planlist") !== null) {
         let _planlist = JSON.parse(localStorage.getItem("planlist"));
@@ -138,9 +136,14 @@ class App extends Component {
     }
   };
 
+  componentDidMount() {
+    console.log(process.env.REACT_APP_APIServer);
+  }
+
   render() {
     // eslint-disable-next-line
-    const { user_id, APIServer } = this.state;
+    const { user_id } = this.state;
+    const APIServer = process.env.REACT_APP_APIServer;
     return (
       <React.Fragment>
         <div className="topnav">

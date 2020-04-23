@@ -7,8 +7,8 @@ class AttBarCard extends Component {
   };
 
   async componentDidMount() {
-    const { APIServer, google_place_id } = this.props;
-    let url = APIServer + "/googlephotos/" + google_place_id;
+    const { google_place_id } = this.props;
+    let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
     await axios
       .get(url)
       .then(res => {

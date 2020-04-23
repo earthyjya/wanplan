@@ -30,7 +30,7 @@ class Homepage extends Component {
   };
 
   async componentDidMount() {
-    const { APIServer } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
     await axios
       .get(APIServer + "/city")
       .then(result => {
