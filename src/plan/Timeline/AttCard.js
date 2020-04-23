@@ -26,16 +26,18 @@ class AttCard extends Component {
 
   async componentDidMount() {
     this.setState({ description: this.props.description });
-    const { google_place_id } = this.props;
-    let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
-    await axios
-      .get(url)
-      .then(res => {
-        this.setState({ photoUrls: res.data });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (process.env.NODE_ENV === "production") {
+      const { google_place_id } = this.props;
+      let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
+      await axios
+        .get(url)
+        .then(res => {
+          this.setState({ photoUrls: res.data });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
   render() {
