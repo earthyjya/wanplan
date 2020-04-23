@@ -40,57 +40,33 @@ class EditPlan extends React.Component {
     if (this.state.daysBefUpdate !== 0) {
       url = APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
 
-      await axios
-        .delete(url)
-        .then(result => {
-          if (result.data === null) alert("Could not update plan :(");
-          // console.log(result);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      await axios.delete(url).catch(error => {
+        console.log(error);
+      });
     }
 
     this.state.plan_startday.map(async day => {
       url = APIServer + "/plan_startday/";
-      await axios
-        .post(url, day)
-        .then(result => {
-          if (result.data === null) alert("Could not update plan :(");
-          // console.log(result);
-        })
-        .catch(error => {
-          this.setState({ error });
-          console.log(error);
-        });
+      await axios.post(url, day).catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
     });
 
     if (this.state.orders !== 0) {
       url = APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
 
-      await axios
-        .delete(url)
-        .then(result => {
-          if (result.data === null) alert("Could not update plan :(");
-          // console.log(result);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      await axios.delete(url).catch(error => {
+        console.log(error);
+      });
     }
 
     this.state.plan_detail.map(async plan => {
       url = APIServer + "/plan_detail/";
-      await axios
-        .post(url, this.state.plan_detail[plan.attraction_order])
-        .then(result => {
-          if (result.data === null) alert("Could not update plan :(");
-          // console.log(result);
-        })
-        .catch(error => {
-          this.setState({ error });
-          console.log(error);
-        });
+      await axios.post(url, this.state.plan_detail[plan.attraction_order]).catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
     });
 
     url = APIServer + "/plan_overview/" + plan_id;
@@ -104,6 +80,56 @@ class EditPlan extends React.Component {
             redirectTo: "/plan/" + this.state.plan_overview.plan_id
           });
         // console.log(result);
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+  };
+
+  updatePlanNoRedirect = async () => {
+    //update current plan
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    let url = "";
+
+    if (this.state.daysBefUpdate !== 0) {
+      url = APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
+
+      await axios.delete(url).catch(error => {
+        console.log(error);
+      });
+    }
+
+    this.state.plan_startday.map(async day => {
+      url = APIServer + "/plan_startday/";
+      await axios.post(url, day).catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+    });
+
+    if (this.state.orders !== 0) {
+      url = APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
+
+      await axios.delete(url).catch(error => {
+        console.log(error);
+      });
+    }
+
+    this.state.plan_detail.map(async plan => {
+      url = APIServer + "/plan_detail/";
+      await axios.post(url, this.state.plan_detail[plan.attraction_order]).catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+    });
+
+    url = APIServer + "/plan_overview/" + plan_id;
+    await axios
+      .put(url, this.state.plan_overview)
+      .then(result => {
+        if (result.data === null) alert("Could not update plan :(");
       })
       .catch(error => {
         this.setState({ error });
@@ -245,6 +271,7 @@ class EditPlan extends React.Component {
     plan_detail.splice(b, 0, removed);
     plan_detail.sort((a, b) => a.day - b.day);
     await this.calPlan(plan_detail);
+    this.updatePlanNoRedirect();
   };
 
   addCard = async (source, destination) => {
@@ -268,12 +295,14 @@ class EditPlan extends React.Component {
 
     plan_detail.splice(index, 0, toAdd);
     this.calPlan(plan_detail);
+    this.updatePlanNoRedirect();
   };
 
   delCard = index => {
     const { plan_detail } = this.state;
     plan_detail.splice(index, 1);
     this.calPlan(plan_detail);
+    this.updatePlanNoRedirect();
   };
 
   changeDuration = (source, newDuration) => {
