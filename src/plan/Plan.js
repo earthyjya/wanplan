@@ -17,7 +17,7 @@ class Plan extends React.Component {
     days: [],
     attraction: [],
     redirect: false,
-    redirectTo: "/"
+    redirectTo: "/",
   };
 
   save = async () => {
@@ -36,83 +36,91 @@ class Plan extends React.Component {
     let oldPlanId = this.state.plan_overview.plan_id;
     let newPlanId = 0;
     let savedplan = {};
+    let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
-      // Duplicate plan_overview
-      let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
-      await axios
-        .post(url)
-        .then(result => {
-          if (result.data === null) alert("Could not duplicate plan :(");
-          // console.log(result);
-          newPlanId = result.data.id;
-          savedplan = { ...result.data, plan_id: newPlanId };
-        })
-        .catch(error => {
-          this.setState({ error });
-        });
+      let saved = false;
+      _planlist.map((plan) => {
+        if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
+      });
+      if (!saved) {
+        // Duplicate plan_overview
+        let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
+        await axios
+          .post(url)
+          .then((result) => {
+            if (result.data === null) alert("Could not duplicate plan :(");
+            // console.log(result);
+            newPlanId = result.data.id;
+            savedplan = { ...result.data, plan_id: newPlanId };
+          })
+          .catch((error) => {
+            this.setState({ error });
+          });
 
-      // Duplicate plan_startday
-      url = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
-      await axios
-        .post(url)
-        .then(result => {
-          if (result.data === null) alert("Could not duplicate plan_startday :(");
-          // console.log(result);
-        })
-        .catch(error => {
-          this.setState({ error });
-          console.log(error);
-        });
+        // Duplicate plan_startday
+        url = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
+        await axios
+          .post(url)
+          .then((result) => {
+            if (result.data === null)
+              alert("Could not duplicate plan_startday :(");
+            // console.log(result);
+          })
+          .catch((error) => {
+            this.setState({ error });
+            console.log(error);
+          });
 
-      // Duplicate plan_detail
-      url = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
-      await axios
-        .post(url)
-        .then(result => {
-          if (result.data === null) alert("Could not duplicate plan_detail :(");
-          else
-            this.setState({
-              redirect: true,
-              redirectTo: "/plan/" + newPlanId + redirect
-            });
-          // console.log(result);
-        })
-        .catch(error => {
-          this.setState({ error });
-          console.log(error);
-        });
-    }
-    if (!isLoggedIn) {
-      savedplan.plan_id = newPlanId;
-      if (localStorage.getItem("planlist") === null || localStorage.getItem("planlist") === []) {
-        var _planlist = [savedplan];
-        _planlist[0] = savedplan;
-        localStorage.setItem("planlist", JSON.stringify(_planlist));
-      } else {
-        let _planlist = JSON.parse(localStorage.getItem("planlist"));
-        _planlist.push(savedplan);
-        localStorage.setItem("planlist", JSON.stringify(_planlist));
+        // Duplicate plan_detail
+        url = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
+        await axios
+          .post(url)
+          .then((result) => {
+            if (result.data === null)
+              alert("Could not duplicate plan_detail :(");
+            else
+              this.setState({
+                redirect: true,
+                redirectTo: "/plan/" + newPlanId + redirect,
+              });
+            // console.log(result);
+          })
+          .catch((error) => {
+            this.setState({ error });
+            console.log(error);
+          });
+      }
+      if (!isLoggedIn) {
+        savedplan.plan_id = newPlanId;
+        if (_planlist === null || _planlist === []) {
+          _planlist = [savedplan];
+          _planlist[0] = savedplan;
+          localStorage.setItem("planlist", JSON.stringify(_planlist));
+        } else {
+          _planlist.push(savedplan);
+          localStorage.setItem("planlist", JSON.stringify(_planlist));
+        }
       }
     }
   };
 
-  updatePlanOverview = async plan_overview => {
+  updatePlanOverview = async (plan_overview) => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
         console.log(error);
       });
     if (this.state.error) alert(this.state.error);
     else
       this.setState({
-        plan_overview: { ...this.state.plan_overview, ...plan_overview }
+        plan_overview: { ...this.state.plan_overview, ...plan_overview },
       });
   };
 
@@ -128,12 +136,24 @@ class Plan extends React.Component {
     //If user already edit the plan before, go to the edit plan page on the same url
     const { user_id } = this.props;
     if (!this.props.isLoggedIn) {
-      this.saveToUser(0, "/edit_plan");
+      let _planlist = JSON.parse(localStorage.getItem("planlist"));
+      let saved = false;
+      _planlist.map((plan) => {
+        if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
+      });
+      if (!saved) {
+        this.saveToUser(0, "/edit_plan");
+      }else{
+        this.setState({
+          redirect: true,
+          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan",
+        });
+      }
     } else {
       if (user_id === this.state.plan_overview.user_id) {
         this.setState({
           redirect: true,
-          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan"
+          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan",
         });
       }
       //Else if user not edit the plan before, create new url and go to that url edit plan page
@@ -156,11 +176,11 @@ class Plan extends React.Component {
     let i = 0;
     await axios
       .get(url)
-      .then(result => {
+      .then((result) => {
         this.setState({ ...result.data });
         // console.log(result);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
         console.log(error);
       });
@@ -188,7 +208,9 @@ class Plan extends React.Component {
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
             <ToastHeader toggle={this.toggleToast}>Plan saved!</ToastHeader>
-            <ToastBody>The plan is saved to your device, view it in plan page!</ToastBody>
+            <ToastBody>
+              The plan is saved to your device, view it in plan page!
+            </ToastBody>
           </Toast>
 
           {modal ? (

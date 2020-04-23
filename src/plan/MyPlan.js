@@ -10,19 +10,32 @@ class MyPlan extends Component {
     redirect: false,
     redirectTo: "/",
     citySearch: 0,
-    cities: []
+    cities: [],
   };
 
   savedPlan = () => {
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    if (_planlist !== null) {
-      return _planlist.map((plan) => (
-        <div key={plan.plan_id}>
-          <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-        </div>
-      ));
+    if (this.props.isLoggedIn) {
+      const { data, user_id } = this.props;
+      return data
+        .filter((plan) => plan.user_id === user_id)
+        .map((plan) => {
+          return (
+            <div key={plan.plan_id}>
+              <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+            </div>
+          );
+        });
     } else {
-      return <div>No saved plan yet!</div>;
+      if (_planlist !== null || _planlist !== []) {
+        return _planlist.map((plan) => (
+          <div key={plan.plan_id}>
+            <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+          </div>
+        ));
+      } else {
+        return <div>No saved plan yet!</div>;
+      }
     }
   };
 
@@ -105,7 +118,7 @@ class MyPlan extends Component {
         <div style={{ top: "20px", left: "10px", position: "relative" }}>
           {(() => {
             if (this.state.citySearch == 0) {
-              console.log("all")
+              console.log("all");
               return (
                 <div>
                   {data.map((plan) => (
