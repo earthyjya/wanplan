@@ -20,8 +20,8 @@ library.add(faPencilAlt, faCamera, faGlobeAsia, faAngleDown, faShareAlt);
 
 class App extends Component {
   state = {
-    user_id: 0,
-    isLoggedIn: false
+    user_id: 2,
+    isLoggedIn: true
   };
 
   delete = () => {

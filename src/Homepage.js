@@ -11,13 +11,13 @@ class Homepage extends Component {
     error: null,
     isLoading: true,
     redirect: false,
-    redirectTo: "/"
+    redirectTo: "/",
   };
 
-  RedirectFunc = plan_id => {
+  RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_plan"
+      redirectTo: "/plan/" + plan_id + "/edit_plan",
     });
   };
 
@@ -25,7 +25,7 @@ class Homepage extends Component {
     if (this.state.redirect) return <Redirect to={this.state.redirectTo} />;
   };
 
-  selectCity = e => {
+  selectCity = (e) => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
@@ -33,11 +33,11 @@ class Homepage extends Component {
     const APIServer = process.env.REACT_APP_APIServer;
     await axios
       .get(APIServer + "/city")
-      .then(result => {
+      .then((result) => {
         this.setState({ cities: result.data, isLoading: false });
         console.log("got cities");
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error, isLoading: false });
         console.log(error);
       });
@@ -54,11 +54,11 @@ class Homepage extends Component {
           className="plan-description-picture-home"
           style={{
             backgroundImage:
-              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"
+              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
           }}
         />
         <Container fluid className="plan-description-container-home">
-          <div className="plan-search-container-home">
+          {/* <div className="plan-search-container-home">
             <select
               className="plan-search-city-home"
               placeholder="choose a city..."
@@ -66,16 +66,20 @@ class Homepage extends Component {
               onChange={this.selectCity}
             >
               <option value="0">choose a city...</option>
-              {this.state.cities.map(city => {
-                return <option value={city.city_id}>{city.city}</option>;
+              {this.state.cities.map((city) => {
+                return (
+                  <option value={city.city_id} text={city.city}>
+                    {city.city}
+                  </option>
+                );
               })}
             </select>
             {/* <select  className="plan-search-date" placeholder="select date">
             </select >
             <select className="plan-search-people" placeholder="people">
-            </select > */}
-            <button className="plan-search-button-home">Search!</button>
-          </div>
+            </select > 
+            <button className="plan-search-button-home">Search!</button> 
+          </div> */}
         </Container>
         <Container fluid className="intro-container-home">
           <div>
@@ -83,7 +87,10 @@ class Homepage extends Component {
             <span className="intro-plan-home">plan</span>
             <span> ที่ตรงกับสไตล์การท่องเที่ยวของคุณ</span>
           </div>
-          <div className="intro-plan-home" style={{ alignSelf: "center", textAlign: "center" }}>
+          <div
+            className="intro-plan-home"
+            style={{ alignSelf: "center", textAlign: "center" }}
+          >
             O R
           </div>
           <div style={{ alignSelf: "flex-end", textAlign: "right" }}>

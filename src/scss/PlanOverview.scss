@@ -37,6 +37,14 @@
   text-align: center;
 }
 
+.plan-originalId {
+  position : absolute;
+  font-size: 1em;
+  right : 5%;
+  top: 470px;
+  text-align: right
+}
+
 .plan-description-container {
   min-height: 450px;
   display: flex;
