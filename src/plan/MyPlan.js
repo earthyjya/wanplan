@@ -34,7 +34,7 @@ class MyPlan extends Component {
           </div>
         ));
       } else {
-        return <div>No saved plan yet!</div>;
+        return <div>Your saved plan will show here</div>;
       }
     }
   };

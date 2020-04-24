@@ -57,12 +57,16 @@ class Homepage extends Component {
               "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
           }}
         />
+        <div className="layer"></div>
         <Container className="plan-description-container-home">
           <Row className="oneplan-title">
-            Oneplan
+            ONEPLAN
           </Row>
           <Row className="oneplan-description">
-            The only plan for <br/> Travel Lover
+            The only plan for 
+          </Row>
+          <Row className="oneplan-description-2">
+            Travel Lover
           </Row>
         </Container>
         <Container fluid className="intro-container-home">
