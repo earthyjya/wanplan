@@ -3,7 +3,7 @@ import axios from "axios";
 import Myplan from "./plan/MyPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Row } from "reactstrap";
 
 class Homepage extends Component {
   state = {
@@ -57,29 +57,13 @@ class Homepage extends Component {
               "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
           }}
         />
-        <Container fluid className="plan-description-container-home">
-          {/* <div className="plan-search-container-home">
-            <select
-              className="plan-search-city-home"
-              placeholder="choose a city..."
-              value={this.state.citySearch}
-              onChange={this.selectCity}
-            >
-              <option value="0">choose a city...</option>
-              {this.state.cities.map((city) => {
-                return (
-                  <option value={city.city_id} text={city.city}>
-                    {city.city}
-                  </option>
-                );
-              })}
-            </select>
-            {/* <select  className="plan-search-date" placeholder="select date">
-            </select >
-            <select className="plan-search-people" placeholder="people">
-            </select > 
-            <button className="plan-search-button-home">Search!</button> 
-          </div> */}
+        <Container className="plan-description-container-home">
+          <Row className="oneplan-title">
+            Oneplan
+          </Row>
+          <Row className="oneplan-description">
+            The only plan for <br/> Travel Lover
+          </Row>
         </Container>
         <Container fluid className="intro-container-home">
           <div>

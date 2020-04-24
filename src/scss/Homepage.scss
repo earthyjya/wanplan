@@ -22,7 +22,28 @@
   width: 100%;
   z-index: 2;
 }
-//
+
+.plan-description-container-home > .row{
+    justify-content: center;
+    z-index: 1;
+    text-shadow: 2px 2px 8px rgba($secondary,0.4);
+}
+
+.oneplan-title{
+  font-family: $engfont;
+  color: $primary;
+  font-size: 6.2em;
+  letter-spacing: 0.2em;
+}
+
+.oneplan-description{
+  font-weight: bold;
+  font-family: $engfont;
+  color: white;
+  font-size: 1.8em;
+  text-align: center;
+  letter-spacing: 0.2em;
+}
 
 .plan-search-container-home {
   height: 72px;
@@ -32,9 +53,9 @@
   z-index: 1;
   display: flex;
   padding: 15px;
-  
+
   align-self: center;
-  
+
   justify-content: space-between;
 }
 
@@ -45,11 +66,11 @@
 }
 
 .plan-search-city-home {
-  
+
   position: relative;
   width: 60%;
   font-family: "Noto Sans TH", sans-serif;
-  	
+
 
 }
 .plan-search-city-home ::-ms-expand {
