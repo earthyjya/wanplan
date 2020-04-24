@@ -27,7 +27,7 @@ class MyPlan extends Component {
           );
         });
     } else {
-      if (_planlist !== null || _planlist !== []) {
+      if (_planlist !== null && _planlist !== []) {
         return _planlist.map((plan) => (
           <div key={plan.plan_id}>
             <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>

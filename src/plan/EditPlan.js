@@ -28,6 +28,8 @@ class EditPlan extends React.Component {
     redirect: false,
     redirectTo: "/",
     updateToast: false,
+    title: false,
+    updated: false,
   };
 
   updatePlan = async () => {
@@ -48,10 +50,13 @@ class EditPlan extends React.Component {
 
     this.state.plan_startday.map(async (day) => {
       url = APIServer + "/plan_startday/";
-      await axios.post(url, day).catch((error) => {
-        this.setState({ error });
-        console.log(error);
-      });
+      await axios
+        .post(url, day)
+        .then((result) => console.log(result))
+        .catch((error) => {
+          this.setState({ error });
+          console.log(error);
+        });
     });
 
     if (this.state.orders !== 0) {
@@ -92,7 +97,7 @@ class EditPlan extends React.Component {
 
     if (!isLoggedIn) {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
-      if (_planlist !== null || _planlist !== []) {
+      if (_planlist !== null && _planlist !== []) {
         _planlist = _planlist.filter(
           (plan) => plan.plan_id !== this.state.plan_overview.plan_id
         );
@@ -149,6 +154,11 @@ class EditPlan extends React.Component {
       .put(url, this.state.plan_overview)
       .then((result) => {
         if (result.data === null) alert("Could not update plan :(");
+        else
+          this.setState({
+            daysBefUpdate: this.state.days.length,
+            orders: this.state.plan_detail.length,
+          });
       })
       .catch((error) => {
         this.setState({ error });
@@ -157,39 +167,46 @@ class EditPlan extends React.Component {
   };
 
   updatePlanOverview = async (plan_overview) => {
-    const { plan_id } = this.props;
+    const { plan_id, isLoggedIn } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
       .then((response) => {
-        // console.log(response);
+        console.log(this.state.updated);
+        this.setState({
+          plan_overview: { ...this.state.plan_overview, ...plan_overview },
+        });
+        this.setState({ updated: true });
+
+        if (!isLoggedIn) {
+          let _planlist = JSON.parse(localStorage.getItem("planlist"));
+          if (_planlist !== null && _planlist !== []) {
+            _planlist = _planlist.filter(
+              (plan) => plan.plan_id !== this.state.plan_overview.plan_id
+            );
+            _planlist.push(this.state.plan_overview);
+            localStorage.setItem("planlist", JSON.stringify(_planlist));
+          }
+        }
       })
       .catch((error) => {
         this.setState({ error });
         console.log(error);
       });
     if (this.state.error) alert(this.state.error);
-    else
-      this.setState({
-        plan_overview: { ...this.state.plan_overview, ...plan_overview },
-      });
-    if (
-      localStorage.getItem("planlist") !== [] &&
-      localStorage.getItem("planlist") !== null
-    ) {
-      let _planlist = JSON.parse(localStorage.getItem("planlist"));
-      localStorage.setItem(
-        "planlist",
-        JSON.stringify(
-          _planlist.map((plan) => {
-            if (plan.plan_id === plan_id) plan = plan_overview;
-            return plan;
-          })
-        )
-      );
+  };
+
+  titleChanged = (change) => {
+    if (change) {
+      this.setState({ title: true });
+      console.log("changed");
+    } else {
+      this.setState({ title: false, updated: false });
     }
   };
+
+  updatedChanges = () => this.setState({updated : false})
 
   publishPlan = () => {
     //publish current plan
@@ -261,6 +278,7 @@ class EditPlan extends React.Component {
       plan_startday,
     });
     this.calPlan(plan_detail);
+    this.updatePlanNoRedirect();
   };
 
   delDay = (day) => {
@@ -279,6 +297,7 @@ class EditPlan extends React.Component {
       plan_startday,
     });
     this.calPlan(plan_detail);
+    this.updatePlanNoRedirect();
   };
 
   reorderCards = async (source, destination) => {
@@ -331,12 +350,14 @@ class EditPlan extends React.Component {
     const { plan_detail } = this.state;
     plan_detail[source].time_spend = Number(newDuration);
     this.calPlan(plan_detail);
+    this.updatePlanNoRedirect();
   };
 
   updateDescription = (source, newDescription) => {
     const { plan_detail } = this.state;
     plan_detail[source].description = newDescription;
     this.setState({ plan_detail });
+    this.updatePlanNoRedirect();
   };
 
   renderEditRedirect = () => {
@@ -414,6 +435,8 @@ class EditPlan extends React.Component {
                   <EditPlanOverview
                     {...this.state}
                     updatePlanOverview={this.updatePlanOverview}
+                    titleChanged={this.titleChanged}
+                    updatedChanges = {this.updatedChanges}
                   />
                   <div className="title-bar">
                     <div className="title">{plan_overview.city}</div>
@@ -506,6 +529,7 @@ class EditPlan extends React.Component {
                 {...this.state}
                 toggleEditPlanContent={this.toggleEditPlanContent}
                 updatePlanOverview={this.updatePlanOverview}
+                titleChanged={this.titleChanged}
               />
             </div>
           ) : (

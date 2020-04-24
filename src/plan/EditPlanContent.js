@@ -69,6 +69,7 @@ class EditPlanContent extends React.Component {
   onSave = () => {
     this.props.updatePlanOverview(this.state.plan_overview);
     this.props.toggleEditPlanContent();
+    this.props.titleChanged(true)
   };
 
   async componentDidMount() {
