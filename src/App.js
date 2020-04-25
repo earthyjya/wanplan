@@ -151,16 +151,16 @@ class App extends Component {
       <React.Fragment>
         <header className="topnav">
           <a className="oneplan" href="/home">
-            Oneplan
+            O
           </a>
-          <a href="/plan">Plan</a>
-          <a href="/howto">How to use?</a>
+          {/* <a href="/plan">Plan</a>
+          {/* <a href="/howto">How to use?</a>
           {/* <button className="white-button" onClick={this.logInlogOut}>
             {(() => (this.state.isLoggedIn ? "Log out" : "Log in"))()}
           </button>
           <button className="white-button" onClick={this.delete}>
             delete cache
-          </button> */}
+          </button> */} */} */}
         </header>
         <BrowserRouter>
           <Route exact path="/" component={() => <Redirect to="/home" />} />

@@ -79,16 +79,18 @@ class Homepage extends Component {
                   <span>เลือก </span>
                   <span className="intro-plan-home">PLAN</span>
                   <span> ที่เพื่อนๆนักท่องเที่ยวเตรียมไว้ให้แล้ว </span>
-                  <br></br>
                 </div>
                 <div style={{ alignSelf: "center", textAlign: "center" }}>
                   O R
                 </div>
                 <div style={{ alignSelf: "flex-end", textAlign: "right" }}>
-                  <br></br>
                   <span>สร้าง </span>
                   <span className="intro-plan-home">PLAN</span>
                   <span> ของคุณเอง</span>
+                </div>
+                <div>
+                  <div>กด Save เพื่อเก็บ Plan ที่สนใจ</div>
+                  <div>กด Edit เพื่อแก้ Plan </div>
                 </div>
               </div>
             </Col>
