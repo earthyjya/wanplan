@@ -126,7 +126,7 @@ class AttCard extends Component {
                 />
                 <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
                   {minutes.map(min => {
-                    return <option>{min}</option>;
+                    return <option key={min}>{min}</option>;
                   })}
                 </select>
               </React.Fragment>

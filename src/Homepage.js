@@ -14,13 +14,13 @@ class Homepage extends Component {
     error: null,
     isLoading: true,
     redirect: false,
-    redirectTo: "/",
+    redirectTo: "/"
   };
 
-  RedirectFunc = (plan_id) => {
+  RedirectFunc = plan_id => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_plan",
+      redirectTo: "/plan/" + plan_id + "/edit_plan"
     });
   };
 
@@ -28,7 +28,7 @@ class Homepage extends Component {
     if (this.state.redirect) return <Redirect to={this.state.redirectTo} />;
   };
 
-  selectCity = (e) => {
+  selectCity = e => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
@@ -36,11 +36,10 @@ class Homepage extends Component {
     const APIServer = process.env.REACT_APP_APIServer;
     await axios
       .get(APIServer + "/city")
-      .then((result) => {
+      .then(result => {
         this.setState({ cities: result.data, isLoading: false });
-        console.log("got cities");
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error, isLoading: false });
         console.log(error);
       });
@@ -57,7 +56,7 @@ class Homepage extends Component {
           className="plan-description-picture-home"
           style={{
             backgroundImage:
-              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
+              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"
           }}
         />
         <div className="layer"></div>
@@ -80,9 +79,7 @@ class Homepage extends Component {
                   <span className="intro-plan-home">PLAN</span>
                   <span> ที่เพื่อนๆนักท่องเที่ยวเตรียมไว้ให้แล้ว </span>
                 </div>
-                <div style={{ alignSelf: "center", textAlign: "center" }}>
-                  O R
-                </div>
+                <div style={{ alignSelf: "center", textAlign: "center" }}>O R</div>
                 <div style={{ alignSelf: "flex-end", textAlign: "right" }}>
                   <span>สร้าง </span>
                   <span className="intro-plan-home">PLAN</span>
@@ -108,7 +105,7 @@ class Homepage extends Component {
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
-                    display: "flex",
+                    display: "flex"
                   }}
                 >
                   <div className="gif"></div>
@@ -116,22 +113,20 @@ class Homepage extends Component {
               </div>
             </Col>
             <Col className="intro-container-home-col-2">
-              <div >
+              <div>
                 <FontAwesomeIcon icon={faRoute} size="1x" />
                 <span> นำ</span>
-                <span className="intro-plan-home"> PLAN </span> 
-                <span>นี้ไปเที่ยว!!</span> 
+                <span className="intro-plan-home"> PLAN </span>
+                <span>นี้ไปเที่ยว!!</span>
                 <br></br>
                 <br></br>
                 <div style={{ alignSelf: "center", textAlign: "center" }}>O R </div>
                 <br></br>
                 <FontAwesomeIcon icon={faShareAlt} size="1x" />
                 <span> แชร์</span>
-                <span className="intro-plan-home"> PLAN </span> 
-                <span>นี้กับเพื่อนๆ</span> 
+                <span className="intro-plan-home"> PLAN </span>
+                <span>นี้กับเพื่อนๆ</span>
               </div>
-             
-                
             </Col>
           </Row>
         </Container>

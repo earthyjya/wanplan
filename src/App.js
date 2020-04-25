@@ -158,7 +158,7 @@ class App extends Component {
           </button>
           <button className="white-button" onClick={this.delete}>
             delete cache
-          </button> */} */} */}
+          </button> */}
         </header>
         <BrowserRouter>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
@@ -200,8 +200,14 @@ class App extends Component {
             )}
           />
         </BrowserRouter>
-        <footer>
-          <center>All right reserved by Oneplan, Inc.</center>
+        <footer style={{ margin: "20px" }}>
+          <center>
+            <p>All right reserved by Oneplan</p>
+            <img
+              src="https://s3-ap-northeast-1.amazonaws.com/photo.oneplan.in.th/powered_by_google_on_white.png"
+              alt="powered by Google"
+            />
+          </center>
         </footer>
       </React.Fragment>
     );

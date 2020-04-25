@@ -173,7 +173,7 @@ class EditPlan extends React.Component {
       })
     );
     // console.log(transports);
-    await this.setState({ transports });
+    this.setState({ transports });
     return transports;
   };
 
@@ -204,7 +204,6 @@ class EditPlan extends React.Component {
 
   calPlan = async plan_detail => {
     //// Need to be updated when transportations are added
-    const transports = await this.getTransports();
     // console.log(transports);
 
     const { plan_startday } = this.state;
@@ -215,6 +214,7 @@ class EditPlan extends React.Component {
     for (i = 0; i < plan_startday.length; i++) {
       plan_startday[i].day = i + 1;
     }
+    const transports = await this.getTransports();
     let lastDay = 0;
     let lastTime = 0;
     let transTime = 0;
@@ -282,6 +282,7 @@ class EditPlan extends React.Component {
   };
 
   reorderCards = (source, destination) => {
+    console.log(source, destination);
     let a = source.index;
     let b = destination.index;
     const daya = Number(source.droppableId);
@@ -303,9 +304,14 @@ class EditPlan extends React.Component {
     let toAdd = {
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
+      description: "",
       day: Number(droppableId)
     };
-    const url = APIServer + "/attraction/" + source.index;
+    console.log(source, destination);
+    const url =
+      APIServer +
+      "/attraction/google_id/" +
+      source.droppableId.slice(0, source.droppableId.length - 3);
     await axios
       .get(url)
       .then(result => (toAdd = { ...toAdd, ...result.data[0] }))
@@ -347,7 +353,6 @@ class EditPlan extends React.Component {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/load_plan/" + plan_id;
-    let i = 0;
     await axios
       .get(url)
       .then(async result => {
@@ -361,6 +366,20 @@ class EditPlan extends React.Component {
       this.setState({ error: true, isLoading: false });
       return;
     }
+    let plan_detail = this.state.plan_detail;
+    for (let i = 0; i < plan_detail.length; ++i) {
+      if (plan_detail[i].attraction_id === 0) {
+        await axios
+          .get(APIServer + "/attraction/google_id/" + plan_detail[i].google_place_id)
+          .then(res => {
+            plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    }
+    this.setState(plan_detail);
     url = APIServer + "/city";
     await axios
       .get(url)
@@ -373,7 +392,7 @@ class EditPlan extends React.Component {
       });
 
     let days = [];
-    for (i = 1; i <= this.state.plan_overview.duration; i++) {
+    for (let i = 1; i <= this.state.plan_overview.duration; i++) {
       await days.push(i);
     }
 
@@ -403,7 +422,13 @@ class EditPlan extends React.Component {
                 return;
               }
 
-              if (source.droppableId !== "bar") this.reorderCards(source, destination);
+              if (
+                source.droppableId.slice(
+                  source.droppableId.length - 3,
+                  source.droppableId.length
+                ) !== "bar"
+              )
+                this.reorderCards(source, destination);
               else this.addCard(source, destination);
             }}
           >

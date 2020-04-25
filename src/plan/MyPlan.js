@@ -66,7 +66,6 @@ class MyPlan extends Component {
       .get(APIServer + "/city")
       .then(result => {
         this.setState({ cities: result.data, isLoading: false });
-        console.log("got cities");
       })
       .catch(error => {
         this.setState({ error, isLoading: false });
@@ -95,7 +94,7 @@ class MyPlan extends Component {
             fontSize: "22px",
             fontWeight: "bold",
             alignSelf: "center",
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           Search Plan
@@ -109,7 +108,7 @@ class MyPlan extends Component {
               <option value="0">All plan</option>
               {this.state.cities.map(city => {
                 return (
-                  <option value={city.city_id} text={city.city}>
+                  <option key={city.city_id} value={city.city_id} text={city.city}>
                     {city.city}
                   </option>
                 );
@@ -120,7 +119,6 @@ class MyPlan extends Component {
         <div style={{ marginTop: "20px", marginLeft: "10px", position: "relative" }}>
           {(() => {
             if (this.state.citySearch === 0) {
-              console.log("all");
               return (
                 <div>
                   {data.map(plan => (

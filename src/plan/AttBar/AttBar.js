@@ -38,26 +38,25 @@ class AttBar extends Component {
         </div>
 
         {this.props.isLoading ? (
-          <div>Loading...</div>
+          <div className="AttBar">Loading...</div>
         ) : this.props.error ? (
-          <div>{this.props.error.message}</div>
+          <div className="AttBar">{this.props.error.message}</div>
         ) : (
-          <Droppable
-            droppableId={"bar"}
-            isDropDisabled={true}
-            type={String}
-            direction="vertical"
-            isCombineEnabled={false}
-          >
-            {dropProvided => (
-              <div {...dropProvided.droppableProps}>
-                <div ref={dropProvided.innerRef}>
-                  <div className="AttBar">
-                    {(() => {
-                      if (this.state.searchedPlace.google_place_id)
-                        return (
+          <div className="AttBar">
+            {(() => {
+              if (this.state.searchedPlace.google_place_id)
+                return (
+                  <Droppable
+                    droppableId={this.state.searchedPlace.google_place_id + "bar"}
+                    isDropDisabled={true}
+                    type={String}
+                    direction="vertical"
+                    isCombineEnabled={false}
+                  >
+                    {dropProvided => (
+                      <div {...dropProvided.droppableProps}>
+                        <div ref={dropProvided.innerRef}>
                           <Draggable
-                            key={this.state.searchedPlace.attraction_id.toString() + "bar"}
                             draggableId={this.state.searchedPlace.attraction_id.toString() + "bar"}
                             index={this.state.searchedPlace.attraction_id}
                           >
@@ -68,20 +67,31 @@ class AttBar extends Component {
                                 ref={dragProvided.innerRef}
                               >
                                 <div>
-                                  <AttBarCard
-                                    {...this.state.searchedPlace}
-                                    key={this.state.searchedPlace.attraction_id.toString()}
-                                  />
+                                  <AttBarCard {...this.state.searchedPlace} />
                                 </div>
                               </div>
                             )}
                           </Draggable>
-                        );
-                    })()}
+                        </div>
+                      </div>
+                    )}
+                  </Droppable>
+                );
+            })()}
 
-                    {this.props.data.map(dat => (
+            {this.props.data.map(dat => (
+              <Droppable
+                key={dat.google_place_id}
+                droppableId={dat.google_place_id + "bar"}
+                isDropDisabled={true}
+                type={String}
+                direction="vertical"
+                isCombineEnabled={false}
+              >
+                {dropProvided => (
+                  <div {...dropProvided.droppableProps}>
+                    <div ref={dropProvided.innerRef}>
                       <Draggable
-                        key={dat.attraction_id.toString() + "bar"}
                         draggableId={dat.attraction_id.toString() + "bar"}
                         index={dat.attraction_id}
                       >
@@ -92,24 +102,25 @@ class AttBar extends Component {
                             ref={dragProvided.innerRef}
                           >
                             <div>
-                              <AttBarCard {...dat} key={dat.attraction_id.toString()} />
+                              <AttBarCard {...dat} />
                             </div>
                           </div>
                         )}
                       </Draggable>
-                    ))}
-                    <span
-                      style={{
-                        display: "none"
-                      }}
-                    >
-                      {dropProvided.placeholder}
-                    </span>
+
+                      <span
+                        style={{
+                          display: "none"
+                        }}
+                      >
+                        {dropProvided.placeholder}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )}
-          </Droppable>
+                )}
+              </Droppable>
+            ))}
+          </div>
         )}
       </div>
     );
