@@ -321,6 +321,17 @@ class EditPlan extends React.Component {
       });
     plan_detail.splice(index, 0, toAdd);
     this.calPlan(plan_detail);
+    if (process.env.NODE_ENV === "production") {
+      await axios
+        .get(APIServer + "/googlephoto/" + plan_detail[index].google_place_id)
+        .then(res => {
+          plan_detail[index] = { ...plan_detail[index], ...res.data[0] };
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      this.setState(plan_detail);
+    }
   };
 
   delCard = index => {
@@ -406,6 +417,20 @@ class EditPlan extends React.Component {
     await this.setState({ isLoading: false });
     console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
+    if (process.env.NODE_ENV === "production") {
+      plan_detail = this.state.plan_detail;
+      for (let i = 0; i < plan_detail.length; ++i) {
+        await axios
+          .get(APIServer + "/googlephoto/" + plan_detail[i].google_place_id)
+          .then(res => {
+            plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      this.setState(plan_detail);
+    }
   }
 
   render() {

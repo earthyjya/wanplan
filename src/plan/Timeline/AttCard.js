@@ -1,11 +1,10 @@
 import "../../scss/AttCard.scss";
-import axios from "axios";
 import React, { Component } from "react";
 
 class AttCard extends Component {
   state = {
     description: "",
-    photoUrls: []
+    photos: []
   };
 
   changeDuration = e => {
@@ -24,20 +23,8 @@ class AttCard extends Component {
     this.props.updateDescription(this.props.attraction_order, this.state.description);
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.setState({ description: this.props.description });
-    if (process.env.NODE_ENV === "production") {
-      const { google_place_id } = this.props;
-      let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
-      await axios
-        .get(url)
-        .then(res => {
-          this.setState({ photoUrls: res.data });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
   }
 
   render() {
@@ -50,9 +37,9 @@ class AttCard extends Component {
       time_spend,
       attraction_name,
       attraction_type,
-      description
+      description,
+      photos
     } = this.props;
-    const { photoUrls } = this.state;
     let minutes = [
       0,
       10,
@@ -106,7 +93,7 @@ class AttCard extends Component {
         </div>
         <img
           src={(() => {
-            if (photoUrls) return photoUrls[0];
+            if (photos) return photos[0];
             return "/";
           })()}
           className="AttPhoto"

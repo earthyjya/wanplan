@@ -3,7 +3,7 @@ import axios from "axios";
 
 class AttBarCard extends Component {
   state = {
-    photoUrls: []
+    photos: []
   };
 
   async componentDidMount() {
@@ -13,7 +13,7 @@ class AttBarCard extends Component {
       await axios
         .get(url)
         .then(res => {
-          this.setState({ photoUrls: res.data });
+          this.setState({ photos: res.data[0].photos });
         })
         .catch(err => {
           console.log(err);
@@ -22,12 +22,12 @@ class AttBarCard extends Component {
   }
   render() {
     const { attraction_name, attraction_type, open_time, close_time, description } = this.props;
-    const { photoUrls } = this.state;
+    const { photos } = this.state;
     return (
       <div className="AttBarCard">
         <img
           src={(() => {
-            if (photoUrls) return photoUrls[0];
+            if (photos) return photos[0];
             return "/";
           })()}
           className="attPhoto2"
