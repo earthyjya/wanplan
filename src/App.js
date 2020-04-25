@@ -136,17 +136,13 @@ class App extends Component {
     }
   };
 
-  componentDidMount() {
-    console.log(process.env.REACT_APP_APIServer);
-  }
-
   render() {
     // eslint-disable-next-line
     const { user_id } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     return (
       <React.Fragment>
-        <div className="topnav">
+        <header className="topnav">
           <a className="oneplan" href="/home">
             Oneplan
           </a>
@@ -158,7 +154,7 @@ class App extends Component {
           <button className="white-button" onClick={this.delete}>
             delete cache
           </button> */}
-        </div>
+        </header>
         <BrowserRouter>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
           <Route
@@ -182,11 +178,15 @@ class App extends Component {
           <Route
             exact
             path="/plan/:plan_id"
-            component={({ match }) => <Plan plan_id={match.params.plan_id} {...this.state} />}
+            component={({ match }) => (
+              <Plan plan_id={Number(match.params.plan_id)} {...this.state} />
+            )}
           />
           <Route
             path="/plan/:plan_id/edit_plan"
-            component={({ match }) => <EditPlan plan_id={match.params.plan_id} {...this.state} />}
+            component={({ match }) => (
+              <EditPlan plan_id={Number(match.params.plan_id)} {...this.state} />
+            )}
           />
           <Route
             path="/users"
@@ -195,6 +195,9 @@ class App extends Component {
             )}
           />
         </BrowserRouter>
+        <footer>
+          <center>All right reserved by Oneplan, Inc.</center>
+        </footer>
       </React.Fragment>
     );
   }

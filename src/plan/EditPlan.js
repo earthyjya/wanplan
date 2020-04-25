@@ -27,186 +27,155 @@ class EditPlan extends React.Component {
     publishToast: false,
     redirect: false,
     redirectTo: "/",
-    updateToast: false,
-    title: false,
-    updated: false,
+    transports: [],
+    updateToast: false
   };
 
   updatePlan = async () => {
     //update current plan
-    this.toggleUpdateToast();
-    const { plan_id, isLoggedIn } = this.props;
+    //this.toggleUpdateToast();
+    await this.updatePlanStartday();
+    await this.updatePlanDetails();
+    await this.setState({ redirect: true, redirectTo: "/plan/" + this.props.plan_id });
+  };
+
+  updatePlanOverview = async plan_overview => {
+    const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = "";
-
-    if (this.state.daysBefUpdate !== 0) {
-      url =
-        APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
-
-      await axios.delete(url).catch((error) => {
-        console.log(error);
-      });
-    }
-
-    this.state.plan_startday.map(async (day) => {
-      url = APIServer + "/plan_startday/";
-      await axios
-        .post(url, day)
-        .then((result) => console.log(result))
-        .catch((error) => {
-          this.setState({ error });
-          console.log(error);
-        });
-    });
-
-    if (this.state.orders !== 0) {
-      url =
-        APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
-
-      await axios.delete(url).catch((error) => {
-        console.log(error);
-      });
-    }
-
-    this.state.plan_detail.map(async (plan) => {
-      url = APIServer + "/plan_detail/";
-      await axios
-        .post(url, this.state.plan_detail[plan.attraction_order])
-        .catch((error) => {
-          this.setState({ error });
-          console.log(error);
-        });
-    });
-
-    url = APIServer + "/plan_overview/" + plan_id;
+    const url = APIServer + "/plan_overview/" + plan_id;
     await axios
-      .put(url, this.state.plan_overview)
-      .then((result) => {
-        if (result.data === null) alert("Could not update plan :(");
-        else
-          this.setState({
-            redirect: true,
-            redirectTo: "/plan/" + this.state.plan_overview.plan_id,
-          });
-        console.log(result);
+      .put(url, plan_overview)
+      .then(response => {
+        // console.log(response);
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });
-
-    if (!isLoggedIn) {
-      let _planlist = JSON.parse(localStorage.getItem("planlist"));
-      if (_planlist !== null && _planlist !== []) {
-        _planlist = _planlist.filter(
-          (plan) => plan.plan_id !== this.state.plan_overview.plan_id
-        );
-        _planlist.push(this.state.plan_overview);
-        localStorage.setItem("planlist", JSON.stringify(_planlist));
-      }
+    if (this.state.error) alert(this.state.error);
+    else
+      this.setState({
+        plan_overview: { ...this.state.plan_overview, ...plan_overview }
+      });
+    let _planlist = JSON.parse(localStorage.getItem("planlist"));
+    if (_planlist !== [] && _planlist !== null) {
+      await localStorage.setItem(
+        "planlist",
+        JSON.stringify(
+          _planlist.map(plan => {
+            if (plan.plan_id === plan_id) return plan_overview;
+            return plan;
+          })
+        )
+      );
     }
   };
 
-  updatePlanNoRedirect = async () => {
-    //update current plan
+  updatePlanStartday = async () => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let url = "";
 
     if (this.state.daysBefUpdate !== 0) {
-      url =
-        APIServer + "/plan_startday/delete/" + this.state.plan_overview.plan_id;
-
-      await axios.delete(url).catch((error) => {
+      url = APIServer + "/plan_startday/delete/" + plan_id;
+      await axios.delete(url).catch(error => {
         console.log(error);
       });
     }
 
-    this.state.plan_startday.map(async (day) => {
+    this.state.plan_startday.map(async day => {
       url = APIServer + "/plan_startday/";
-      await axios.post(url, day).catch((error) => {
+      await axios.post(url, day).catch(error => {
         this.setState({ error });
         console.log(error);
       });
     });
+  };
+
+  updatePlanDetails = async () => {
+    //update current plan
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    let url = "";
 
     if (this.state.orders !== 0) {
-      url =
-        APIServer + "/plan_detail/delete/" + this.state.plan_overview.plan_id;
-
-      await axios.delete(url).catch((error) => {
+      url = APIServer + "/plan_detail/delete/" + plan_id;
+      await axios.delete(url).catch(error => {
         console.log(error);
       });
     }
 
-    this.state.plan_detail.map(async (plan) => {
+    this.state.plan_detail.map(async plan => {
       url = APIServer + "/plan_detail/";
-      await axios
-        .post(url, this.state.plan_detail[plan.attraction_order])
-        .catch((error) => {
-          this.setState({ error });
-          console.log(error);
-        });
-    });
-
-    url = APIServer + "/plan_overview/" + plan_id;
-    await axios
-      .put(url, this.state.plan_overview)
-      .then((result) => {
-        if (result.data === null) alert("Could not update plan :(");
-        else
-          this.setState({
-            daysBefUpdate: this.state.days.length,
-            orders: this.state.plan_detail.length,
-          });
-      })
-      .catch((error) => {
+      await axios.post(url, plan).catch(error => {
         this.setState({ error });
         console.log(error);
       });
+    });
   };
 
-  updatePlanOverview = async (plan_overview) => {
-    const { plan_id, isLoggedIn } = this.props;
+  updateOnePlanDetail = async order => {
+    const plan_id = this.props.plan_id;
+    const detail = this.state.plan_detail[order];
     const APIServer = process.env.REACT_APP_APIServer;
-    const url = APIServer + "/plan_overview/" + plan_id;
+    const url = APIServer + "/plan_detail/" + plan_id + "/" + order;
+    console.log(url);
     await axios
-      .put(url, plan_overview)
-      .then((response) => {
-        console.log(this.state.updated);
-        this.setState({
-          plan_overview: { ...this.state.plan_overview, ...plan_overview },
-        });
-        this.setState({ updated: true });
+      .put(url, detail)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
-        if (!isLoggedIn) {
-          let _planlist = JSON.parse(localStorage.getItem("planlist"));
-          if (_planlist !== null && _planlist !== []) {
-            _planlist = _planlist.filter(
-              (plan) => plan.plan_id !== this.state.plan_overview.plan_id
-            );
-            _planlist.push(this.state.plan_overview);
-            localStorage.setItem("planlist", JSON.stringify(_planlist));
+  getTransports = async () => {
+    const { days } = this.state;
+    const APIServer = process.env.REACT_APP_APIServer;
+    let transports = [];
+    for (let i = 1; i <= this.state.plan_overview.duration; i++) {
+      await transports.push([]);
+    }
+    await Promise.all(
+      days.map(async day => {
+        let idx = day - 1;
+        let places = await this.state.plan_detail.filter(det => det.day === day);
+        // console.log(places);
+        let lastPlace = { attraction_name: "Hotel" };
+        for (let j = 0; j < places.length; j++) {
+          if (!lastPlace.google_place_id || !places[j].google_place_id) {
+            await transports[idx].push({ text: "No transportation data", value: 0 });
+            lastPlace = places[j];
+            continue;
           }
+          let url =
+            APIServer +
+            "/googletransport/" +
+            lastPlace.google_place_id +
+            "/" +
+            places[j].google_place_id;
+          await axios
+            .get(url)
+            .then(async res => {
+              // console.log(res.data);
+              await transports[idx].push({
+                text: res.data.duration.text,
+                mode: res.data.mode,
+                value: res.data.duration.value / 60
+              });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          lastPlace = places[j];
         }
       })
-      .catch((error) => {
-        this.setState({ error });
-        console.log(error);
-      });
-    if (this.state.error) alert(this.state.error);
+    );
+    // console.log(transports);
+    await this.setState({ transports });
+    return transports;
   };
-
-  titleChanged = (change) => {
-    if (change) {
-      this.setState({ title: true });
-      console.log("changed");
-    } else {
-      this.setState({ title: false, updated: false });
-    }
-  };
-
-  updatedChanges = () => this.setState({updated : false})
 
   publishPlan = () => {
     //publish current plan
@@ -233,11 +202,13 @@ class EditPlan extends React.Component {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
-  calPlan = async (plan_detail) => {
+  calPlan = async plan_detail => {
     //// Need to be updated when transportations are added
+    const transports = await this.getTransports();
+    // console.log(transports);
 
     const { plan_startday } = this.state;
-    var i = 0;
+    let i = 0;
     for (i = 0; i < plan_detail.length; i++) {
       plan_detail[i].attraction_order = i;
     }
@@ -246,61 +217,71 @@ class EditPlan extends React.Component {
     }
     let lastDay = 0;
     let lastTime = 0;
+    let transTime = 0;
+    let idx = 0;
     for (i = 0; i < plan_detail.length; i++) {
       if (plan_detail[i].day !== lastDay) {
         lastDay = plan_detail[i].day;
-        lastTime = Str2Int(plan_startday[lastDay - 1].start_day);
+        idx = 0;
+        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+        lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+        ++idx;
       }
       plan_detail[i].start_time = Int2Str(lastTime);
       plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-      lastTime = lastTime + plan_detail[i].time_spend;
+      if (transports[lastDay - 1][idx])
+        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+      else transTime = 0;
+      lastTime = lastTime + plan_detail[i].time_spend + transTime;
+      // console.log(transTime);
+      ++idx;
     }
-
     await this.setState({ plan_detail, plan_startday });
+    this.updatePlanDetails();
+    this.updatePlanStartday();
   };
 
-  addDay = (day) => {
+  addDay = day => {
     let { days, plan_overview, plan_detail, plan_startday } = this.state;
     days = days.concat(days.length + 1);
     plan_overview.duration += 1;
     plan_startday.splice(day, 0, {
       plan_id: this.props.plan_id,
       day: day,
-      start_day: "09:00",
+      start_day: "09:00"
     });
-    plan_detail.map((detail) => {
+    plan_detail.map(detail => {
       if (detail.day > day) detail.day += 1;
       return null;
     });
     this.setState({
       days,
       plan_overview,
-      plan_startday,
+      plan_startday
     });
     this.calPlan(plan_detail);
-    this.updatePlanNoRedirect();
+    this.updatePlanOverview(plan_overview);
   };
 
-  delDay = (day) => {
+  delDay = day => {
     let { days, plan_overview, plan_detail, plan_startday } = this.state;
     days.pop();
     plan_overview.duration -= 1;
     plan_startday.splice(day - 1, 1);
-    plan_detail = plan_detail.filter((plan) => plan.day !== day);
-    plan_detail.map((detail) => {
+    plan_detail = plan_detail.filter(plan => plan.day !== day);
+    plan_detail.map(detail => {
       if (detail.day >= day) detail.day -= 1;
       return null;
     });
     this.setState({
       days,
       plan_overview,
-      plan_startday,
+      plan_startday
     });
     this.calPlan(plan_detail);
-    this.updatePlanNoRedirect();
   };
 
-  reorderCards = async (source, destination) => {
+  reorderCards = (source, destination) => {
     let a = source.index;
     let b = destination.index;
     const daya = Number(source.droppableId);
@@ -311,8 +292,7 @@ class EditPlan extends React.Component {
     if (a < b && daya !== dayb && b !== 0) b -= 1;
     plan_detail.splice(b, 0, removed);
     plan_detail.sort((a, b) => a.day - b.day);
-    await this.calPlan(plan_detail);
-    this.updatePlanNoRedirect();
+    this.calPlan(plan_detail);
   };
 
   addCard = async (source, destination) => {
@@ -323,44 +303,40 @@ class EditPlan extends React.Component {
     let toAdd = {
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
-      day: Number(droppableId),
+      day: Number(droppableId)
     };
     const url = APIServer + "/attraction/" + source.index;
     await axios
       .get(url)
-      .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
-      .catch((error) => {
+      .then(result => (toAdd = { ...toAdd, ...result.data[0] }))
+      .catch(error => {
         this.setState({ error });
         // console.error(error);
       });
-
     plan_detail.splice(index, 0, toAdd);
     this.calPlan(plan_detail);
-    this.updatePlanNoRedirect();
   };
 
-  delCard = (index) => {
+  delCard = index => {
     const { plan_detail } = this.state;
     plan_detail.splice(index, 1);
     this.calPlan(plan_detail);
-    this.updatePlanNoRedirect();
   };
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
     plan_detail[source].time_spend = Number(newDuration);
     this.calPlan(plan_detail);
-    this.updatePlanNoRedirect();
   };
 
   updateDescription = (source, newDescription) => {
     const { plan_detail } = this.state;
     plan_detail[source].description = newDescription;
     this.setState({ plan_detail });
-    this.updatePlanNoRedirect();
+    this.updateOnePlanDetail(source);
   };
 
-  renderEditRedirect = () => {
+  renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirectTo} />;
     }
@@ -374,10 +350,10 @@ class EditPlan extends React.Component {
     let i = 0;
     await axios
       .get(url)
-      .then((result) => {
-        this.setState({ ...result.data });
+      .then(async result => {
+        await this.setState({ ...result.data });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });
@@ -388,10 +364,10 @@ class EditPlan extends React.Component {
     url = APIServer + "/city";
     await axios
       .get(url)
-      .then((result) => {
+      .then(result => {
         this.setState({ cities: result.data });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });
@@ -401,13 +377,16 @@ class EditPlan extends React.Component {
       await days.push(i);
     }
 
+    await this.getTransports();
+
     await this.setState({
       days: days,
       daysBefUpdate: days.length,
-      orders: this.state.plan_detail.length,
-      isLoading: false,
+      orders: this.state.plan_detail.length
     });
+    await this.setState({ isLoading: false });
     console.log("Fetching done...");
+    this.calPlan(this.state.plan_detail);
   }
 
   render() {
@@ -424,20 +403,14 @@ class EditPlan extends React.Component {
                 return;
               }
 
-              if (source.droppableId !== "bar")
-                this.reorderCards(source, destination);
+              if (source.droppableId !== "bar") this.reorderCards(source, destination);
               else this.addCard(source, destination);
             }}
           >
             <Container fluid className="p-0">
               <Row className="m-0">
                 <Col lg={8} className="p-0">
-                  <EditPlanOverview
-                    {...this.state}
-                    updatePlanOverview={this.updatePlanOverview}
-                    titleChanged={this.titleChanged}
-                    updatedChanges = {this.updatedChanges}
-                  />
+                  <EditPlanOverview {...this.state} updatePlanOverview={this.updatePlanOverview} />
                   <div className="title-bar">
                     <div className="title">{plan_overview.city}</div>
                     <div className="city">Plan</div>
@@ -450,10 +423,7 @@ class EditPlan extends React.Component {
                         onClick={this.toggleEditPlanContent}
                       />
                     </div>
-                    <button
-                      className="white-button"
-                      onClick={this.toggleShareModal}
-                    >
+                    <button className="white-button" onClick={this.toggleShareModal}>
                       Share!
                       <span style={{ fontSize: "15px" }}>
                         <br />
@@ -472,7 +442,7 @@ class EditPlan extends React.Component {
                       </span>
                     </button>
                   </div>
-                  {this.renderEditRedirect()}
+                  {this.renderRedirect()}
                   <Timeline
                     {...this.state}
                     {...this.props}
@@ -486,30 +456,22 @@ class EditPlan extends React.Component {
                   />
                 </Col>
                 <Col className="p-0">
-                  <Request
-                    url={
-                      APIServer + "/attraction/city/" + plan_overview.city_id
-                    }
-                  >
-                    {(result) => <AttBar {...result} />}
+                  <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
+                    {result => <AttBar {...result} />}
                   </Request>
                 </Col>
               </Row>
             </Container>
           </DragDropContext>
           <Toast isOpen={this.state.updateToast}>
-            <ToastHeader toggle={this.toggleUpdateToast}>
-              Plan updated!
-            </ToastHeader>
+            <ToastHeader toggle={this.toggleUpdateToast}>Plan updated!</ToastHeader>
             <ToastBody>
-              If you want to save this plan, please sign-in or copy the url.
-              This plan will now show on 'My plan'.
+              If you want to save this plan, please sign-in or copy the url. This plan will now show
+              on 'My plan'.
             </ToastBody>
           </Toast>
           <Toast isOpen={this.state.publishToast}>
-            <ToastHeader toggle={this.togglePublishToast}>
-              Plan published!
-            </ToastHeader>
+            <ToastHeader toggle={this.togglePublishToast}>Plan published!</ToastHeader>
             <ToastBody>
               The plan is opended to public. It will be available for other user
             </ToastBody>
@@ -529,7 +491,6 @@ class EditPlan extends React.Component {
                 {...this.state}
                 toggleEditPlanContent={this.toggleEditPlanContent}
                 updatePlanOverview={this.updatePlanOverview}
-                titleChanged={this.titleChanged}
               />
             </div>
           ) : (

@@ -10,14 +10,15 @@ import { Toast, ToastBody, ToastHeader } from "reactstrap";
 
 class Plan extends React.Component {
   state = {
-    isLoading: true,
-    error: null,
-    modal: false,
-    toastOpen: false,
-    days: [],
     attraction: [],
+    days: [],
+    error: null,
+    isLoading: true,
+    modal: false,
     redirect: false,
     redirectTo: "/",
+    toastOpen: false,
+    transports: []
   };
 
   save = async () => {
@@ -39,21 +40,22 @@ class Plan extends React.Component {
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
       let saved = false;
-      _planlist.map((plan) => {
+      _planlist.map(plan => {
         if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
+        return null;
       });
       if (!saved) {
         // Duplicate plan_overview
         let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
         await axios
           .post(url)
-          .then((result) => {
+          .then(result => {
             if (result.data === null) alert("Could not duplicate plan :(");
             // console.log(result);
             newPlanId = result.data.id;
             savedplan = { ...result.data, plan_id: newPlanId };
           })
-          .catch((error) => {
+          .catch(error => {
             this.setState({ error });
           });
 
@@ -61,12 +63,11 @@ class Plan extends React.Component {
         url = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
         await axios
           .post(url)
-          .then((result) => {
-            if (result.data === null)
-              alert("Could not duplicate plan_startday :(");
+          .then(result => {
+            if (result.data === null) alert("Could not duplicate plan_startday :(");
             // console.log(result);
           })
-          .catch((error) => {
+          .catch(error => {
             this.setState({ error });
             console.log(error);
           });
@@ -75,17 +76,16 @@ class Plan extends React.Component {
         url = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
         await axios
           .post(url)
-          .then((result) => {
-            if (result.data === null)
-              alert("Could not duplicate plan_detail :(");
+          .then(result => {
+            if (result.data === null) alert("Could not duplicate plan_detail :(");
             else
               this.setState({
                 redirect: true,
-                redirectTo: "/plan/" + newPlanId + redirect,
+                redirectTo: "/plan/" + newPlanId + redirect
               });
             // console.log(result);
           })
-          .catch((error) => {
+          .catch(error => {
             this.setState({ error });
             console.log(error);
           });
@@ -104,23 +104,23 @@ class Plan extends React.Component {
     }
   };
 
-  updatePlanOverview = async (plan_overview) => {
+  updatePlanOverview = async plan_overview => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });
     if (this.state.error) alert(this.state.error);
     else
       this.setState({
-        plan_overview: { ...this.state.plan_overview, ...plan_overview },
+        plan_overview: { ...this.state.plan_overview, ...plan_overview }
       });
   };
 
@@ -134,26 +134,27 @@ class Plan extends React.Component {
 
   checkEdit = async () => {
     //If user already edit the plan before, go to the edit plan page on the same url
-    const { user_id } = this.props;
+    const { user_id, plan_id } = this.props;
     if (!this.props.isLoggedIn) {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
       let saved = false;
-      _planlist.map((plan) => {
-        if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
+      _planlist.map(plan => {
+        if (plan.plan_id === plan_id) saved = true;
+        return null;
       });
       if (!saved) {
         this.saveToUser(0, "/edit_plan");
-      }else{
+      } else {
         this.setState({
           redirect: true,
-          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan",
+          redirectTo: "/plan/" + plan_id + "/edit_plan"
         });
       }
     } else {
       if (user_id === this.state.plan_overview.user_id) {
         this.setState({
           redirect: true,
-          redirectTo: "/plan/" + this.props.plan_id + "/edit_plan",
+          redirectTo: "/plan/" + plan_id + "/edit_plan"
         });
       }
       //Else if user not edit the plan before, create new url and go to that url edit plan page
@@ -176,11 +177,11 @@ class Plan extends React.Component {
     let i = 0;
     await axios
       .get(url)
-      .then((result) => {
-        this.setState({ ...result.data });
+      .then(async result => {
+        await this.setState({ ...result.data });
         // console.log(result);
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });
@@ -190,13 +191,53 @@ class Plan extends React.Component {
     }
 
     let days = [];
+    let transports = [];
     for (i = 1; i <= this.state.plan_overview.duration; i++) {
       await days.push(i);
+      await transports.push([]);
     }
+    await Promise.all(
+      days.map(async day => {
+        let idx = day - 1;
+        let places = await this.state.plan_detail.filter(det => det.day === day);
+        // console.log(places);
+        let lastPlace = { attraction_name: "Hotel" };
+        for (let j = 0; j < places.length; j++) {
+          // console.log(idx, j, lastPlace, places[j]);
+          transports[idx].push({});
+          if (!lastPlace.google_place_id || !places[j].google_place_id) {
+            transports[idx][j] = { text: "No transportation data", value: 0 };
+            lastPlace = places[j];
+            continue;
+          }
+          url =
+            APIServer +
+            "/googletransport/" +
+            lastPlace.google_place_id +
+            "/" +
+            places[j].google_place_id;
+          await axios
+            .get(url)
+            .then(res => {
+              // console.log(res.data);
+              transports[idx][j] = {
+                text: res.data.duration.text,
+                mode: res.data.mode,
+                value: res.data.duration.value / 60
+              };
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          lastPlace = places[j];
+        }
+      })
+    );
+    console.log(transports);
 
-    await this.setState({ days: days, isLoading: false });
-
-    // console.log("Fetching done...");
+    await this.setState({ transports: transports, days: days });
+    await this.setState({ isLoading: false });
+    console.log("Fetching done...");
   }
 
   render() {
@@ -208,9 +249,7 @@ class Plan extends React.Component {
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
             <ToastHeader toggle={this.toggleToast}>Plan saved!</ToastHeader>
-            <ToastBody>
-              The plan is saved to your device, view it in plan page!
-            </ToastBody>
+            <ToastBody>The plan is saved to your device, view it in plan page!</ToastBody>
           </Toast>
 
           {modal ? (

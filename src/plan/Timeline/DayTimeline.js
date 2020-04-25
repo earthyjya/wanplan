@@ -16,6 +16,7 @@ class DayTimeline extends Component {
     const { plan_detail, day, editing } = this.props;
     let start = "";
     let destination = "";
+    let idx = day - 1;
     if (editing)
       return (
         <div className="DayTimeline">
@@ -36,17 +37,29 @@ class DayTimeline extends Component {
             {dropProvided => (
               <div {...dropProvided.droppableProps}>
                 <div ref={dropProvided.innerRef}>
-                  {(() => {
-                    if (plan_detail) {
-                      destination = plan_detail[0];
-                      //
-                      return (
-                        <TransCard start={{ attraction_name: "Hotel" }} destination={destination} />
-                      );
-                    }
-                  })()}
                   {plan_detail.map(detail => (
                     <div key={detail.attraction_order.toString()}>
+                      {(() => {
+                        start = (() => {
+                          if (detail !== plan_detail[0]) {
+                            return plan_detail.filter(
+                              det => det.attraction_order === detail.attraction_order - 1
+                            )[0];
+                          } else {
+                            return { attraction_name: "Hotel" };
+                          }
+                        })();
+                        destination = detail;
+                      })()}
+                      <TransCard
+                        start={start}
+                        destination={destination}
+                        transport={
+                          this.props.transports[idx][
+                            detail.attraction_order - plan_detail[0].attraction_order
+                          ]
+                        }
+                      />
                       <Draggable
                         draggableId={detail.attraction_order.toString()}
                         index={detail.attraction_order}
@@ -68,21 +81,19 @@ class DayTimeline extends Component {
                           </div>
                         )}
                       </Draggable>
-                      {(() => {
-                        start = detail;
-                        destination = (() => {
-                          if (detail !== plan_detail[plan_detail.length - 1]) {
-                            return plan_detail.filter(
-                              det => det.attraction_order === detail.attraction_order + 1
-                            )[0];
-                          } else {
-                            return { attraction_name: "Hotel" };
-                          }
-                        })();
-                      })()}
-                      <TransCard start={start} destination={destination} />
                     </div>
                   ))}
+                  {(() => {
+                    if (plan_detail) {
+                      return (
+                        <TransCard
+                          start={plan_detail[plan_detail.length - 1]}
+                          destination={{ attraction_name: "Hotel" }}
+                          transport={{ text: "No transportation data" }}
+                        />
+                      );
+                    }
+                  })()}
                   {dropProvided.placeholder}
                 </div>
               </div>
@@ -103,14 +114,29 @@ class DayTimeline extends Component {
             <div className="Block"></div>
             <h2>Day {day}</h2>
           </div>
-          {(() => {
-            if (plan_detail.length) {
-              destination = plan_detail[0];
-              return <TransCard start={{ attraction_name: "Hotel" }} destination={destination} />;
-            }
-          })()}
           {plan_detail.map(detail => (
             <div key={detail.attraction_order.toString()}>
+              {(() => {
+                start = (() => {
+                  if (detail !== plan_detail[0]) {
+                    return plan_detail.filter(
+                      det => det.attraction_order === detail.attraction_order - 1
+                    )[0];
+                  } else {
+                    return { attraction_name: "Hotel" };
+                  }
+                })();
+                destination = detail;
+              })()}
+              <TransCard
+                start={start}
+                destination={destination}
+                transport={
+                  this.props.transports[idx][
+                    detail.attraction_order - plan_detail[0].attraction_order
+                  ]
+                }
+              />
               <AttCard
                 {...detail}
                 changeOrder={this.props.changeOrder}
@@ -118,21 +144,19 @@ class DayTimeline extends Component {
                 delCard={this.props.delCard}
                 editing={this.props.editing}
               />
-              {(() => {
-                start = detail;
-                destination = (() => {
-                  if (detail !== plan_detail[plan_detail.length - 1]) {
-                    return plan_detail.filter(
-                      det => det.attraction_order === detail.attraction_order + 1
-                    )[0];
-                  } else {
-                    return { attraction_name: "Hotel" };
-                  }
-                })();
-              })()}
-              <TransCard start={start} destination={destination} />
             </div>
           ))}
+          {(() => {
+            if (plan_detail.length) {
+              return (
+                <TransCard
+                  start={plan_detail[plan_detail.length - 1]}
+                  destination={{ attraction_name: "Hotel" }}
+                  transport={{ text: "No transportation data" }}
+                />
+              );
+            }
+          })()}
 
           <hr style={{ margin: "0px 30px 30px 30px" }} />
         </div>

@@ -10,7 +10,7 @@ class MyPlan extends Component {
     redirect: false,
     redirectTo: "/",
     citySearch: 0,
-    cities: [],
+    cities: []
   };
 
   savedPlan = () => {
@@ -18,8 +18,8 @@ class MyPlan extends Component {
     if (this.props.isLoggedIn) {
       const { data, user_id } = this.props;
       return data
-        .filter((plan) => plan.user_id === user_id)
-        .map((plan) => {
+        .filter(plan => plan.user_id === user_id)
+        .map(plan => {
           return (
             <div key={plan.plan_id}>
               <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
@@ -28,7 +28,7 @@ class MyPlan extends Component {
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
-        return _planlist.map((plan) => (
+        return _planlist.map(plan => (
           <div key={plan.plan_id}>
             <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
           </div>
@@ -45,14 +45,14 @@ class MyPlan extends Component {
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 
-  selectCity = (e) => {
+  selectCity = e => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
-  RedirectFunc = (plan_id) => {
+  RedirectFunc = plan_id => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_plan",
+      redirectTo: "/plan/" + plan_id + "/edit_plan"
     });
   };
 
@@ -64,11 +64,11 @@ class MyPlan extends Component {
     const APIServer = process.env.REACT_APP_APIServer;
     await axios
       .get(APIServer + "/city")
-      .then((result) => {
+      .then(result => {
         this.setState({ cities: result.data, isLoading: false });
         console.log("got cities");
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error, isLoading: false });
         console.log(error);
       });
@@ -89,8 +89,8 @@ class MyPlan extends Component {
         <div className="Plan-list-div">{this.savedPlan()}</div>
         <div
           style={{
-            top: "20px",
-            left: "10px",
+            marginTop: "20px",
+            marginLeft: "10px",
             position: "relative",
             fontSize: "22px",
             fontWeight: "bold",
@@ -107,7 +107,7 @@ class MyPlan extends Component {
               onChange={this.selectCity}
             >
               <option value="0">All plan</option>
-              {this.state.cities.map((city) => {
+              {this.state.cities.map(city => {
                 return (
                   <option value={city.city_id} text={city.city}>
                     {city.city}
@@ -117,13 +117,13 @@ class MyPlan extends Component {
             </select>
           </div>
         </div>
-        <div style={{ top: "20px", left: "10px", position: "relative" }}>
+        <div style={{ marginTop: "20px", marginLeft: "10px", position: "relative" }}>
           {(() => {
-            if (this.state.citySearch == 0) {
+            if (this.state.citySearch === 0) {
               console.log("all");
               return (
                 <div>
-                  {data.map((plan) => (
+                  {data.map(plan => (
                     <div key={plan.plan_id}>
                       <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
                     </div>
@@ -133,16 +133,15 @@ class MyPlan extends Component {
             } else {
               return (
                 <div>
-                  {data.map((plan) => {
-                    if (plan.city_id == this.state.citySearch) {
+                  {data.map(plan => {
+                    if (plan.city_id === this.state.citySearch) {
                       return (
                         <div key={plan.plan_id}>
-                          <a href={"/plan/" + plan.plan_id}>
-                            {plan.plan_title}
-                          </a>
+                          <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
                         </div>
                       );
                     }
+                    return <React.Fragment></React.Fragment>;
                   })}
                 </div>
               );
