@@ -38,7 +38,7 @@ class DayTimeline extends Component {
               <div {...dropProvided.droppableProps}>
                 <div ref={dropProvided.innerRef}>
                   {plan_detail.map(detail => (
-                    <div key={detail.attraction_order.toString()}>
+                    <div key={detail.attraction_order}>
                       {(() => {
                         start = (() => {
                           if (detail !== plan_detail[0]) {
@@ -72,7 +72,6 @@ class DayTimeline extends Component {
                           >
                             <AttCard
                               {...detail}
-                              changeOrder={this.props.changeOrder}
                               changeDuration={this.props.changeDuration}
                               updateDescription={this.props.updateDescription}
                               delCard={this.props.delCard}
@@ -115,7 +114,7 @@ class DayTimeline extends Component {
             <h2>Day {day}</h2>
           </div>
           {plan_detail.map(detail => (
-            <div key={detail.attraction_order.toString()}>
+            <div key={detail.attraction_order}>
               {(() => {
                 start = (() => {
                   if (detail !== plan_detail[0]) {
@@ -139,7 +138,6 @@ class DayTimeline extends Component {
               />
               <AttCard
                 {...detail}
-                changeOrder={this.props.changeOrder}
                 changeDuration={this.props.changeDuration}
                 delCard={this.props.delCard}
                 editing={this.props.editing}

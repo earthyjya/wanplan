@@ -13,7 +13,7 @@ class AttBar extends Component {
   onPlaceSelected = async place => {
     const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/attraction/google_id/" + place.place_id;
-    console.log(url);
+    // console.log(url);
     await axios
       .get(url)
       .then(res => {
@@ -54,25 +54,22 @@ class AttBar extends Component {
                     isCombineEnabled={false}
                   >
                     {dropProvided => (
-                      <div {...dropProvided.droppableProps}>
-                        <div ref={dropProvided.innerRef}>
-                          <Draggable
-                            draggableId={this.state.searchedPlace.attraction_id.toString() + "bar"}
-                            index={this.state.searchedPlace.attraction_id}
-                          >
-                            {dragProvided => (
-                              <div
-                                {...dragProvided.dragHandleProps}
-                                {...dragProvided.draggableProps}
-                                ref={dragProvided.innerRef}
-                              >
-                                <div>
-                                  <AttBarCard {...this.state.searchedPlace} />
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        </div>
+                      <div {...dropProvided.droppableProps} ref={dropProvided.innerRef}>
+                        <Draggable
+                          draggableId={this.state.searchedPlace.attraction_id.toString() + "bar"}
+                          index={this.state.searchedPlace.attraction_id}
+                        >
+                          {dragProvided => (
+                            <div
+                              {...dragProvided.dragHandleProps}
+                              {...dragProvided.draggableProps}
+                              ref={dragProvided.innerRef}
+                            >
+                              <AttBarCard {...this.state.searchedPlace} />
+                            </div>
+                          )}
+                        </Draggable>
+                        {dropProvided.placeholder}
                       </div>
                     )}
                   </Droppable>
@@ -89,33 +86,23 @@ class AttBar extends Component {
                 isCombineEnabled={false}
               >
                 {dropProvided => (
-                  <div {...dropProvided.droppableProps}>
-                    <div ref={dropProvided.innerRef}>
-                      <Draggable
-                        draggableId={dat.attraction_id.toString() + "bar"}
-                        index={dat.attraction_id}
-                      >
-                        {dragProvided => (
-                          <div
-                            {...dragProvided.dragHandleProps}
-                            {...dragProvided.draggableProps}
-                            ref={dragProvided.innerRef}
-                          >
-                            <div>
-                              <AttBarCard {...dat} />
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
+                  <div {...dropProvided.droppableProps} ref={dropProvided.innerRef}>
+                    <Draggable
+                      draggableId={dat.attraction_id.toString() + "bar"}
+                      index={dat.attraction_id}
+                    >
+                      {dragProvided => (
+                        <div
+                          {...dragProvided.dragHandleProps}
+                          {...dragProvided.draggableProps}
+                          ref={dragProvided.innerRef}
+                        >
+                          <AttBarCard {...dat} />
+                        </div>
+                      )}
+                    </Draggable>
 
-                      <span
-                        style={{
-                          display: "none"
-                        }}
-                      >
-                        {dropProvided.placeholder}
-                      </span>
-                    </div>
+                    {dropProvided.placeholder}
                   </div>
                 )}
               </Droppable>

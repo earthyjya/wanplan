@@ -82,9 +82,14 @@ class EditPlan extends React.Component {
 
     if (this.state.daysBefUpdate !== 0) {
       url = APIServer + "/plan_startday/delete/" + plan_id;
-      await axios.delete(url).catch(error => {
-        console.log(error);
-      });
+      await axios
+        .delete(url)
+        .then(res => {
+          // console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
 
     this.state.plan_startday.map(async day => {
@@ -104,9 +109,14 @@ class EditPlan extends React.Component {
 
     if (this.state.orders !== 0) {
       url = APIServer + "/plan_detail/delete/" + plan_id;
-      await axios.delete(url).catch(error => {
-        console.log(error);
-      });
+      await axios
+        .delete(url)
+        .then(res => {
+          // console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
 
     this.state.plan_detail.map(async plan => {
@@ -286,7 +296,7 @@ class EditPlan extends React.Component {
   };
 
   reorderCards = (source, destination) => {
-    console.log(source, destination);
+    // console.log(source, destination);
     let a = source.index;
     let b = destination.index;
     const daya = Number(source.droppableId);
@@ -309,9 +319,10 @@ class EditPlan extends React.Component {
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
       description: "",
+      attraction_order: index,
       day: Number(droppableId)
     };
-    console.log(source, destination);
+    // console.log(source, destination);
     const url =
       APIServer +
       "/attraction/google_id/" +
@@ -324,6 +335,10 @@ class EditPlan extends React.Component {
         // console.error(error);
       });
     plan_detail.splice(index, 0, toAdd);
+    for (let i = 0; i < plan_detail.length; i++) {
+      plan_detail[i].attraction_order = i;
+    }
+    this.setState({ plan_detail });
     this.calPlan(plan_detail);
     if (process.env.NODE_ENV === "production") {
       await axios
@@ -341,6 +356,7 @@ class EditPlan extends React.Component {
   delCard = index => {
     const { plan_detail } = this.state;
     plan_detail.splice(index, 1);
+    this.setState({ plan_detail });
     this.calPlan(plan_detail);
   };
 
@@ -507,7 +523,6 @@ class EditPlan extends React.Component {
                     {...this.props}
                     addDay={this.addDay}
                     delDay={this.delDay}
-                    changeOrder={this.changeOrder}
                     changeDuration={this.changeDuration}
                     updateDescription={this.updateDescription}
                     delCard={this.delCard}
