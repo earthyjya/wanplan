@@ -3,6 +3,7 @@ import React from "react";
 
 class EditPlanContent extends React.Component {
   state = {
+    originalCityId: 0,
     isLoading: true
   };
 
@@ -69,11 +70,14 @@ class EditPlanContent extends React.Component {
   onSave = () => {
     this.props.updatePlanOverview(this.state.plan_overview);
     this.props.toggleEditPlanContent();
-    this.props.titleChanged(true)
   };
 
   async componentDidMount() {
-    this.setState({ plan_overview: this.props.plan_overview, isLoading: false });
+    this.setState({
+      plan_overview: this.props.plan_overview,
+      originalCityId: this.props.plan_overview.city_id,
+      isLoading: false
+    });
   }
 
   render() {

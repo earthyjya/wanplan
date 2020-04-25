@@ -260,6 +260,20 @@ class Plan extends React.Component {
     await this.setState({ days: days });
     await this.setState({ isLoading: false });
     console.log("Fetching done...");
+    if (process.env.NODE_ENV === "production") {
+      plan_detail = this.state.plan_detail;
+      for (let i = 0; i < plan_detail.length; ++i) {
+        await axios
+          .get(APIServer + "/googlephoto/" + plan_detail[i].google_place_id)
+          .then(res => {
+            plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      this.setState(plan_detail);
+    }
   }
 
   render() {

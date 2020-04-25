@@ -21,6 +21,7 @@ class EditPlan extends React.Component {
     editTitle: false,
     error: null,
     isLoading: true,
+    loadAttBar: true,
     modal: false,
     orders: 0,
     plan_detail: [],
@@ -53,10 +54,13 @@ class EditPlan extends React.Component {
         console.log(error);
       });
     if (this.state.error) alert(this.state.error);
-    else
-      this.setState({
-        plan_overview: { ...this.state.plan_overview, ...plan_overview }
+    else {
+      const old_plan_overview = this.state.plan_overview;
+      await this.setState({
+        plan_overview: { ...old_plan_overview, ...plan_overview }
       });
+      if (old_plan_overview.city_id !== plan_overview.city_id) this.reloadAttBar();
+    }
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (_planlist !== [] && _planlist !== null) {
       await localStorage.setItem(
@@ -359,6 +363,11 @@ class EditPlan extends React.Component {
     }
   };
 
+  reloadAttBar = async () => {
+    await this.setState({ loadAttBar: false });
+    await this.setState({ loadAttBar: true });
+  };
+
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
     const { plan_id } = this.props;
@@ -506,9 +515,15 @@ class EditPlan extends React.Component {
                   />
                 </Col>
                 <Col className="p-0">
-                  <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
-                    {result => <AttBar {...result} />}
-                  </Request>
+                  {(() => {
+                    if (this.state.loadAttBar)
+                      return (
+                        <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
+                          {result => <AttBar {...result} />}
+                        </Request>
+                      );
+                    return;
+                  })()}
                 </Col>
               </Row>
             </Container>
