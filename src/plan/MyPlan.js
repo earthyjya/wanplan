@@ -94,6 +94,8 @@ class MyPlan extends Component {
             position: "relative",
             fontSize: "22px",
             fontWeight: "bold",
+            alignSelf: "center",
+            textAlign: "center",
           }}
         >
           Search Plan

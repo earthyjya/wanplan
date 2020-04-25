@@ -3,7 +3,10 @@ import axios from "axios";
 import Myplan from "./plan/MyPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Container, Row } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRoute } from "@fortawesome/free-solid-svg-icons";
+import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 class Homepage extends Component {
   state = {
@@ -59,33 +62,76 @@ class Homepage extends Component {
         />
         <div className="layer"></div>
         <Container className="plan-description-container-home">
-          <Row className="oneplan-title">
-            ONEPLAN
-          </Row>
-          <Row className="oneplan-description">
-            The only plan for 
-          </Row>
-          <Row className="oneplan-description-2">
-            Travel Lover
-          </Row>
+          <Row className="oneplan-title">ONEPLAN</Row>
+          <Row className="oneplan-description">The only plan for</Row>
+          <Row className="oneplan-description-2">Travel Lover</Row>
         </Container>
         <Container fluid className="intro-container-home">
-          <div>
-            <span>เลือก </span>
-            <span className="intro-plan-home">plan</span>
-            <span> ที่ตรงกับสไตล์การท่องเที่ยวของคุณ</span>
-          </div>
-          <div
-            className="intro-plan-home"
-            style={{ alignSelf: "center", textAlign: "center" }}
-          >
-            O R
-          </div>
-          <div style={{ alignSelf: "flex-end", textAlign: "right" }}>
-            <span>สร้าง </span>
-            <span className="intro-plan-home">plan</span>
-            <span> ของคุณเอง</span>
-          </div>
+          <Row style={{ height: "40 px" }}>
+            <Col className="howto-number">1</Col>
+            <Col className="howto-number">2</Col>
+            <Col className="howto-number">3</Col>
+          </Row>
+          <Row className="intro-container-home-row">
+            <Col className="intro-container-home-col">
+              <div>
+                <div>
+                  <span>เลือก </span>
+                  <span className="intro-plan-home">PLAN</span>
+                  <span> ที่เพื่อนๆนักท่องเที่ยวเตรียมไว้ให้แล้ว </span>
+                  <br></br>
+                </div>
+                <div style={{ alignSelf: "center", textAlign: "center" }}>
+                  O R
+                </div>
+                <div style={{ alignSelf: "flex-end", textAlign: "right" }}>
+                  <br></br>
+                  <span>สร้าง </span>
+                  <span className="intro-plan-home">PLAN</span>
+                  <span> ของคุณเอง</span>
+                </div>
+              </div>
+            </Col>
+            <Col className="intro-container-home-col">
+              <div>
+                <div style={{ alignSelf: "center", textAlign: "center" }}>
+                  <span>ปรับแต่ง</span>
+                  <span className="intro-plan-home"> PLAN </span>
+                  <span>ของคุณ</span>
+                </div>
+                <div style={{ fontSize: "small" }}>
+                  เลือกที่ท่องเที่ยวและปรับเวลาได้ตามสไตล์การเที่ยวของคุณ
+                </div>
+                <div
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                >
+                  <div className="gif"></div>
+                </div>
+              </div>
+            </Col>
+            <Col className="intro-container-home-col-2">
+              <div >
+                <FontAwesomeIcon icon={faRoute} size="1x" />
+                <span> นำ</span>
+                <span className="intro-plan-home"> PLAN </span> 
+                <span>นี้ไปเที่ยว!!</span> 
+                <br></br>
+                <br></br>
+                <div style={{ alignSelf: "center", textAlign: "center" }}>O R </div>
+                <br></br>
+                <FontAwesomeIcon icon={faShareAlt} size="1x" />
+                <span> แชร์</span>
+                <span className="intro-plan-home"> PLAN </span> 
+                <span>นี้กับเพื่อนๆ</span> 
+              </div>
+             
+                
+            </Col>
+          </Row>
         </Container>
         <Myplan data={this.props.data} {...this.state} {...this.props} />
       </React.Fragment>

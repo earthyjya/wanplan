@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans&display=swap");
 
 //duplicate!
-.plan-description-picture-home{
+.plan-description-picture-home {
   position: absolute;
   min-height: 400px;
   filter: blur(2px);
@@ -22,22 +22,22 @@
   width: 100%;
   z-index: 2;
 }
-.layer{
+.layer {
   position: absolute;
   top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 0 0 0 1000px rgba(232, 232, 232, 0.15);
+  left: 0;
+  width: 100%;
+  height: 66.4%;
+  box-shadow: inset 0 0 0 1000px rgba(232, 232, 232, 0.15);
 }
 
-.plan-description-container-home > .row{
-    justify-content: center;
-    z-index: 1;
-    text-shadow: 2px 2px 8px rgba($secondary,0.4);
+.plan-description-container-home > .row {
+  justify-content: center;
+  z-index: 1;
+  text-shadow: 2px 2px 8px rgba($secondary, 0.4);
 }
 
-.oneplan-title{
+.oneplan-title {
   font-family: $engfont;
   color: $primary;
   font-size: 5.5em;
@@ -45,7 +45,7 @@
   letter-spacing: 0.27em;
 }
 
-.oneplan-description{
+.oneplan-description {
   font-weight: bold;
   font-family: $engfont;
   color: #e0e0e0;
@@ -54,21 +54,20 @@
   letter-spacing: 0.2em;
 }
 
-.oneplan-description-2{
+.oneplan-description-2 {
   font-weight: 650;
   font-family: $engfont;
   color: white;
   font-size: 3.3em;
   text-align: center;
   letter-spacing: 0.2em;
-  
 }
 
 .plan-search-container-home {
   height: 72px;
   width: 767px;
   border-radius: 10px;
-  background-color: #FFF;
+  background-color: #fff;
   z-index: 1;
   display: flex;
   padding: 15px;
@@ -78,19 +77,16 @@
   justify-content: space-between;
 }
 
-.plan-search-container-home  > select,
-.plan-search-container-home  > button{
+.plan-search-container-home > select,
+.plan-search-container-home > button {
   height: 45px;
   margin-right: 10px;
 }
 
 .plan-search-city-home {
-
   position: relative;
   width: 60%;
   font-family: "Noto Sans TH", sans-serif;
-
-
 }
 .plan-search-city-home ::-ms-expand {
   display: none;
@@ -99,8 +95,6 @@
   border-color: #888;
   color: #fcc626;
 }
-
-
 
 // .plan-search-date{
 //   width: 300px;
@@ -115,27 +109,69 @@
   border-radius: 8px;
   background-color: #fcd328;
 }
-.plan-search-button-home :hover{
+.plan-search-button-home :hover {
   background-color: #fcc626;
 }
 .intro-container-home {
   display: flex;
   height: 298px;
   width: 100%;
-  background-color: #F5F6F3;
+  background-color: #f5f6f3;
   flex-direction: column;
-  padding: 30px !important;
-  padding-left: 100px !important;
-  padding-right: 100px !important;
+  padding: 3px !important;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+}
+.howto-1 {
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+}
+.howto-number {
+  font-size: 2em;
+  font-weight: 800;
+  text-align: center;
+  padding-top: 8px;
+}
+.intro-container-home-row {
+  height: 100%;
+  width: 100%;
+}
+.intro-container-home-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 292 px;
+  
+  border-right: solid;
+}
+
+.intro-container-home-col-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 292 px;
+  
+  
+}
+.gif{
+  object-fit: scale-down;
+  height: 150px;
+  width: 246px;
+  background-image: url('https://s3-ap-northeast-1.amazonaws.com/photo.oneplan.in.th/howto-both-new.gif');
+  align-content: center;
+  align-self: center;
+  display: block;
+ 
 }
 .intro-plan-home {
   color: #fcd328;
+  font-size: 1.3em;
 }
 
-.intro-container-home  > div{
+.intro-container-home > div {
   font-family: "Noto Sans TH", sans-serif;
-  height: 200px;
-  width: 500px;
-  font-size: 2.6em;
+
+  font-size: 1.2em;
   font-weight: 800;
 }
