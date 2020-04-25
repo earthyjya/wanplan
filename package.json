@@ -21,6 +21,7 @@
     "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
+    "react-google-autocomplete": "^1.1.4",
     "react-gtm-module": "^2.0.8",
     "react-lorem-ipsum": "^1.4.4",
     "react-router-dom": "^5.1.2",

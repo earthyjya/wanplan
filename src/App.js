@@ -7,7 +7,7 @@ import Plan from "./plan/Plan";
 import React, { Component } from "react";
 import Request from "./lib/Request";
 import User from "./user/User";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 import {
   faPencilAlt,
   faCamera,
@@ -28,11 +28,10 @@ class App extends Component {
   delete = () => {
     localStorage.setItem("planlist", JSON.stringify([]));
   };
-  componentDidMount(){
-    ReactGA.initialize('UA-164341109-1');
+  componentDidMount() {
+    ReactGA.initialize("UA-164341109-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
   }
-
 
   logInlogOut = async () => {
     if (this.state.isLoggedIn) {
@@ -140,7 +139,6 @@ class App extends Component {
         }
       }
     }
-    
   };
 
   render() {
