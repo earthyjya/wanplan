@@ -190,7 +190,13 @@ class App extends Component {
           <Route
             path="/plan/:plan_id/edit_plan"
             component={({ match }) => (
-              <EditPlan plan_id={Number(match.params.plan_id)} {...this.state} />
+              <EditPlan plan_id={Number(match.params.plan_id)} new_plan={false} {...this.state} />
+            )}
+          />
+          <Route
+            path="/plan/:plan_id/edit_new_plan"
+            component={({ match }) => (
+              <EditPlan plan_id={Number(match.params.plan_id)} new_plan={true} {...this.state} />
             )}
           />
           <Route
@@ -200,7 +206,7 @@ class App extends Component {
             )}
           />
         </BrowserRouter>
-        <footer style={{ margin: "20px" }}>
+        <footer style={{ margin: "10px" }}>
           <center>
             <p>All right reserved by Oneplan</p>
             <img

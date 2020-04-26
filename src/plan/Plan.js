@@ -4,6 +4,7 @@ import PlanOverview from "./PlanOverview";
 import React from "react";
 import Share from "./Share";
 import Timeline from "./Timeline/Timeline";
+import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
@@ -164,6 +165,43 @@ class Plan extends React.Component {
     }
   };
 
+  calPlan = async plan_detail => {
+    //// Need to be updated when transportations are added
+    // console.log(transports);
+
+    const { plan_startday } = this.state;
+    let i = 0;
+    for (i = 0; i < plan_detail.length; i++) {
+      plan_detail[i].attraction_order = i;
+    }
+    for (i = 0; i < plan_startday.length; i++) {
+      plan_startday[i].day = i + 1;
+    }
+    const transports = await this.getTransports();
+    let lastDay = 0;
+    let lastTime = 0;
+    let transTime = 0;
+    let idx = 0;
+    for (i = 0; i < plan_detail.length; i++) {
+      if (plan_detail[i].day !== lastDay) {
+        lastDay = plan_detail[i].day;
+        idx = 0;
+        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+        lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+        ++idx;
+      }
+      plan_detail[i].start_time = Int2Str(lastTime);
+      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
+      if (transports[lastDay - 1][idx])
+        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+      else transTime = 0;
+      lastTime = lastTime + plan_detail[i].time_spend + transTime;
+      // console.log(transTime);
+      ++idx;
+    }
+    await this.setState({ plan_detail, plan_startday });
+  };
+
   getTransports = async () => {
     const { days } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
@@ -260,6 +298,7 @@ class Plan extends React.Component {
     await this.setState({ days: days });
     await this.setState({ isLoading: false });
     console.log("Fetching done...");
+    this.calPlan(this.state.plan_detail);
     if (process.env.NODE_ENV === "production") {
       plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {

@@ -32,7 +32,7 @@ class AttBar extends Component {
             className="search-text"
             style={{ backgroundColor: "grey" }}
             onPlaceSelected={this.onPlaceSelected}
-            types={["geocode"]}
+            types={["geocode", "establishment"]}
             componentRestrictions={{ country: "jp" }}
           />
         </div>

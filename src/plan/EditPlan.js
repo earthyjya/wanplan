@@ -251,8 +251,6 @@ class EditPlan extends React.Component {
       ++idx;
     }
     await this.setState({ plan_detail, plan_startday });
-    this.updatePlanDetails();
-    this.updatePlanStartday();
   };
 
   addDay = day => {
@@ -274,7 +272,6 @@ class EditPlan extends React.Component {
       plan_startday
     });
     this.calPlan(plan_detail);
-    this.updatePlanOverview(plan_overview);
   };
 
   delDay = day => {
@@ -386,13 +383,13 @@ class EditPlan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { plan_id } = this.props;
+    const { plan_id, new_plan } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/load_plan/" + plan_id;
     await axios
       .get(url)
       .then(async result => {
-        await this.setState({ ...result.data });
+        await this.setState({ ...result.data, editTitle: new_plan });
       })
       .catch(error => {
         this.setState({ error });
@@ -498,18 +495,14 @@ class EditPlan extends React.Component {
                         onClick={this.toggleEditPlanContent}
                       />
                     </div>
-                    <button className="white-button" onClick={this.toggleShareModal}>
+                    {/*<button className="white-button" onClick={this.toggleShareModal}>
                       Share!
                       <span style={{ fontSize: "15px" }}>
                         <br />
                         this plan
                       </span>
-                    </button>
-                    <button
-                      style={{ marginLeft: "10px" }}
-                      className="white-button2"
-                      onClick={this.updatePlan}
-                    >
+                    </button>*/}
+                    <button className="white-button" onClick={this.updatePlan}>
                       Update!
                       <span style={{ fontSize: "15px" }}>
                         <br />
