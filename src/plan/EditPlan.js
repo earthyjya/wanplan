@@ -22,6 +22,7 @@ class EditPlan extends React.Component {
     error: null,
     isLoading: true,
     loadAttBar: true,
+    loadPlanOverview: true,
     modal: false,
     orders: 0,
     plan_detail: [],
@@ -35,6 +36,7 @@ class EditPlan extends React.Component {
   updatePlan = async () => {
     //update current plan
     //this.toggleUpdateToast();
+    await this.updatePlanOverview(this.state.plan_overview);
     await this.updatePlanStartday();
     await this.updatePlanDetails();
     await this.setState({ redirect: true, redirectTo: "/plan/" + this.props.plan_id });
@@ -60,6 +62,7 @@ class EditPlan extends React.Component {
         plan_overview: { ...old_plan_overview, ...plan_overview }
       });
       if (old_plan_overview.city_id !== plan_overview.city_id) this.reloadAttBar();
+      // if (old_plan_overview.plan_title !== plan_overview.plan_title) this.reloadPlanOverview();
     }
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (_planlist !== [] && _planlist !== null) {
@@ -272,6 +275,7 @@ class EditPlan extends React.Component {
       plan_startday
     });
     this.calPlan(plan_detail);
+    this.updatePlanOverview(plan_overview);
   };
 
   delDay = day => {
@@ -381,6 +385,11 @@ class EditPlan extends React.Component {
     await this.setState({ loadAttBar: true });
   };
 
+  reloadPlanOverview = async () => {
+    await this.setState({ loadPlanOverview: false });
+    await this.setState({ loadPlanOverview: true });
+  };
+
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
     const { plan_id, new_plan } = this.props;
@@ -482,7 +491,17 @@ class EditPlan extends React.Component {
             <Container fluid className="p-0">
               <Row className="m-0">
                 <Col lg={8} className="p-0">
-                  <EditPlanOverview {...this.state} updatePlanOverview={this.updatePlanOverview} />
+                  {(() => {
+                    if (this.state.loadPlanOverview)
+                      return (
+                        <EditPlanOverview
+                          {...this.state}
+                          updatePlanOverview={this.updatePlanOverview}
+                        />
+                      );
+                    return;
+                  })()}
+
                   <div className="title-bar">
                     <div className="title">{plan_overview.city}</div>
                     <div className="city">Plan</div>
@@ -564,6 +583,7 @@ class EditPlan extends React.Component {
                 {...this.state}
                 toggleEditPlanContent={this.toggleEditPlanContent}
                 updatePlanOverview={this.updatePlanOverview}
+                reloadPlanOverview={this.reloadPlanOverview}
               />
             </div>
           ) : (
