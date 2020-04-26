@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRoute } from "@fortawesome/free-solid-svg-icons";
+import { faRoute, faExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 class Homepage extends Component {
@@ -114,6 +114,11 @@ class Homepage extends Component {
             </Col>
             <Col className="intro-container-home-col-2">
               <div>
+                <FontAwesomeIcon icon={faExclamation} size="2x" color="red" />
+                <span> Update!</span>
+                <span className="intro-plan-home"> PLAN </span>
+                <span>เพื่อบันทึกการแก้ไข </span>
+                <br></br>
                 <FontAwesomeIcon icon={faRoute} size="1x" />
                 <span> นำ</span>
                 <span className="intro-plan-home"> PLAN </span>
