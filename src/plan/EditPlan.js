@@ -16,7 +16,6 @@ class EditPlan extends React.Component {
   state = {
     attraction: [],
     days: [],
-    daysBefUpdate: 0,
     dropdownOpen: false,
     editTitle: false,
     error: null,
@@ -24,7 +23,6 @@ class EditPlan extends React.Component {
     loadAttBar: true,
     loadPlanOverview: true,
     modal: false,
-    orders: 0,
     plan_detail: [],
     publishToast: false,
     redirect: false,
@@ -35,11 +33,19 @@ class EditPlan extends React.Component {
 
   updatePlan = async () => {
     //update current plan
-    //this.toggleUpdateToast();
+    this.toggleUpdateToast();
     await this.updatePlanOverview(this.state.plan_overview);
     await this.updatePlanStartday();
     await this.updatePlanDetails();
     await this.setState({ redirect: true, redirectTo: "/plan/" + this.props.plan_id });
+  };
+
+  updatePlanNoRedirect = async () => {
+    //update current plan
+    //this.toggleUpdateToast();
+    await this.updatePlanOverview(this.state.plan_overview);
+    await this.updatePlanStartday();
+    await this.updatePlanDetails();
   };
 
   updatePlanOverview = async plan_overview => {
@@ -83,24 +89,27 @@ class EditPlan extends React.Component {
     const APIServer = process.env.REACT_APP_APIServer;
     let url = "";
 
-    if (this.state.daysBefUpdate !== 0) {
-      url = APIServer + "/plan_startday/delete/" + plan_id;
-      await axios
-        .delete(url)
-        .then(res => {
-          // console.log(res);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    url = APIServer + "/plan_startday/delete/" + plan_id;
+    await axios
+      .delete(url)
+      .then(res => {
+        console.log("delete", res);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
     this.state.plan_startday.map(async day => {
       url = APIServer + "/plan_startday/";
-      await axios.post(url, day).catch(error => {
-        this.setState({ error });
-        console.log(error);
-      });
+      await axios
+        .post(url, day)
+        .then(res => {
+          console.log("post", res);
+        })
+        .catch(error => {
+          this.setState({ error });
+          console.log(error);
+        });
     });
   };
 
@@ -110,24 +119,27 @@ class EditPlan extends React.Component {
     const APIServer = process.env.REACT_APP_APIServer;
     let url = "";
 
-    if (this.state.orders !== 0) {
-      url = APIServer + "/plan_detail/delete/" + plan_id;
-      await axios
-        .delete(url)
-        .then(res => {
-          // console.log(res);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    url = APIServer + "/plan_detail/delete/" + plan_id;
+    await axios
+      .delete(url)
+      .then(res => {
+        // console.log(res);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
     this.state.plan_detail.map(async plan => {
       url = APIServer + "/plan_detail/";
-      await axios.post(url, plan).catch(error => {
-        this.setState({ error });
-        console.log(error);
-      });
+      await axios
+        .post(url, plan)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          this.setState({ error });
+          console.log(error);
+        });
     });
   };
 
@@ -223,15 +235,23 @@ class EditPlan extends React.Component {
     //// Need to be updated when transportations are added
     // console.log(transports);
 
-    const { plan_startday } = this.state;
+    let { plan_startday } = this.state;
     let i = 0;
     for (i = 0; i < plan_detail.length; i++) {
       plan_detail[i].attraction_order = i;
     }
+    plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
     for (i = 0; i < plan_startday.length; i++) {
       plan_startday[i].day = i + 1;
     }
-    const transports = await this.getTransports();
+    let transports = [];
+    await this.getTransports()
+      .then(res => {
+        transports = res;
+      })
+      .catch(err => {
+        console.log(err);
+      });
     let lastDay = 0;
     let lastTime = 0;
     let transTime = 0;
@@ -276,6 +296,7 @@ class EditPlan extends React.Component {
     });
     this.calPlan(plan_detail);
     this.updatePlanOverview(plan_overview);
+    this.updatePlanStartday();
   };
 
   delDay = day => {
@@ -294,6 +315,8 @@ class EditPlan extends React.Component {
       plan_startday
     });
     this.calPlan(plan_detail);
+    this.updatePlanOverview(plan_overview);
+    this.updatePlanStartday();
   };
 
   reorderCards = (source, destination) => {
@@ -441,9 +464,7 @@ class EditPlan extends React.Component {
     await this.getTransports();
 
     await this.setState({
-      days: days,
-      daysBefUpdate: days.length,
-      orders: this.state.plan_detail.length
+      days: days
     });
     await this.setState({ isLoading: false });
     console.log("Fetching done...");

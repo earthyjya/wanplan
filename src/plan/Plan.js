@@ -169,15 +169,23 @@ class Plan extends React.Component {
     //// Need to be updated when transportations are added
     // console.log(transports);
 
-    const { plan_startday } = this.state;
+    let { plan_startday } = this.state;
     let i = 0;
     for (i = 0; i < plan_detail.length; i++) {
       plan_detail[i].attraction_order = i;
     }
+    plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
     for (i = 0; i < plan_startday.length; i++) {
       plan_startday[i].day = i + 1;
     }
-    const transports = await this.getTransports();
+    let transports = [];
+    await this.getTransports()
+      .then(res => {
+        transports = res;
+      })
+      .catch(err => {
+        console.log(err);
+      });
     let lastDay = 0;
     let lastTime = 0;
     let transTime = 0;
@@ -293,7 +301,7 @@ class Plan extends React.Component {
     for (let i = 1; i <= this.state.plan_overview.duration; i++) {
       await days.push(i);
     }
-    await this.getTransports();
+    await this.getTransports().then(res => {});
 
     await this.setState({ days: days });
     await this.setState({ isLoading: false });

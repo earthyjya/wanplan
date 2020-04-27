@@ -76,7 +76,7 @@ class AttBar extends Component {
                 );
             })()}
 
-            {this.props.data.map(dat => (
+            {this.props.data.slice(0, 10).map(dat => (
               <Droppable
                 key={dat.google_place_id}
                 droppableId={dat.google_place_id + "bar"}
