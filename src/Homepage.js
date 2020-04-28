@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRoute, faExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faRoute, faExclamation, faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 class Homepage extends Component {
@@ -51,6 +51,12 @@ class Homepage extends Component {
     if (error) return <div>Something Went Wrong :(</div>;
     return (
       <React.Fragment>
+        <div className="Feedback">
+          <a className="feedback_text" href="https://forms.gle/NEWenWLeHL7bFpWu9 "> Give Feedback </a>
+        </div>
+        <a href="https://forms.gle/NEWenWLeHL7bFpWu9" className="Feedback-2" >
+          <FontAwesomeIcon icon={faCommentAlt} size="1x" color="white" />
+        </a>
         <Container
           fluid
           className="plan-description-picture-home"

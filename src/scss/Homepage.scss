@@ -3,6 +3,52 @@
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans&display=swap");
 
 //duplicate!
+.Feedback{
+  position: fixed;
+  background-color: #339af0;
+  bottom: 20px;
+  right: 20px;
+  height: 40px;
+  width: 150px;
+  border-radius: 25px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 20px;
+
+}
+
+.Feedback-2{
+  position: fixed;
+  background-color: #339af0;
+  bottom: 20px;
+  right: 180px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 25px;
+  font-size: 1em;
+
+}
+
+.feedback_text:link{
+  color: $gray4;
+}
+.feedback_text:visited{
+  color: $gray4;
+}
+.feedback_text:hover{
+  color: $gray4;
+}
+.feedback_text:active{
+  color: $gray4;
+}
 .plan-description-picture-home {
   position: absolute;
   min-height: 400px;
