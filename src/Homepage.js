@@ -5,22 +5,33 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRoute, faExclamation, faCommentAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRoute,
+  faExclamation,
+  faCommentAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
+import FeedbackForm from "./FeedbackForm.js";
+import "./scss/Feedback.scss"
 
 class Homepage extends Component {
   state = {
     citySearch: 0,
     error: null,
     isLoading: true,
+    feedback: false,
     redirect: false,
-    redirectTo: "/"
+    redirectTo: "/",
   };
 
-  RedirectFunc = plan_id => {
+  toggleFeedback = () => {
+    this.setState({ feedback: !this.state.feedback });
+  };
+
+  RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_plan"
+      redirectTo: "/plan/" + plan_id + "/edit_plan",
     });
   };
 
@@ -28,7 +39,7 @@ class Homepage extends Component {
     if (this.state.redirect) return <Redirect to={this.state.redirectTo} />;
   };
 
-  selectCity = e => {
+  selectCity = (e) => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
@@ -36,33 +47,43 @@ class Homepage extends Component {
     const APIServer = process.env.REACT_APP_APIServer;
     await axios
       .get(APIServer + "/city")
-      .then(result => {
+      .then((result) => {
         this.setState({ cities: result.data, isLoading: false });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error, isLoading: false });
         console.log(error);
       });
   }
 
   render() {
-    const { isLoading, error } = this.state;
+    const { isLoading, error, feedback } = this.state;
     if (isLoading) return <div></div>;
     if (error) return <div>Something Went Wrong :(</div>;
     return (
       <React.Fragment>
-        <div className="Feedback">
-          <a className="feedback_text" href="https://forms.gle/NEWenWLeHL7bFpWu9 "> Give Feedback </a>
-        </div>
-        <a href="https://forms.gle/NEWenWLeHL7bFpWu9" className="Feedback-2" >
+        <button className="Feedback" onClick={this.toggleFeedback}>
+          Give Feedback
+        </button>
+        <button className="Feedback-2" onClick={this.toggleFeedback}>
           <FontAwesomeIcon icon={faCommentAlt} size="1x" color="white" />
-        </a>
+        </button>
+        {feedback ? (
+          <div className="feedbackForm">
+            <FeedbackForm
+              {...this.state}
+              toggleFeedback={this.toggleFeedback}
+            />
+          </div>
+        ) : (
+          <div></div>
+        )}
         <Container
           fluid
           className="plan-description-picture-home"
           style={{
             backgroundImage:
-              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"
+              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
           }}
         />
         <div className="layer"></div>
@@ -85,7 +106,9 @@ class Homepage extends Component {
                   <span className="intro-plan-home">PLAN</span>
                   <span> ที่เพื่อนๆนักท่องเที่ยวเตรียมไว้ให้แล้ว </span>
                 </div>
-                <div style={{ alignSelf: "center", textAlign: "center" }}>O R</div>
+                <div style={{ alignSelf: "center", textAlign: "center" }}>
+                  O R
+                </div>
                 <div style={{ alignSelf: "flex-end", textAlign: "right" }}>
                   <span>สร้าง </span>
                   <span className="intro-plan-home">PLAN</span>
@@ -111,7 +134,7 @@ class Homepage extends Component {
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
-                    display: "flex"
+                    display: "flex",
                   }}
                 >
                   <div className="gif"></div>
@@ -131,7 +154,9 @@ class Homepage extends Component {
                 <span>นี้ไปเที่ยว!!</span>
                 <br></br>
                 <br></br>
-                <div style={{ alignSelf: "center", textAlign: "center" }}>O R </div>
+                <div style={{ alignSelf: "center", textAlign: "center" }}>
+                  O R{" "}
+                </div>
                 <br></br>
                 <FontAwesomeIcon icon={faShareAlt} size="1x" />
                 <span> แชร์</span>

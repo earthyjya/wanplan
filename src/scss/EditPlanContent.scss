@@ -1,68 +1,68 @@
 @import "./Style.scss";
 
 .edit-plan-modal {
-	display: block;
-	position: fixed;
-	z-index: 3;
-	padding-top: 15%;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.4);
-	border: none;
+  display: block;
+  position: fixed;
+  z-index: 3;
+  padding-top: 15%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
 }
 
 .edit-plan-content {
-	background-color: #0a090c;
-	color: white;
-	margin: auto;
-	padding: 20px;
-	height: 400px;
-	width: 600px;
-	border-radius: 5px;
+  background-color: #0a090c;
+  color: white;
+  margin: auto;
+  padding: 20px;
+  height: 400px;
+  width: 600px;
+  border-radius: 5px;
 }
 
 .close-edit-plan {
-	float: right;
-	cursor: pointer;
-	font-size: 15px;
-	font-weight: 900;
+  float: right;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .edit-plan-content > .div {
-	margin: 10px;
+  margin: 10px;
 }
 
 .input-box {
-	border: none;
-	border-radius: 4px;
-	width: 100%;
-	height: 35px;
-	padding: 10px;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  height: 35px;
+  padding: 10px;
 }
 
 .input-description-box {
-	border: none;
-	border-radius: 4px;
-	width: 100%;
-	height: 105px;
-	padding: 10px;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  height: 105px;
+  padding: 10px;
 }
 
 .edit-plan-content > button {
-	margin: 10px 0px 0px 3px;
-	padding: 4px 14px;
-	float: right;
-	border: none;
-	border-radius: 4px;
+  margin: 10px 0px 0px 3px;
+  padding: 4px 14px;
+  float: right;
+  border: none;
+  border-radius: 4px;
 }
 
 .edit-plan-content > .save {
-	background-color: #fcd328;
+  background-color: #fcd328;
 }
 
 .edit-plan-content > .cancel {
-	background-color: gray;
+  background-color: gray;
 }

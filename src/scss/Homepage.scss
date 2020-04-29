@@ -17,7 +17,13 @@
   align-items: center;
   text-align: center;
   line-height: 20px;
-
+  color: $gray4;
+  border: none;
+  outline:none;
+}
+.Feedback:active, .Feedback:focus {
+	outline:none;
+	outline: 0;
 }
 
 .Feedback-2{
@@ -37,18 +43,18 @@
 
 }
 
-.feedback_text:link{
-  color: $gray4;
-}
-.feedback_text:visited{
-  color: $gray4;
-}
-.feedback_text:hover{
-  color: $gray4;
-}
-.feedback_text:active{
-  color: $gray4;
-}
+// .feedback_text:link{
+//   color: $gray4;
+// }
+// .feedback_text:visited{
+//   color: $gray4;
+// }
+// .feedback_text:hover{
+//   color: $gray4;
+// }
+// .feedback_text:active{
+//   color: $gray4;
+// }
 .plan-description-picture-home {
   position: absolute;
   min-height: 400px;
