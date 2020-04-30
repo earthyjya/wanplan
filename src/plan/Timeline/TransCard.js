@@ -1,5 +1,6 @@
 import "../../scss/TransCard.scss";
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class TransCard extends Component {
   render() {
@@ -18,10 +19,17 @@ class TransCard extends Component {
               return <div className="transport">{transport.text}</div>;
             return (
               <React.Fragment>
-                <div className="start">{transport.text}</div>
-                <div className="transport" style={{ marginLeft: "5px" }}>
-                  {" "}
-                  by {transport.mode}
+                <div>
+                  from A to B
+                </div>
+                <div>
+                  800m
+                  <FontAwesomeIcon icon="walking" size="sm" /> 10min
+                  <FontAwesomeIcon icon="train" size="sm" /> 5min
+                  <FontAwesomeIcon icon="car" size="sm" /> 2min
+                </div>
+                <div>
+                  Google Map
                 </div>
               </React.Fragment>
             );

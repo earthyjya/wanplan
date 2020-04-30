@@ -45,6 +45,7 @@
   border-radius: 20px;
   font-size: 22px;
   align-content: center;
+  text-align: center;
   color: #0a090c;
   background-color: #fcd328;
   border: none;
@@ -80,6 +81,13 @@
   width: 100%;
   overflow: hidden;
   top: 64px;
+}
+
+.VerticaLline{
+  border-left-width: medium;
+  border-left: solid;
+  border-left-color: $gray3;
+  margin-left: 100px;
 }
 
 .container1 {

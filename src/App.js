@@ -9,15 +9,14 @@ import Request from "./lib/Request";
 import User from "./user/User";
 import ReactGA from "react-ga";
 import {
-  faPencilAlt,
-  faCamera,
-  faGlobeAsia,
-  faAngleDown,
-  faShareAlt
+  faPencilAlt, faCamera, faGlobeAsia, faAngleDown,
+  faShareAlt, faWalking, faCar, faTrain
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
-library.add(faPencilAlt, faCamera, faGlobeAsia, faAngleDown, faShareAlt);
+library.add(
+  faPencilAlt, faCamera, faGlobeAsia, faAngleDown,
+  faShareAlt, faWalking, faCar, faTrain);
 
 class App extends Component {
   state = {

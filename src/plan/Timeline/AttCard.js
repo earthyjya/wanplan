@@ -76,51 +76,32 @@ class AttCard extends Component {
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
-      <div className="AttCard">
-        {(() => {
-          if (editing)
-            return (
-              <div className="DelCard" onClick={this.delCard}>
-                &#10005;
-              </div>
-            );
-        })()}
-        <div className="StartTime">{start_time}</div>
-        <div className="EndTime">{end_time}</div>
-        <div className="AttName">{attraction_name}</div>
-        <div className="AttTypeCont">
-          <div className="AttType">{attraction_type}</div>
-        </div>
-        <img
-          src={(() => {
-            if (photos) return photos[0];
-            return "/";
-          })()}
-          className="AttPhoto"
-          alt={attraction_name}
-        />
+      <React.Fragment>
 
-        {(() => {
-          if (editing)
-            return (
-              <React.Fragment>
-                <textarea
-                  className="AttDesCont"
-                  value={this.state.description}
-                  onChange={this.onChange}
-                  onBlur={this.updateDescription}
-                  type="textarea"
-                />
-                <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
-                  {minutes.map(min => {
-                    return <option key={min}>{min}</option>;
-                  })}
-                </select>
-              </React.Fragment>
-            );
-          else return <div className="AttDesCont">{description}</div>;
-        })()}
+      <div className="AttCard">
+        <div className="StartTimeDot">
+          <div className="StartTime">{start_time}</div>
+        </div>
+        <div class="Triangle"/>
+        <div class="AttPhotoCont">
+          <div className="AttTypeCont">
+            <div className="AttType">Type</div>
+          </div>
+          <img
+            src={(() => {
+              if (photos) return photos[0];
+              return "/";
+            })()}
+            className="AttPhoto"
+            alt={attraction_name}
+          />
+        </div>
+        <div class="AttDetailsCont">
+          <div class="AttName">{attraction_name}</div>
+          <div>lorem ipsum อะไรสักอย่างขี้เกียจไปก๊อปมาอ่ะ เขียนมั่วๆ ให้ยาวๆ ไปละกัน</div>
+        </div>
       </div>
+      </React.Fragment>
     );
   }
 }
