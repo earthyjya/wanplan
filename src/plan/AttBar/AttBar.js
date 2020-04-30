@@ -11,6 +11,7 @@ class AttBar extends Component {
   };
 
   onPlaceSelected = async place => {
+    await this.setState({ searchedPlace: {} });
     const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/attraction/google_id/" + place.place_id;
     // console.log(url);
