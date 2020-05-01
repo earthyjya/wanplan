@@ -151,7 +151,7 @@ return (
     );///
 })()}
 <div className="EndTime">{end_time}</div>
-<div className="AttName">{attraction_name}</div>
+
 {(() => {
   if (editing)
     return (

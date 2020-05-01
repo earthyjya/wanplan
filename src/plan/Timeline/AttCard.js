@@ -4,7 +4,8 @@ import React, { Component } from "react";
 class AttCard extends Component {
   state = {
     description: "",
-    photos: []
+    photos: [],
+    isFocused: false
   };
 
   changeDuration = e => {
@@ -25,6 +26,19 @@ class AttCard extends Component {
 
   componentDidMount() {
     this.setState({ description: this.props.description });
+    this.attRef = React.createRef();
+    this.handleBlur = this.handleBlur.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleBlur(event){
+    if(!event.currentTarget.contains(event.relatedTarget))
+      this.setState({isFocused: false})
+  }
+
+  handleClick(){
+    if(!this.state.isFocused)
+      this.attRef.current.focus()
   }
 
   render() {
@@ -76,32 +90,72 @@ class AttCard extends Component {
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
-      <React.Fragment>
-
-      <div className="AttCard">
-        <div className="StartTimeDot">
-          <div className="StartTime">{start_time}</div>
-        </div>
-        <div class="Triangle"/>
-        <div class="AttPhotoCont">
-          <div className="AttTypeCont">
-            <div className="AttType">Type</div>
-          </div>
-          <img
-            src={(() => {
-              if (photos) return photos[0];
-              return "/";
+        <div
+          className="AttCard"
+          ref={this.attRef}
+          onClick={this.handleClick}
+          onFocus={() => {this.setState({isFocused: true})}}
+          onBlur={this.handleBlur}
+          tabIndex="0"
+        >
+          <div className="StartTimeDot">
+            {(() => { //If edit,focus show minutes selector else show start time
+              if(this.state.isFocused && this.props.editing){
+                return(
+                  <select
+                    className="SelAttDura"
+                    value={time_spend}
+                    onChange={this.changeDuration}
+                  >
+                    {minutes.map(min => {
+                      return <option key={min}>{min}</option>;
+                    })}
+                  </select>
+                )
+              }
+              else {
+                return(
+                  <div className="StartTime">{start_time}</div>
+                )
+              }
             })()}
-            className="AttPhoto"
-            alt={attraction_name}
-          />
+          </div>
+          <div class="Triangle"/>
+          <div class="AttPhotoCont">
+            <div className="AttTypeCont">
+              <div className="AttType">Type</div>
+            </div>
+            <img
+              src={(() => {
+                if (photos) return photos[0];
+                return "/";
+              })()}
+              className="AttPhoto"
+              alt={attraction_name}
+            />
+          </div>
+          <div class="AttDetailsCont">
+            <div class="AttName">{attraction_name}</div>
+              {(() => {  //If edit,focus show textarea to edit else show just text
+                if(this.state.isFocused && this.props.editing){
+                  return(
+                    <textarea
+                      className="AttDesCont"
+                      value={this.state.description}
+                      onChange={this.onChange}
+                      onBlur={this.updateDescription}
+                      type="textarea"
+                    />
+                  )
+                }
+                else {
+                  return(
+                    <div>lorem ipsum อะไรสักอย่างขี้เกียจไปก๊อปมาอ่ะ เขียนมั่วๆ ให้ยาวๆ ไปละกัน</div>
+                  )
+                }
+              })()}
+          </div>
         </div>
-        <div class="AttDetailsCont">
-          <div class="AttName">{attraction_name}</div>
-          <div>lorem ipsum อะไรสักอย่างขี้เกียจไปก๊อปมาอ่ะ เขียนมั่วๆ ให้ยาวๆ ไปละกัน</div>
-        </div>
-      </div>
-      </React.Fragment>
     );
   }
 }

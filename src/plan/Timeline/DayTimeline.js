@@ -54,8 +54,6 @@ class DayTimeline extends Component {
                           destination = detail;
                         })()}
                         {(() => { //Transport
-                          if(start.attraction_name != "Hotel"){
-                            console.log("HHH:",start.attraction_name)
                             return(
                               <TransCard
                                 start={start}
@@ -65,7 +63,6 @@ class DayTimeline extends Component {
                                     detail.attraction_order - plan_detail[0].attraction_order
                                 ]}
                               />);
-                            }
                         })()}
                         <Draggable
                           draggableId={detail.attraction_order.toString()}
@@ -76,6 +73,7 @@ class DayTimeline extends Component {
                               {...dragProvided.dragHandleProps}
                               {...dragProvided.draggableProps}
                               ref={dragProvided.innerRef}
+                              tabIndex="-1"
                             >
                               <AttCard
                                 {...detail}
