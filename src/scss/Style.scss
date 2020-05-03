@@ -11,6 +11,16 @@ $gray4: #f5f6f3;
 $engfont: "Noto Sans", sans-serif;
 $jpfont: "Noto Sans JP", sans-serif;
 $titlefont: "Raleway", sans-serif;
+$thfont: "Noto Sans TH", sans-serif;
+
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans&display=swap");
+
+@font-face {
+  font-family: "Noto Sans TH";
+  unicode-range: "U+0E00–U+0e7f";
+  src: local("Noto Sans TH"),
+    url(./fonts/NotoSansThai-Regular.ttf) format("truetype");
+}
 
 @supports(-webkit-appearance: none) {
   input[type='checkbox'],

@@ -1,6 +1,8 @@
+@import "./Style.scss";
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  font-family: $jpfont, $thfont, $engfont, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -10,10 +12,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-@font-face {
-  font-family: "Noto Sans TH";
-  src: local("Noto Sans TH"),
-    url(./fonts/NotoSansThai-Regular.ttf) format("truetype");
 }

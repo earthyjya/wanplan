@@ -5,7 +5,7 @@ class AttCard extends Component {
   state = {
     description: "",
     photos: [],
-    isFocused: false
+    isFocused: false //isFocused is not focus seen by DOM
   };
 
   changeDuration = e => {
@@ -37,7 +37,7 @@ class AttCard extends Component {
   }
 
   handleClick(){
-    if(!this.state.isFocused)
+    if(!this.state.isFocused && this.props.editing)
       this.attRef.current.focus()
   }
 
@@ -150,7 +150,7 @@ class AttCard extends Component {
                 }
                 else {
                   return(
-                    <div>lorem ipsum อะไรสักอย่างขี้เกียจไปก๊อปมาอ่ะ เขียนมั่วๆ ให้ยาวๆ ไปละกัน</div>
+                    <div>{description}</div>
                   )
                 }
               })()}
