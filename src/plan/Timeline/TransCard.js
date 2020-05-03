@@ -8,7 +8,7 @@ class TransCard extends Component {
     if (!start || !destination)
       return (
         <div className="Transcard">
-          <div className="transport">Place not defined</div>
+          <div className="no-transport">Place not defined</div>
         </div>
       );
     return (
@@ -16,21 +16,24 @@ class TransCard extends Component {
         {(() => {
           if (transport) {
             if (transport.text === "No transportation data")
-              return <div className="transport">{transport.text}</div>;
+              return <div className="no-transport">{transport.text}</div>;
             return (
               <React.Fragment>
-                <div>
-                  from A to B
+                <div className="fromTo">
+                  <span> from </span>
+                  <span> {start.attraction_name} </span>
+                  <span> to </span>
+                  <span> {destination.attraction_name} </span>
                 </div>
-                <div>
-                  800m
-                  <FontAwesomeIcon icon="walking" size="sm" /> 10min
-                  <FontAwesomeIcon icon="train" size="sm" /> 5min
-                  <FontAwesomeIcon icon="car" size="sm" /> 2min
+                <div className="transport">
+                  <span> 800m </span>
+                  <span> <FontAwesomeIcon icon="walking" size="sm" /> <span>10min</span></span>
+                  <span> <FontAwesomeIcon icon="train" size="sm" /> <span>5min</span></span>
+                  <span> <FontAwesomeIcon icon="car" size="sm" /> <span>2min</span></span>
                 </div>
-                <div>
+                <a className="map" href="https://www.google.com/maps">
                   Google Map
-                </div>
+                </a>
               </React.Fragment>
             );
           }

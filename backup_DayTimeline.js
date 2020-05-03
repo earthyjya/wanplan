@@ -82,7 +82,7 @@ return(
     <button className="AddDay" onClick={this.addDay}>
       +
     </button>
-    <hr style={{ margin: "0px 30px 30px 30px" }} />
+    <hr style={{ margin: "0px 50px 50px 50px" }} />
   </div>
 </div>
 );
@@ -136,7 +136,7 @@ return (
       }
     })()}
 
-    <hr style={{ margin: "0px 30px 30px 30px" }} />
+    <hr style={{ margin: "0px 50px 50px 50px" }} />
   </div>
 );
 

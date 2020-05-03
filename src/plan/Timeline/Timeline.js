@@ -21,7 +21,7 @@ class Timeline extends Component {
                 </button>
               );
           })()}
-          <hr style={{ margin: "0px 30px 30px 30px" }} />
+          <hr style={{ margin: "0px 0px 40px 0px"}} />
         </div>
         {days.map(day => (
           <DayTimeline

@@ -1,12 +1,5 @@
 @import "./Style.scss";
 
-@import url("https://fonts.googleapis.com/css?family=Noto+Sans&display=swap");
-
-@font-face {
-  font-family: "noto_sans_thai_uiregular", sans-serif;
-  unicode-range: "U+0E00–U+0e7f";
-}
-
 .App {
   display: flex;
   flex-direction: column;

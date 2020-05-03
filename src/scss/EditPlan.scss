@@ -38,17 +38,17 @@
 
 .AddDay {
   position: relative;
-  top: 20px;
-  left: 50px;
-  height: 40px;
-  width: 40px;
-  border-radius: 20px;
-  font-size: 22px;
-  align-content: center;
-  text-align: center;
-  color: #0a090c;
-  background-color: #fcd328;
-  border: none;
+  top: 25px;
+  left: 60px;
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+  font-size: 30px;
+  font-weight: bolder;
+  line-height: 10px;
+  color: $secondary;
+  background-color: $primary;
+  outline: 10px solid white;
 }
 
 .AddDay:hover {
@@ -66,8 +66,7 @@
   align-content: center;
   text-indent: -1px;
   color: white;
-  background-color: white;
-  margin: 10px 5px 10px 25px;
+  background-color: $gray3;
   border: none;
   font-weight: 700;
 }
@@ -80,14 +79,25 @@
 .Timeline {
   width: 100%;
   overflow: hidden;
-  top: 64px;
+  padding: 60px;
+  padding-top: 0;
+}
+
+.DayTitleCont{
+  display: flex;
+  flex-direction: row;
+  margin: 10px 5px 30px 25px;
+  & > * {
+    align-self: center;
+    margin-left: 10px;
+  }
 }
 
 .VerticaLline{
   border-left-width: medium;
   border-left: solid;
   border-left-color: $gray3;
-  margin-left: 100px;
+  margin-left: 120px;
 }
 
 .container1 {

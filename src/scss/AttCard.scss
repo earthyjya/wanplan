@@ -4,7 +4,7 @@
   position: relative;
   background: $gray4;
   box-sizing: border-box;
-  margin: 30px;
+  margin: 30px 30px 30px 40px;
   padding: 25px;
   height: 180px;
   width: 550px;
@@ -29,11 +29,12 @@
 
 .DelCard {
   color: grey;
-  float: right;
+  position: absolute;
+  right: .5em;
+  top: .2em;
+  padding: 10px;
   cursor: pointer;
-  font-style: 12px;
-  font-weight: 900;
-  margin: 5px 8px 0  0;
+  font-size: small;
 }
 
 .Triangle{
@@ -50,10 +51,10 @@
 .StartTimeDot{
   position: absolute;
   background: black;
-  width: 10px;
-  height: 10px;
-  left: -50px;
-  top: 50%;
+  width: 12px;
+  height: 12px;
+  left: -47px;
+  top: 48%;
   border-radius: 100%;
 }
 
@@ -118,7 +119,7 @@
 .AttType {
   margin-top: 2px;
   font-size: x-small;
-  font-family: sans-serif;
+  font-weight: bold;
   transform: rotate(-90deg);
   text-align: left;
 }
@@ -126,12 +127,14 @@
 .AttDetailsCont{
   width: 200px;
   margin-left: 1.2em;
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
 }
 
 .AttName {
-  top: 14px;
-  left: 236px;
+  font-weight: bold;
+  font-size: 1em;
 }
 .AttDes {
   font-size: 10px;
@@ -141,6 +144,8 @@
 .AttDesCont {
   width: 100%;
   height: auto;
+  flex-grow: 1;
+  padding: .6em;
 }
 
 .AttDesCont p {

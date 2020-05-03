@@ -19,14 +19,13 @@ class DayTimeline extends Component {
     let idx = day - 1;
     if (editing)
       return (
-        <React.Fragment>
-
-          <div style={{display:'flex', flexDirection:'row'}}>
+        <div>
+          <div className="DayTitleCont">
             <button className="DelDay" onClick={this.delDay}>
               &#10005;
             </button>
-            <h2>Day {day}</h2>
-            <p>xx places | estimated time: xx | budget: xxxx JPY</p>
+            <div style={{fontSize:'2em', fontWeight:'800'}}> Day {day}</div>
+            <div style={{marginLeft:'1em', alignSelf:'center'}}>xx places | estimated time: xx | budget: xxxx JPY</div>
           </div>
           <div className='VerticaLline'>
             <Droppable
@@ -105,11 +104,10 @@ class DayTimeline extends Component {
             </Droppable>
           </div>
 
-        </React.Fragment>
+        </div>
       );
     else
       return(
-
         <div className="DayTimeline">
           <div>
             <div className="Block"></div>

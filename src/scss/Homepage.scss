@@ -90,7 +90,6 @@
 }
 
 .oneplan-title {
-  font-family: $engfont;
   color: $primary;
   font-size: 5.5em;
   font-weight: 650;
@@ -99,7 +98,6 @@
 
 .oneplan-description {
   font-weight: bold;
-  font-family: $engfont;
   color: #e0e0e0;
   font-size: 1.8em;
   text-align: center;
@@ -108,7 +106,6 @@
 
 .oneplan-description-2 {
   font-weight: 650;
-  font-family: $engfont;
   color: white;
   font-size: 3.3em;
   text-align: center;
@@ -138,7 +135,6 @@
 .plan-search-city-home {
   position: relative;
   width: 60%;
-  font-family: "Noto Sans TH", sans-serif;
 }
 .plan-search-city-home ::-ms-expand {
   display: none;
@@ -194,7 +190,7 @@
   justify-content: center;
   align-items: center;
   height: 292 px;
-  
+
   border-right: solid;
 }
 
@@ -203,8 +199,8 @@
   justify-content: center;
   align-items: center;
   height: 292 px;
-  
-  
+
+
 }
 .gif{
   object-fit: scale-down;
@@ -214,7 +210,7 @@
   align-content: center;
   align-self: center;
   display: block;
- 
+
 }
 .intro-plan-home {
   color: #fcd328;
@@ -222,8 +218,6 @@
 }
 
 .intro-container-home > div {
-  font-family: "Noto Sans TH", sans-serif;
-
   font-size: 1.2em;
   font-weight: 800;
 }

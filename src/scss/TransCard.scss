@@ -2,34 +2,52 @@
 
 .Transcard {
     box-sizing: border-box;
-    padding-left: 18px;
+    padding: 18px;
     margin-left: 80px;
     height: auto;
-    width: 300px;
-    max-width: 800px;
+    width: auto;
+    max-width: 600px;
     border-left: solid;
     border-left-color: $gray3;
     border-left-width: thick;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
+.no-transport {
+    display: inline-block;
+    color: #e5e5e5;
+}
+
 .transport {
     display: inline-block;
-    color: #e5e5e5;
+    & > * {
+      margin-left: 0.4em;
+      font-size: large;
+    }
+    & > :first-child{
+      color: $gray2;
+      margin-left: 0;
+      font-size: small;
+    }
+    & > * > :nth-child(2){
+      font-size: small;
+    }
 }
-.from {
-    display: inline-block;
-    color: #e5e5e5;
+
+.fromTo{
+  :nth-child(1){
+      color: $gray2;
+  }
+  :nth-child(3){
+      color: $gray2;
+  }
 }
-.start {
-    display: inline-block;
-    color: yellow;
-}
-.to {
-    display: inline-block;
-    color: #e5e5e5;
-}
-.destination {
-    display: inline-block;
-    color: yellow;
+
+.map{
+  color: $primary;
+  width: max-content;
+  &:hover{
+    color: $primary;
+  }
 }

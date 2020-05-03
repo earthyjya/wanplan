@@ -99,29 +99,9 @@
   color: #000000;
 }
 
-
 .DayTimeline {
   width: 100%;
   background: white;
-}
-
-.AddDay {
-  position: relative;
-  top: 20px;
-  left: 50px;
-  height: 40px;
-  width: 40px;
-  border-radius: 20px;
-  font-size: 22px;
-  align-content: center;
-  color: #0a090c;
-  background-color: #fcd328;
-  border: none;
-}
-
-.AddDay:hover {
-  color: #000000;
-  background-color: #fcc626;
 }
 
 .Block {
@@ -133,12 +113,6 @@
   margin: 10px 5px 10px 25px;
   display: flex;
   flex-direction: row;
-}
-
-.Timeline {
-  width: 100%;
-  overflow: hidden;
-  top: 64px;
 }
 
 .container1 {

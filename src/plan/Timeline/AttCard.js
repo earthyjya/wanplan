@@ -155,6 +155,9 @@ class AttCard extends Component {
                 }
               })()}
           </div>
+          <div className="DelCard" onClick={this.delCard}>
+                &#10005;
+          </div>
         </div>
     );
   }
