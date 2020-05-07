@@ -19,6 +19,7 @@ class DayTimeline extends Component {
     let idx = day - 1;
     if (editing)
       return (
+      <React.Fragment>
         <div>
           <div className="DayTitleCont">
             <button className="DelDay" onClick={this.delDay}>
@@ -103,8 +104,14 @@ class DayTimeline extends Component {
               )}
             </Droppable>
           </div>
-
         </div>
+        <div>
+          <button className="AddDay" onClick={this.addDay}>
+            +
+          </button>
+          <hr style={{ margin: "0px 50px 50px 50px" }} />
+        </div>
+      </React.Fragment>
       );
     else
       return(
