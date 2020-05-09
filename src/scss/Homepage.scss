@@ -42,6 +42,10 @@
   font-size: 1em;
 
 }
+.Feedback-2:active, .Feedback-2:focus {
+	outline:none;
+	outline: 0;
+}
 
 // .feedback_text:link{
 //   color: $gray4;
