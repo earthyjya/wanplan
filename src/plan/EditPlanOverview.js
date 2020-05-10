@@ -72,6 +72,9 @@ class EditPlanOverview extends Component {
                 <FontAwesomeIcon className="title-input-icon" icon="pencil-alt" />
               </div>
             </Row>
+            <Row className="plan-description-city-days">
+              city name(s) | xx days
+            </Row>
           </Container>
 
           {(() => {

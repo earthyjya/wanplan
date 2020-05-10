@@ -99,7 +99,7 @@ class AttCard extends Component {
           tabIndex="0"
         >
           <div className="StartTimeDot">
-            {(() => { //If edit,focus show minutes selector else show start time
+            {(() => { //If editing and focus, show minutes selector else show start time
               if(this.state.isFocused && this.props.editing){
                 return(
                   <select
@@ -108,7 +108,7 @@ class AttCard extends Component {
                     onChange={this.changeDuration}
                   >
                     {minutes.map(min => {
-                      return <option key={min}>{min}</option>;
+                      return <option key={min}>{min} mins</option>;
                     })}
                   </select>
                 )
@@ -136,7 +136,7 @@ class AttCard extends Component {
           </div>
           <div class="AttDetailsCont">
             <div class="AttName">{attraction_name}</div>
-              {(() => {  //If edit,focus show textarea to edit else show just text
+              {(() => {  //If editing and focus, show textarea to edit else show just text
                 if(this.state.isFocused && this.props.editing){
                   return(
                     <textarea
@@ -155,9 +155,15 @@ class AttCard extends Component {
                 }
               })()}
           </div>
-          <div className="DelCard" onClick={this.delCard}>
-                &#10005;
-          </div>
+          {(() => { //If editing, show delete button
+            if(this.props.editing){
+              return(
+                <div className="DelCard" onClick={this.delCard}>
+                      &#10005;
+                </div>
+              )
+            }
+          })()}
         </div>
     );
   }
