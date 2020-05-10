@@ -8,6 +8,10 @@ class AttBarCard extends Component {
 
   async componentDidMount() {
     if (process.env.NODE_ENV === "production") {
+      if (this.props.photos) {
+        await this.setState({ photos: this.props.photos });
+        return;
+      }
       const { google_place_id } = this.props;
       let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
       await axios
@@ -35,7 +39,7 @@ class AttBarCard extends Component {
         />
         <div style={{ float: "left", margin: "12px" }}>
           <div className="attName2">{attraction_name}</div>
-          <div className="attType2">{attraction_type}</div>
+          <div className="attType2">{attraction_type ? attraction_type.replace("_", " ") : ""}</div>
 
           <div className="description">
             <div>
