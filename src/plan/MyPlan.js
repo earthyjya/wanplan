@@ -10,7 +10,13 @@ class MyPlan extends Component {
     redirect: false,
     redirectTo: "/",
     citySearch: 0,
-    cities: []
+    cities: [],
+    leastDay: 0,
+    mostDay: 1000,
+    adventure: null,
+    sightseeing: null,
+    cultural: null,
+    others: null
   };
 
   savedPlan = () => {
@@ -18,8 +24,8 @@ class MyPlan extends Component {
     if (this.props.isLoggedIn) {
       const { data, user_id } = this.props;
       return data
-        .filter(plan => plan.user_id === user_id)
-        .map(plan => {
+        .filter((plan) => plan.user_id === user_id)
+        .map((plan) => {
           return (
             <div key={plan.plan_id}>
               <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
@@ -28,7 +34,7 @@ class MyPlan extends Component {
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
-        return _planlist.map(plan => (
+        return _planlist.map((plan) => (
           <div key={plan.plan_id}>
             <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
           </div>
@@ -45,14 +51,38 @@ class MyPlan extends Component {
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 
-  selectCity = e => {
+  selectCity = (e) => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
-  RedirectFunc = plan_id => {
+  leastDayChanged = e =>{
+    this.setState({leastDay: e.target.value})
+  }
+
+  mostDayChanged = e =>{
+    this.setState({mostDay: e.target.value})
+  }
+
+  adventureChanged = e =>{
+    this.setState({adventure: e.target.checked})
+  }
+
+  sightseeingChanged = e =>{
+    this.setState({sightseeing: e.target.checked})
+  }
+
+  culturalChanged = e =>{
+    this.setState({cultural: e.target.checked})
+  }
+
+  othersChanged = e =>{
+    this.setState({others: e.target.checked})
+  }
+
+  RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_new_plan"
+      redirectTo: "/plan/" + plan_id + "/edit_new_plan",
     });
   };
 
@@ -69,7 +99,7 @@ class MyPlan extends Component {
         prefecture: "Fukuoka",
         region: "Kyushu",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:20.000Z"
+        updated_time: "2020-04-07T05:24:20.000Z",
       },
       {
         city_id: 6,
@@ -77,7 +107,7 @@ class MyPlan extends Component {
         prefecture: "Hyogo",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:06.000Z"
+        updated_time: "2020-04-07T05:24:06.000Z",
       },
       {
         city_id: 5,
@@ -85,7 +115,7 @@ class MyPlan extends Component {
         prefecture: "Hiroshima",
         region: "Chugoku",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:04.000Z"
+        updated_time: "2020-04-07T05:24:04.000Z",
       },
       {
         city_id: 2,
@@ -93,7 +123,7 @@ class MyPlan extends Component {
         prefecture: "Ishikawa",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:57.000Z"
+        updated_time: "2020-04-07T05:23:57.000Z",
       },
       {
         city_id: 7,
@@ -101,7 +131,7 @@ class MyPlan extends Component {
         prefecture: "Hyogo",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:08.000Z"
+        updated_time: "2020-04-07T05:24:08.000Z",
       },
       {
         city_id: 8,
@@ -109,7 +139,7 @@ class MyPlan extends Component {
         prefecture: "Kyoto",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:10.000Z"
+        updated_time: "2020-04-07T05:24:10.000Z",
       },
       {
         city_id: 1,
@@ -117,7 +147,7 @@ class MyPlan extends Component {
         prefecture: "Aichi",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:55.000Z"
+        updated_time: "2020-04-07T05:23:55.000Z",
       },
       {
         city_id: 9,
@@ -125,7 +155,7 @@ class MyPlan extends Component {
         prefecture: "Osaka",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:12.000Z"
+        updated_time: "2020-04-07T05:24:12.000Z",
       },
       {
         city_id: 15,
@@ -133,7 +163,7 @@ class MyPlan extends Component {
         prefecture: "Miyagi",
         region: "Tohoku",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:24.000Z"
+        updated_time: "2020-04-07T05:24:24.000Z",
       },
       {
         city_id: 3,
@@ -141,7 +171,7 @@ class MyPlan extends Component {
         prefecture: "Shizuoka",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:59.000Z"
+        updated_time: "2020-04-07T05:23:59.000Z",
       },
       {
         city_id: 12,
@@ -149,7 +179,7 @@ class MyPlan extends Component {
         prefecture: "Tokyo",
         region: "Kanto",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:18.000Z"
+        updated_time: "2020-04-07T05:24:18.000Z",
       },
       {
         city_id: 11,
@@ -157,8 +187,8 @@ class MyPlan extends Component {
         prefecture: "Kanagawa",
         region: "Kanto",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:16.000Z"
-      }
+        updated_time: "2020-04-07T05:24:16.000Z",
+      },
     ];
     this.setState({ cities });
     // await axios
@@ -193,34 +223,79 @@ class MyPlan extends Component {
             fontSize: "22px",
             fontWeight: "bold",
             alignSelf: "center",
-            textAlign: "center"
+            textAlign: "center",
           }}
         >
           Search Plan
           <div>
+            <div className="search-subtitle">City</div>
             <select
               className="plan-search-city-home"
               placeholder="choose a city..."
               value={this.state.citySearch}
               onChange={this.selectCity}
             >
-              <option value="0">All plan</option>
-              {this.state.cities.map(city => {
+              <option value="0">select city</option>
+              {this.state.cities.map((city) => {
                 return (
-                  <option key={city.city_id} value={city.city_id} text={city.city}>
+                  <option
+                    key={city.city_id}
+                    value={city.city_id}
+                    text={city.city}
+                  >
                     {city.city}
                   </option>
                 );
               })}
             </select>
+            <div className="search-subtitle">
+              Days
+              <div style={{ fontWeight: "normal" }} >
+                At least <input className="day-input" onChange = {this.leastDayChanged}></input> At most{" "}
+                <input className="day-input" onChange = {this.mostDayChanged}></input>
+              </div>
+              Plan style
+              <div style={{ fontWeight: "normal" }}>
+                <label style={{ paddingRight: "16px" }}>
+                  <div className="checkbox-container">
+                    <input type="checkbox" className="search-checkbox" onChange = {this.adventureChanged}/>
+                    <span> Adventure </span>
+                  </div>
+                </label>
+                <label style={{ paddingRight: "16px" }}>
+                  <div className="checkbox-container">
+                    <input type="checkbox" className="search-checkbox" onChange = {this.sightseeingChanged}/>
+                    <span> Sightseeing </span>
+                  </div>
+                </label>
+                <label style={{ paddingRight: "16px" }}>
+                  <div className="checkbox-container">
+                    <input type="checkbox" className="search-checkbox" onChange = {this.culturalChanged}/>
+                    <span> Cultural </span>
+                  </div>
+                </label>
+                <label style={{ paddingRight: "16px" }}>
+                  <div className="checkbox-container">
+                    <input type="checkbox" className="search-checkbox" onChange = {this.othersChanged}/>
+                    <span> Others </span>
+                  </div>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
-        <div style={{ marginTop: "20px", marginLeft: "10px", position: "relative" }}>
+        <div
+          style={{
+            marginTop: "20px",
+            marginLeft: "10px",
+            position: "relative",
+          }}
+        >
           {(() => {
             if (this.state.citySearch === 0) {
               return (
                 <div>
-                  {data.map(plan => (
+                  {data.map((plan) => (
                     <div key={plan.plan_id}>
                       <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
                     </div>
@@ -230,11 +305,13 @@ class MyPlan extends Component {
             } else {
               return (
                 <div>
-                  {data.map(plan => {
+                  {data.map((plan) => {
                     if (plan.city_id === this.state.citySearch) {
                       return (
                         <div key={plan.plan_id}>
-                          <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+                          <a href={"/plan/" + plan.plan_id}>
+                            {plan.plan_title}
+                          </a>
                         </div>
                       );
                     }

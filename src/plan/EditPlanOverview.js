@@ -7,6 +7,7 @@ class EditPlanOverview extends Component {
   state = {
     dropdownOpen: false,
     isLoading: true
+    
   };
 
   toggleDropDown = () => {
