@@ -11,14 +11,46 @@
 .AttBarCard {
   overflow-wrap: break-word;
   position: relative;
-  background: #f5f6f3;
-  box-sizing: border-box;
-  padding-left: 10px;
-  margin: 30px 10% 30px 10%;
-  height: 300px;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: 30px;
+  height: 400px;
   width: auto;
-  border-radius: 10px;
-  box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
+  color: white;
+
+  #name{
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  #open-time{
+    font-size: 0.7em;
+  }
+  #description{
+    font-weight: lighter;
+    font-size: 0.9em;
+  }
+  #type{
+    color: black;
+    width: 100px;
+    background-color: $primary;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    margin-left: 20px;
+  }
+  #image{
+    display: flex;
+    flex-grow: 1;
+    border-radius: 10px;
+    justify-content: flex-end;
+  }
+  #description-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0px -200px 80px -100px rgba(0,0,0,0.4);
+  }
 }
 
 .attPhoto2 {
@@ -55,21 +87,51 @@
   line-height: 20px;
 }
 
-.search {
+.search-container {
   position: sticky;
-  top: 20px;
+  top: -20px;
   right: 0px;
   z-index: 1;
+  font-size: 1.4em;
+   > span{
+    font-weight: bold;
+  }
 }
-.search-text {
-  border: none;
-  background: lightgrey;
+
+.search-bar {
+  background: white !important;
   outline: none;
   padding: 5px;
-  margin-left: 5px;
+  margin: 5px;
+  border-radius: 12px;
+  border: solid 1px;
+  border-color: $gray2;
   color: black;
-  border-radius: 10px;
   width: 95%;
+  padding-left: 2.4em;
+  font-size: 0.8em;
+  &::placeholder{
+    color: $gray2;
+    left: 30px;
+  }
+}
+
+.search-container:focus-within{
+  > .search-icon{
+    color: $primary;
+    transition: 0.25s;
+  }
+  > .search-bar{
+    border-color: $secondary;
+  }
+}
+
+.search-icon{
+  position: absolute;
+  top: 2.1em;
+  left: 20px;
+  color: $gray2;
+  transition: 0.25s;
 }
 
 input[type="text"]:focus {
@@ -91,7 +153,7 @@ input[type="text"]:focus {
 .att-bar-desc{
   display: flex;
   flex-direction: column;
-  font-size: 0.8em;
+  font-size: 0.9em;
   justify-content: space-evenly;
   & > * {
     margin-bottom: 1em;

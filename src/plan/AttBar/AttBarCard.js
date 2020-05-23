@@ -24,28 +24,32 @@ class AttBarCard extends Component {
         });
     }
   }
+
+  checkBgImage(){
+    var style = {
+      backgroundImage: 'url(https://via.placeholder.com/300x200)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }
+    if(this.state.photos.length > 0)
+      {style.backgroundImage = 'url(' + this.state.photos[0] + ')'
+      console.log(this.state.photos)}
+    return style
+  }
+
+
   render() {
     const { attraction_name, attraction_type, open_time, close_time, description } = this.props;
     const { photos } = this.state;
     return (
-      <div className="AttBarCard">
-        <img
-          src={(() => {
-            if (photos) return photos[0];
-            return "/";
-          })()}
-          className="attPhoto2"
-          alt={attraction_name}
-        />
-        <div style={{ float: "left", margin: "12px" }}>
-          <div className="attName2">{attraction_name}</div>
-          <div className="attType2">{attraction_type ? attraction_type.replace("_", " ") : ""}</div>
-
-          <div className="description">
-            <div>
-              <u> opening hours</u> : {open_time} - {close_time}
-            </div>
-            <div>{description}</div>
+      <div className="AttBarCard" style={{display: "flex", flexDirection: "column"}}>
+        <div id="type"> {attraction_type ? attraction_type.replace("_", " ") : ""}</div>
+        <div id="image" style = {this.checkBgImage()}>
+          <div id="description-container">
+            <div id="open-time"> Open : {open_time} - {close_time} </div>
+            <div id="name">{attraction_name}</div>
+            <div id="description"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            mod tempor incididunt ut labore et dolore magna aliqua.{description} </div>
           </div>
         </div>
       </div>
