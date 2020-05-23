@@ -4,6 +4,7 @@ import Autocomplete from "react-google-autocomplete";
 import axios from "axios";
 import React, { Component } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class AttBar extends Component {
   state = {
@@ -44,6 +45,26 @@ class AttBar extends Component {
   render() {
     return (
       <div className="att-bar-wrap">
+        <div className="att-bar-desc">
+          <h3>Kiyomizudera</h3>
+          <div style={{display:"flex", flexDirection:"row"}}>
+            <img style={{width:"160px", height:"100px"}} src="https://via.placeholder.com/160x100"/>
+            <div style={{display:"flex", flexDirection:"column", padding:"0.6em"}}>
+              <span> <FontAwesomeIcon icon="clock"/> operating hours: 09.00 - 24.00</span>
+              <span> <FontAwesomeIcon icon="money-bill-wave"/> entrance fee</span>
+            </div>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            nim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            nim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          </p>
+          <button className="details-button">more details</button>
+          <hr/>
+        </div>
         <div className="search">
           <Autocomplete
             className="search-text"

@@ -10,13 +10,15 @@ import User from "./user/User";
 import ReactGA from "react-ga";
 import {
   faPencilAlt, faCamera, faGlobeAsia, faAngleDown,
-  faShareAlt, faWalking, faCar, faTrain
+  faShareAlt, faWalking, faCar, faTrain, faClock,
+  faMoneyBillWave
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
 library.add(
   faPencilAlt, faCamera, faGlobeAsia, faAngleDown,
-  faShareAlt, faWalking, faCar, faTrain);
+  faShareAlt, faWalking, faCar, faTrain, faClock,
+  faMoneyBillWave);
 
 class App extends Component {
   state = {

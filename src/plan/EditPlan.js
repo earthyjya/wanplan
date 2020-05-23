@@ -562,7 +562,7 @@ class EditPlan extends React.Component {
                     editing={true}
                   />
                 </Col>
-                <Col className="p-0">
+                <Col lg={4} className="p-0">
                   {(() => {
                     if (this.state.loadAttBar)
                       return (
