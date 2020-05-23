@@ -7,7 +7,7 @@ class EditPlanOverview extends Component {
   state = {
     dropdownOpen: false,
     isLoading: true
-    
+
   };
 
   toggleDropDown = () => {
@@ -70,7 +70,7 @@ class EditPlanOverview extends Component {
                   onChange={this.changeTitle}
                   onBlur={this.updatePlanOverview}
                 />
-                <FontAwesomeIcon className="title-input-icon" icon="pencil-alt" />
+              <FontAwesomeIcon size="2x" className="title-input-icon" icon="pencil-alt" />
               </div>
             </Row>
             <Row className="plan-description-city-days">
