@@ -18,18 +18,18 @@
   width: auto;
   color: white;
 
-  #name{
+  .name{
     font-size: 1.1em;
     font-weight: bold;
   }
-  #open-time{
+  .open-time{
     font-size: 0.7em;
   }
-  #description{
+  .description{
     font-weight: lighter;
     font-size: 0.9em;
   }
-  #type{
+  .type{
     color: black;
     width: 100px;
     background-color: $primary;
@@ -37,13 +37,13 @@
     border-radius: 10px 10px 0 0;
     margin-left: 20px;
   }
-  #image{
+  .image{
     display: flex;
     flex-grow: 1;
     border-radius: 10px;
     justify-content: flex-end;
   }
-  #description-container{
+  .description-container{
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -79,20 +79,15 @@
   float: left;
 }
 
-.description {
-  overflow-wrap: break-word;
-  font-size: 0.8em;
-  margin-top: 40px;
-  width: 100%;
-  line-height: 20px;
-}
-
 .search-container {
   position: sticky;
-  top: -20px;
+  top: -38px;
   right: 0px;
   z-index: 1;
   font-size: 1.4em;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  background-color: white;
    > span{
     font-weight: bold;
   }
@@ -128,7 +123,7 @@
 
 .search-icon{
   position: absolute;
-  top: 2.1em;
+  top: 2.9em;
   left: 20px;
   color: $gray2;
   transition: 0.25s;

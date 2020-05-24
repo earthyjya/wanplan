@@ -1,8 +1,10 @@
 import "../../scss/AttCard.scss";
+import AttModal from "./AttModal.js";
 import React, { Component } from "react";
 
 class AttCard extends Component {
   state = {
+    showAttModal: false,
     description: "",
     photos: [],
     isFocused: false //isFocused is not focus seen by DOM
@@ -29,6 +31,7 @@ class AttCard extends Component {
     this.attRef = React.createRef();
     this.handleBlur = this.handleBlur.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.toggleAttModal = this.toggleAttModal.bind(this);
   }
 
   handleBlur(event){
@@ -39,6 +42,10 @@ class AttCard extends Component {
   handleClick(){
     if(!this.state.isFocused && this.props.editing)
       this.attRef.current.focus()
+  }
+
+  toggleAttModal(){
+    this.setState({showAttModal: !this.state.showAttModal})
   }
 
   render() {
@@ -55,41 +62,15 @@ class AttCard extends Component {
       photos
     } = this.props;
     let minutes = [
-      0,
-      10,
-      20,
-      30,
-      40,
-      50,
-      60,
-      70,
-      80,
-      90,
-      100,
-      110,
-      120,
-      130,
-      140,
-      150,
-      160,
-      170,
-      180,
-      190,
-      200,
-      210,
-      220,
-      230,
-      240,
-      250,
-      260,
-      270,
-      280,
-      290,
-      300
+      0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,
+      150,160,170,180,190,200,210,220,230,240,250,260,
+      270,280,290,300
     ];
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
+        <React.Fragment>
+        <AttModal toggle={this.toggleAttModal} isOpen={this.state.showAttModal}/>
         <div
           className="AttCard"
           ref={this.attRef}
@@ -132,6 +113,7 @@ class AttCard extends Component {
               })()}
               className="AttPhoto"
               alt={attraction_name}
+              onClick={this.toggleAttModal}
             />
           </div>
           <div class="AttDetailsCont">
@@ -165,6 +147,7 @@ class AttCard extends Component {
             }
           })()}
         </div>
+        </React.Fragment>
     );
   }
 }

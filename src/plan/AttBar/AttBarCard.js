@@ -43,12 +43,12 @@ class AttBarCard extends Component {
     const { photos } = this.state;
     return (
       <div className="AttBarCard" style={{display: "flex", flexDirection: "column"}}>
-        <div id="type"> {attraction_type ? attraction_type.replace("_", " ") : ""}</div>
-        <div id="image" style = {this.checkBgImage()}>
-          <div id="description-container">
-            <div id="open-time"> Open : {open_time} - {close_time} </div>
-            <div id="name">{attraction_name}</div>
-            <div id="description"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        <div class="type"> {attraction_type ? attraction_type.replace("_", " ") : ""}</div>
+        <div class="image" style = {this.checkBgImage()}>
+          <div class="description-container">
+            <div class="open-time"> Open : {open_time} - {close_time} </div>
+            <div class="name">{attraction_name}</div>
+            <div class="description"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             mod tempor incididunt ut labore et dolore magna aliqua.{description} </div>
           </div>
         </div>
