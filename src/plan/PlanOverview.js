@@ -57,8 +57,8 @@ class PlanOverview extends Component {
               </div>
             </div>
           </Row>
-          <Row className="plan-description-title">
-            {plan_overview.plan_title}
+          <Row>
+            <div className="plan-description-title">{plan_overview.plan_title}</div>
           </Row>
           <Row className="plan-description">
             {plan_overview.plan_description}
@@ -73,7 +73,7 @@ class PlanOverview extends Component {
             </a>
 			</div>
 		  }})()}
-            
+
           </Row>
         </Container>
       </React.Fragment>
