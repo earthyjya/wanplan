@@ -65,10 +65,13 @@
   min-height: 400px;
   filter: blur(2px);
   -webkit-filter: blur(1px);
+  padding-bottom: 50px;
+  width: 100%;
 }
 
 .plan-description-container-home {
   min-height: 400px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -79,6 +82,7 @@
   width: 100%;
   z-index: 2;
 }
+
 .layer {
   position: absolute;
   top: 0;
@@ -96,9 +100,8 @@
 
 .oneplan-title {
   color: $primary;
-  font-size: 5.5em;
+  font-size: 8em;
   font-weight: 650;
-  letter-spacing: 0.27em;
 }
 
 .oneplan-description {

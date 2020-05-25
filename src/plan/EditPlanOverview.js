@@ -62,7 +62,6 @@ class EditPlanOverview extends Component {
             </div>
 
             <Row>
-              <div>
                 <input
                   type="textarea"
                   id="title-input"
@@ -71,7 +70,6 @@ class EditPlanOverview extends Component {
                   onBlur={this.updatePlanOverview}
                 />
               <FontAwesomeIcon size="2x" className="title-input-icon" icon="pencil-alt" />
-              </div>
             </Row>
             <Row className="plan-description-city-days">
               city name(s) | xx days

@@ -1,0 +1,55 @@
+@import "./Style.scss";
+
+.attmodal{
+
+}
+
+.attmodal-carousel{
+  height: auto;
+  width: auto;
+  border-radius: .3rem;
+}
+
+.attmodal-carousel-item{
+  width: 100%;
+  padding-bottom: -10.25%;
+  img{
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    border-radius: .3rem .3rem 0 0;
+  }
+}
+
+.attmodal-description-container{
+  display: flex;
+  flex-direction: column;
+  padding: 1.2em;
+  .name{
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  .type{
+    color: $primary;
+    font-weight: bold;
+  }
+  .time-container{
+    display: flex;
+    flex-direction: row;
+    font-size: 0.8em;
+    margin: 1em 0 1em 0;
+    & > *{
+      margin-right: 0.8em;
+      & > :first-child{
+        font-weight: bold;
+        margin-right: 0.4em;
+      }
+    }
+    svg{
+      margin-right: 0.2em;
+    }
+  }
+  .description{
+    color: $gray1;
+  }
+}

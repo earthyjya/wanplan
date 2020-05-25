@@ -1,4 +1,4 @@
-//import "../../scss/AttModal.scss";
+import "../../scss/AttModal.scss";
 import React, { Component } from "react";
 import { Button, Modal, ModalBody } from 'reactstrap';
 import {Carousel,CarouselItem,CarouselControl,
@@ -26,7 +26,7 @@ class AttModal extends Component {
   getCarouselItems(){
     var progress = []
     progress.push(
-      <CarouselItem key={0}>
+      <CarouselItem className="attmodal-carousel-item" key={0}>
         <img
           src="https://via.placeholder.com/300x200"
           alt="First slide"
@@ -34,7 +34,7 @@ class AttModal extends Component {
       </CarouselItem>
     )
     progress.push(
-      <CarouselItem key={1}>
+      <CarouselItem className="attmodal-carousel-item" key={1}>
         <img
           src="https://via.placeholder.com/300x200"
           alt="second slide"
@@ -42,7 +42,7 @@ class AttModal extends Component {
     </CarouselItem>
     )
     progress.push(
-      <CarouselItem key={2}>
+      <CarouselItem className="attmodal-carousel-item" key={2}>
         <img
           src="https://via.placeholder.com/300x200"
           alt="Third slide"
@@ -59,9 +59,13 @@ class AttModal extends Component {
             centered={true}
             backdrop={true}
             isOpen={this.props.isOpen}
-            toggle={this.props.toggle} >
-            <ModalBody style={{padding:0}}>
-              <Carousel activeIndex={this.state.activeIndex}>
+            toggle={this.props.toggle}
+            size='md'
+            >
+            <ModalBody className = 'attmodal' style={{padding:0}}>
+              <Carousel
+                className="attmodal-carousel"
+                activeIndex={this.state.activeIndex}>
                 {this.getCarouselItems()}
                 <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
                 <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
@@ -75,12 +79,12 @@ class AttModal extends Component {
                     <span> 8:00 - 16:00 </span>
                   </div>
                   <div class="peak">
-                    <span> <FontAwesomeIcon icon="calendar-alt"/> peak:</span>
+                    <span> <FontAwesomeIcon icon="calendar-alt"/>peak:</span>
                     <span> 8:00 - 16:00 </span>
                   </div>
                   <div class="link">
                     <span> <FontAwesomeIcon icon="link"/></span>
-                    <a href="https://www.google.com"/>
+                    <a href="https://www.google.com">link</a>
                   </div>
                 </div>
                 <div class="description"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

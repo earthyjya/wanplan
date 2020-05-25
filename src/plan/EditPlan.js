@@ -511,7 +511,7 @@ class EditPlan extends React.Component {
           >
             <Container fluid className="p-0">
               <Row className="m-0">
-                <Col lg={8} className="p-0">
+                <Col  sm={12} lg={8} className="p-0">
                   {(() => {
                     if (this.state.loadPlanOverview)
                       return (

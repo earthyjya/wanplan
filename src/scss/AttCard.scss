@@ -7,7 +7,7 @@
   margin: 30px 30px 30px 40px;
   padding: 25px;
   height: 180px;
-  width: 550px;
+  width: 80%;
   border-radius: 10px;
   box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -15,8 +15,8 @@
   transition: .2s ease-in-out;
   &:focus-within{
     outline: none;
-    width: 700px;
     height: 240px;
+    width: 90%;
     padding: 40px;
     > .AttPhotoCont{
       width: 178px;

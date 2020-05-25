@@ -87,7 +87,7 @@ class Homepage extends Component {
           }}
         />
         <div className="layer"></div>
-        <Container className="plan-description-container-home">
+        <Container fluid className="plan-description-container-home">
           <Row className="oneplan-title">ONEPLAN</Row>
           <Row className="oneplan-description">The only plan for</Row>
           <Row className="oneplan-description-2">Travel Lover</Row>
