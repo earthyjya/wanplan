@@ -1,4 +1,4 @@
-import "../../scss/AttModal.scss";
+import "../scss/AttModal.scss";
 import React, { Component } from "react";
 import { Button, Modal, ModalBody } from 'reactstrap';
 import {Carousel,CarouselItem,CarouselControl,

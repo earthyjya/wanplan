@@ -81,6 +81,7 @@ class DayTimeline extends Component {
                                 updateDescription={this.props.updateDescription}
                                 delCard={this.props.delCard}
                                 editing={this.props.editing}
+                                toggleAttModal={this.props.toggleAttModal}
                               />
                             </div>
                           )}
@@ -149,6 +150,7 @@ class DayTimeline extends Component {
                 changeDuration={this.props.changeDuration}
                 delCard={this.props.delCard}
                 editing={this.props.editing}
+                toggleAttModal={this.props.toggleAttModal}
               />
             </div>
           ))}

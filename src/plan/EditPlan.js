@@ -7,6 +7,7 @@ import React from "react";
 import Request from "../lib/Request.js";
 import Share from "./Share";
 import Timeline from "./Timeline/Timeline";
+import AttModal from "./AttModal.js";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
@@ -28,7 +29,8 @@ class EditPlan extends React.Component {
     redirect: false,
     redirectTo: "/",
     transports: [],
-    updateToast: false
+    updateToast: false,
+    showAttModal: false,
   };
 
   updatePlan = async () => {
@@ -225,6 +227,10 @@ class EditPlan extends React.Component {
 
   toggleEditPlanContent = () => {
     this.setState({ editTitle: !this.state.editTitle });
+  };
+
+  toggleAttModal(){
+    this.setState({showAttModal: !this.state.showAttModal})
   };
 
   toggleDropDown = () => {
@@ -483,6 +489,7 @@ class EditPlan extends React.Component {
       }
       this.setState(plan_detail);
     }
+    this.toggleAttModal = this.toggleAttModal.bind(this);
   }
 
   render() {
@@ -493,6 +500,7 @@ class EditPlan extends React.Component {
     else {
       return (
         <React.Fragment>
+          <AttModal toggle={this.toggleAttModal} isOpen={this.state.showAttModal}/>
           <DragDropContext
             onDragEnd={({ destination, source }) => {
               if (!destination) {
@@ -560,6 +568,7 @@ class EditPlan extends React.Component {
                     updateDescription={this.updateDescription}
                     delCard={this.delCard}
                     editing={true}
+                    toggleAttModal={this.toggleAttModal}
                   />
                 </Col>
                 <Col lg={4} className="p-0">
@@ -567,7 +576,7 @@ class EditPlan extends React.Component {
                     if (this.state.loadAttBar)
                       return (
                         <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
-                          {result => <AttBar {...result} />}
+                          {result => <AttBar toggleAttModal={this.toggleAttModal} {...result} />}
                         </Request>
                       );
                     return;

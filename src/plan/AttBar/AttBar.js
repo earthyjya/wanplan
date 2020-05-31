@@ -82,7 +82,7 @@ class AttBar extends Component {
               mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
               nim veniam, quis nostrud exercitation ullamco laboris nisi ut
             </p>
-            <button className="details-button">more details</button>
+            <button onClick={this.props.toggleAttModal} className="details-button">more details</button>
             <hr/>
           </div>
           :

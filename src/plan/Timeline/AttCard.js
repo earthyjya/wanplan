@@ -1,10 +1,8 @@
 import "../../scss/AttCard.scss";
-import AttModal from "./AttModal.js";
 import React, { Component } from "react";
 
 class AttCard extends Component {
   state = {
-    showAttModal: false,
     description: "",
     photos: [],
     isFocused: false //isFocused is not focus seen by DOM
@@ -31,7 +29,6 @@ class AttCard extends Component {
     this.attRef = React.createRef();
     this.handleBlur = this.handleBlur.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.toggleAttModal = this.toggleAttModal.bind(this);
   }
 
   handleBlur(event){
@@ -42,10 +39,6 @@ class AttCard extends Component {
   handleClick(){
     if(!this.state.isFocused && this.props.editing)
       this.attRef.current.focus()
-  }
-
-  toggleAttModal(){
-    this.setState({showAttModal: !this.state.showAttModal})
   }
 
   render() {
@@ -70,7 +63,6 @@ class AttCard extends Component {
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
         <React.Fragment>
-        <AttModal toggle={this.toggleAttModal} isOpen={this.state.showAttModal}/>
         <div
           className="AttCard"
           ref={this.attRef}
@@ -113,7 +105,7 @@ class AttCard extends Component {
               })()}
               className="AttPhoto"
               alt={attraction_name}
-              onClick={this.toggleAttModal}
+              onClick={this.props.toggleAttModal}
             />
           </div>
           <div class="AttDetailsCont">
