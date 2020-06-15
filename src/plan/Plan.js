@@ -19,7 +19,18 @@ class Plan extends React.Component {
     redirect: false,
     redirectTo: "/",
     toastOpen: false,
-    transports: []
+    transports: [],
+    review: "",
+    addedReview: "",
+    ratingList: [
+      { id: 1, isChecked: false },
+      { id: 2, isChecked: false },
+      { id: 3, isChecked: false },
+      { id: 4, isChecked: false },
+      { id: 5, isChecked: false },
+    ],
+    rating: null,
+    addedRating: null,
   };
 
   save = async () => {
@@ -41,7 +52,7 @@ class Plan extends React.Component {
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
       let saved = false;
-      _planlist.map(plan => {
+      _planlist.map((plan) => {
         if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
         return null;
       });
@@ -50,13 +61,13 @@ class Plan extends React.Component {
         let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
         await axios
           .post(url)
-          .then(result => {
+          .then((result) => {
             if (result.data === null) alert("Could not duplicate plan :(");
             // console.log(result);
             newPlanId = result.data.id;
             savedplan = { ...result.data, plan_id: newPlanId };
           })
-          .catch(error => {
+          .catch((error) => {
             this.setState({ error });
           });
 
@@ -64,11 +75,12 @@ class Plan extends React.Component {
         url = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
         await axios
           .post(url)
-          .then(result => {
-            if (result.data === null) alert("Could not duplicate plan_startday :(");
+          .then((result) => {
+            if (result.data === null)
+              alert("Could not duplicate plan_startday :(");
             // console.log(result);
           })
-          .catch(error => {
+          .catch((error) => {
             this.setState({ error });
             console.log(error);
           });
@@ -77,16 +89,17 @@ class Plan extends React.Component {
         url = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
         await axios
           .post(url)
-          .then(result => {
-            if (result.data === null) alert("Could not duplicate plan_detail :(");
+          .then((result) => {
+            if (result.data === null)
+              alert("Could not duplicate plan_detail :(");
             else
               this.setState({
                 redirect: true,
-                redirectTo: "/plan/" + newPlanId + redirect
+                redirectTo: "/plan/" + newPlanId + redirect,
               });
             // console.log(result);
           })
-          .catch(error => {
+          .catch((error) => {
             this.setState({ error });
             console.log(error);
           });
@@ -105,23 +118,23 @@ class Plan extends React.Component {
     }
   };
 
-  updatePlanOverview = async plan_overview => {
+  updatePlanOverview = async (plan_overview) => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
         console.log(error);
       });
     if (this.state.error) alert(this.state.error);
     else
       this.setState({
-        plan_overview: { ...this.state.plan_overview, ...plan_overview }
+        plan_overview: { ...this.state.plan_overview, ...plan_overview },
       });
   };
 
@@ -139,7 +152,7 @@ class Plan extends React.Component {
     if (!this.props.isLoggedIn) {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
       let saved = false;
-      _planlist.map(plan => {
+      _planlist.map((plan) => {
         if (plan.plan_id === plan_id) saved = true;
         return null;
       });
@@ -148,14 +161,14 @@ class Plan extends React.Component {
       } else {
         this.setState({
           redirect: true,
-          redirectTo: "/plan/" + plan_id + "/edit_plan"
+          redirectTo: "/plan/" + plan_id + "/edit_plan",
         });
       }
     } else {
       if (user_id === this.state.plan_overview.user_id) {
         this.setState({
           redirect: true,
-          redirectTo: "/plan/" + plan_id + "/edit_plan"
+          redirectTo: "/plan/" + plan_id + "/edit_plan",
         });
       }
       //Else if user not edit the plan before, create new url and go to that url edit plan page
@@ -165,7 +178,7 @@ class Plan extends React.Component {
     }
   };
 
-  calPlan = async plan_detail => {
+  calPlan = async (plan_detail) => {
     //// Need to be updated when transportations are added
     // console.log(transports);
 
@@ -180,10 +193,10 @@ class Plan extends React.Component {
     }
     let transports = [];
     await this.getTransports()
-      .then(res => {
+      .then((res) => {
         transports = res;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     let lastDay = 0;
@@ -218,14 +231,19 @@ class Plan extends React.Component {
       await transports.push([]);
     }
     await Promise.all(
-      days.map(async day => {
+      days.map(async (day) => {
         let idx = day - 1;
-        let places = await this.state.plan_detail.filter(det => det.day === day);
+        let places = await this.state.plan_detail.filter(
+          (det) => det.day === day
+        );
         // console.log(places);
         let lastPlace = { attraction_name: "Hotel" };
         for (let j = 0; j < places.length; j++) {
           if (!lastPlace.google_place_id || !places[j].google_place_id) {
-            await transports[idx].push({ text: "No transportation data", value: 0 });
+            await transports[idx].push({
+              text: "No transportation data",
+              value: 0,
+            });
             lastPlace = places[j];
             continue;
           }
@@ -237,15 +255,15 @@ class Plan extends React.Component {
             places[j].google_place_id;
           await axios
             .get(url)
-            .then(async res => {
+            .then(async (res) => {
               // console.log(res.data);
               await transports[idx].push({
                 text: res.data.duration.text,
                 mode: res.data.mode,
-                value: res.data.duration.value / 60
+                value: res.data.duration.value / 60,
               });
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
             });
           lastPlace = places[j];
@@ -255,6 +273,37 @@ class Plan extends React.Component {
     // console.log(transports);
     this.setState({ transports });
     return transports;
+  };
+
+  ratingChanged = (e) => {
+    let { ratingList, rating } = this.state;
+    ratingList = ratingList.map((item) =>
+      item.id > e.target.name
+        ? { ...item, isChecked: false }
+        : { ...item, isChecked: true }
+    );
+    rating = e.target.name;
+    this.setState({ ratingList: ratingList, rating: rating });
+  };
+
+  submitReview = (e) => {
+    this.setState({
+      addedReview: this.state.review,
+      review: "",
+      addedRating: this.state.rating,
+      rating: null,
+      ratingList: [
+        { id: 1, isChecked: false },
+        { id: 2, isChecked: false },
+        { id: 3, isChecked: false },
+        { id: 4, isChecked: false },
+        { id: 5, isChecked: false },
+      ],
+    });
+  };
+
+  reviewChanged = (e) => {
+    this.setState({ review: e.target.value });
   };
 
   renderEditRedirect = () => {
@@ -269,11 +318,11 @@ class Plan extends React.Component {
     let url = APIServer + "/load_plan/" + plan_id;
     await axios
       .get(url)
-      .then(async result => {
+      .then(async (result) => {
         await this.setState({ ...result.data });
         // console.log(result);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
         console.log(error);
       });
@@ -286,11 +335,15 @@ class Plan extends React.Component {
     for (let i = 0; i < plan_detail.length; ++i) {
       if (plan_detail[i].attraction_id === 0) {
         await axios
-          .get(APIServer + "/attraction/google_id/" + plan_detail[i].google_place_id)
-          .then(res => {
+          .get(
+            APIServer +
+              "/attraction/google_id/" +
+              plan_detail[i].google_place_id
+          )
+          .then((res) => {
             plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
       }
@@ -301,7 +354,7 @@ class Plan extends React.Component {
     for (let i = 1; i <= this.state.plan_overview.duration; i++) {
       await days.push(i);
     }
-    await this.getTransports().then(res => {});
+    await this.getTransports().then((res) => {});
 
     await this.setState({ days: days });
     await this.setState({ isLoading: false });
@@ -312,10 +365,10 @@ class Plan extends React.Component {
       for (let i = 0; i < plan_detail.length; ++i) {
         await axios
           .get(APIServer + "/googlephoto/" + plan_detail[i].google_place_id)
-          .then(res => {
+          .then((res) => {
             plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
       }
@@ -324,7 +377,14 @@ class Plan extends React.Component {
   }
 
   render() {
-    const { isLoading, error, plan_overview, modal } = this.state;
+    const {
+      isLoading,
+      error,
+      plan_overview,
+      modal,
+      ratingList,
+      rating,
+    } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -332,7 +392,9 @@ class Plan extends React.Component {
         <React.Fragment>
           <Toast isOpen={this.state.toastOpen}>
             <ToastHeader toggle={this.toggleToast}>Plan saved!</ToastHeader>
-            <ToastBody>The plan is saved to your device, view it in plan page!</ToastBody>
+            <ToastBody>
+              The plan is saved to your device, view it in plan page!
+            </ToastBody>
           </Toast>
 
           {modal ? (
@@ -375,6 +437,46 @@ class Plan extends React.Component {
               </Col>
             </Row>
           </Container>
+          <div className="review">
+            <div>Reviews</div>
+            <div>
+              <textarea
+                className="addReview"
+                placeholder="add a review"
+                value={this.state.review}
+                rows={3}
+                onChange={this.reviewChanged}
+              />
+            </div>
+
+            <div className="rating">
+              <div>Rating</div>
+              {(() =>
+                ratingList.map((item) => (
+                  <label>
+                    <div className="rating-container">
+                      <input
+                        type="checkbox"
+                        value={item.id}
+                        name={item.id}
+                        checked={item.isChecked}
+                        className="search-rating"
+                        onChange={this.ratingChanged}
+                      />
+                    </div>
+                  </label>
+                )))()}
+            </div>
+            <div>
+              <input
+                type="submit"
+                value="post"
+                className="postReview"
+                className="postReview"
+                onClick={this.submitReview}
+              />
+            </div>
+          </div>
         </React.Fragment>
       );
     }

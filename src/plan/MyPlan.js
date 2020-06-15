@@ -13,10 +13,13 @@ class MyPlan extends Component {
     cities: [],
     leastDay: 0,
     mostDay: 1000,
-    adventure: null,
-    sightseeing: null,
-    cultural: null,
-    others: null
+    allChecked: false,
+    list: [
+      { id: 1, name: "adventure", isChecked: false },
+      { id: 2, name: "sightseeing", isChecked: false },
+      { id: 3, name: "cultural", isChecked: false },
+      { id: 4, name: "others", isChecked: false },
+    ],
   };
 
   savedPlan = () => {
@@ -55,29 +58,31 @@ class MyPlan extends Component {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
-  leastDayChanged = e =>{
-    this.setState({leastDay: e.target.value})
-  }
+  leastDayChanged = (e) => {
+    this.setState({ leastDay: e.target.value });
+  };
 
-  mostDayChanged = e =>{
-    this.setState({mostDay: e.target.value})
-  }
+  mostDayChanged = (e) => {
+    this.setState({ mostDay: e.target.value });
+  };
 
-  adventureChanged = e =>{
-    this.setState({adventure: e.target.checked})
-  }
+  styleChanged = (e) => {
+    let { list, allChecked } = this.state
+    let itemName = e.target.name;
+    let checked = e.target.checked;
+    list = list.map(item =>
+      item.name === itemName ? { ...item, isChecked: checked } : item
+    );
+    allChecked = list.every(item => item.isChecked);
+    this.setState({ list: list, allChecked: allChecked });
+  };
 
-  sightseeingChanged = e =>{
-    this.setState({sightseeing: e.target.checked})
-  }
-
-  culturalChanged = e =>{
-    this.setState({cultural: e.target.checked})
-  }
-
-  othersChanged = e =>{
-    this.setState({others: e.target.checked})
-  }
+  allChanged = (e) => {
+    let { list, allChecked } = this.state;
+    allChecked = e.target.checked;
+    list = list.map((item) => ({ ...item, isChecked: e.target.checked }));
+    this.setState({ list: list, allChecked: allChecked });
+  };
 
   RedirectFunc = (plan_id) => {
     this.setState({
@@ -204,6 +209,7 @@ class MyPlan extends Component {
 
   render() {
     const { isLoading, error, data } = this.props;
+    const { list, allChecked } = this.state;
     if (isLoading) return <div></div>;
     if (error) return <div className="MyPlan-text">Can't find the plan</div>;
 
@@ -250,33 +256,82 @@ class MyPlan extends Component {
             </select>
             <div className="search-subtitle">
               Days
-              <div style={{ fontWeight: "normal" }} >
-                At least <input className="day-input" onChange = {this.leastDayChanged}></input> At most{" "}
-                <input className="day-input" onChange = {this.mostDayChanged}></input>
+              <div style={{ fontWeight: "normal" }}>
+                At least{" "}
+                <input
+                  className="day-input"
+                  onChange={this.leastDayChanged}
+                ></input>{" "}
+                At most{" "}
+                <input
+                  className="day-input"
+                  onChange={this.mostDayChanged}
+                ></input>
               </div>
               Plan style
               <div style={{ fontWeight: "normal" }}>
                 <label style={{ paddingRight: "16px" }}>
                   <div className="checkbox-container">
-                    <input type="checkbox" className="search-checkbox" onChange = {this.adventureChanged}/>
+                    <input
+                      type="checkbox"
+                      className="search-checkbox"
+                      name="all"
+                      value="all"
+                      checked={allChecked}
+                      onChange={this.allChanged}
+                    />
+                    <span> All </span>
+                  </div>
+                </label>
+                <label style={{ paddingRight: "16px" }}>
+                  <div className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="search-checkbox"
+                      name={list[0].name}
+                      value={list[0].name}
+                      checked={list[0].isChecked}
+                      onChange={this.styleChanged}
+                    />
                     <span> Adventure </span>
                   </div>
                 </label>
                 <label style={{ paddingRight: "16px" }}>
                   <div className="checkbox-container">
-                    <input type="checkbox" className="search-checkbox" onChange = {this.sightseeingChanged}/>
+                    <input
+                      type="checkbox"
+                      className="search-checkbox"
+                      name={list[1].name}
+                      value={list[1].name}
+                      checked={list[1].isChecked}
+                      onChange={this.styleChanged}
+                    />
                     <span> Sightseeing </span>
                   </div>
                 </label>
                 <label style={{ paddingRight: "16px" }}>
                   <div className="checkbox-container">
-                    <input type="checkbox" className="search-checkbox" onChange = {this.culturalChanged}/>
+                    <input
+                      type="checkbox"
+                      className="search-checkbox"
+                      name={list[2].name}
+                      value={list[2].name}
+                      checked={list[2].isChecked}
+                      onChange={this.styleChanged}
+                    />
                     <span> Cultural </span>
                   </div>
                 </label>
                 <label style={{ paddingRight: "16px" }}>
                   <div className="checkbox-container">
-                    <input type="checkbox" className="search-checkbox" onChange = {this.othersChanged}/>
+                    <input
+                      type="checkbox"
+                      className="search-checkbox"
+                      name={list[3].name}
+                      value={list[3].name}
+                      checked={list[3].isChecked}
+                      onChange={this.styleChanged}
+                    />
                     <span> Others </span>
                   </div>
                 </label>

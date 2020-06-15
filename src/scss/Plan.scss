@@ -119,3 +119,59 @@
   position: relative;
   top: 52px;
 }
+
+.review {
+  width: 100%;
+  overflow: hidden;
+  padding: 3%;
+  padding-top: 0;
+  position: relative;
+}
+
+.addReview {
+  border: none;
+  width: 80%;
+}
+
+.postReview {
+  position: absolute;
+  top: 72px;
+  right: 16%;
+  background-color: #fcd328;
+  border: none;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.rating {
+  position: absolute;
+  top: 20px;
+  left: 80%;
+}
+
+.rating-container {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 3px;
+  // margin-left: 10px;
+  // padding: 10px;
+}
+
+.search-rating {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #888;
+}
+
+.rating-container :checked {
+  background: #fcd328;
+  border: none;
+}
+
+.rating-container :focus {
+  border: none;
+}
