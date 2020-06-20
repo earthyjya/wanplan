@@ -1,8 +1,11 @@
+@import "./Style.scss";
+
 .new_plan_button {
-  background-color: #0a090c;
+  background-color: $primary;
   position: absolute;
-  right: 13%;
-  color: white;
+  right: 5%;
+  color: $secondary;
+  font-weight: bold;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
@@ -11,13 +14,19 @@
   z-index: 3;
 }
 
-.MyPlan-text {
-  top: 10px;
-  left: 10px;
-  color: #0a090c;
+.myplan-container{
+  padding-top: 50px;
+  padding-bottom: 0px;
+  background-color: $secondary;
+  overflow-x: hidden;
+}
+
+.myplan-text {
+  color: white;
   position: relative;
-  font-size: 22px;
+  font-size: 2.4em;
   font-weight: bold;
+  padding-left: 50px;
 }
 
 .Plan-list-div {

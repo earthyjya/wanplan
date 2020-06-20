@@ -100,14 +100,14 @@
 
 .oneplan-title {
   color: $primary;
-  font-size: 8em;
+  font-size: clamp(4em, 14vw, 8em);
   font-weight: 650;
 }
 
 .oneplan-description {
   font-weight: bold;
   color: #e0e0e0;
-  font-size: 1.8em;
+  font-size: clamp(1em, 3vw, 4em);
   text-align: center;
   letter-spacing: 0.2em;
 }
@@ -115,7 +115,7 @@
 .oneplan-description-2 {
   font-weight: 650;
   color: white;
-  font-size: 3.3em;
+  font-size: clamp(2em, 5vw, 6em);
   text-align: center;
   letter-spacing: 0.2em;
 }

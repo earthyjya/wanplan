@@ -3,6 +3,8 @@ import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import PlanCard from "./PlanCard.js"
+import { CardDeck } from 'reactstrap';
 
 class MyPlan extends Component {
   state = {
@@ -30,17 +32,19 @@ class MyPlan extends Component {
         .filter((plan) => plan.user_id === user_id)
         .map((plan) => {
           return (
-            <div key={plan.plan_id}>
-              <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-            </div>
+            <PlanCard plan={plan} key={plan.plan_id}/>
+            // <div key={plan.plan_id}>
+            //   <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+            // </div>
           );
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
         return _planlist.map((plan) => (
-          <div key={plan.plan_id}>
-            <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-          </div>
+          <PlanCard plan={plan} key={plan.plan_id}/>
+          // <div key={plan.plan_id}>
+          //   <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+          // </div>
         ));
       } else {
         return <div>Your saved plan will show here</div>;
@@ -219,8 +223,12 @@ class MyPlan extends Component {
           สร้าง plan ใหม่
         </button>
         {this.RenderRedirect()}
-        <div className="MyPlan-text">My Plan</div>
-        <div className="Plan-list-div">{this.savedPlan()}</div>
+        <div className="myplan-container">
+          <div className="myplan-text">My Plan</div>
+          <CardDeck className="plan-card-deck">
+            {this.savedPlan()}
+          </CardDeck>
+        </div>
         <div
           style={{
             marginTop: "20px",

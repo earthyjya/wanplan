@@ -1,0 +1,46 @@
+@import "./Style.scss";
+
+.plan-card{
+  min-width: 350px !important;
+  width: 350px !important;
+  height: 450px;
+  border-radius: 10px !important;
+  border: none !important;
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+  cursor: pointer;
+}
+
+.plan-card-img{
+  height: 70%;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.plan-card-title{
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: .2em !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.plan-card-subtitle{
+  font-size: 1.2em;
+}
+
+.plan-card-deck{
+  overflow-x: scroll;
+  flex-wrap: nowrap !important;
+  height: auto;
+  padding: 1.8em;
+  bottom: -1.2em;
+}
+
+.plan-card-view-count{
+  position: absolute;
+  font-size: 1.2em;
+  top: 1em;
+  right: 1em;
+  opacity: 0.4;
+}
