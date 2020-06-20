@@ -33,18 +33,12 @@ class MyPlan extends Component {
         .map((plan) => {
           return (
             <PlanCard plan={plan} key={plan.plan_id}/>
-            // <div key={plan.plan_id}>
-            //   <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-            // </div>
           );
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
         return _planlist.map((plan) => (
           <PlanCard plan={plan} key={plan.plan_id}/>
-          // <div key={plan.plan_id}>
-          //   <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-          // </div>
         ));
       } else {
         return <div>Your saved plan will show here</div>;
