@@ -56,7 +56,7 @@ class EditPlanOverview extends Component {
             }}
           ></Container>
           <Container fluid className="plan-description-container plan-header">
-            <div className="choose-photo-container">
+            <div className="choose-photo-container" onClick={this.props.togglePlanCover}>
               <FontAwesomeIcon icon="camera" size="lg" />
               <span style={{ marginLeft: "8px" }}>choose a cover photo</span>
             </div>

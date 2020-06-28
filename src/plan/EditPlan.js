@@ -6,6 +6,7 @@ import EditPlanOverview from "./EditPlanOverview";
 import React from "react";
 import Request from "../lib/Request.js";
 import Share from "./Share";
+import PlanCover from "./PlanCover";
 import Timeline from "./Timeline/Timeline";
 import AttModal from "./AttModal.js";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -31,6 +32,8 @@ class EditPlan extends React.Component {
     transports: [],
     updateToast: false,
     showAttModal: false,
+    planCover: false,
+    selectedCover: null
   };
 
   updatePlan = async () => {
@@ -39,7 +42,10 @@ class EditPlan extends React.Component {
     await this.updatePlanOverview(this.state.plan_overview);
     await this.updatePlanStartday();
     await this.updatePlanDetails();
-    await this.setState({ redirect: true, redirectTo: "/plan/" + this.props.plan_id });
+    await this.setState({
+      redirect: true,
+      redirectTo: "/plan/" + this.props.plan_id
+    });
   };
 
   updatePlanNoRedirect = async () => {
@@ -69,7 +75,8 @@ class EditPlan extends React.Component {
       await this.setState({
         plan_overview: { ...old_plan_overview, ...plan_overview }
       });
-      if (old_plan_overview.city_id !== plan_overview.city_id) this.reloadAttBar();
+      if (old_plan_overview.city_id !== plan_overview.city_id)
+        this.reloadAttBar();
       // if (old_plan_overview.plan_title !== plan_overview.plan_title) this.reloadPlanOverview();
     }
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
@@ -171,12 +178,17 @@ class EditPlan extends React.Component {
     await Promise.all(
       days.map(async day => {
         let idx = day - 1;
-        let places = await this.state.plan_detail.filter(det => det.day === day);
+        let places = await this.state.plan_detail.filter(
+          det => det.day === day
+        );
         // console.log(places);
         let lastPlace = { attraction_name: "Hotel" };
         for (let j = 0; j < places.length; j++) {
           if (!lastPlace.google_place_id || !places[j].google_place_id) {
-            await transports[idx].push({ text: "No transportation data", value: 0 });
+            await transports[idx].push({
+              text: "No transportation data",
+              value: 0
+            });
             lastPlace = places[j];
             continue;
           }
@@ -229,12 +241,40 @@ class EditPlan extends React.Component {
     this.setState({ editTitle: !this.state.editTitle });
   };
 
-  toggleAttModal(){
-    this.setState({showAttModal: !this.state.showAttModal})
+  toggleAttModal = () => {
+    this.setState({ showAttModal: !this.state.showAttModal });
   };
 
   toggleDropDown = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
+  togglePlanCover = () => {
+    this.setState({ planCover: !this.state.planCover });
+  };
+
+  fileSelectedHandler = e => {
+    console.log(e.target.files[0]);
+    this.setState({selectedCover: e.target.files[0]})
+  };
+
+  uploadSelectedCover = () => {
+    if (!this.state.selectedCover) {
+      console.log("No file is selected"); // In case the no file is selected.
+    } else {
+      const { plan_id } = this.props;
+      const fd = new FormData();
+      const url = process.env.REACT_APP_APIServer + "/plan_cover/" + plan_id;
+      fd.append("image", this.state.selectedCover, plan_id);
+      axios
+        .post(url, fd)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   calPlan = async plan_detail => {
@@ -441,7 +481,11 @@ class EditPlan extends React.Component {
     for (let i = 0; i < plan_detail.length; ++i) {
       if (plan_detail[i].attraction_id === 0) {
         await axios
-          .get(APIServer + "/attraction/google_id/" + plan_detail[i].google_place_id)
+          .get(
+            APIServer +
+              "/attraction/google_id/" +
+              plan_detail[i].google_place_id
+          )
           .then(res => {
             plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
           })
@@ -493,14 +537,24 @@ class EditPlan extends React.Component {
   }
 
   render() {
-    const { isLoading, error, plan_overview, modal, editTitle } = this.state;
+    const {
+      isLoading,
+      error,
+      plan_overview,
+      modal,
+      editTitle,
+      planCover
+    } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
       return (
         <React.Fragment>
-          <AttModal toggle={this.toggleAttModal} isOpen={this.state.showAttModal}/>
+          <AttModal
+            toggle={this.toggleAttModal}
+            isOpen={this.state.showAttModal}
+          />
           <DragDropContext
             onDragEnd={({ destination, source }) => {
               if (!destination) {
@@ -519,13 +573,14 @@ class EditPlan extends React.Component {
           >
             <Container fluid className="p-0">
               <Row className="m-0">
-                <Col  sm={12} lg={8} className="p-0">
+                <Col sm={12} lg={8} className="p-0">
                   {(() => {
                     if (this.state.loadPlanOverview)
                       return (
                         <EditPlanOverview
                           {...this.state}
                           updatePlanOverview={this.updatePlanOverview}
+                          togglePlanCover={this.togglePlanCover}
                         />
                       );
                     return;
@@ -575,8 +630,19 @@ class EditPlan extends React.Component {
                   {(() => {
                     if (this.state.loadAttBar)
                       return (
-                        <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
-                          {result => <AttBar toggleAttModal={this.toggleAttModal} {...result} />}
+                        <Request
+                          url={
+                            APIServer +
+                            "/attraction/city/" +
+                            plan_overview.city_id
+                          }
+                        >
+                          {result => (
+                            <AttBar
+                              toggleAttModal={this.toggleAttModal}
+                              {...result}
+                            />
+                          )}
                         </Request>
                       );
                     return;
@@ -586,14 +652,18 @@ class EditPlan extends React.Component {
             </Container>
           </DragDropContext>
           <Toast isOpen={this.state.updateToast}>
-            <ToastHeader toggle={this.toggleUpdateToast}>Plan updated!</ToastHeader>
+            <ToastHeader toggle={this.toggleUpdateToast}>
+              Plan updated!
+            </ToastHeader>
             <ToastBody>
-              If you want to save this plan, please sign-in or copy the url. This plan will now show
-              on 'My plan'.
+              If you want to save this plan, please sign-in or copy the url.
+              This plan will now show on 'My plan'.
             </ToastBody>
           </Toast>
           <Toast isOpen={this.state.publishToast}>
-            <ToastHeader toggle={this.togglePublishToast}>Plan published!</ToastHeader>
+            <ToastHeader toggle={this.togglePublishToast}>
+              Plan published!
+            </ToastHeader>
             <ToastBody>
               The plan is opended to public. It will be available for other user
             </ToastBody>
@@ -602,6 +672,18 @@ class EditPlan extends React.Component {
           {modal ? (
             <div className="share-modal">
               <Share toggleShareModal={this.toggleShareModal} />
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          {planCover ? (
+            <div className="upload-plan-cover">
+              <PlanCover
+                togglePlanCover={this.togglePlanCover}
+                fileSelectedHandler={this.fileSelectedHandler}
+                uploadSelectedCover={this.uploadSelectedCover}
+              />
             </div>
           ) : (
             <div></div>

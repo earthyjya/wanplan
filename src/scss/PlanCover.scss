@@ -1,0 +1,34 @@
+@import "./Style.scss";
+
+.upload-plan-cover {
+  display: block;
+  position: fixed;
+  z-index: 3;
+  padding-top: 15%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+}
+
+.plan-cover-modal-content {
+  background-color: #0a090c;
+  color: white;
+  margin: auto;
+  padding: 20px;
+  border: none;
+  border-radius: 5px;
+  height: 300px;
+  width: 450px;
+}
+
+.close-modal {
+  float: right;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
+}
+
