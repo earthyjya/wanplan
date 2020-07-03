@@ -3,8 +3,8 @@ import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import PlanCard from "./PlanCard.js"
-import { CardDeck } from 'reactstrap';
+import PlanCard from "./PlanCard.js";
+import { CardDeck } from "reactstrap";
 
 class MyPlan extends Component {
   state = {
@@ -31,14 +31,12 @@ class MyPlan extends Component {
       return data
         .filter((plan) => plan.user_id === user_id)
         .map((plan) => {
-          return (
-            <PlanCard plan={plan} key={plan.plan_id}/>
-          );
+          return <PlanCard plan={plan} key={plan.plan_id} />;
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
         return _planlist.map((plan) => (
-          <PlanCard plan={plan} key={plan.plan_id}/>
+          <PlanCard plan={plan} key={plan.plan_id} />
         ));
       } else {
         return <div>Your saved plan will show here</div>;
@@ -57,21 +55,21 @@ class MyPlan extends Component {
   };
 
   leastDayChanged = (e) => {
-    this.setState({ leastDay: e.target.value });
+    this.setState({ leastDay: Number(e.target.value) });
   };
 
   mostDayChanged = (e) => {
-    this.setState({ mostDay: e.target.value });
+    this.setState({ mostDay: Number(e.target.value) });
   };
 
   styleChanged = (e) => {
-    let { list, allChecked } = this.state
+    let { list, allChecked } = this.state;
     let itemName = e.target.name;
     let checked = e.target.checked;
-    list = list.map(item =>
+    list = list.map((item) =>
       item.name === itemName ? { ...item, isChecked: checked } : item
     );
-    allChecked = list.every(item => item.isChecked);
+    allChecked = list.every((item) => item.isChecked);
     this.setState({ list: list, allChecked: allChecked });
   };
 
@@ -219,9 +217,7 @@ class MyPlan extends Component {
         {this.RenderRedirect()}
         <div className="myplan-container">
           <div className="myplan-text">My Plan</div>
-          <CardDeck className="plan-card-deck">
-            {this.savedPlan()}
-          </CardDeck>
+          <CardDeck className="plan-card-deck">{this.savedPlan()}</CardDeck>
         </div>
         <div
           style={{
@@ -260,15 +256,39 @@ class MyPlan extends Component {
               Days
               <div style={{ fontWeight: "normal" }}>
                 At least{" "}
-                <input
+                <select
                   className="day-input"
+                  placeholder="None"
                   onChange={this.leastDayChanged}
-                ></input>{" "}
+                >
+                  <option value="0">None</option>
+                  {(() => {
+                    let days = [];
+                    for (var i = 1; i <= 8; i++) {
+                      days.push(i);
+                    }
+                    return days.map((day) => (
+                      <option value={day}>{day}</option>
+                    ));
+                  })()}
+                </select>{" "}
                 At most{" "}
-                <input
+                <select
                   className="day-input"
+                  placeholder="None"
                   onChange={this.mostDayChanged}
-                ></input>
+                >
+                  <option value="0">None</option>
+                  {(() => {
+                    let days = [];
+                    for (var i = 1; i <= 8; i++) {
+                      days.push(i);
+                    }
+                    return days.map((day) => (
+                      <option value={day}>{day}</option>
+                    ));
+                  })()}
+                </select>
               </div>
               Plan style
               <div style={{ fontWeight: "normal" }}>
