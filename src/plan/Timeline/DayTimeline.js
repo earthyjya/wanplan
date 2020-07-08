@@ -124,7 +124,9 @@ class DayTimeline extends Component {
             <div className="Block"></div>
             <h2>Day {day}</h2>
           </div>
-          <div className='VerticaLline'>
+          <div className='DayTimelineContentContainer'>
+          <div className='TimeVerticalLineContainer'/>
+          <div className='AttCardTransCardContainer'>
           {plan_detail.map(detail => (
             <div key={detail.attraction_order}>
               {(() => {
@@ -168,7 +170,7 @@ class DayTimeline extends Component {
               );
             }
           })()}
-
+        </div>
           <hr style={{ margin: "0px 30px 30px 30px" }} />
         </div>
         </div>

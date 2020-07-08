@@ -68,7 +68,7 @@ class AttCard extends Component {
             <div className="Time"> {start_time} </div>
           </div>
           {(() => {
-            if(this.state.isFocused && this.props.editing){
+            if(this.props.editing){
               return(
                 <select
                   className="SelAttDura"
