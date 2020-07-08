@@ -4,13 +4,10 @@
   width: auto;
   border-left-width: thick;
   border-left: solid;
-  border-left-color: $secondary;
+  border-left-color: $gray2;
   display: flex;
   flex-direction: row;
   transition: 0.2s;
-  &:focus-within{
-    border-left-color: $primary;
-  }
 }
 
 .AttCardTimeContainer{
@@ -73,7 +70,7 @@
 %AttDot{
   position: relative;
   right: -2px;
-  background: $secondary;
+  background: $gray2;
   width: 10px;
   height: 10px;
   border-radius: 100%;
@@ -81,17 +78,11 @@
 
 .AttDotStart{
   @extend %AttDot;
-  &:focus-within{
-    background: $primary;
-  }
 }
 
 .AttDotStop{
   @extend %AttDot;
   bottom: 0;
-  &:focus-within{
-    background: $primary;
-  }
 }
 
 .Time{
