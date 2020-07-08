@@ -62,7 +62,35 @@ class AttCard extends Component {
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
-        <React.Fragment>
+      <div className="AttCardContainer">
+        <div className="AttCardTimeContainer">
+          <div className="AttDotStart">
+            <div className="Time"> {start_time} </div>
+          </div>
+          {(() => {
+            if(this.state.isFocused && this.props.editing){
+              return(
+                <select
+                  className="SelAttDura"
+                  value={time_spend}
+                  onChange={this.changeDuration}
+                >
+                  {minutes.map(min => {
+                    return <option key={min}>{min} mins</option>;
+                  })}
+                </select>
+              )
+            }
+            else {
+              return(
+                <div className="Duration">{end_time-start_time}</div>
+              )
+            }
+          })()}
+          <div className="AttDotStop">
+            <div className="Time"> {end_time} </div>
+          </div>
+        </div>
         <div
           className="AttCard"
           ref={this.attRef}
@@ -71,28 +99,7 @@ class AttCard extends Component {
           onBlur={this.handleBlur}
           tabIndex="0"
         >
-          <div className="StartTimeDot">
-            {(() => { //If editing and focus, show minutes selector else show start time
-              if(this.state.isFocused && this.props.editing){
-                return(
-                  <select
-                    className="SelAttDura"
-                    value={time_spend}
-                    onChange={this.changeDuration}
-                  >
-                    {minutes.map(min => {
-                      return <option key={min}>{min} mins</option>;
-                    })}
-                  </select>
-                )
-              }
-              else {
-                return(
-                  <div className="StartTime">{start_time}</div>
-                )
-              }
-            })()}
-          </div>
+
           <div class="Triangle"/>
           <div class="AttPhotoCont">
             <div className="AttTypeCont">
@@ -139,7 +146,7 @@ class AttCard extends Component {
             }
           })()}
         </div>
-        </React.Fragment>
+      </div>
     );
   }
 }
