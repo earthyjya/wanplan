@@ -92,7 +92,7 @@ class EditPlanContent extends React.Component {
           &#10005;
         </div>
         <div>
-          <span className="input-title">Plan Title* : </span>
+          <span className="input-title">Plan Title * : </span>
           <input
             className="input-box"
             value={plan_overview.plan_title}
@@ -116,7 +116,7 @@ class EditPlanContent extends React.Component {
           </select>
         </div>
         <div>
-          <span className="input-description">Plan Description* : </span>
+          <span className="input-title">Plan Description * : </span>
           <input
             className="input-description-box"
             value={plan_overview.plan_description}
