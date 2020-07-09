@@ -6,6 +6,7 @@ import EditPlanOverview from "./EditPlanOverview";
 import React from "react";
 import Request from "../lib/Request.js";
 import Share from "./Share";
+import GGMap from "./GGMap/GGMap";
 import PlanCover from "./PlanCover";
 import Timeline from "./Timeline/Timeline";
 import AttModal from "./AttModal.js";
@@ -253,6 +254,14 @@ class EditPlan extends React.Component {
 
   fileSelectedHandler = e => {
     this.setState({ selectedCover: e.target.files[0] });
+  };
+
+  modeMap = () => {
+    this.setState({ mode: "map" });
+  };
+
+  modePlan = () => {
+    this.setState({ mode: "plan" });
   };
 
   uploadSelectedCover = async () => {
@@ -600,8 +609,12 @@ class EditPlan extends React.Component {
 
                   <div className="title-bar">
                     <div className="title">{plan_overview.city}</div>
-                    <div className="plan">Plan</div>
-                    <div className="map">Map</div>
+                    <div className="plan" onClick={this.modePlan}>
+                      Plan
+                    </div>
+                    <div className="map" onClick={this.modeMap}>
+                      Map
+                    </div>
                     <div>
                       {/* eslint-disable-next-line */}
                       <i
@@ -626,17 +639,24 @@ class EditPlan extends React.Component {
                     </button>
                   </div>
                   {this.renderRedirect()}
-                  <Timeline
-                    {...this.state}
-                    {...this.props}
-                    addDay={this.addDay}
-                    delDay={this.delDay}
-                    changeDuration={this.changeDuration}
-                    updateDescription={this.updateDescription}
-                    delCard={this.delCard}
-                    editing={true}
-                    toggleAttModal={this.toggleAttModal}
-                  />
+                  {(() => {
+                    if (this.state.mode === "plan")
+                      return (
+                        <Timeline
+                          {...this.state}
+                          {...this.props}
+                          addDay={this.addDay}
+                          delDay={this.delDay}
+                          changeDuration={this.changeDuration}
+                          updateDescription={this.updateDescription}
+                          delCard={this.delCard}
+                          editing={true}
+                          toggleAttModal={this.toggleAttModal}
+                        />
+                      );
+                    else if (this.state.mode === "map")
+                      return <GGMap {...this.state} {...this.props} editing={true} />;
+                  })()}
                 </Col>
                 <Col lg={4} className="p-0">
                   {(() => {

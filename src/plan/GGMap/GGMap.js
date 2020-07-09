@@ -3,10 +3,16 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "./mapStyles";
 class GGMap extends Component {
 	render() {
-		const mapContainerStyle = {
+		let mapContainerStyle = {
 			width: "90vw",
 			height: "90vh"
 		};
+		if (this.props.editing) {
+			mapContainerStyle = {
+				width: "60vw",
+				height: "80vh"
+			};
+		}
 		const center = {
 			lat: 35.6804,
 			lng: 139.769

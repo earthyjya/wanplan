@@ -432,7 +432,7 @@ class Plan extends React.Component {
                   if (this.state.mode === "plan")
                     return <Timeline {...this.state} {...this.props} editing={false} />;
                   else if (this.state.mode === "map")
-                    return <GGMap {...this.state} {...this.props} />;
+                    return <GGMap {...this.state} {...this.props} editing={false} />;
                 })()}
               </Col>
             </Row>
