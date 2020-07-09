@@ -5,7 +5,6 @@ import axios from "axios";
 import React, { Component } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { renderToString } from 'react-dom/server';
 
 class AttBar extends Component {
   state = {
@@ -48,49 +47,60 @@ class AttBar extends Component {
     this.attbarRef = React.createRef();
   }
 
-  showDetails(dat){
-    this.setState({detailsDat: dat});
-    this.attbarRef.current.scrollTo({top:0, behavior: 'smooth'})
+  showDetails(dat) {
+    this.setState({ detailsDat: dat });
+    this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   render() {
     return (
       <div ref={this.attbarRef} className="att-bar-wrap">
-        {(this.state.detailsDat !== "") ?
+        {this.state.detailsDat !== "" ? (
           <div className="att-bar-desc">
-            <h3>{this.state.detailsDat.name ?
-                this.state.detailsDat.name
-                :
-                this.state.detailsDat.attraction_name}</h3>
-            <div style={{display:"flex", flexDirection:"row"}}>
-              <img style={{width:"160px", height:"100px"}}
-                src={(this.state.detailsDat.photos)?
-                  this.state.detailsDat.photos[0]
-                  :
-                  "https://via.placeholder.com/160x100"}
+            <h3>
+              {this.state.detailsDat.name
+                ? this.state.detailsDat.name
+                : this.state.detailsDat.attraction_name}
+            </h3>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <img
+                style={{ width: "160px", height: "100px" }}
+                alt="PlaceHolder"
+                src={
+                  this.state.detailsDat.photos
+                    ? this.state.detailsDat.photos[0]
+                    : "https://via.placeholder.com/160x100"
+                }
               />
-            <div style={{display:"flex", flexDirection:"column", paddingLeft:"0.8em"}}>
-                <span> <FontAwesomeIcon icon="clock"/> operating hours: 09.00 - 24.00</span>
-                <span> <FontAwesomeIcon icon="money-bill-wave"/> entrance fee</span>
+              <div style={{ display: "flex", flexDirection: "column", paddingLeft: "0.8em" }}>
+                <span>
+                  {" "}
+                  <FontAwesomeIcon icon="clock" /> operating hours: 09.00 - 24.00
+                </span>
+                <span>
+                  {" "}
+                  <FontAwesomeIcon icon="money-bill-wave" /> entrance fee
+                </span>
               </div>
             </div>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              nim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              nim veniam, quis nostrud exercitation ullamco laboris nisi ut
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor incididunt
+              ut labore et dolore magna aliqua. Ut enim nim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+              do mod tempor incididunt ut labore et dolore magna aliqua. Ut enim nim veniam, quis
+              nostrud exercitation ullamco laboris nisi ut
             </p>
-            <button onClick={this.props.toggleAttModal} className="details-button">more details</button>
-            <hr/>
+            <button onClick={this.props.toggleAttModal} className="details-button">
+              more details
+            </button>
+            <hr />
           </div>
-          :
-          <React.Fragment/>
-        }
+        ) : (
+          <React.Fragment />
+        )}
         <div className="search-container">
           <span>Nearby</span>
-          <FontAwesomeIcon className="search-icon" icon="search"/>
+          <FontAwesomeIcon className="search-icon" icon="search" />
           <Autocomplete
             className="search-bar"
             style={{ backgroundColor: "white", borderRadius: "8px", borderColor: "" }}
@@ -174,9 +184,9 @@ class AttBar extends Component {
                                       ref={dragProvided.innerRef}
                                     >
                                       <AttBarCard
-                                        attraction_name = {dat.name}
-                                        attraction_type = {dat.types[0]}
-                                        photos = {dat.photos}
+                                        attraction_name={dat.name}
+                                        attraction_type={dat.types[0]}
+                                        photos={dat.photos}
                                       />
                                     </div>
                                   )}

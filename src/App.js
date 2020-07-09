@@ -9,18 +9,39 @@ import Request from "./lib/Request";
 import User from "./user/User";
 import ReactGA from "react-ga";
 import {
-  faPencilAlt, faCamera, faGlobeAsia, faAngleDown,
-  faShareAlt, faWalking, faCar, faTrain, faClock,
-  faMoneyBillWave, faSearch, faLink, faCalendarAlt,
+  faPencilAlt,
+  faCamera,
+  faGlobeAsia,
+  faAngleDown,
+  faShareAlt,
+  faWalking,
+  faCar,
+  faTrain,
+  faClock,
+  faMoneyBillWave,
+  faSearch,
+  faLink,
+  faCalendarAlt,
   faEye
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
 library.add(
-  faPencilAlt, faCamera, faGlobeAsia, faAngleDown,
-  faShareAlt, faWalking, faCar, faTrain, faClock,
-  faMoneyBillWave, faSearch, faLink, faCalendarAlt,
-  faEye);
+  faPencilAlt,
+  faCamera,
+  faGlobeAsia,
+  faAngleDown,
+  faShareAlt,
+  faWalking,
+  faCar,
+  faTrain,
+  faClock,
+  faMoneyBillWave,
+  faSearch,
+  faLink,
+  faCalendarAlt,
+  faEye
+);
 
 class App extends Component {
   state = {
