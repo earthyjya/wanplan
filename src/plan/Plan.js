@@ -282,7 +282,7 @@ class Plan extends React.Component {
     this.setState({ ratingList: ratingList, rating: rating });
   };
 
-  submitReview = async (e) => {
+  submitReview = async e => {
     let { rating, review, addedRating, addedReview, reviewIndex } = this.state;
     let { plan_id } = this.props;
     this.setState({
@@ -301,21 +301,21 @@ class Plan extends React.Component {
     console.log({ plan_id, review, rating });
     await axios
       .post(url, { plan_id, review, rating })
-      .then(async (result) => {
+      .then(async result => {
         // console.log(result.data);
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });
 
     await axios
       .get(url)
-      .then(async (result) => {
+      .then(async result => {
         this.setState({ addedReview: [...result.data] });
         // console.log(result.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -326,6 +326,7 @@ class Plan extends React.Component {
 
   renderEditRedirect = () => {
     if (this.state.redirect) {
+      window.history.pushState(this.state, "", window.location.href);
       return <Redirect to={this.state.redirectTo} />;
     }
   };
@@ -400,11 +401,11 @@ class Plan extends React.Component {
 
     await axios
       .get(url)
-      .then(async (result) => {
+      .then(async result => {
         this.setState({ addedReview: [...result.data] });
         // console.log(result.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }
@@ -419,7 +420,7 @@ class Plan extends React.Component {
       rating,
       addedReview,
       addedRating,
-      reviewIndex,
+      reviewIndex
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
@@ -519,7 +520,7 @@ class Plan extends React.Component {
               />
             </div>
             <div>
-              {addedReview.map((i) => {
+              {addedReview.map(i => {
                 return (
                   <div className="review-box">
                     <div>{i.rating == 0 ? "No rating" : i.rating} &#x2605;</div>
