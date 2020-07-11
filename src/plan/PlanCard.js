@@ -31,7 +31,7 @@ class PlanCard extends Component {
           </div>
           <CardImg
             className="plan-card-img"
-            src="https://via.placeholder.com/300x300"
+            src="/myplan_placeholder.jpg"
             alt="Card image cap"
           />
           <CardBody>
