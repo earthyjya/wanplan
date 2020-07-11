@@ -2,7 +2,6 @@ import "../scss/MyPlan.scss";
 import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import PlanCard from "./PlanCard.js";
 import { CardDeck } from "reactstrap";
 
@@ -17,11 +16,19 @@ class MyPlan extends Component {
     mostDay: 1000,
     allChecked: false,
     list: [
+<<<<<<< HEAD
       { id: 1, name: "Adventure", isChecked: false },
       { id: 2, name: "Sightseeing", isChecked: false },
       { id: 3, name: "Cultural", isChecked: false },
       // { id: 4, name: "Others", isChecked: false },
     ],
+=======
+      { id: 1, name: "adventure", isChecked: false },
+      { id: 2, name: "sightseeing", isChecked: false },
+      { id: 3, name: "cultural", isChecked: false },
+      { id: 4, name: "others", isChecked: false }
+    ]
+>>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
   };
 
   savedPlan = () => {
@@ -29,15 +36,13 @@ class MyPlan extends Component {
     if (this.props.isLoggedIn) {
       const { data, user_id } = this.props;
       return data
-        .filter((plan) => plan.user_id === user_id)
-        .map((plan) => {
+        .filter(plan => plan.user_id === user_id)
+        .map(plan => {
           return <PlanCard plan={plan} key={plan.plan_id} />;
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
-        return _planlist.map((plan) => (
-          <PlanCard plan={plan} key={plan.plan_id} />
-        ));
+        return _planlist.map(plan => <PlanCard plan={plan} key={plan.plan_id} />);
       } else {
         return <div>Your saved plan will show here</div>;
       }
@@ -50,7 +55,7 @@ class MyPlan extends Component {
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 
-  selectCity = (e) => {
+  selectCity = e => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
@@ -77,22 +82,26 @@ class MyPlan extends Component {
     this.setState({ list: list, allChecked: allChecked });
   };
 
-  allChanged = (e) => {
+  allChanged = e => {
     let { list, allChecked } = this.state;
     allChecked = e.target.checked;
-    list = list.map((item) => ({ ...item, isChecked: e.target.checked }));
+    list = list.map(item => ({ ...item, isChecked: e.target.checked }));
     this.setState({ list: list, allChecked: allChecked });
   };
 
+<<<<<<< HEAD
   criteria = () => {
     let { citySearch, leastDay, mostDay, allChecked, list } = this.state;
     this.props.criteria({ citySearch, leastDay, mostDay, allChecked, list });
   };
 
   RedirectFunc = (plan_id) => {
+=======
+  RedirectFunc = plan_id => {
+>>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_new_plan",
+      redirectTo: "/plan/" + plan_id + "/edit_new_plan"
     });
   };
 
@@ -101,7 +110,7 @@ class MyPlan extends Component {
   };
 
   async componentDidMount() {
-    const APIServer = process.env.REACT_APP_APIServer;
+    // const APIServer = process.env.REACT_APP_APIServer;
     let cities = [
       {
         city_id: 13,
@@ -109,7 +118,7 @@ class MyPlan extends Component {
         prefecture: "Fukuoka",
         region: "Kyushu",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:20.000Z",
+        updated_time: "2020-04-07T05:24:20.000Z"
       },
       {
         city_id: 6,
@@ -117,7 +126,7 @@ class MyPlan extends Component {
         prefecture: "Hyogo",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:06.000Z",
+        updated_time: "2020-04-07T05:24:06.000Z"
       },
       {
         city_id: 5,
@@ -125,7 +134,7 @@ class MyPlan extends Component {
         prefecture: "Hiroshima",
         region: "Chugoku",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:04.000Z",
+        updated_time: "2020-04-07T05:24:04.000Z"
       },
       {
         city_id: 2,
@@ -133,7 +142,7 @@ class MyPlan extends Component {
         prefecture: "Ishikawa",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:57.000Z",
+        updated_time: "2020-04-07T05:23:57.000Z"
       },
       {
         city_id: 7,
@@ -141,7 +150,7 @@ class MyPlan extends Component {
         prefecture: "Hyogo",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:08.000Z",
+        updated_time: "2020-04-07T05:24:08.000Z"
       },
       {
         city_id: 8,
@@ -149,7 +158,7 @@ class MyPlan extends Component {
         prefecture: "Kyoto",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:10.000Z",
+        updated_time: "2020-04-07T05:24:10.000Z"
       },
       {
         city_id: 1,
@@ -157,7 +166,7 @@ class MyPlan extends Component {
         prefecture: "Aichi",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:55.000Z",
+        updated_time: "2020-04-07T05:23:55.000Z"
       },
       {
         city_id: 9,
@@ -165,7 +174,7 @@ class MyPlan extends Component {
         prefecture: "Osaka",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:12.000Z",
+        updated_time: "2020-04-07T05:24:12.000Z"
       },
       {
         city_id: 15,
@@ -173,7 +182,7 @@ class MyPlan extends Component {
         prefecture: "Miyagi",
         region: "Tohoku",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:24.000Z",
+        updated_time: "2020-04-07T05:24:24.000Z"
       },
       {
         city_id: 3,
@@ -181,7 +190,7 @@ class MyPlan extends Component {
         prefecture: "Shizuoka",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:59.000Z",
+        updated_time: "2020-04-07T05:23:59.000Z"
       },
       {
         city_id: 12,
@@ -189,7 +198,7 @@ class MyPlan extends Component {
         prefecture: "Tokyo",
         region: "Kanto",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:18.000Z",
+        updated_time: "2020-04-07T05:24:18.000Z"
       },
       {
         city_id: 11,
@@ -197,8 +206,8 @@ class MyPlan extends Component {
         prefecture: "Kanagawa",
         region: "Kanto",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:16.000Z",
-      },
+        updated_time: "2020-04-07T05:24:16.000Z"
+      }
     ];
     this.setState({ cities });
     // await axios
@@ -237,7 +246,7 @@ class MyPlan extends Component {
             fontSize: "22px",
             fontWeight: "bold",
             alignSelf: "center",
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           Search Plan
@@ -249,14 +258,15 @@ class MyPlan extends Component {
               value={this.state.citySearch}
               onChange={this.selectCity}
             >
+<<<<<<< HEAD
               <option value="0">All</option>
               {this.state.cities.map((city) => {
+=======
+              <option value="0">select city</option>
+              {this.state.cities.map(city => {
+>>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
                 return (
-                  <option
-                    key={city.city_id}
-                    value={city.city_id}
-                    text={city.city}
-                  >
+                  <option key={city.city_id} value={city.city_id} text={city.city}>
                     {city.city}
                   </option>
                 );
@@ -377,20 +387,39 @@ class MyPlan extends Component {
           style={{
             marginTop: "40px",
             marginLeft: "10px",
-            position: "relative",
+            position: "relative"
           }}
         >
           {(() => {
             if (error) return <div className="MyPlan-text">Can't find the plan</div>;
               return (
                 <div>
-                  {data.map((plan) => (
+                  {data.map(plan => (
                     <div key={plan.plan_id}>
                       <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
                     </div>
                   ))}
                 </div>
               );
+<<<<<<< HEAD
+=======
+            } else {
+              return (
+                <div>
+                  {data.map(plan => {
+                    if (plan.city_id === this.state.citySearch) {
+                      return (
+                        <div key={plan.plan_id}>
+                          <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+                        </div>
+                      );
+                    }
+                    return <React.Fragment></React.Fragment>;
+                  })}
+                </div>
+              );
+            }
+>>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
           })()}
         </div>
       </React.Fragment>

@@ -93,11 +93,30 @@
   }
 }
 
-.VerticaLline{
+.DayTimelineContentContainer{
+  display: flex;
+  flex-direction: row;
+}
+
+.TimeVerticalLineContainer{
+  min-width: 60px;
+  width: 5vw;
+}
+
+.AttVerticalLine{
   border-left-width: medium;
   border-left: solid;
-  border-left-color: $gray3;
-  margin-left: 70px;
+  border-left-color: $primary;
+}
+
+.TransVerticalLine{
+  border-right-width: medium;
+  border-right: solid;
+  border-right-color: $gray3;
+}
+
+.AttCardTransCardContainer{
+  width: 80%;
 }
 
 .container1 {

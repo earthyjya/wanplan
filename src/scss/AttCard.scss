@@ -1,10 +1,29 @@
 @import "./Style.scss";
 
+.AttCardContainer{
+  width: auto;
+  border-left-width: thick;
+  border-left: solid;
+  border-left-color: $gray2;
+  display: flex;
+  flex-direction: row;
+  transition: 0.2s;
+}
+
+.AttCardTimeContainer{
+  position: relative;
+  left: -8px;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
 .AttCard {
   position: relative;
   background: $gray4;
   box-sizing: border-box;
-  margin: 30px 30px 30px 40px;
   padding: 25px;
   height: 180px;
   width: 80%;
@@ -13,10 +32,11 @@
   display: flex;
   flex-direction: row;
   transition: .2s ease-in-out;
+
   &:focus-within{
     outline: none;
     height: 240px;
-    width: 90%;
+    width: 100%;
     padding: 40px;
     > .AttPhotoCont{
       width: 178px;
@@ -45,45 +65,53 @@
   filter: drop-shadow(4px 4px 7px rgba(0, 0, 0, 0.2));
   z-index: -1;
   left: -15px;
-  top: 40%;
 }
 
-.StartTimeDot{
-  position: absolute;
-  background: black;
-  width: 12px;
-  height: 12px;
-  left: -47px;
-  top: 48%;
+%AttDot{
+  position: relative;
+  right: -2px;
+  background: $gray2;
+  width: 10px;
+  height: 10px;
   border-radius: 100%;
 }
 
-.StartTime{
-  position: absolute;
-  font-family: sans-serif;
-  font-size: medium;
-  font-weight: 400;
-  color: grey;
-  right: 20px;
-  top: -7px;
+.AttDotStart{
+  @extend %AttDot;
 }
 
-.EndTime {
-  font-family: sans-serif;
-  position: absolute;
-  top: 30px;
+.AttDotStop{
+  @extend %AttDot;
+  bottom: 0;
+}
+
+.Time{
+  position: relative;
   font-size: medium;
   font-weight: 400;
+  color: $gray2;
+  left: -50px;
+  top: -5px;
+}
+
+.Duration{
+  position: relative;
+  width: 90px;
+  left: -45px;
+  background: white;
+  border-radius: 5px;
+  font-size: 1.2em;
   color: grey;
+  text-align: center;
 }
 
 .SelAttDura {
-  position: absolute;
-  width: 70px;
-  right: 20px;
-  top: -7px;
-  background: none;
-  border: none;
+  position: relative;
+  width: 90px;
+  left: -45px;
+  background: white;
+  border-radius: 5px;
+  font-size: 1.2em;
   color: grey;
 }
 

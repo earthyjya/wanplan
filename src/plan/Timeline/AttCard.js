@@ -31,69 +31,94 @@ class AttCard extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleBlur(event){
-    if(!event.currentTarget.contains(event.relatedTarget))
-      this.setState({isFocused: false})
+  handleBlur(event) {
+    if (!event.currentTarget.contains(event.relatedTarget)) this.setState({ isFocused: false });
   }
 
-  handleClick(){
-    if(!this.state.isFocused && this.props.editing)
-      this.attRef.current.focus()
+  handleClick() {
+    if (!this.state.isFocused && this.props.editing) this.attRef.current.focus();
   }
 
   render() {
     const {
       error,
       isLoading,
-      editing,
       start_time,
       end_time,
       time_spend,
       attraction_name,
-      attraction_type,
       description,
       photos
     } = this.props;
     let minutes = [
-      0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,
-      150,160,170,180,190,200,210,220,230,240,250,260,
-      270,280,290,300
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240,
+      250,
+      260,
+      270,
+      280,
+      290,
+      300
     ];
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
     return (
-        <React.Fragment>
+      <div className="AttCardContainer">
+        <div className="AttCardTimeContainer">
+          <div className="AttDotStart">
+            <div className="Time"> {start_time} </div>
+          </div>
+          {(() => {
+            if (this.props.editing) {
+              return (
+                <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
+                  {minutes.map(min => {
+                    return <option key={min}>{min} mins</option>;
+                  })}
+                </select>
+              );
+            } else {
+              return <div className="Duration">{end_time - start_time}</div>;
+            }
+          })()}
+          <div className="AttDotStop">
+            <div className="Time"> {end_time} </div>
+          </div>
+        </div>
         <div
           className="AttCard"
           ref={this.attRef}
           onClick={this.handleClick}
-          onFocus={() => {this.setState({isFocused: true})}}
+          onFocus={() => {
+            this.setState({ isFocused: true });
+          }}
           onBlur={this.handleBlur}
           tabIndex="0"
         >
-          <div className="StartTimeDot">
-            {(() => { //If editing and focus, show minutes selector else show start time
-              if(this.state.isFocused && this.props.editing){
-                return(
-                  <select
-                    className="SelAttDura"
-                    value={time_spend}
-                    onChange={this.changeDuration}
-                  >
-                    {minutes.map(min => {
-                      return <option key={min}>{min} mins</option>;
-                    })}
-                  </select>
-                )
-              }
-              else {
-                return(
-                  <div className="StartTime">{start_time}</div>
-                )
-              }
-            })()}
-          </div>
-          <div class="Triangle"/>
+          <div class="Triangle" />
           <div class="AttPhotoCont">
             <div className="AttTypeCont">
               <div className="AttType">Type</div>
@@ -110,36 +135,35 @@ class AttCard extends Component {
           </div>
           <div class="AttDetailsCont">
             <div class="AttName">{attraction_name}</div>
-              {(() => {  //If editing and focus, show textarea to edit else show just text
-                if(this.state.isFocused && this.props.editing){
-                  return(
-                    <textarea
-                      className="AttDesCont"
-                      value={this.state.description}
-                      onChange={this.onChange}
-                      onBlur={this.updateDescription}
-                      type="textarea"
-                    />
-                  )
-                }
-                else {
-                  return(
-                    <div>{description}</div>
-                  )
-                }
-              })()}
+            {(() => {
+              //If editing and focus, show textarea to edit else show just text
+              if (this.state.isFocused && this.props.editing) {
+                return (
+                  <textarea
+                    className="AttDesCont"
+                    value={this.state.description}
+                    onChange={this.onChange}
+                    onBlur={this.updateDescription}
+                    type="textarea"
+                  />
+                );
+              } else {
+                return <div>{description}</div>;
+              }
+            })()}
           </div>
-          {(() => { //If editing, show delete button
-            if(this.props.editing){
-              return(
+          {(() => {
+            //If editing, show delete button
+            if (this.props.editing) {
+              return (
                 <div className="DelCard" onClick={this.delCard}>
-                      &#10005;
+                  &#10005;
                 </div>
-              )
+              );
             }
           })()}
         </div>
-        </React.Fragment>
+      </div>
     );
   }
 }

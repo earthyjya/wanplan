@@ -28,32 +28,34 @@ class DayTimeline extends Component {
             <div style={{fontSize:'2em', fontWeight:'800'}}> Day {day}</div>
             <div style={{marginLeft:'1em', alignSelf:'center'}}>xx places | estimated time: xx | budget: xxxx JPY</div>
           </div>
-          <div className='VerticaLline'>
-            <Droppable
-              droppableId={day.toString()}
-              type={String}
-              direction="vertical"
-              isCombineEnabled={false}
-              style={{ overflow: "scroll" }}
-            >
-              {dropProvided => (
-                <div {...dropProvided.droppableProps}>
-                  <div ref={dropProvided.innerRef}>
-                    {plan_detail.map(detail => (
-                      <div key={detail.attraction_order}>
-                        {(() => {
-                          start = (() => {
-                            if (detail !== plan_detail[0]) {
-                              return plan_detail.filter(
-                                det => det.attraction_order === detail.attraction_order - 1
-                              )[0];
-                            } else {
-                              return { attraction_name: "Hotel" };
-                            }
-                          })();
-                          destination = detail;
-                        })()}
-                        {(() => { //Transport
+          <div className='DayTimelineContentContainer'>
+            <div className='TimeVerticalLineContainer'/>
+            <div className='AttCardTransCardContainer'>
+              <Droppable
+                droppableId={day.toString()}
+                type={String}
+                direction="vertical"
+                isCombineEnabled={false}
+                style={{ overflow: "scroll" }}
+                >
+                {dropProvided => (
+                  <div {...dropProvided.droppableProps}>
+                    <div ref={dropProvided.innerRef}>
+                      {plan_detail.map(detail => (
+                        <div key={detail.attraction_order}>
+                          {(() => {
+                            start = (() => {
+                              if (detail !== plan_detail[0]) {
+                                return plan_detail.filter(
+                                  det => det.attraction_order === detail.attraction_order - 1
+                                )[0];
+                              } else {
+                                return { attraction_name: "Hotel" };
+                              }
+                            })();
+                            destination = detail;
+                          })()}
+                          {(() => { //Transport
                             return(
                               <TransCard
                                 start={start}
@@ -61,49 +63,50 @@ class DayTimeline extends Component {
                                 transport={
                                   this.props.transports[idx][
                                     detail.attraction_order - plan_detail[0].attraction_order
-                                ]}
-                              />);
-                        })()}
-                        <Draggable
-                          draggableId={detail.attraction_order.toString()}
-                          index={detail.attraction_order}
-                        >
-                          {dragProvided => (
-                            <div
-                              {...dragProvided.dragHandleProps}
-                              {...dragProvided.draggableProps}
-                              ref={dragProvided.innerRef}
-                              tabIndex="-1"
-                            >
-                              <AttCard
-                                {...detail}
-                                changeDuration={this.props.changeDuration}
-                                updateDescription={this.props.updateDescription}
-                                delCard={this.props.delCard}
-                                editing={this.props.editing}
-                                toggleAttModal={this.props.toggleAttModal}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      </div>
-                    ))}
-                    {(() => {
-                      if (plan_detail) {
-                        return (
-                          <TransCard
-                            start={plan_detail[plan_detail.length - 1]}
-                            destination={{ attraction_name: "Hotel" }}
-                            transport={{ text: "No transportation data" }}
-                          />
-                        );
-                      }
-                    })()}
-                    {dropProvided.placeholder}
-                  </div>
-                </div>
-              )}
-            </Droppable>
+                                  ]}
+                                  />);
+                                })()}
+                                <Draggable
+                                  draggableId={detail.attraction_order.toString()}
+                                  index={detail.attraction_order}
+                                  >
+                                  {dragProvided => (
+                                    <div
+                                      {...dragProvided.dragHandleProps}
+                                      {...dragProvided.draggableProps}
+                                      ref={dragProvided.innerRef}
+                                      tabIndex="-1"
+                                      >
+                                      <AttCard
+                                        {...detail}
+                                        changeDuration={this.props.changeDuration}
+                                        updateDescription={this.props.updateDescription}
+                                        delCard={this.props.delCard}
+                                        editing={this.props.editing}
+                                        toggleAttModal={this.props.toggleAttModal}
+                                        />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              </div>
+                            ))}
+                            {(() => {
+                              if (plan_detail) {
+                                return (
+                                  <TransCard
+                                    start={plan_detail[plan_detail.length - 1]}
+                                    destination={{ attraction_name: "Hotel" }}
+                                    transport={{ text: "No transportation data" }}
+                                    />
+                                );
+                              }
+                            })()}
+                            {dropProvided.placeholder}
+                          </div>
+                        </div>
+                      )}
+                </Droppable>
+            </div>
           </div>
         </div>
         <div>
@@ -121,7 +124,9 @@ class DayTimeline extends Component {
             <div className="Block"></div>
             <h2>Day {day}</h2>
           </div>
-          <div className='VerticaLline'>
+          <div className='DayTimelineContentContainer'>
+          <div className='TimeVerticalLineContainer'/>
+          <div className='AttCardTransCardContainer'>
           {plan_detail.map(detail => (
             <div key={detail.attraction_order}>
               {(() => {
@@ -165,7 +170,7 @@ class DayTimeline extends Component {
               );
             }
           })()}
-
+        </div>
           <hr style={{ margin: "0px 30px 30px 30px" }} />
         </div>
         </div>

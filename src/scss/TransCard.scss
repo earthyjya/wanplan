@@ -1,9 +1,15 @@
 @import "./Style.scss";
 
+.TransCardTimeContainer{
+    border-left-width: medium;
+    border-left: solid;
+    border-left-color: $gray3;
+    padding: 30px 0 30px 80px;
+}
+
 .Transcard {
     box-sizing: border-box;
     padding: 18px;
-    margin-left: 80px;
     height: auto;
     width: auto;
     max-width: 600px;

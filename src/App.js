@@ -23,7 +23,11 @@ import {
   faSearch,
   faLink,
   faCalendarAlt,
+<<<<<<< HEAD
   faEye,
+=======
+  faEye
+>>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
