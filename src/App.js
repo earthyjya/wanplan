@@ -56,7 +56,7 @@ class App extends Component {
       { id: 1, name: "Adventure", isChecked: false },
       { id: 2, name: "Sightseeing", isChecked: false },
       { id: 3, name: "Cultural", isChecked: false },
-      // { id: 4, name: "Others", isChecked: false },
+      { id: 4, name: "AUTO_TAG", isChecked: false },
     ],
     allFalse: true,
     urls: [
@@ -186,54 +186,6 @@ class App extends Component {
     }
   };
 
-  criteria = (e) => {
-    const APIServer = process.env.REACT_APP_APIServer;
-    let { allFalse, list, urls, citySearch, leastDay, mostDay } = this.state;
-    this.setState(e);
-    console.log(e)
-    this.state.list.map((i) => {
-      if (i.isChecked) {
-        this.setState({ allFalse: false });
-      }
-    });
-    let toAddUrls = [];
-    if (!allFalse) {
-      e.list.map((style) => {
-        
-        if (style.isChecked)
-          toAddUrls = [
-            ...toAddUrls,
-            APIServer +
-              "/plan_overview/criteria/" +
-              e.citySearch +
-              "/" +
-              e.leastDay +
-              "/" +
-              e.mostDay +
-              "/" +
-              style.name,
-          ];
-      });
-    } else {
-      e.list.map((style) => {
-        toAddUrls = [
-          ...toAddUrls,
-          APIServer +
-            "/plan_overview/criteria/" +
-            e.citySearch +
-            "/" +
-            e.leastDay +
-            "/" +
-            e.mostDay +
-            "/" +
-            style.name,
-        ];
-      });
-    }
-    console.log(toAddUrls);
-    this.setState({urls: toAddUrls})
-  };
-
   render() {
     // eslint-disable-next-line
     const { user_id } = this.state;
@@ -255,22 +207,11 @@ class App extends Component {
         </header>
         <BrowserRouter>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
-          <Route
-            path="/home"
-            component={() => (
-              <RequestCriteria urls={this.state.urls}>
-                {(result) => (
-                  <Homepage
-                    {...result}
-                    {...this.state}
-                    criteria={this.criteria}
-                  />
-                )}
-              </RequestCriteria>
-            )}
-          />
+          <Route path="/home">
+            <Homepage {...this.state} />
+          </Route>
 
-          <Route
+          {/* <Route
             exact
             path="/plan"
             component={() => (
@@ -284,7 +225,7 @@ class App extends Component {
                 )}
               </RequestCriteria>
             )}
-          />
+          /> */}
           <Route
             exact
             path="/plan/:plan_id"

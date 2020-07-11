@@ -12,11 +12,11 @@ export class RequestCriteria extends Component {
         // console.log("Getting from " + this.props.url);
         console.log(this.props.urls)
         this.props.urls.map(async url =>
-           
 		await axios
 			.get(url)
 			.then(result => this.setState({ data: [...this.state.data,...result.data], isLoading: false }))
 			.catch(error => this.setState({ error, isLoading: false })))
+			
 	}
 
 	render() {

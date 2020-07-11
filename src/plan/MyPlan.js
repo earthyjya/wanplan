@@ -4,9 +4,11 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
 import { CardDeck } from "reactstrap";
+import axios from "axios";
 
 class MyPlan extends Component {
   state = {
+    data : [],
     error: null,
     redirect: false,
     redirectTo: "/",
@@ -19,8 +21,50 @@ class MyPlan extends Component {
       { id: 1, name: "Adventure", isChecked: false },
       { id: 2, name: "Sightseeing", isChecked: false },
       { id: 3, name: "Cultural", isChecked: false },
-      // { id: 4, name: "Others", isChecked: false },
+      { id: 4, name: "AUTO_TAG", isChecked: false },
     ],
+    allFalse : true,
+    url : "https://api.oneplan.in.th/api/plan_overview",
+  };
+
+  criteria = async () => {
+    const APIServer = process.env.REACT_APP_APIServer;
+    let allFalse = true;
+    let e =  this.state
+    this.setState(e);
+    // console.log(e);
+    e.list.map((i) => {
+      if (i.isChecked) {
+        this.setState({ allFalse: false });
+        allFalse = false;
+        // console.log("not all false");
+      }
+    });
+    let url = "";
+    if (e.citySearch != 0) 
+      url = APIServer + "/plan_overview/criteria/" + e.citySearch + "/";
+    else
+      url = APIServer + "/plan_overview/criteria/all/"
+    url = url + e.leastDay + "/" + e.mostDay + "/"
+      if (!allFalse) {
+        e.list.map((style) => {
+          if (style.isChecked)
+             url = url + style.name + ","
+        });
+      } else {
+        e.list.map((style) => {
+          url = url + style.name + ","
+        });
+      }
+      url = url 
+    console.log(url);
+    this.setState({ url: url });
+
+    await axios
+    .get(url)
+    .then(result => {console.log(result.data)
+      this.setState({ data: result.data, isLoading: false, error: null })})
+    .catch(error => this.setState({ error, isLoading: false }))
   };
 
   savedPlan = () => {
@@ -81,11 +125,6 @@ class MyPlan extends Component {
     this.setState({ list: list, allChecked: allChecked });
   };
 
-  criteria = () => {
-    let { citySearch, leastDay, mostDay, allChecked, list } = this.state;
-    this.props.criteria({ citySearch, leastDay, mostDay, allChecked, list });
-  };
-
   RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
@@ -98,7 +137,8 @@ class MyPlan extends Component {
   };
 
   async componentDidMount() {
-    // const APIServer = process.env.REACT_APP_APIServer;
+     //const APIServer = process.env.REACT_APP_APIServer;
+     let {url} = this.state 
     let cities = [
       {
         city_id: 13,
@@ -197,6 +237,13 @@ class MyPlan extends Component {
         updated_time: "2020-04-07T05:24:16.000Z"
       }
     ];
+
+    await axios
+			.get(url)
+      .then(result => {console.log(result.data)
+        this.setState({ data: result.data, isLoading: false, error: null })})
+			.catch(error => this.setState({ error, isLoading: false }))
+
     this.setState({ cities });
     // await axios
     //   .get(APIServer + "/city")
@@ -212,8 +259,8 @@ class MyPlan extends Component {
   }
 
   render() {
-    const { isLoading, error, data } = this.props;
-    const { list, allChecked } = this.state;
+    const { isLoading } = this.props;
+    const { list, allChecked, data, error } = this.state;
     if (isLoading) return <div></div>;
 
     return (
@@ -262,6 +309,7 @@ class MyPlan extends Component {
                 <select
                   className="day-input"
                   placeholder="None"
+                  value={this.state.leastDay}
                   onChange={this.leastDayChanged}
                 >
                   <option value="0">None</option>
@@ -279,6 +327,7 @@ class MyPlan extends Component {
                 <select
                   className="day-input"
                   placeholder="None"
+                  value={this.state.mostDay}
                   onChange={this.mostDayChanged}
                 >
                   <option value="0">None</option>
@@ -347,7 +396,7 @@ class MyPlan extends Component {
                     <span> Cultural </span>
                   </div>
                 </label>
-                {/* <label style={{ paddingRight: "16px" }}>
+                <label style={{ paddingRight: "16px" }}>
                   <div className="checkbox-container">
                     <input
                       type="checkbox"
@@ -359,7 +408,7 @@ class MyPlan extends Component {
                     />
                     <span> Others </span>
                   </div>
-                </label> */}
+                </label>
               </div>
               <button className="search-button" onClick = {this.criteria}>Search</button>
             </div>
@@ -374,7 +423,7 @@ class MyPlan extends Component {
           }}
         >
           {(() => {
-            if (error) return <div className="MyPlan-text">Can't find the plan</div>;
+            if (error) return <div>{"Can't find plan"}</div>
               return (
                 <div>
                   {data.map(plan => (
