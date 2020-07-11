@@ -17,10 +17,10 @@ class MyPlan extends Component {
     mostDay: 1000,
     allChecked: false,
     list: [
-      { id: 1, name: "adventure", isChecked: false },
-      { id: 2, name: "sightseeing", isChecked: false },
-      { id: 3, name: "cultural", isChecked: false },
-      { id: 4, name: "others", isChecked: false },
+      { id: 1, name: "Adventure", isChecked: false },
+      { id: 2, name: "Sightseeing", isChecked: false },
+      { id: 3, name: "Cultural", isChecked: false },
+      // { id: 4, name: "Others", isChecked: false },
     ],
   };
 
@@ -59,7 +59,11 @@ class MyPlan extends Component {
   };
 
   mostDayChanged = (e) => {
+    if (e!= 0){
     this.setState({ mostDay: Number(e.target.value) });
+    }else{
+      this.setState({ mostDay: 1000 })
+    }
   };
 
   styleChanged = (e) => {
@@ -78,6 +82,11 @@ class MyPlan extends Component {
     allChecked = e.target.checked;
     list = list.map((item) => ({ ...item, isChecked: e.target.checked }));
     this.setState({ list: list, allChecked: allChecked });
+  };
+
+  criteria = () => {
+    let { citySearch, leastDay, mostDay, allChecked, list } = this.state;
+    this.props.criteria({ citySearch, leastDay, mostDay, allChecked, list });
   };
 
   RedirectFunc = (plan_id) => {
@@ -201,13 +210,14 @@ class MyPlan extends Component {
     //     this.setState({ error, isLoading: false });
     //     console.log(error);
     //   });
+    let { citySearch, leastDay, mostDay, allChecked, list } = this.props;
+    this.setState({ citySearch, leastDay, mostDay, allChecked, list });
   }
 
   render() {
     const { isLoading, error, data } = this.props;
     const { list, allChecked } = this.state;
     if (isLoading) return <div></div>;
-    if (error) return <div className="MyPlan-text">Can't find the plan</div>;
 
     return (
       <React.Fragment>
@@ -239,7 +249,7 @@ class MyPlan extends Component {
               value={this.state.citySearch}
               onChange={this.selectCity}
             >
-              <option value="0">select city</option>
+              <option value="0">All</option>
               {this.state.cities.map((city) => {
                 return (
                   <option
@@ -268,7 +278,7 @@ class MyPlan extends Component {
                       days.push(i);
                     }
                     return days.map((day) => (
-                      <option value={day}>{day}</option>
+                      <option key = {day} value={day}>{day}</option>
                     ));
                   })()}
                 </select>{" "}
@@ -285,7 +295,7 @@ class MyPlan extends Component {
                       days.push(i);
                     }
                     return days.map((day) => (
-                      <option value={day}>{day}</option>
+                      <option key={day} value={day}>{day}</option>
                     ));
                   })()}
                 </select>
@@ -344,7 +354,7 @@ class MyPlan extends Component {
                     <span> Cultural </span>
                   </div>
                 </label>
-                <label style={{ paddingRight: "16px" }}>
+                {/* <label style={{ paddingRight: "16px" }}>
                   <div className="checkbox-container">
                     <input
                       type="checkbox"
@@ -356,20 +366,22 @@ class MyPlan extends Component {
                     />
                     <span> Others </span>
                   </div>
-                </label>
+                </label> */}
               </div>
+              <button className="search-button" onClick = {this.criteria}>Search</button>
             </div>
           </div>
         </div>
+
         <div
           style={{
-            marginTop: "20px",
+            marginTop: "40px",
             marginLeft: "10px",
             position: "relative",
           }}
         >
           {(() => {
-            if (this.state.citySearch === 0) {
+            if (error) return <div className="MyPlan-text">Can't find the plan</div>;
               return (
                 <div>
                   {data.map((plan) => (
@@ -379,24 +391,6 @@ class MyPlan extends Component {
                   ))}
                 </div>
               );
-            } else {
-              return (
-                <div>
-                  {data.map((plan) => {
-                    if (plan.city_id === this.state.citySearch) {
-                      return (
-                        <div key={plan.plan_id}>
-                          <a href={"/plan/" + plan.plan_id}>
-                            {plan.plan_title}
-                          </a>
-                        </div>
-                      );
-                    }
-                    return <React.Fragment></React.Fragment>;
-                  })}
-                </div>
-              );
-            }
           })()}
         </div>
       </React.Fragment>

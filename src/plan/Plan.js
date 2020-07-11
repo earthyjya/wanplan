@@ -21,7 +21,7 @@ class Plan extends React.Component {
     toastOpen: false,
     transports: [],
     review: "",
-    addedReview: "",
+    addedReview: [],
     ratingList: [
       { id: 1, isChecked: false },
       { id: 2, isChecked: false },
@@ -29,8 +29,7 @@ class Plan extends React.Component {
       { id: 4, isChecked: false },
       { id: 5, isChecked: false },
     ],
-    rating: null,
-    addedRating: null,
+    rating: 0,
   };
 
   save = async () => {
@@ -286,12 +285,12 @@ class Plan extends React.Component {
     this.setState({ ratingList: ratingList, rating: rating });
   };
 
-  submitReview = (e) => {
+  submitReview = async (e) => {
+    let { rating, review, addedRating, addedReview, reviewIndex } = this.state;
+    let { plan_id } = this.props;
     this.setState({
-      addedReview: this.state.review,
       review: "",
-      addedRating: this.state.rating,
-      rating: null,
+      rating: 0,
       ratingList: [
         { id: 1, isChecked: false },
         { id: 2, isChecked: false },
@@ -300,6 +299,28 @@ class Plan extends React.Component {
         { id: 5, isChecked: false },
       ],
     });
+
+    let url = process.env.REACT_APP_APIServer + "/plan_review";
+    console.log({ plan_id, review, rating });
+    await axios
+      .post(url, { plan_id, review, rating })
+      .then(async (result) => {
+        // console.log(result.data);
+      })
+      .catch((error) => {
+        this.setState({ error });
+        console.log(error);
+      });
+
+    await axios
+      .get(url)
+      .then(async (result) => {
+        this.setState({ addedReview: [...result.data] });
+        // console.log(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   reviewChanged = (e) => {
@@ -320,7 +341,6 @@ class Plan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data });
-        // console.log(result);
       })
       .catch((error) => {
         this.setState({ error });
@@ -374,6 +394,18 @@ class Plan extends React.Component {
       }
       this.setState(plan_detail);
     }
+
+    url = APIServer + "/plan_review/plan/" + plan_id;
+
+    await axios
+      .get(url)
+      .then(async (result) => {
+        this.setState({ addedReview: [...result.data] });
+        // console.log(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -384,6 +416,9 @@ class Plan extends React.Component {
       modal,
       ratingList,
       rating,
+      addedReview,
+      addedRating,
+      reviewIndex,
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
@@ -475,6 +510,16 @@ class Plan extends React.Component {
                 className="postReview"
                 onClick={this.submitReview}
               />
+            </div>
+            <div>
+              {addedReview.map((i) => {
+                return (
+                  <div className="review-box">
+                    <div>{i.rating == 0 ? "No rating" : i.rating} &#x2605;</div>
+                    <div>{i.review == "" ? "No comment" : i.review}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </React.Fragment>

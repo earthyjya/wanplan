@@ -6,7 +6,7 @@ export default async function CreateNewPlan(APIServer, user_id, isLoggedIn, Redi
 		plan_title: "untitled",
 		user_id: newUserId,
 		city_id: 2,
-		duration: 0,
+		duration: 1,
 		plan_style: "",
 		plan_description: "",
 		original_id: 0,
