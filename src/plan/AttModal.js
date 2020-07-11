@@ -43,6 +43,14 @@ class AttModal extends Component {
   }
 
   render() {
+    if (!this.props.detail) return <React.Fragment></React.Fragment>;
+    const {
+      attraction_name,
+      attraction_link,
+      attraction_description,
+      open_time,
+      close_time
+    } = this.props.detail;
     return (
       <React.Fragment>
         <Modal
@@ -63,7 +71,7 @@ class AttModal extends Component {
               <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
             </Carousel>
             <div class="attmodal-description-container">
-              <div class="name"> Someplacedera </div>
+              <div class="name"> {attraction_name} </div>
               <div class="type"> sightseeing place </div>
               <div class="time-container">
                 <div class="opening">
@@ -72,7 +80,7 @@ class AttModal extends Component {
                     <FontAwesomeIcon icon="clock" />
                     opening:
                   </span>
-                  <span> 8:00 - 16:00 </span>
+                  <span>{open_time + " - " + close_time}</span>
                 </div>
                 <div class="peak">
                   <span>
@@ -87,14 +95,10 @@ class AttModal extends Component {
                     {" "}
                     <FontAwesomeIcon icon="link" />
                   </span>
-                  <a href="https://www.google.com">link</a>
+                  <a href={attraction_link}>link</a>
                 </div>
               </div>
-              <div class="description">
-                {" "}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor
-                incididunt ut labore et dolore magna aliqua.
-              </div>
+              <div class="description">{attraction_description}</div>
             </div>
           </ModalBody>
         </Modal>

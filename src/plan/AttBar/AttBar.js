@@ -49,6 +49,7 @@ class AttBar extends Component {
 
   showDetails(dat) {
     this.setState({ detailsDat: dat });
+    this.props.showDetails(dat);
     this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
 

@@ -49,7 +49,7 @@ class AttCard extends Component {
       attraction_name,
       description,
       photos
-    } = this.props;
+    } = this.props.detail;
     let minutes = [
       0,
       10,
@@ -114,6 +114,7 @@ class AttCard extends Component {
           onClick={this.handleClick}
           onFocus={() => {
             this.setState({ isFocused: true });
+            this.props.showDetails(this.props.detail);
           }}
           onBlur={this.handleBlur}
           tabIndex="0"

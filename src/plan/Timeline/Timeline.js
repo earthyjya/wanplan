@@ -21,7 +21,7 @@ class Timeline extends Component {
                 </button>
               );
           })()}
-          <hr style={{ margin: "0px 0px 40px 0px"}} />
+          <hr style={{ margin: "0px 0px 40px 0px" }} />
         </div>
         {days.map(day => (
           <DayTimeline
@@ -30,6 +30,7 @@ class Timeline extends Component {
             plan_detail={plan_detail.filter(plan => plan.day === day)}
             day={day}
             key={day.toString()}
+            showDetails={this.props.showDetails}
           />
         ))}
       </div>

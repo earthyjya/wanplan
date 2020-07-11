@@ -19,162 +19,169 @@ class DayTimeline extends Component {
     let idx = day - 1;
     if (editing)
       return (
-      <React.Fragment>
-        <div>
-          <div className="DayTitleCont">
-            <button className="DelDay" onClick={this.delDay}>
-              &#10005;
-            </button>
-            <div style={{fontSize:'2em', fontWeight:'800'}}> Day {day}</div>
-            <div style={{marginLeft:'1em', alignSelf:'center'}}>xx places | estimated time: xx | budget: xxxx JPY</div>
-          </div>
-          <div className='DayTimelineContentContainer'>
-            <div className='TimeVerticalLineContainer'/>
-            <div className='AttCardTransCardContainer'>
-              <Droppable
-                droppableId={day.toString()}
-                type={String}
-                direction="vertical"
-                isCombineEnabled={false}
-                style={{ overflow: "scroll" }}
+        <React.Fragment>
+          <div>
+            <div className="DayTitleCont">
+              <button className="DelDay" onClick={this.delDay}>
+                &#10005;
+              </button>
+              <div style={{ fontSize: "2em", fontWeight: "800" }}> Day {day}</div>
+              <div style={{ marginLeft: "1em", alignSelf: "center" }}>
+                xx places | estimated time: xx | budget: xxxx JPY
+              </div>
+            </div>
+            <div className="DayTimelineContentContainer">
+              <div className="TimeVerticalLineContainer" />
+              <div className="AttCardTransCardContainer">
+                <Droppable
+                  droppableId={day.toString()}
+                  type={String}
+                  direction="vertical"
+                  isCombineEnabled={false}
+                  style={{ overflow: "scroll" }}
                 >
-                {dropProvided => (
-                  <div {...dropProvided.droppableProps}>
-                    <div ref={dropProvided.innerRef}>
-                      {plan_detail.map(detail => (
-                        <div key={detail.attraction_order}>
-                          {(() => {
-                            start = (() => {
-                              if (detail !== plan_detail[0]) {
-                                return plan_detail.filter(
-                                  det => det.attraction_order === detail.attraction_order - 1
-                                )[0];
-                              } else {
-                                return { attraction_name: "Hotel" };
-                              }
-                            })();
-                            destination = detail;
-                          })()}
-                          {(() => { //Transport
-                            return(
-                              <TransCard
-                                start={start}
-                                destination={destination}
-                                transport={
-                                  this.props.transports[idx][
-                                    detail.attraction_order - plan_detail[0].attraction_order
-                                  ]}
-                                  />);
-                                })()}
-                                <Draggable
-                                  draggableId={detail.attraction_order.toString()}
-                                  index={detail.attraction_order}
-                                  >
-                                  {dragProvided => (
-                                    <div
-                                      {...dragProvided.dragHandleProps}
-                                      {...dragProvided.draggableProps}
-                                      ref={dragProvided.innerRef}
-                                      tabIndex="-1"
-                                      >
-                                      <AttCard
-                                        {...detail}
-                                        changeDuration={this.props.changeDuration}
-                                        updateDescription={this.props.updateDescription}
-                                        delCard={this.props.delCard}
-                                        editing={this.props.editing}
-                                        toggleAttModal={this.props.toggleAttModal}
-                                        />
-                                    </div>
-                                  )}
-                                </Draggable>
-                              </div>
-                            ))}
+                  {dropProvided => (
+                    <div {...dropProvided.droppableProps}>
+                      <div ref={dropProvided.innerRef}>
+                        {plan_detail.map(detail => (
+                          <div key={detail.attraction_order}>
                             {(() => {
-                              if (plan_detail) {
-                                return (
-                                  <TransCard
-                                    start={plan_detail[plan_detail.length - 1]}
-                                    destination={{ attraction_name: "Hotel" }}
-                                    transport={{ text: "No transportation data" }}
-                                    />
-                                );
-                              }
+                              start = (() => {
+                                if (detail !== plan_detail[0]) {
+                                  return plan_detail.filter(
+                                    det => det.attraction_order === detail.attraction_order - 1
+                                  )[0];
+                                } else {
+                                  return { attraction_name: "Hotel" };
+                                }
+                              })();
+                              destination = detail;
                             })()}
-                            {dropProvided.placeholder}
+                            {(() => {
+                              //Transport
+                              return (
+                                <TransCard
+                                  start={start}
+                                  destination={destination}
+                                  transport={
+                                    this.props.transports[idx][
+                                      detail.attraction_order - plan_detail[0].attraction_order
+                                    ]
+                                  }
+                                />
+                              );
+                            })()}
+                            <Draggable
+                              draggableId={detail.attraction_order.toString()}
+                              index={detail.attraction_order}
+                            >
+                              {dragProvided => (
+                                <div
+                                  {...dragProvided.dragHandleProps}
+                                  {...dragProvided.draggableProps}
+                                  ref={dragProvided.innerRef}
+                                  tabIndex="-1"
+                                >
+                                  <AttCard
+                                    detail={detail}
+                                    changeDuration={this.props.changeDuration}
+                                    updateDescription={this.props.updateDescription}
+                                    delCard={this.props.delCard}
+                                    editing={this.props.editing}
+                                    toggleAttModal={this.props.toggleAttModal}
+                                    showDetails={this.props.showDetails}
+                                  />
+                                </div>
+                              )}
+                            </Draggable>
                           </div>
-                        </div>
-                      )}
+                        ))}
+                        {(() => {
+                          if (plan_detail) {
+                            return (
+                              <TransCard
+                                start={plan_detail[plan_detail.length - 1]}
+                                destination={{ attraction_name: "Hotel" }}
+                                transport={{ text: "No transportation data" }}
+                              />
+                            );
+                          }
+                        })()}
+                        {dropProvided.placeholder}
+                      </div>
+                    </div>
+                  )}
                 </Droppable>
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <button className="AddDay" onClick={this.addDay}>
-            +
-          </button>
-          <hr style={{ margin: "0px 50px 50px 50px" }} />
-        </div>
-      </React.Fragment>
+          <div>
+            <button className="AddDay" onClick={this.addDay}>
+              +
+            </button>
+            <hr style={{ margin: "0px 50px 50px 50px" }} />
+          </div>
+        </React.Fragment>
       );
     else
-      return(
+      return (
         <div className="DayTimeline">
           <div>
             <div className="Block"></div>
             <h2>Day {day}</h2>
           </div>
-          <div className='DayTimelineContentContainer'>
-          <div className='TimeVerticalLineContainer'/>
-          <div className='AttCardTransCardContainer'>
-          {plan_detail.map(detail => (
-            <div key={detail.attraction_order}>
+          <div className="DayTimelineContentContainer">
+            <div className="TimeVerticalLineContainer" />
+            <div className="AttCardTransCardContainer">
+              {plan_detail.map(detail => (
+                <div key={detail.attraction_order}>
+                  {(() => {
+                    start = (() => {
+                      if (detail !== plan_detail[0]) {
+                        return plan_detail.filter(
+                          det => det.attraction_order === detail.attraction_order - 1
+                        )[0];
+                      } else {
+                        return { attraction_name: "Hotel" };
+                      }
+                    })();
+                    destination = detail;
+                  })()}
+                  <TransCard
+                    start={start}
+                    destination={destination}
+                    transport={
+                      this.props.transports[idx][
+                        detail.attraction_order - plan_detail[0].attraction_order
+                      ]
+                    }
+                  />
+                  <AttCard
+                    detail={detail}
+                    changeDuration={this.props.changeDuration}
+                    delCard={this.props.delCard}
+                    editing={this.props.editing}
+                    showDetails={this.props.showDetails}
+                    toggleAttModal={this.props.toggleAttModal}
+                  />
+                </div>
+              ))}
               {(() => {
-                start = (() => {
-                  if (detail !== plan_detail[0]) {
-                    return plan_detail.filter(
-                      det => det.attraction_order === detail.attraction_order - 1
-                    )[0];
-                  } else {
-                    return { attraction_name: "Hotel" };
-                  }
-                })();
-                destination = detail;
-              })()}
-              <TransCard
-                start={start}
-                destination={destination}
-                transport={
-                  this.props.transports[idx][
-                    detail.attraction_order - plan_detail[0].attraction_order
-                  ]
+                if (plan_detail.length) {
+                  return (
+                    <TransCard
+                      start={plan_detail[plan_detail.length - 1]}
+                      destination={{ attraction_name: "Hotel" }}
+                      transport={{ text: "No transportation data" }}
+                    />
+                  );
                 }
-              />
-              <AttCard
-                {...detail}
-                changeDuration={this.props.changeDuration}
-                delCard={this.props.delCard}
-                editing={this.props.editing}
-                toggleAttModal={this.props.toggleAttModal}
-              />
+              })()}
             </div>
-          ))}
-          {(() => {
-            if (plan_detail.length) {
-              return (
-                <TransCard
-                  start={plan_detail[plan_detail.length - 1]}
-                  destination={{ attraction_name: "Hotel" }}
-                  transport={{ text: "No transportation data" }}
-                />
-              );
-            }
-          })()}
+            <hr style={{ margin: "0px 30px 30px 30px" }} />
+          </div>
         </div>
-          <hr style={{ margin: "0px 30px 30px 30px" }} />
-        </div>
-        </div>
-      )
+      );
   }
 }
 

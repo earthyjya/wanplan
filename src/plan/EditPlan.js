@@ -35,6 +35,7 @@ class EditPlan extends React.Component {
     showAttModal: false,
     planCover: false,
     selectedCover: null,
+    detailsDat: null,
     mode: "plan"
   };
 
@@ -92,6 +93,10 @@ class EditPlan extends React.Component {
         )
       );
     }
+  };
+
+  showDetails = dat => {
+    this.setState({ detailsDat: dat });
   };
 
   updatePlanStartday = async () => {
@@ -575,7 +580,11 @@ class EditPlan extends React.Component {
     else {
       return (
         <React.Fragment>
-          <AttModal toggle={this.toggleAttModal} isOpen={this.state.showAttModal} />
+          <AttModal
+            detail={this.state.detailsDat}
+            toggle={this.toggleAttModal}
+            isOpen={this.state.showAttModal}
+          />
           <DragDropContext
             onDragEnd={({ destination, source }) => {
               if (!destination) {
@@ -652,6 +661,7 @@ class EditPlan extends React.Component {
                           delCard={this.delCard}
                           editing={true}
                           toggleAttModal={this.toggleAttModal}
+                          showDetails={this.showDetails}
                         />
                       );
                     else if (this.state.mode === "map")
@@ -663,7 +673,13 @@ class EditPlan extends React.Component {
                     if (this.state.loadAttBar)
                       return (
                         <Request url={APIServer + "/attraction/city/" + plan_overview.city_id}>
-                          {result => <AttBar toggleAttModal={this.toggleAttModal} {...result} />}
+                          {result => (
+                            <AttBar
+                              toggleAttModal={this.toggleAttModal}
+                              showDetails={this.showDetails}
+                              {...result}
+                            />
+                          )}
                         </Request>
                       );
                     return;
