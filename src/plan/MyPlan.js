@@ -16,19 +16,11 @@ class MyPlan extends Component {
     mostDay: 1000,
     allChecked: false,
     list: [
-<<<<<<< HEAD
       { id: 1, name: "Adventure", isChecked: false },
       { id: 2, name: "Sightseeing", isChecked: false },
       { id: 3, name: "Cultural", isChecked: false },
       // { id: 4, name: "Others", isChecked: false },
     ],
-=======
-      { id: 1, name: "adventure", isChecked: false },
-      { id: 2, name: "sightseeing", isChecked: false },
-      { id: 3, name: "cultural", isChecked: false },
-      { id: 4, name: "others", isChecked: false }
-    ]
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
   };
 
   savedPlan = () => {
@@ -89,16 +81,12 @@ class MyPlan extends Component {
     this.setState({ list: list, allChecked: allChecked });
   };
 
-<<<<<<< HEAD
   criteria = () => {
     let { citySearch, leastDay, mostDay, allChecked, list } = this.state;
     this.props.criteria({ citySearch, leastDay, mostDay, allChecked, list });
   };
 
   RedirectFunc = (plan_id) => {
-=======
-  RedirectFunc = plan_id => {
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
     this.setState({
       redirect: true,
       redirectTo: "/plan/" + plan_id + "/edit_new_plan"
@@ -258,13 +246,8 @@ class MyPlan extends Component {
               value={this.state.citySearch}
               onChange={this.selectCity}
             >
-<<<<<<< HEAD
               <option value="0">All</option>
               {this.state.cities.map((city) => {
-=======
-              <option value="0">select city</option>
-              {this.state.cities.map(city => {
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
                 return (
                   <option key={city.city_id} value={city.city_id} text={city.city}>
                     {city.city}
@@ -401,25 +384,6 @@ class MyPlan extends Component {
                   ))}
                 </div>
               );
-<<<<<<< HEAD
-=======
-            } else {
-              return (
-                <div>
-                  {data.map(plan => {
-                    if (plan.city_id === this.state.citySearch) {
-                      return (
-                        <div key={plan.plan_id}>
-                          <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-                        </div>
-                      );
-                    }
-                    return <React.Fragment></React.Fragment>;
-                  })}
-                </div>
-              );
-            }
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
           })()}
         </div>
       </React.Fragment>

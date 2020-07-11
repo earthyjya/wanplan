@@ -30,13 +30,9 @@ class Plan extends React.Component {
       { id: 4, isChecked: false },
       { id: 5, isChecked: false }
     ],
-<<<<<<< HEAD
     rating: 0,
-=======
-    rating: null,
-    addedRating: null,
+    addedRating: [],
     mode: "plan"
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
   };
 
   save = async () => {
@@ -286,13 +282,9 @@ class Plan extends React.Component {
     this.setState({ ratingList: ratingList, rating: rating });
   };
 
-<<<<<<< HEAD
   submitReview = async (e) => {
     let { rating, review, addedRating, addedReview, reviewIndex } = this.state;
     let { plan_id } = this.props;
-=======
-  submitReview = e => {
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
     this.setState({
       review: "",
       rating: 0,
@@ -354,10 +346,6 @@ class Plan extends React.Component {
       .get(url)
       .then(async result => {
         await this.setState({ ...result.data });
-<<<<<<< HEAD
-=======
-        console.log(result.data);
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
       })
       .catch(error => {
         this.setState({ error });
@@ -422,7 +410,6 @@ class Plan extends React.Component {
   }
 
   render() {
-<<<<<<< HEAD
     const {
       isLoading,
       error,
@@ -434,9 +421,6 @@ class Plan extends React.Component {
       addedRating,
       reviewIndex,
     } = this.state;
-=======
-    const { isLoading, error, plan_overview, modal, ratingList, rating } = this.state;
->>>>>>> dbb721d60eb36a748724c07b1bee3dd8916b4ee1
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
