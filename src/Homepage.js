@@ -1,6 +1,8 @@
 import "./scss/Homepage.scss";
 import axios from "axios";
 import Myplan from "./plan/MyPlan.js";
+import SearchPlan from "./plan/SearchPlan.js";
+import Footer from "./Footer.js"
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
@@ -86,87 +88,23 @@ class Homepage extends Component {
               "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
           }}
         />
-        <div className="layer"></div>
         <Container fluid className="plan-description-container-home">
-          <Row className="oneplan-title">ONEPLAN</Row>
-          <Row className="oneplan-description">The only plan for</Row>
-          <Row className="oneplan-description-2">Travel Lover</Row>
-        </Container>
-        <Container fluid className="intro-container-home">
-          <Row style={{ height: "40 px" }}>
-            <Col className="howto-number">1</Col>
-            <Col className="howto-number">2</Col>
-            <Col className="howto-number">3</Col>
-          </Row>
-          <Row className="intro-container-home-row">
-            <Col className="intro-container-home-col">
-              <div>
-                <div>
-                  <span>เลือก </span>
-                  <span className="intro-plan-home">PLAN</span>
-                  <span> ที่เพื่อนๆนักท่องเที่ยวเตรียมไว้ให้แล้ว </span>
-                </div>
-                <div style={{ alignSelf: "center", textAlign: "center" }}>
-                  O R
-                </div>
-                <div style={{ alignSelf: "flex-end", textAlign: "right" }}>
-                  <span>สร้าง </span>
-                  <span className="intro-plan-home">PLAN</span>
-                  <span> ของคุณเอง</span>
-                </div>
-                <div>
-                  <div>กด Save เพื่อเก็บ Plan ที่สนใจ</div>
-                  <div>กด Edit เพื่อแก้ Plan </div>
-                </div>
-              </div>
-            </Col>
-            <Col className="intro-container-home-col">
-              <div>
-                <div style={{ alignSelf: "center", textAlign: "center" }}>
-                  <span>ปรับแต่ง</span>
-                  <span className="intro-plan-home"> PLAN </span>
-                  <span>ของคุณ</span>
-                </div>
-                <div style={{ fontSize: "small" }}>
-                  เลือกที่ท่องเที่ยวและปรับเวลาได้ตามสไตล์การเที่ยวของคุณ
-                </div>
-                <div
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "flex",
-                  }}
-                >
-                  <div className="gif"></div>
-                </div>
-              </div>
-            </Col>
-            <Col className="intro-container-home-col-2">
-              <div>
-                <FontAwesomeIcon icon={faExclamation} size="2x" color="red" />
-                <span> Update!</span>
-                <span className="intro-plan-home"> PLAN </span>
-                <span>เพื่อบันทึกการแก้ไข </span>
-                <br></br>
-                <FontAwesomeIcon icon={faRoute} size="1x" />
-                <span> นำ</span>
-                <span className="intro-plan-home"> PLAN </span>
-                <span>นี้ไปเที่ยว!!</span>
-                <br></br>
-                <br></br>
-                <div style={{ alignSelf: "center", textAlign: "center" }}>
-                  O R{" "}
-                </div>
-                <br></br>
-                <FontAwesomeIcon icon={faShareAlt} size="1x" />
-                <span> แชร์</span>
-                <span className="intro-plan-home"> PLAN </span>
-                <span>นี้กับเพื่อนๆ</span>
-              </div>
-            </Col>
-          </Row>
+          <Row className="oneplan-title">ONE PLAN</Row>
+          <Row className="oneplan-description-2">อยากเที่ยวไหน..ให้เราช่วยแพลน</Row>
         </Container>
         <Myplan data={this.props.data} {...this.state} {...this.props} />
+        <SearchPlan data={this.props.data} {...this.state} {...this.props} />
+        <div className="homepage-ending-container">
+          <div className="title">Oneplan</div>
+          <div className="content">
+            ช่วยให้คนที่ไม่ชอบความยุ่งยากหรืออยากเริ่มต้นแพลนเที่ยวญี่ปุ่นด้วยตัวเองสามารถวางแผนได้ง่ายขึ้น ผ่าน Social platform ของเราที่ผู้ใช้สามารถเลือกแพลนที่เพื่อน ๆ คนอื่นแชร์ไว้มาปรับแต่งบนบอร์ดที่
+            ออกแบบมาให้สามารถแก้ไขได้ง่ายและอิสระ พร้อมจองตั๋วและโรงแรมที่เหมาะที่สุดสำหรับทริปของคุณ
+          </div>
+          <button>สร้างแพลน</button>
+          <img src="https://via.placeholder.com/300x300"/>
+          <div className="circle"></div>
+        </div>
+        <Footer/>
       </React.Fragment>
     );
   }

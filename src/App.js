@@ -199,7 +199,7 @@ class App extends Component {
     let toAddUrls = [];
     if (!allFalse) {
       e.list.map((style) => {
-        
+
         if (style.isChecked)
           toAddUrls = [
             ...toAddUrls,
@@ -321,15 +321,6 @@ class App extends Component {
             )}
           />
         </BrowserRouter>
-        <footer style={{ margin: "10px" }}>
-          <center>
-            <p>Copyright 2020 Oneplan</p>
-            <img
-              src="https://s3-ap-northeast-1.amazonaws.com/photo.oneplan.in.th/powered_by_google_on_white.png"
-              alt="powered by Google"
-            />
-          </center>
-        </footer>
       </React.Fragment>
     );
   }

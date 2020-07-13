@@ -40,6 +40,7 @@
     padding: 40px;
     > .AttPhotoCont{
       width: 178px;
+      max-width: 178px;
     }
     > .StartTimeDot{
       background: $primary;
@@ -117,6 +118,7 @@
 
 .AttPhotoCont{
   transition: .2s ease-in-out;
+  max-width: 148px;
   width: 148px;
   left: 20px;
   display: flex;
@@ -129,6 +131,7 @@
   flex-grow: 1;
   height: auto;
   border-radius: 10px;
+  object-fit: contain;
   border: none;
   background: #ffffff;
 }

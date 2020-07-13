@@ -25,7 +25,7 @@ class PlanCard extends Component {
     return (
       <React.Fragment>
         {this.renderRedirect()}
-        <Card onClick={this.handleClick} width="600px" className="plan-card">
+        <Card onClick={this.handleClick} className="plan-card">
           <div className="plan-card-view-count">
             <FontAwesomeIcon icon="eye" /> 9999
           </div>
