@@ -21,6 +21,11 @@
 .footer-email{
   grid-column-start: 1;
   grid-column-end: 2;
+  * {
+    margin: .4em;
+    margin-top: .8em;
+    font-size: 1.4em;
+  }
 }
 
 .footer-link{

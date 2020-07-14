@@ -80,17 +80,19 @@ class Homepage extends Component {
         ) : (
           <div></div>
         )}
-        <Container
-          fluid
+        <img
           className="plan-description-picture-home"
-          style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
-          }}
+          src="https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80"
         />
         <Container fluid className="plan-description-container-home">
+          <Row className="oneplan-logo">
+            <img
+              style={{width:'200px'}}
+              src="/oneplan-logo-white-removebg-preview.png"
+            />
+          </Row>
           <Row className="oneplan-title">ONE PLAN</Row>
-          <Row className="oneplan-description-2">อยากเที่ยวไหน..ให้เราช่วยแพลน</Row>
+          <Row className="oneplan-description">อยากเที่ยวไหน..ให้เราช่วยแพลน</Row>
         </Container>
         <Myplan data={this.props.data} {...this.state} {...this.props} />
         <SearchPlan data={this.props.data} {...this.state} {...this.props} />

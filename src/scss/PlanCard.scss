@@ -6,8 +6,7 @@
   height: 450px;
   border-radius: 10px !important;
   border: none !important;
-  margin-left: 20px !important;
-  margin-right: 20px !important;
+  margin: 2em !important;
   cursor: pointer;
 }
 
@@ -30,11 +29,11 @@
 }
 
 .plan-card-deck{
-  overflow-x: scroll;
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll !important;
   flex-wrap: nowrap !important;
   height: auto;
-  padding: 1.8em;
-  bottom: -1.2em;
 }
 
 .plan-card-view-count{

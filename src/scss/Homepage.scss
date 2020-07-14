@@ -62,16 +62,16 @@
 // }
 .plan-description-picture-home {
   position: absolute;
-  min-height: 650px;
+  min-height: 700px;
   filter: blur(2px);
   -webkit-filter: blur(2px);
   width: 100%;
-  clip-path: circle(1700px at 50% -1050px);
+  clip-path: circle(1700px at 50% -900px);
   object-fit: cover;
 }
 
 .plan-description-container-home {
-  min-height: 600px;
+  min-height: 700px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -92,23 +92,14 @@
 
 .oneplan-title {
   color: $primary;
-  font-size: clamp(4em, 14vw, 8em);
+  font-size: clamp(4em, 12vw, 6em);
   letter-spacing: 0.1em;
   font-weight: 650;
 }
-
-.oneplan-description {
-  font-weight: bold;
-  color: #e0e0e0;
-  font-size: clamp(1em, 3vw, 4em);
-  text-align: center;
-  letter-spacing: 0.2em;
-}
-
-.oneplan-description-2 {
+.oneplan-description{
   font-weight: 600;
   color: white;
-  font-size: clamp(1.6em, 5.4vw, 3.5em);
+  font-size: clamp(1.6em, 4vw, 3em);
   text-align: center;
 }
 
@@ -303,6 +294,7 @@
   }
   .content{
     grid-area: content;
+    text-align: justify;
   }
   .circle{
     position: relative;
