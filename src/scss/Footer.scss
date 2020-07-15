@@ -9,51 +9,74 @@
   background-color: $secondary;
   color: white;
   white-space: nowrap;
-}
-
-.footer-header{
-  grid-column-start: 1;
-  grid-column-end: 4;
-  font-size: 1.8em;
-  font-weight: bold;
-}
-
-.footer-email{
-  grid-column-start: 1;
-  grid-column-end: 2;
-  * {
-    margin: .4em;
-    margin-top: .8em;
-    font-size: 1.4em;
+  grid-template:
+    "header header header"
+    "email site-map question"
+    ". link input"
+    ". . send-button" ;
+  @media all and (max-width: 480px){
+    grid-template-columns: auto-fit 2fr;
+    grid-template:
+      "header header"
+      "email email"
+      "site-map link"
+      "question question"
+      "input input"
+      "send-button .";
   }
-}
+  .header{
+    grid-area: header;
+    font-size: 1.8em;
+    font-weight: bold;
+  }
 
-.footer-link{
-  white-space: nowrap;
-}
+  .site-map{
+    grid-area: site-map;
+  }
 
-.footer-input{
-  input{
-    background-color: rgba(0,0,0,0);
-    border-radius: 8px;
-    margin-bottom: 0.8em;
-    padding: 0.4em;
-    width: 80%;
-    color: white;
-    &:focus{
+  .email{
+    grid-area: email;
+    * {
+      margin: .4em;
+      margin-top: .8em;
+      font-size: 1.4em;
+    }
+  }
+
+  .link{
+    grid-area: link;
+    white-space: nowrap;
+  }
+
+  .input{
+    grid-area: input;
+    input{
+      background-color: rgba(0,0,0,0);
+      border-radius: 8px;
+      margin-bottom: 0.8em;
+      padding: 0.4em;
+      width: 80%;
       color: white;
-    }
-    &::placeholder {
-      color: rgba( $gray4, .8 );
+      &:focus{
+        color: white;
+      }
+      &::placeholder {
+        color: rgba( $gray4, .8 );
+      }
     }
   }
-}
 
-.footer-send-button{
-  button{
-    border-radius: 100px;
-    width: 100px;
-    height: 2.2em;
-    background-color: $primary;
+  .send-button{
+    grid-area: send-button;
+    button{
+      border-radius: 100px;
+      width: 100px;
+      height: 2.2em;
+      background-color: $primary;
+    }
+  }
+
+  .question{
+    grid-area: question;
   }
 }

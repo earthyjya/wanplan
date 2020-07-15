@@ -67,10 +67,12 @@ class MyPlan extends Component {
       <React.Fragment>
         {this.RenderRedirect()}
         <div className="myplan-container container-fluid">
-          <button className="new_plan_button" onClick={this.onClickNewPlan}>
-            สร้าง plan ใหม่
-          </button>
-          <div className="myplan-text">My Plan</div>
+          <div className="myplan-text">
+            <div> My Plan </div>
+            <button className="new_plan_button" onClick={this.onClickNewPlan}>
+              สร้าง plan ใหม่
+            </button>
+          </div>
           <div className="plan-card-deck">{this.savedPlan()}</div>
         </div>
       </React.Fragment>

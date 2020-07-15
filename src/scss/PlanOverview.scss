@@ -2,7 +2,10 @@
 
 .author-card-container{
   display: flex;
-  margin-bottom: -10px;
+  flex-grow: 1;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
 
 .author-card-details{
@@ -19,15 +22,16 @@
 
 .avatar-image {
   height: 40px;
-  width: 40px;
   align-self: center;
   border-radius: 50%;
 }
 
 .plan-description-title {
   font-weight: 600;
-  font-size: 11vh;
+  font-size: clamp(2em, 12vw, 4em);
   color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .plan-description {
