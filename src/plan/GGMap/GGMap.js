@@ -35,13 +35,14 @@ class GGMap extends Component {
 						if (detail.geometry)
 							return (
 								<Marker
-									key={detail.google_place_id}
+									key={detail.attraction_order}
 									position={{
 										lat: detail.geometry.location.lat,
 										lng: detail.geometry.location.lng
 									}}
 								/>
 							);
+						return null;
 					})}
 				</GoogleMap>
 			</div>

@@ -18,9 +18,9 @@ class MyPlan extends Component {
     list: [
       { id: 1, name: "Adventure", isChecked: false },
       { id: 2, name: "Sightseeing", isChecked: false },
-      { id: 3, name: "Cultural", isChecked: false },
+      { id: 3, name: "Cultural", isChecked: false }
       // { id: 4, name: "Others", isChecked: false },
-    ],
+    ]
   };
 
   savedPlan = () => {
@@ -51,26 +51,24 @@ class MyPlan extends Component {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
-  leastDayChanged = (e) => {
+  leastDayChanged = e => {
     this.setState({ leastDay: Number(e.target.value) });
   };
 
-  mostDayChanged = (e) => {
-    if (e!= 0){
-    this.setState({ mostDay: Number(e.target.value) });
-    }else{
-      this.setState({ mostDay: 1000 })
+  mostDayChanged = e => {
+    if (e !== 0) {
+      this.setState({ mostDay: Number(e.target.value) });
+    } else {
+      this.setState({ mostDay: 1000 });
     }
   };
 
-  styleChanged = (e) => {
+  styleChanged = e => {
     let { list, allChecked } = this.state;
     let itemName = e.target.name;
     let checked = e.target.checked;
-    list = list.map((item) =>
-      item.name === itemName ? { ...item, isChecked: checked } : item
-    );
-    allChecked = list.every((item) => item.isChecked);
+    list = list.map(item => (item.name === itemName ? { ...item, isChecked: checked } : item));
+    allChecked = list.every(item => item.isChecked);
     this.setState({ list: list, allChecked: allChecked });
   };
 
@@ -86,7 +84,7 @@ class MyPlan extends Component {
     this.props.criteria({ citySearch, leastDay, mostDay, allChecked, list });
   };
 
-  RedirectFunc = (plan_id) => {
+  RedirectFunc = plan_id => {
     this.setState({
       redirect: true,
       redirectTo: "/plan/" + plan_id + "/edit_new_plan"
@@ -247,7 +245,7 @@ class MyPlan extends Component {
               onChange={this.selectCity}
             >
               <option value="0">All</option>
-              {this.state.cities.map((city) => {
+              {this.state.cities.map(city => {
                 return (
                   <option key={city.city_id} value={city.city_id} text={city.city}>
                     {city.city}
@@ -259,36 +257,32 @@ class MyPlan extends Component {
               Days
               <div style={{ fontWeight: "normal" }}>
                 At least{" "}
-                <select
-                  className="day-input"
-                  placeholder="None"
-                  onChange={this.leastDayChanged}
-                >
+                <select className="day-input" placeholder="None" onChange={this.leastDayChanged}>
                   <option value="0">None</option>
                   {(() => {
                     let days = [];
                     for (var i = 1; i <= 8; i++) {
                       days.push(i);
                     }
-                    return days.map((day) => (
-                      <option key = {day} value={day}>{day}</option>
+                    return days.map(day => (
+                      <option key={day} value={day}>
+                        {day}
+                      </option>
                     ));
                   })()}
                 </select>{" "}
                 At most{" "}
-                <select
-                  className="day-input"
-                  placeholder="None"
-                  onChange={this.mostDayChanged}
-                >
+                <select className="day-input" placeholder="None" onChange={this.mostDayChanged}>
                   <option value="0">None</option>
                   {(() => {
                     let days = [];
                     for (var i = 1; i <= 8; i++) {
                       days.push(i);
                     }
-                    return days.map((day) => (
-                      <option key={day} value={day}>{day}</option>
+                    return days.map(day => (
+                      <option key={day} value={day}>
+                        {day}
+                      </option>
                     ));
                   })()}
                 </select>
@@ -361,7 +355,9 @@ class MyPlan extends Component {
                   </div>
                 </label> */}
               </div>
-              <button className="search-button" onClick = {this.criteria}>Search</button>
+              <button className="search-button" onClick={this.criteria}>
+                Search
+              </button>
             </div>
           </div>
         </div>
@@ -375,15 +371,15 @@ class MyPlan extends Component {
         >
           {(() => {
             if (error) return <div className="MyPlan-text">Can't find the plan</div>;
-              return (
-                <div>
-                  {data.map(plan => (
-                    <div key={plan.plan_id}>
-                      <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
-                    </div>
-                  ))}
-                </div>
-              );
+            return (
+              <div>
+                {data.map(plan => (
+                  <div key={plan.plan_id}>
+                    <a href={"/plan/" + plan.plan_id}>{plan.plan_title}</a>
+                  </div>
+                ))}
+              </div>
+            );
           })()}
         </div>
       </React.Fragment>

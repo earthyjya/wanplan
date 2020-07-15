@@ -277,13 +277,13 @@ class EditPlan extends React.Component {
       console.log(this.state.selectedCover.type);
       const { plan_id } = this.props;
       let url = "";
-      let options = {
-        headers: {
-          "Content-Type": this.state.selectedCover.type,
-          type: this.state.selectedCover.type,
-          plan_id: "" + plan_id
-        }
-      };
+      // let options = {
+      //   headers: {
+      //     "Content-Type": this.state.selectedCover.type,
+      //     type: this.state.selectedCover.type,
+      //     plan_id: "" + plan_id
+      //   }
+      // };
       // await axios
       //   .put(process.env.REACT_APP_APIServer + "/plan_cover",this.state.selectedCover,  options)
       //   .then(res => {
@@ -523,6 +523,7 @@ class EditPlan extends React.Component {
       if (plan_detail[i].attraction_id === 0) {
         await axios
           .get(APIServer + "/attraction/google_id/" + plan_detail[i].google_place_id)
+          // eslint-disable-next-line
           .then(res => {
             plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
           })

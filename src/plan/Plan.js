@@ -283,7 +283,7 @@ class Plan extends React.Component {
   };
 
   submitReview = async e => {
-    let { rating, review, addedRating, addedReview, reviewIndex } = this.state;
+    let { rating, review } = this.state;
     let { plan_id } = this.props;
     this.setState({
       review: "",
@@ -362,6 +362,7 @@ class Plan extends React.Component {
       if (plan_detail[i].attraction_id === 0) {
         await axios
           .get(APIServer + "/attraction/google_id/" + plan_detail[i].google_place_id)
+          // eslint-disable-next-line
           .then(res => {
             plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
           })
@@ -411,17 +412,7 @@ class Plan extends React.Component {
   }
 
   render() {
-    const {
-      isLoading,
-      error,
-      plan_overview,
-      modal,
-      ratingList,
-      rating,
-      addedReview,
-      addedRating,
-      reviewIndex
-    } = this.state;
+    const { isLoading, error, plan_overview, modal, ratingList, addedReview } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -523,8 +514,8 @@ class Plan extends React.Component {
               {addedReview.map(i => {
                 return (
                   <div className="review-box">
-                    <div>{i.rating == 0 ? "No rating" : i.rating} &#x2605;</div>
-                    <div>{i.review == "" ? "No comment" : i.review}</div>
+                    <div>{i.rating === 0 ? "No rating" : i.rating} &#x2605;</div>
+                    <div>{i.review === "" ? "No comment" : i.review}</div>
                   </div>
                 );
               })}

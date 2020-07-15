@@ -123,8 +123,8 @@ class AttCard extends Component {
           onBlur={this.handleBlur}
           tabIndex="0"
         >
-          <div class="Triangle" />
-          <div class="AttPhotoCont">
+          <div className="Triangle" />
+          <div className="AttPhotoCont">
             <div className="AttTypeCont">
               <div className="AttType">Type</div>
             </div>
@@ -138,8 +138,8 @@ class AttCard extends Component {
               onClick={this.props.toggleAttModal}
             />
           </div>
-          <div class="AttDetailsCont">
-            <div class="AttName">{attraction_name}</div>
+          <div className="AttDetailsCont">
+            <div className="AttName">{attraction_name}</div>
             {(() => {
               //If editing and focus, show textarea to edit else show just text
               if (this.state.isFocused && this.props.editing) {
