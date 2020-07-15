@@ -25,6 +25,11 @@ import {
   faCalendarAlt,
   faEye
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebookSquare,
+  faInstagramSquare,
+  faTwitterSquare,
+} from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
 library.add(
@@ -41,7 +46,10 @@ library.add(
   faSearch,
   faLink,
   faCalendarAlt,
-  faEye
+  faEye,
+  faFacebookSquare,
+  faInstagramSquare,
+  faTwitterSquare,
 );
 
 class App extends Component {
@@ -191,7 +199,8 @@ class App extends Component {
     });
     let toAddUrls = [];
     if (!allFalse) {
-      e.list.map(style => {
+      e.list.map((style) => {
+
         if (style.isChecked)
           toAddUrls = [
             ...toAddUrls,
@@ -236,7 +245,7 @@ class App extends Component {
       <React.Fragment>
         <header className="topnav">
           <a className="oneplan" href="/home">
-            O
+            <img src="/oneplan-logo-primary.png"/>
           </a>
           {/* <a href="/plan">Plan</a>
           {/* <a href="/howto">How to use?</a>
@@ -293,15 +302,6 @@ class App extends Component {
             )}
           />
         </BrowserRouter>
-        <footer style={{ margin: "10px" }}>
-          <center>
-            <p>Copyright 2020 Oneplan</p>
-            <img
-              src="https://s3-ap-northeast-1.amazonaws.com/photo.oneplan.in.th/powered_by_google_on_white.png"
-              alt="powered by Google"
-            />
-          </center>
-        </footer>
       </React.Fragment>
     );
   }

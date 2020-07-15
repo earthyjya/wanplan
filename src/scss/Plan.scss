@@ -42,10 +42,13 @@
 .title-bar > div.title {
   font-weight: bold;
   font-size: 24px;
-  height: 55px;
   color: $secondary;
   padding: 10px 20px 10px 20px;
   cursor: default;
+  @media all and (max-width: 480px){
+    padding: 5px 5px 5px 5px;
+    font-size: 18px;
+  }
 }
 
 .title-bar > div.plan {
@@ -53,6 +56,10 @@
   padding: 5px 20px 5px 20px;
   cursor: default;
   border-left: solid;
+  @media all and (max-width: 480px){
+    padding: 5px 5px 5px 5px;
+    font-size: 18px;
+  }
 }
 
 .title-bar > div.map {
@@ -60,6 +67,10 @@
   padding: 5px 20px 5px 20px;
   cursor: default;
   border-left: solid;
+  @media all and (max-width: 480px){
+    padding: 5px 5px 5px 5px;
+    font-size: 18px;
+  }
 }
 
 .title-bar > button.white-button {
@@ -180,4 +191,3 @@
   width: 80%;
   margin-top: 24px;
 }
-

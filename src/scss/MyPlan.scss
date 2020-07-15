@@ -2,23 +2,21 @@
 
 .new_plan_button {
   background-color: $primary;
-  position: absolute;
-  right: 5%;
   color: $secondary;
   font-weight: bold;
-  padding: 15px 32px;
+  padding: 1rem;
+  margin-left: auto;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 26px;
+  text-overflow: clip;
+  font-size: clamp(1rem, 3vw, 2rem);
   z-index: 3;
+  width: 26vw;
 }
 
 .myplan-container{
   padding-top: 50px;
   padding-bottom: 0px;
   background-color: $secondary;
-  overflow-x: hidden;
 }
 
 .myplan-text {
@@ -26,7 +24,10 @@
   position: relative;
   font-size: 2.4em;
   font-weight: bold;
-  padding-left: 50px;
+  padding: 0 30px 0 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .Plan-list-div {

@@ -95,7 +95,7 @@ class EditPlan extends React.Component {
     }
   };
 
-  showDetails = dat => {
+  showDetails = (dat) => {
     this.setState({ detailsDat: dat });
   };
 
