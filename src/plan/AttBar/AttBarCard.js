@@ -42,15 +42,15 @@ class AttBarCard extends Component {
     const { attraction_name, attraction_type, open_time, close_time, description } = this.props;
     return (
       <div className="AttBarCard" style={{ display: "flex", flexDirection: "column" }}>
-        <div class="type"> {attraction_type ? attraction_type.replace("_", " ") : ""}</div>
-        <div class="image" style={this.checkBgImage()}>
-          <div class="description-container">
-            <div class="open-time">
+        <div className="type"> {attraction_type ? attraction_type.replace("_", " ") : ""}</div>
+        <div className="image" style={this.checkBgImage()}>
+          <div className="description-container">
+            <div className="open-time">
               {" "}
               Open : {open_time} - {close_time}{" "}
             </div>
-            <div class="name">{attraction_name}</div>
-            <div class="description">
+            <div className="name">{attraction_name}</div>
+            <div className="description">
               {" "}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor incididunt
               ut labore et dolore magna aliqua.{description}{" "}
