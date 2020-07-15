@@ -27,26 +27,24 @@ class SearchPlan extends Component {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
-  leastDayChanged = (e) => {
+  leastDayChanged = e => {
     this.setState({ leastDay: Number(e.target.value) });
   };
 
-  mostDayChanged = (e) => {
-    if (e!= 0){
-    this.setState({ mostDay: Number(e.target.value) });
-    }else{
-      this.setState({ mostDay: 1000 })
+  mostDayChanged = e => {
+    if (e !== 0) {
+      this.setState({ mostDay: Number(e.target.value) });
+    } else {
+      this.setState({ mostDay: 1000 });
     }
   };
 
-  styleChanged = (e) => {
+  styleChanged = e => {
     let { list, allChecked } = this.state;
     let itemName = e.target.name;
     let checked = e.target.checked;
-    list = list.map((item) =>
-      item.name === itemName ? { ...item, isChecked: checked } : item
-    );
-    allChecked = list.every((item) => item.isChecked);
+    list = list.map(item => (item.name === itemName ? { ...item, isChecked: checked } : item));
+    allChecked = list.every(item => item.isChecked);
     this.setState({ list: list, allChecked: allChecked });
   };
 

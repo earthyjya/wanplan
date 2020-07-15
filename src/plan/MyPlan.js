@@ -47,43 +47,6 @@ class MyPlan extends Component {
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 
-  selectCity = e => {
-    this.setState({ citySearch: Number(e.target.value) });
-  };
-
-  leastDayChanged = e => {
-    this.setState({ leastDay: Number(e.target.value) });
-  };
-
-  mostDayChanged = e => {
-    if (e !== 0) {
-      this.setState({ mostDay: Number(e.target.value) });
-    } else {
-      this.setState({ mostDay: 1000 });
-    }
-  };
-
-  styleChanged = e => {
-    let { list, allChecked } = this.state;
-    let itemName = e.target.name;
-    let checked = e.target.checked;
-    list = list.map(item => (item.name === itemName ? { ...item, isChecked: checked } : item));
-    allChecked = list.every(item => item.isChecked);
-    this.setState({ list: list, allChecked: allChecked });
-  };
-
-  allChanged = e => {
-    let { list, allChecked } = this.state;
-    allChecked = e.target.checked;
-    list = list.map(item => ({ ...item, isChecked: e.target.checked }));
-    this.setState({ list: list, allChecked: allChecked });
-  };
-
-  criteria = () => {
-    let { citySearch, leastDay, mostDay, allChecked, list } = this.state;
-    this.props.criteria({ citySearch, leastDay, mostDay, allChecked, list });
-  };
-
   RedirectFunc = plan_id => {
     this.setState({
       redirect: true,
