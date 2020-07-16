@@ -8,7 +8,7 @@ import axios from "axios";
 
 class SearchPlan extends Component {
   state = {
-    data : [],
+    data: [],
     error: null,
     redirect: false,
     redirectTo: "/",
@@ -18,15 +18,20 @@ class SearchPlan extends Component {
     mostDay: 1000,
     allChecked: false,
     list: [
-      { id: 1, name: "Adventure", isChecked: false },
-      { id: 2, name: "Sightseeing", isChecked: false },
-      { id: 3, name: "Cultural", isChecked: false },
-      { id: 4, name: "AUTO_TAG", isChecked: false },
+      { id: 1, name: "Adventure", nameShow: "Adventure", isChecked: false },
+      { id: 2, name: "Sightseeing", nameShow: "Sightseeing", isChecked: false },
+      { id: 3, name: "Cultural", nameShow: "Cultural", isChecked: false },
+      { id: 4, name: "Family", nameShow: "Family", isChecked: false },
+      { id: 5, name: "Food", nameShow: "Food", isChecked: false },
+      { id: 6, name: "Shopping", nameShow: "Shopping", isChecked: false },
+      { id: 7, name: "Unseen", nameShow: "Unseen", isChecked: false },
+      { id: 8, name: "Must go", nameShow: "Must go", isChecked: false },
+      { id: 9, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
-    url : "https://api.oneplan.in.th/api/plan_overview",
+    url: "https://api.oneplan.in.th/api/plan_overview",
   };
 
-  selectCity = e => {
+  selectCity = (e) => {
     this.setState({ citySearch: Number(e.target.value) });
   };
 
@@ -35,10 +40,10 @@ class SearchPlan extends Component {
   };
 
   mostDayChanged = (e) => {
-    if (e!= 0){
-    this.setState({ mostDay: Number(e.target.value) });
-    }else{
-      this.setState({ mostDay: 1000 })
+    if (e != 0) {
+      this.setState({ mostDay: Number(e.target.value) });
+    } else {
+      this.setState({ mostDay: 1000 });
     }
   };
 
@@ -53,17 +58,17 @@ class SearchPlan extends Component {
     this.setState({ list: list, allChecked: allChecked });
   };
 
-  allChanged = e => {
+  allChanged = (e) => {
     let { list, allChecked } = this.state;
     allChecked = e.target.checked;
-    list = list.map(item => ({ ...item, isChecked: e.target.checked }));
+    list = list.map((item) => ({ ...item, isChecked: e.target.checked }));
     this.setState({ list: list, allChecked: allChecked });
   };
 
   criteria = async () => {
     const APIServer = process.env.REACT_APP_APIServer;
     let allFalse = true;
-    let e =  this.state
+    let e = this.state;
     // console.log(e);
     e.list.map((i) => {
       if (i.isChecked) {
@@ -73,35 +78,35 @@ class SearchPlan extends Component {
       }
     });
     let url = "";
-    if (e.citySearch != 0) 
+    if (e.citySearch != 0)
       url = APIServer + "/plan_overview/criteria/" + e.citySearch + "/";
-    else
-      url = APIServer + "/plan_overview/criteria/all/"
-    url = url + e.leastDay + "/" + e.mostDay + "/"
-      if (!allFalse) {
-        e.list.map((style) => {
-          if (style.isChecked)
-             url = url + style.name + ","
-        });
-      } else {
-        e.list.map((style) => {
-          url = url + style.name + ","
-        });
-      }
+    else url = APIServer + "/plan_overview/criteria/all/";
+    url = url + e.leastDay + "/" + e.mostDay + "/";
+    if (!allFalse) {
+      e.list.map((style) => {
+        if (style.isChecked) url = url + style.name + ",";
+      });
+    } else {
+      e.list.map((style) => {
+        url = url + style.name + ",";
+      });
+    }
     this.setState({ url: url });
 
-    console.log(url)
+    console.log(url);
     await axios
-    .get(url)
-    .then(result => {console.log(result.data)
-      this.setState({ data: result.data, isLoading: false, error: null })})
-    .catch(error => this.setState({ error, isLoading: false }))
+      .get(url)
+      .then((result) => {
+        console.log(result.data);
+        this.setState({ data: result.data, isLoading: false, error: null });
+      })
+      .catch((error) => this.setState({ error, isLoading: false }));
   };
 
   RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_new_plan"
+      redirectTo: "/plan/" + plan_id + "/edit_new_plan",
     });
   };
 
@@ -118,7 +123,7 @@ class SearchPlan extends Component {
         prefecture: "Fukuoka",
         region: "Kyushu",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:20.000Z"
+        updated_time: "2020-04-07T05:24:20.000Z",
       },
       {
         city_id: 6,
@@ -126,7 +131,7 @@ class SearchPlan extends Component {
         prefecture: "Hyogo",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:06.000Z"
+        updated_time: "2020-04-07T05:24:06.000Z",
       },
       {
         city_id: 5,
@@ -134,7 +139,7 @@ class SearchPlan extends Component {
         prefecture: "Hiroshima",
         region: "Chugoku",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:04.000Z"
+        updated_time: "2020-04-07T05:24:04.000Z",
       },
       {
         city_id: 2,
@@ -142,7 +147,7 @@ class SearchPlan extends Component {
         prefecture: "Ishikawa",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:57.000Z"
+        updated_time: "2020-04-07T05:23:57.000Z",
       },
       {
         city_id: 7,
@@ -150,7 +155,7 @@ class SearchPlan extends Component {
         prefecture: "Hyogo",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:08.000Z"
+        updated_time: "2020-04-07T05:24:08.000Z",
       },
       {
         city_id: 8,
@@ -158,7 +163,7 @@ class SearchPlan extends Component {
         prefecture: "Kyoto",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:10.000Z"
+        updated_time: "2020-04-07T05:24:10.000Z",
       },
       {
         city_id: 1,
@@ -166,7 +171,7 @@ class SearchPlan extends Component {
         prefecture: "Aichi",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:55.000Z"
+        updated_time: "2020-04-07T05:23:55.000Z",
       },
       {
         city_id: 9,
@@ -174,7 +179,7 @@ class SearchPlan extends Component {
         prefecture: "Osaka",
         region: "Kansai",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:12.000Z"
+        updated_time: "2020-04-07T05:24:12.000Z",
       },
       {
         city_id: 15,
@@ -182,7 +187,7 @@ class SearchPlan extends Component {
         prefecture: "Miyagi",
         region: "Tohoku",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:24.000Z"
+        updated_time: "2020-04-07T05:24:24.000Z",
       },
       {
         city_id: 3,
@@ -190,7 +195,7 @@ class SearchPlan extends Component {
         prefecture: "Shizuoka",
         region: "Chubu",
         country_id: 1,
-        updated_time: "2020-04-07T05:23:59.000Z"
+        updated_time: "2020-04-07T05:23:59.000Z",
       },
       {
         city_id: 12,
@@ -198,7 +203,7 @@ class SearchPlan extends Component {
         prefecture: "Tokyo",
         region: "Kanto",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:18.000Z"
+        updated_time: "2020-04-07T05:24:18.000Z",
       },
       {
         city_id: 11,
@@ -206,8 +211,8 @@ class SearchPlan extends Component {
         prefecture: "Kanagawa",
         region: "Kanto",
         country_id: 1,
-        updated_time: "2020-04-07T05:24:16.000Z"
-      }
+        updated_time: "2020-04-07T05:24:16.000Z",
+      },
     ];
     this.setState({ cities });
     // await axios
@@ -221,10 +226,12 @@ class SearchPlan extends Component {
     //   });
 
     await axios
-			.get(this.state.url)
-      .then(result => {console.log(result.data)
-        this.setState({ data: result.data, isLoading: false, error: null })})
-			.catch(error => this.setState({ error, isLoading: false }))
+      .get(this.state.url)
+      .then((result) => {
+        console.log(result.data);
+        this.setState({ data: result.data, isLoading: false, error: null });
+      })
+      .catch((error) => this.setState({ error, isLoading: false }));
   }
 
   render() {
@@ -232,7 +239,6 @@ class SearchPlan extends Component {
     if (isLoading) return <div></div>;
 
     return (
-
       <React.Fragment>
         {this.RenderRedirect()}
         <div
@@ -243,7 +249,7 @@ class SearchPlan extends Component {
             fontSize: "22px",
             fontWeight: "bold",
             alignSelf: "center",
-            textAlign: "center"
+            textAlign: "center",
           }}
         >
           Search Plan
@@ -258,7 +264,11 @@ class SearchPlan extends Component {
               <option value="0">All</option>
               {this.state.cities.map((city) => {
                 return (
-                  <option key={city.city_id} value={city.city_id} text={city.city}>
+                  <option
+                    key={city.city_id}
+                    value={city.city_id}
+                    text={city.city}
+                  >
                     {city.city}
                   </option>
                 );
@@ -280,7 +290,9 @@ class SearchPlan extends Component {
                       days.push(i);
                     }
                     return days.map((day) => (
-                      <option key = {day} value={day}>{day}</option>
+                      <option key={day} value={day}>
+                        {day}
+                      </option>
                     ));
                   })()}
                 </select>{" "}
@@ -297,7 +309,9 @@ class SearchPlan extends Component {
                       days.push(i);
                     }
                     return days.map((day) => (
-                      <option key={day} value={day}>{day}</option>
+                      <option key={day} value={day}>
+                        {day}
+                      </option>
                     ));
                   })()}
                 </select>
@@ -317,76 +331,40 @@ class SearchPlan extends Component {
                     <span> All </span>
                   </div>
                 </label>
-                <label style={{ paddingRight: "16px" }}>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      className="search-checkbox"
-                      name={list[0].name}
-                      value={list[0].name}
-                      checked={list[0].isChecked}
-                      onChange={this.styleChanged}
-                    />
-                    <span> Adventure </span>
-                  </div>
-                </label>
-                <label style={{ paddingRight: "16px" }}>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      className="search-checkbox"
-                      name={list[1].name}
-                      value={list[1].name}
-                      checked={list[1].isChecked}
-                      onChange={this.styleChanged}
-                    />
-                    <span> Sightseeing </span>
-                  </div>
-                </label>
-                <label style={{ paddingRight: "16px" }}>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      className="search-checkbox"
-                      name={list[2].name}
-                      value={list[2].name}
-                      checked={list[2].isChecked}
-                      onChange={this.styleChanged}
-                    />
-                    <span> Cultural </span>
-                  </div>
-                </label>
-                <label style={{ paddingRight: "16px" }}>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      className="search-checkbox"
-                      name={list[3].name}
-                      value={list[3].name}
-                      checked={list[3].isChecked}
-                      onChange={this.styleChanged}
-                    />
-                    <span> Others </span>
-                  </div>
-                </label>
+                {list.map((style) => (
+                  <label style={{ paddingRight: "16px" }}>
+                    <div className="checkbox-container">
+                      <input
+                        type="checkbox"
+                        className="search-checkbox"
+                        name={style.name}
+                        value={style.name}
+                        checked={style.isChecked}
+                        onChange={this.styleChanged}
+                      />
+                      <span> {style.nameShow} </span>
+                    </div>
+                  </label>
+                ))}
               </div>
-              <button className="search-button" onClick = {this.criteria}>Search</button>
+              <button className="search-button" onClick={this.criteria}>
+                Search
+              </button>
             </div>
           </div>
         </div>
         <CardDeck className="plan-card-deck-search">
-        {(() => {
-          if (error) return <div className="MyPlan-text">Can't find the plan</div>;
+          {(() => {
+            if (error)
+              return <div className="MyPlan-text">Can't find the plan</div>;
             return (
               <React.Fragment>
-                {data
-                  .slice(0,9)
-                  .map(plan => (
+                {data.slice(0, 9).map((plan) => (
                   <PlanCard plan={plan} key={plan.plan_id} />
                 ))}
               </React.Fragment>
             );
-        })()}
+          })()}
         </CardDeck>
       </React.Fragment>
     );
