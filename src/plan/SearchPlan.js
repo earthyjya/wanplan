@@ -29,6 +29,7 @@ class SearchPlan extends Component {
       { id: 9, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
     url: "https://api.oneplan.in.th/api/plan_overview",
+    seeAll: false,
   };
 
   selectCity = (e) => {
@@ -224,7 +225,9 @@ class SearchPlan extends Component {
     //     this.setState({ error, isLoading: false });
     //     console.log(error);
     //   });
-
+    this.showAll = this.showAll.bind(this)
+    this.showSeeAll = this.showSeeAll.bind(this)
+    this.enableSeeAll = this.enableSeeAll.bind(this)
     await axios
       .get(this.state.url)
       .then((result) => {
@@ -234,7 +237,43 @@ class SearchPlan extends Component {
       .catch((error) => this.setState({ error, isLoading: false }));
   }
 
+  enableSeeAll(){
+    this.setState({seeAll: true})
+  }
+
+  showAll(){
+    const { data } = this.state;
+    if (this.state.seeAll){
+      return(
+        <React.Fragment>
+          {data.map((plan) => (
+            <PlanCard plan={plan} key={plan.plan_id} />
+          ))}
+        </React.Fragment>
+      )
+    }
+    else{
+      return(
+        <React.Fragment>
+          {data.slice(0,9).map((plan) => (
+            <PlanCard plan={plan} key={plan.plan_id} />
+          ))}
+        </React.Fragment>
+      )
+    }
+  }
+
+  showSeeAll(){
+    if (!this.state.seeAll){
+      return(
+        <button className="see-all-button" onClick={this.enableSeeAll}> See all </button>
+      )
+    }
+    return <React.Fragment/>
+  }
+
   render() {
+
     const { list, allChecked, data, isLoading, error } = this.state;
     if (isLoading) return <div></div>;
 
@@ -359,13 +398,13 @@ class SearchPlan extends Component {
               return <div className="MyPlan-text">Can't find the plan</div>;
             return (
               <React.Fragment>
-                {data.slice(0, 9).map((plan) => (
-                  <PlanCard plan={plan} key={plan.plan_id} />
-                ))}
+                {this.showAll()}
               </React.Fragment>
             );
           })()}
+          {this.showSeeAll()}
         </CardDeck>
+
       </React.Fragment>
     );
   }

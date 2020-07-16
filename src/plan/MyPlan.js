@@ -79,7 +79,7 @@ class MyPlan extends Component {
               สร้าง plan ใหม่
             </button>
           </div>
-          <div className="plan-card-deck">{this.savedPlan()}</div>
+          <div className="myplan-card-deck">{this.savedPlan()}</div>
         </div>
       </React.Fragment>
     );

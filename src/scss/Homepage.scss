@@ -71,7 +71,7 @@
 }
 
 .plan-description-container-home {
-  min-height: 750px;
+  min-height: 650px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -92,14 +92,14 @@
 
 .oneplan-title {
   color: $primary;
-  font-size: clamp(4em, 12vw, 6em);
+  font-size: clamp(3em, 12vw, 6em);
   letter-spacing: 0.1em;
   font-weight: 650;
 }
 .oneplan-description{
   font-weight: 600;
   color: white;
-  font-size: clamp(1.6em, 4vw, 3em);
+  font-size: clamp(1.4em, 4vw, 3em);
   text-align: center;
 }
 
