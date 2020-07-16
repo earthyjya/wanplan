@@ -9,6 +9,9 @@ import Request from "./lib/Request";
 import RequestCriteria from "./lib/RequestCriteria";
 import User from "./user/User";
 import ReactGA from "react-ga";
+import fire from "./config/Firebase";
+import Login from "./Login.js";
+import Signup from "./Signup.js";
 import {
   faPencilAlt,
   faCamera,
@@ -23,7 +26,7 @@ import {
   faSearch,
   faLink,
   faCalendarAlt,
-  faEye
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -49,14 +52,30 @@ library.add(
   faEye,
   faFacebookSquare,
   faInstagramSquare,
-  faTwitterSquare,
+  faTwitterSquare
 );
 
 class App extends Component {
   state = {
+    user: {},
     user_id: 0,
     isLoggedIn: false,
-    urls: ["https://api.oneplan.in.th/api/plan_overview" /*+"/user/" + user_id*/]
+    urls: [
+      "https://api.oneplan.in.th/api/plan_overview" /*+"/user/" + user_id*/,
+    ],
+    toggleLogin: false,
+    toggleSignup: false,
+  };
+
+  authListener = () => {
+    fire.auth().onAuthStateChanged((user) => {
+      console.log(user);
+      if (user) {
+        this.setState({ user, isLoggedIn: true });
+      } else {
+        this.setState({ user: null, isLoggedIn: false });
+      }
+    });
   };
 
   delete = () => {
@@ -65,6 +84,7 @@ class App extends Component {
   componentDidMount() {
     ReactGA.initialize("UA-164341109-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
+    this.authListener();
   }
 
   logInlogOut = async () => {
@@ -78,7 +98,7 @@ class App extends Component {
         let _planlist = JSON.parse(localStorage.getItem("planlist"));
         for (let i = 0; i < _planlist.length; i++) {
           let url = APIServer + "/load_plan/" + _planlist[i].plan_id;
-          await axios.get(url).then(async result => {
+          await axios.get(url).then(async (result) => {
             let data = result.data;
             url = APIServer + "/plan_overview";
             let original_id = data.plan_overview.original_id;
@@ -87,73 +107,79 @@ class App extends Component {
             let savedplan = {
               ...data.plan_overview,
               original_id: original_id,
-              user_id: user_id
+              user_id: user_id,
             };
             await axios
               .post(url, savedplan)
-              .then(result => {
+              .then((result) => {
                 if (result.data === null) alert("Could not save plan :(");
                 planId = result.data.id;
                 // console.log(result);
               })
-              .catch(error => {
+              .catch((error) => {
                 this.setState({ error });
               });
-            data.plan_startday.map(async day => {
+            data.plan_startday.map(async (day) => {
               url = APIServer + "/plan_startday/";
               let newDay = day;
               newDay.plan_id = planId;
               await axios
                 .post(url, newDay)
-                .then(result => {
+                .then((result) => {
                   if (result.data === null) alert("Could not save plan :(");
                   // console.log(result);
                 })
-                .catch(error => {
+                .catch((error) => {
                   this.setState({ error });
                   console.log(error);
                 });
             });
 
-            data.plan_detail.map(async plan => {
+            data.plan_detail.map(async (plan) => {
               url = APIServer + "/plan_detail/";
               let newPlan = plan;
               newPlan.plan_id = planId;
               await axios
                 .post(url, newPlan)
-                .then(result => {
+                .then((result) => {
                   if (result.data === null) alert("Could not save plan :(");
                   // console.log(result);
                 })
-                .catch(error => {
+                .catch((error) => {
                   this.setState({ error });
                   console.log(error);
                 });
             });
             if (data.plan_overview.original_id === 0) {
               if (data.plan_startday) {
-                url = APIServer + "/plan_startday/delete/" + data.plan_overview.plan_id;
+                url =
+                  APIServer +
+                  "/plan_startday/delete/" +
+                  data.plan_overview.plan_id;
 
                 await axios
                   .delete(url)
-                  .then(result => {
+                  .then((result) => {
                     if (result.data === null) alert("Could not update plan :(");
                     // console.log(result);
                   })
-                  .catch(error => {
+                  .catch((error) => {
                     console.log(error);
                   });
               }
               if (data.plan_detail !== []) {
-                url = APIServer + "/plan_detail/delete/" + data.plan_overview.plan_id;
+                url =
+                  APIServer +
+                  "/plan_detail/delete/" +
+                  data.plan_overview.plan_id;
 
                 await axios
                   .delete(url)
-                  .then(result => {
+                  .then((result) => {
                     if (result.data === null) alert("Could not update plan :(");
                     // console.log(result);
                   })
-                  .catch(error => {
+                  .catch((error) => {
                     console.log(error);
                   });
               }
@@ -161,11 +187,11 @@ class App extends Component {
 
               await axios
                 .delete(url)
-                .then(result => {
+                .then((result) => {
                   if (result.data === null) alert("Could not update plan :(");
                   // console.log(result);
                 })
-                .catch(error => {
+                .catch((error) => {
                   console.log(error);
                 });
             }
@@ -175,16 +201,58 @@ class App extends Component {
     }
   };
 
+  toggleLogin = () => {
+    this.setState({ toggleLogin: !this.state.toggleLogin });
+  };
+
+  toggleSignup = () => {
+    this.setState({ toggleSignup: !this.state.toggleSignup });
+  };
+
+  logout = () => {
+    fire.auth().signOut();
+  }
+
   render() {
     // eslint-disable-next-line
-    const { user_id } = this.state;
+    const { user_id, toggleLogin, toggleSignup, isLoggedIn } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     return (
       <React.Fragment>
         <header className="topnav">
           <a className="oneplan" href="/home">
-            <img src="/oneplan-logo-primary.png"/>
+            <img src="/oneplan-logo-primary.png" />
           </a>
+          {(() => {
+            if (isLoggedIn) {
+              return (
+                <div className="login">
+                  <button className="login" onClick={this.logout}>
+                    Log out
+                  </button>
+                </div>
+              );
+            } else {
+              return (
+                <div>
+                  <div className="login">
+                    <button className="login" onClick={this.toggleLogin}>
+                      Log In
+                    </button>
+                  </div>
+                  <div className="signin">
+                    <button
+                      className="signin-button"
+                      onClick={this.toggleSignup}
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+          })()}
+
           {/* <a href="/plan">Plan</a>
           {/* <a href="/howto">How to use?</a>
           {/* <button className="white-button" onClick={this.logInlogOut}>
@@ -194,11 +262,40 @@ class App extends Component {
             delete cache
           </button> */}
         </header>
+        {(() => {
+          if (toggleLogin) {
+            return (
+              <div className="loginForm">
+                <Login toggleLogin={this.toggleLogin} />
+              </div>
+            );
+          }
+        })()}
+        {(() => {
+          if (toggleSignup) {
+            return (
+              <div className="loginForm">
+                <Signup toggleSignup={this.toggleSignup} />
+              </div>
+            );
+          }
+        })()}
         <BrowserRouter>
+
           <Route exact path="/" component={() => <Redirect to="/home" />} />
-          <Route path="/home">
-            <Homepage {...this.state} />
-          </Route>
+
+          {(()=> {
+          if (isLoggedIn)
+            return(<Route path="/home" component = {() => (<Request url={APIServer + "/plan_overview"}>
+            {(result) => <Homepage {...result} {...this.state}/>}
+          </Request>)
+            }/>)
+          else
+          return(<Route path="/home">
+          <Homepage {...this.state} />
+        </Route>)
+        })()}
+          
 
           {/* <Route
             exact
@@ -219,19 +316,29 @@ class App extends Component {
           <Route
             path="/plan/:plan_id/edit_plan"
             component={({ match }) => (
-              <EditPlan plan_id={Number(match.params.plan_id)} new_plan={false} {...this.state} />
+              <EditPlan
+                plan_id={Number(match.params.plan_id)}
+                new_plan={false}
+                {...this.state}
+              />
             )}
           />
           <Route
             path="/plan/:plan_id/edit_new_plan"
             component={({ match }) => (
-              <EditPlan plan_id={Number(match.params.plan_id)} new_plan={true} {...this.state} />
+              <EditPlan
+                plan_id={Number(match.params.plan_id)}
+                new_plan={true}
+                {...this.state}
+              />
             )}
           />
           <Route
             path="/users"
             component={() => (
-              <Request url={APIServer + "/user"}>{result => <User {...result} />}</Request>
+              <Request url={APIServer + "/user"}>
+                {(result) => <User {...result} />}
+              </Request>
             )}
           />
         </BrowserRouter>

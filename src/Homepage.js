@@ -26,6 +26,27 @@ class Homepage extends Component {
     redirectTo: "/",
   };
 
+  // handleChange(e) {
+  //   this.setState({ [e.target.name]: e.target.value });
+  // }
+
+  // login(e) {
+  //   e.preventDefault();
+  //   fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
+  //   }).catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
+
+  // signup(e){
+  //   e.preventDefault();
+  //   fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
+  //   }).then((u)=>{console.log(u)})
+  //   .catch((error) => {
+  //       console.log(error);
+  //     })
+  // }
+
   toggleFeedback = () => {
     this.setState({ feedback: !this.state.feedback });
   };
