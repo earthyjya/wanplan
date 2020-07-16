@@ -28,6 +28,9 @@ class SearchPlan extends Component {
       { id: 8, name: "Must go", nameShow: "Must go", isChecked: false },
       { id: 9, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
+    budgetList: [{ id: 1, name: "$", nameShow: "$", isChecked: false },
+    { id: 2, name: "$$", nameShow: "$$", isChecked: false },
+    { id: 3, name: "$$$", nameShow: "$$$", isChecked: false }],
     url: "https://api.oneplan.in.th/api/plan_overview",
   };
 
@@ -56,6 +59,16 @@ class SearchPlan extends Component {
     );
     allChecked = list.every((item) => item.isChecked);
     this.setState({ list: list, allChecked: allChecked });
+  };
+
+  priceChanged = (e) => {
+    let { budgetList } = this.state;
+    let itemName = e.target.name;
+    let checked = e.target.checked;
+    budgetList = budgetList.map((item) =>
+      item.name === itemName ? { ...item, isChecked: checked } : item
+    );
+    this.setState({ budgetList });
   };
 
   allChanged = (e) => {
@@ -235,7 +248,7 @@ class SearchPlan extends Component {
   }
 
   render() {
-    const { list, allChecked, data, isLoading, error } = this.state;
+    const { list, allChecked, data, isLoading, error, budgetList } = this.state;
     if (isLoading) return <div></div>;
 
     return (
@@ -347,6 +360,24 @@ class SearchPlan extends Component {
                   </label>
                 ))}
               </div>
+              Budget
+                <div>
+                {budgetList.map((price) => (
+                  <label style ={{ paddingRight: "16px" }}>
+                    <div className="checkbox-container">
+                      <input
+                        type="checkbox"
+                        className="search-checkbox"
+                        name={price.name}
+                        value={price.name}
+                        checked={price.isChecked}
+                        onChange={this.priceChanged}
+                      />
+                      <span> {price.nameShow} </span>
+                    </div>
+                  </label>
+                ))}
+                </div>
               <button className="search-button" onClick={this.criteria}>
                 Search
               </button>
