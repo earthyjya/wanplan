@@ -1,0 +1,9 @@
+@import "./Style.scss";
+
+.plan-card-deck-search{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10% !important;
+  justify-content: space-around;
+  align-items: center;
+}

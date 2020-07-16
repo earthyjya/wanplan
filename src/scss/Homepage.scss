@@ -62,34 +62,26 @@
 // }
 .plan-description-picture-home {
   position: absolute;
-  min-height: 400px;
+  min-height: 700px;
   filter: blur(2px);
-  -webkit-filter: blur(1px);
-  padding-bottom: 50px;
+  -webkit-filter: blur(2px);
   width: 100%;
+  clip-path: circle(1700px at 50% -900px);
+  object-fit: cover;
 }
 
 .plan-description-container-home {
-  min-height: 400px;
+  min-height: 750px;
   height: 400px;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: rgba(10, 5, 5, 0.8);
   color: white;
   justify-content: center;
   padding-bottom: 50px;
   width: 100%;
   z-index: 2;
-}
-
-.layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 66.4%;
-  box-shadow: inset 0 0 0 1000px rgba(232, 232, 232, 0.15);
+  background-color: black;
 }
 
 .plan-description-container-home > .row {
@@ -100,24 +92,15 @@
 
 .oneplan-title {
   color: $primary;
-  font-size: clamp(4em, 14vw, 8em);
+  font-size: clamp(4em, 12vw, 6em);
+  letter-spacing: 0.1em;
   font-weight: 650;
 }
-
-.oneplan-description {
-  font-weight: bold;
-  color: #e0e0e0;
-  font-size: clamp(1em, 3vw, 4em);
-  text-align: center;
-  letter-spacing: 0.2em;
-}
-
-.oneplan-description-2 {
-  font-weight: 650;
+.oneplan-description{
+  font-weight: 600;
   color: white;
-  font-size: clamp(2em, 5vw, 6em);
+  font-size: clamp(1.6em, 4vw, 3em);
   text-align: center;
-  letter-spacing: 0.2em;
 }
 
 .plan-search-container-home {
@@ -290,4 +273,57 @@
   left: 0%;
   background:#fcd328;
   border-radius: 3px;
+}
+
+.homepage-ending-container{
+  padding: 4em 10vw 4em 10vw;
+  display: grid;
+  grid-template:
+    "title img"
+    "content img"
+    "button img" ;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.2em;
+  justify-content: space-evenly;
+  background-color: $gray4;
+  .title{
+    grid-area: title;
+    font-size: 2.4em;
+    font-weight: bold;
+    color: $primary;
+  }
+  .content{
+    grid-area: content;
+    text-align: justify;
+  }
+  .circle{
+    position: relative;
+    right: -10vw;
+    border-radius: 100%;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    justify-self: center;
+    align-self: end;
+    height: 8vw;
+    width: 8vw;
+    background-color: $primary;
+    z-index: 1;
+  }
+  img{
+    grid-area: img;
+    border-radius: 100%;
+    place-self: center;
+    width: 25vw;
+  }
+  button{
+    grid-area: button;
+    background-color: $primary;
+    color: $secondary;
+    font-size: 1.8em;
+    border-radius: 100px;
+    width: 230px;
+    height: 2.4em;
+  }
 }

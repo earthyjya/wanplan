@@ -23,8 +23,13 @@ import {
   faSearch,
   faLink,
   faCalendarAlt,
-  faEye,
+  faEye
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebookSquare,
+  faInstagramSquare,
+  faTwitterSquare,
+} from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
 library.add(
@@ -41,27 +46,17 @@ library.add(
   faSearch,
   faLink,
   faCalendarAlt,
-  faEye
+  faEye,
+  faFacebookSquare,
+  faInstagramSquare,
+  faTwitterSquare,
 );
 
 class App extends Component {
   state = {
     user_id: 0,
     isLoggedIn: false,
-    citySearch: 0,
-    leastDay: 0,
-    mostDay: 1000,
-    allChecked: false,
-    list: [
-      { id: 1, name: "Adventure", isChecked: false },
-      { id: 2, name: "Sightseeing", isChecked: false },
-      { id: 3, name: "Cultural", isChecked: false },
-      { id: 4, name: "AUTO_TAG", isChecked: false },
-    ],
-    allFalse: true,
-    urls: [
-      "https://api.oneplan.in.th/api/plan_overview" /*+"/user/" + user_id*/,
-    ],
+    urls: ["https://api.oneplan.in.th/api/plan_overview" /*+"/user/" + user_id*/]
   };
 
   delete = () => {
@@ -83,7 +78,7 @@ class App extends Component {
         let _planlist = JSON.parse(localStorage.getItem("planlist"));
         for (let i = 0; i < _planlist.length; i++) {
           let url = APIServer + "/load_plan/" + _planlist[i].plan_id;
-          await axios.get(url).then(async (result) => {
+          await axios.get(url).then(async result => {
             let data = result.data;
             url = APIServer + "/plan_overview";
             let original_id = data.plan_overview.original_id;
@@ -92,79 +87,73 @@ class App extends Component {
             let savedplan = {
               ...data.plan_overview,
               original_id: original_id,
-              user_id: user_id,
+              user_id: user_id
             };
             await axios
               .post(url, savedplan)
-              .then((result) => {
+              .then(result => {
                 if (result.data === null) alert("Could not save plan :(");
                 planId = result.data.id;
                 // console.log(result);
               })
-              .catch((error) => {
+              .catch(error => {
                 this.setState({ error });
               });
-            data.plan_startday.map(async (day) => {
+            data.plan_startday.map(async day => {
               url = APIServer + "/plan_startday/";
               let newDay = day;
               newDay.plan_id = planId;
               await axios
                 .post(url, newDay)
-                .then((result) => {
+                .then(result => {
                   if (result.data === null) alert("Could not save plan :(");
                   // console.log(result);
                 })
-                .catch((error) => {
+                .catch(error => {
                   this.setState({ error });
                   console.log(error);
                 });
             });
 
-            data.plan_detail.map(async (plan) => {
+            data.plan_detail.map(async plan => {
               url = APIServer + "/plan_detail/";
               let newPlan = plan;
               newPlan.plan_id = planId;
               await axios
                 .post(url, newPlan)
-                .then((result) => {
+                .then(result => {
                   if (result.data === null) alert("Could not save plan :(");
                   // console.log(result);
                 })
-                .catch((error) => {
+                .catch(error => {
                   this.setState({ error });
                   console.log(error);
                 });
             });
             if (data.plan_overview.original_id === 0) {
               if (data.plan_startday) {
-                url =
-                  APIServer +
-                  "/plan_startday/delete/" +
-                  data.plan_overview.plan_id;
+                url = APIServer + "/plan_startday/delete/" + data.plan_overview.plan_id;
 
                 await axios
                   .delete(url)
-                  .then((result) => {
+                  .then(result => {
                     if (result.data === null) alert("Could not update plan :(");
                     // console.log(result);
                   })
-                  .catch((error) => {
+                  .catch(error => {
                     console.log(error);
                   });
               }
               if (data.plan_detail !== []) {
-                url =
-                  APIServer +
-                  "/plan_detail/delete/" +
-                  data.plan_overview.plan_id;
+                url = APIServer + "/plan_detail/delete/" + data.plan_overview.plan_id;
 
                 await axios
                   .delete(url)
-                  .then((result) => {
+                  .then(result => {
                     if (result.data === null) alert("Could not update plan :(");
                     // console.log(result);
                   })
-                  .catch((error) => {
+                  .catch(error => {
                     console.log(error);
                   });
               }
@@ -172,11 +161,11 @@ class App extends Component {
 
               await axios
                 .delete(url)
-                .then((result) => {
+                .then(result => {
                   if (result.data === null) alert("Could not update plan :(");
                   // console.log(result);
                 })
-                .catch((error) => {
+                .catch(error => {
                   console.log(error);
                 });
             }
@@ -194,7 +183,7 @@ class App extends Component {
       <React.Fragment>
         <header className="topnav">
           <a className="oneplan" href="/home">
-            O
+            <img src="/oneplan-logo-primary.png"/>
           </a>
           {/* <a href="/plan">Plan</a>
           {/* <a href="/howto">How to use?</a>
@@ -216,13 +205,7 @@ class App extends Component {
             path="/plan"
             component={() => (
               <RequestCriteria urls={this.state.urls}>
-                {(result) => (
-                  <MyPlan
-                    {...result}
-                    {...this.state}
-                    criteria={this.criteria}
-                  />
-                )}
+                {result => <MyPlan {...result} {...this.state} criteria={this.criteria} />}
               </RequestCriteria>
             )}
           /> */}
@@ -236,41 +219,22 @@ class App extends Component {
           <Route
             path="/plan/:plan_id/edit_plan"
             component={({ match }) => (
-              <EditPlan
-                plan_id={Number(match.params.plan_id)}
-                new_plan={false}
-                {...this.state}
-              />
+              <EditPlan plan_id={Number(match.params.plan_id)} new_plan={false} {...this.state} />
             )}
           />
           <Route
             path="/plan/:plan_id/edit_new_plan"
             component={({ match }) => (
-              <EditPlan
-                plan_id={Number(match.params.plan_id)}
-                new_plan={true}
-                {...this.state}
-              />
+              <EditPlan plan_id={Number(match.params.plan_id)} new_plan={true} {...this.state} />
             )}
           />
           <Route
             path="/users"
             component={() => (
-              <Request url={APIServer + "/user"}>
-                {(result) => <User {...result} />}
-              </Request>
+              <Request url={APIServer + "/user"}>{result => <User {...result} />}</Request>
             )}
           />
         </BrowserRouter>
-        <footer style={{ margin: "10px" }}>
-          <center>
-            <p>Copyright 2020 Oneplan</p>
-            <img
-              src="https://s3-ap-northeast-1.amazonaws.com/photo.oneplan.in.th/powered_by_google_on_white.png"
-              alt="powered by Google"
-            />
-          </center>
-        </footer>
       </React.Fragment>
     );
   }

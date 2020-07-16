@@ -108,8 +108,12 @@ class AttBar extends Component {
             onPlaceSelected={this.onPlaceSelected}
             types={["geocode", "establishment"]}
             placeholder={this.searchPlaceholder}
-            onfocus="this.placeholder = ''"
-            onblur="this.placeholder = 'enter your text'"
+            onFocus={() => {
+              this.placeholder = "";
+            }}
+            onBlur={() => {
+              this.placeholder = "enter your text";
+            }}
             componentRestrictions={{ country: "jp" }}
           />
         </div>

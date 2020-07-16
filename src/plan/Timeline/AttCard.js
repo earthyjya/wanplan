@@ -9,11 +9,11 @@ class AttCard extends Component {
   };
 
   changeDuration = e => {
-    this.props.changeDuration(this.props.attraction_order, e.target.value);
+    this.props.changeDuration(this.props.detail.attraction_order, e.target.value);
   };
 
   delCard = () => {
-    this.props.delCard(this.props.attraction_order);
+    this.props.delCard(this.props.detail.attraction_order);
   };
 
   onChange = e => {
@@ -21,7 +21,7 @@ class AttCard extends Component {
   };
 
   updateDescription = () => {
-    this.props.updateDescription(this.props.attraction_order, this.state.description);
+    this.props.updateDescription(this.props.detail.attraction_order, this.state.description);
   };
 
   componentDidMount() {
@@ -96,12 +96,16 @@ class AttCard extends Component {
               return (
                 <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
                   {minutes.map(min => {
-                    return <option key={min}>{min} mins</option>;
+                    return (
+                      <option value={min} key={min}>
+                        {min} mins
+                      </option>
+                    );
                   })}
                 </select>
               );
             } else {
-              return <div className="Duration">{end_time - start_time}</div>;
+              return <div className="Duration">{time_spend} mins</div>;
             }
           })()}
           <div className="AttDotStop">
@@ -114,13 +118,13 @@ class AttCard extends Component {
           onClick={this.handleClick}
           onFocus={() => {
             this.setState({ isFocused: true });
-            this.props.showDetails(this.props.detail);
+            if (this.props.editing) this.props.showDetails(this.props.detail);
           }}
           onBlur={this.handleBlur}
           tabIndex="0"
         >
-          <div class="Triangle" />
-          <div class="AttPhotoCont">
+          <div className="Triangle" />
+          <div className="AttPhotoCont">
             <div className="AttTypeCont">
               <div className="AttType">Type</div>
             </div>
@@ -134,8 +138,8 @@ class AttCard extends Component {
               onClick={this.props.toggleAttModal}
             />
           </div>
-          <div class="AttDetailsCont">
-            <div class="AttName">{attraction_name}</div>
+          <div className="AttDetailsCont">
+            <div className="AttName">{attraction_name}</div>
             {(() => {
               //If editing and focus, show textarea to edit else show just text
               if (this.state.isFocused && this.props.editing) {

@@ -1,6 +1,6 @@
 import "../scss/PlanCover.scss";
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 
 class PlanCover extends React.Component {
   state = {
@@ -13,7 +13,7 @@ class PlanCover extends React.Component {
   }
 
   render() {
-    const { URL, copied } = this.state;
+    // const { URL, copied } = this.state;
     return (
       <div className="plan-cover-modal-content">
         <div className="close-modal" onClick={this.props.togglePlanCover}>
