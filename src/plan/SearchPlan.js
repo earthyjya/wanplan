@@ -29,7 +29,7 @@ class SearchPlan extends Component {
       { id: 9, name: "Go_to_travel", nameShow: "Go to travel", isChecked: false },
       { id: 10, name: "Nature", nameShow: "Nature", isChecked: false },
       { id: 11, name: "Social_distancing", nameShow: "Social distancing", isChecked: false },
-      { id: 9, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
+      { id: 12, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
     budgetList: [{ id: 1, name: "$", nameShow: "$", isChecked: false },
     { id: 2, name: "$$", nameShow: "$$", isChecked: false },
