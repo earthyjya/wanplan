@@ -13,12 +13,12 @@
 .AttCardTimeContainer{
   position: relative;
   left: -8px;
-  width: 50px;
+  width: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   @media all and (max-width: 480px){
-    width: 20px;
+    width: 22px;
   }
 }
 
@@ -27,16 +27,16 @@
   position: relative;
   background: $gray4;
   box-sizing: border-box;
-  padding: 25px;
-  height: 180px;
+  padding: 20px;
   width: 80%;
+  height: 180px;
   border-radius: 10px;
   box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
   transition: .2s ease-in-out;
   @media all and (max-width: 480px){
-    padding: 10px;
+    padding: 15px;
     flex-direction: column;
     width: 100%;
   }
@@ -44,7 +44,6 @@
     outline: none;
     height: 240px;
     width: 100%;
-    padding: 40px;
     @media all and (max-width: 480px){
       padding: 10px;
       flex-direction: column;
@@ -55,6 +54,10 @@
     }
     > .StartTimeDot{
       background: $primary;
+    }
+    .AttName{
+      overflow: auto;
+      white-space: normal;
     }
   }
 }
@@ -112,9 +115,12 @@
   left: -45px;
   background: white;
   border-radius: 5px;
-  font-size: 1.2em;
+  font-size: 1em;
   color: grey;
   text-align: center;
+  @media all and (max-width: 480px){
+    font-size: 0.8em;
+  }
 }
 
 .SelAttDura {
@@ -135,6 +141,10 @@
   display: flex;
   flex-direction: row;
   align-self: stretch;
+  @media all and (max-width: 480px){
+    flex-direction: column;
+    flex-grow: 1;
+  }
 }
 
 .AttPhoto {
@@ -147,13 +157,11 @@
   border: none;
   background: #ffffff;
   @media all and (max-width: 480px){
-    padding: 10px;
-    flex-direction: column;
   }
 }
 
 .AttTypeCont {
-  background: #fcd328;
+  background: $primary;
   width: 18px;
   height: 50px;
   border-radius: 7px 0px 0px 7px;
@@ -162,6 +170,16 @@
   justify-content: center;
   flex-direction: column;
   align-self: flex-end;
+  @media all and (max-width: 480px){
+    border-radius: 7px 7px 0px 0px;
+    width: 50px;
+    height: 18px;
+    margin-bottom: 0;
+    align-self: flex-start;
+    flex-direction: column;
+    position: absolute;
+    top: -18px;
+  }
 }
 
 .AttType {
@@ -170,19 +188,31 @@
   font-weight: bold;
   transform: rotate(-90deg);
   text-align: left;
+  @media all and (max-width: 480px){
+    transform: rotate(0deg);
+    text-align: center;
+  }
 }
 
 .AttDetailsCont{
-  width: 200px;
   margin-left: 1.2em;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  @media all and (max-width: 480px){
+    margin-left: 0;
+    margin-top: 0.2em;
+  }
 }
 
 .AttName {
   font-weight: bold;
   font-size: 1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .AttDes {
   font-size: 10px;

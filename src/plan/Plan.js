@@ -475,7 +475,7 @@ class Plan extends React.Component {
           </div>
           <Container fluid>
             <Row>
-              <Col lg={12}>
+              <Col lg={12} className="p-0">
                 {(() => {
                   if (this.state.mode === "plan")
                     return (

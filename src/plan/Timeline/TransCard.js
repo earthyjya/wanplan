@@ -22,12 +22,12 @@ class TransCard extends Component {
                 return <div className="no-transport">{transport.text}</div>;
               return (
                 <React.Fragment>
-                  <div className="fromTo">
-                    <span> from </span>
-                    <span> {start.attraction_name} </span>
-                    <span> to </span>
+                  {/* <div className="fromTo">
+                     <span> from </span>
+                     <span> {start.attraction_name} </span>
+                     <span> to </span>
                     <span> {destination.attraction_name} </span>
-                  </div>
+                  </div>*/}
                   <div className="transport">
                     <span> 800m </span>
                     <span> <FontAwesomeIcon icon="walking" size="sm" /> <span>10min</span></span>
