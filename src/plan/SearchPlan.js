@@ -292,20 +292,11 @@ class SearchPlan extends Component {
     return (
       <React.Fragment>
         {this.RenderRedirect()}
-        <div
-          style={{
-            marginTop: "20px",
-            marginLeft: "10px",
-            position: "relative",
-            fontSize: "22px",
-            fontWeight: "bold",
-            alignSelf: "center",
-            textAlign: "center",
-          }}
-        >
-          Search Plan
+        <div className="search-plan-container">
+          <span>Search Plan</span>
+          {/*"city-search-container"*/}
           <div>
-            <div className="search-subtitle">City</div>
+            <span>City:</span>
             <select
               className="plan-search-city-home"
               placeholder="choose a city..."
@@ -325,102 +316,103 @@ class SearchPlan extends Component {
                 );
               })}
             </select>
-            <div className="search-subtitle">
-              Days
-              <div style={{ fontWeight: "normal" }}>
-                At least{" "}
-                <select
-                  className="day-input"
-                  placeholder="None"
-                  onChange={this.leastDayChanged}
-                >
-                  <option value="0">None</option>
-                  {(() => {
-                    let days = [];
-                    for (var i = 1; i <= 8; i++) {
-                      days.push(i);
-                    }
-                    return days.map((day) => (
-                      <option key={day} value={day}>
-                        {day}
-                      </option>
-                    ));
-                  })()}
-                </select>{" "}
-                At most{" "}
-                <select
-                  className="day-input"
-                  placeholder="None"
-                  onChange={this.mostDayChanged}
-                >
-                  <option value="0">None</option>
-                  {(() => {
-                    let days = [];
-                    for (var i = 1; i <= 8; i++) {
-                      days.push(i);
-                    }
-                    return days.map((day) => (
-                      <option key={day} value={day}>
-                        {day}
-                      </option>
-                    ));
-                  })()}
-                </select>
-              </div>
-              Plan style
-              <div style={{ fontWeight: "normal" }}>
-                <label style={{ paddingRight: "16px" }}>
-                  <div className="checkbox-container">
+          </div>
+          {/*"days-search-container"*/}
+          <div>
+            <span>Days:</span>
+            <div>
+              <span>At least </span>
+              <select
+                className="day-input"
+                placeholder="None"
+                onChange={this.leastDayChanged}
+              >
+                <option value="0">None</option>
+                {(() => {
+                  let days = [];
+                  for (var i = 1; i <= 8; i++) {
+                    days.push(i);
+                  }
+                  return days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ));
+                })()}
+              </select>
+              <span>At most </span>
+              <select
+                className="day-input"
+                placeholder="None"
+                onChange={this.mostDayChanged}
+              >
+                <option value="0">None</option>
+                {(() => {
+                  let days = [];
+                  for (var i = 1; i <= 8; i++) {
+                    days.push(i);
+                  }
+                  return days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ));
+                })()}
+              </select>
+            </div>
+          </div>
+          {/*"style-search-container"*/}
+          <div>
+            <span>Plan style:</span>
+            <div>
+              <label className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="search-checkbox"
+                    name="all"
+                    value="all"
+                    checked={allChecked}
+                    onChange={this.allChanged}
+                  />
+                  <span> All </span>
+              </label>
+              {list.map((style) => (
+                <label className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="search-checkbox"
+                    name={style.name}
+                    value={style.name}
+                    checked={style.isChecked}
+                    onChange={this.styleChanged}
+                  />
+                  <span> {style.nameShow} </span>
+                </label>
+              ))}
+            </div>
+          </div>
+          {/*"budget-search-container"*/}
+          <div>
+            <span>Budget:</span>
+            <div>
+              {budgetList.map((price) => (
+                <label className="checkbox-container">
                     <input
                       type="checkbox"
                       className="search-checkbox"
-                      name="all"
-                      value="all"
-                      checked={allChecked}
-                      onChange={this.allChanged}
+                      name={price.name}
+                      value={price.name}
+                      checked={price.isChecked}
+                      onChange={this.priceChanged}
                     />
-                    <span> All </span>
-                  </div>
+                    <span> {price.nameShow} </span>
                 </label>
-                {list.map((style) => (
-                  <label style={{ paddingRight: "16px" }}>
-                    <div className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        className="search-checkbox"
-                        name={style.name}
-                        value={style.name}
-                        checked={style.isChecked}
-                        onChange={this.styleChanged}
-                      />
-                      <span> {style.nameShow} </span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-              Budget
-                <div>
-                {budgetList.map((price) => (
-                  <label style ={{ paddingRight: "16px" }}>
-                    <div className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        className="search-checkbox"
-                        name={price.name}
-                        value={price.name}
-                        checked={price.isChecked}
-                        onChange={this.priceChanged}
-                      />
-                      <span> {price.nameShow} </span>
-                    </div>
-                  </label>
-                ))}
-                </div>
-              <button className="search-button" onClick={this.criteria}>
-                Search
-              </button>
+              ))}
             </div>
           </div>
+          <button className="search-button" onClick={this.criteria}>
+            Search
+          </button>
         </div>
         <CardDeck className="plan-card-deck-search">
           {(() => {

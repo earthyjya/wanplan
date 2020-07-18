@@ -103,46 +103,6 @@
   text-align: center;
 }
 
-.plan-search-container-home {
-  height: 72px;
-  width: 767px;
-  border-radius: 10px;
-  background-color: #fff;
-  z-index: 1;
-  display: flex;
-  padding: 15px;
-
-  align-self: center;
-
-  justify-content: space-between;
-}
-
-.plan-search-container-home > select,
-.plan-search-container-home > button {
-  height: 45px;
-  margin-right: 10px;
-}
-
-.plan-search-city-home {
-  position: relative;
-  width: 40%;
-}
-.plan-search-city-home ::-ms-expand {
-  display: none;
-}
-.plan-search-city-home :hover {
-  border-color: #888;
-  color: #fcc626;
-}
-
-// .plan-search-date{
-//   width: 300px;
-// }
-
-// .plan-search-people{
-//   width: 160px;
-// }
-
 .plan-search-button-home {
   width: 180px;
   border-radius: 8px;
@@ -151,6 +111,7 @@
 .plan-search-button-home :hover {
   background-color: #fcc626;
 }
+
 .intro-container-home {
   display: flex;
   height: 298px;
@@ -161,6 +122,7 @@
   padding-left: 30px !important;
   padding-right: 30px !important;
 }
+
 .howto-1 {
   display: "flex";
   justify-content: "center";
@@ -191,6 +153,7 @@
   align-items: center;
   height: 292 px;
 }
+
 .gif {
   object-fit: scale-down;
   height: 150px;
@@ -200,6 +163,7 @@
   align-self: center;
   display: block;
 }
+
 .intro-plan-home {
   color: #fcd328;
   font-size: 1.3em;
@@ -208,72 +172,6 @@
 .intro-container-home > div {
   font-size: 1.2em;
   font-weight: 800;
-}
-
-.search-subtitle {
-  margin-top: 20px;
-  margin-left: 30%;
-  margin-right: 30%;
-  position: relative;
-  font-size: 18px;
-  align-self: center;
-  text-align: left;
-}
-
-.day-input {
-  height: 32px;
-  width: 72px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #888;
-}
-
-.chekcbox-container{
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
-  margin-left: 10px;
-  padding: 10px;
-}
-
-.hidden-checkbox {
-  border: 0;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
-.search-checkbox {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border-radius: 3px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #888;
-}
-
-.checkbox-container :checked{
-  background:#fcd328;
-}
-
-.checkbox-container :focus{
-  border-style: solid;
-  border-width: 1px;
-  border-color: #888;
-}
-
-.search-button{
-  position: absolute;
-  left: 0%;
-  background:#fcd328;
-  border-radius: 3px;
 }
 
 .homepage-ending-container{
