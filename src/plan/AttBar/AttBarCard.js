@@ -3,7 +3,7 @@ import axios from "axios";
 
 class AttBarCard extends Component {
   state = {
-    photos: []
+    photos: [],
   };
 
   async componentDidMount() {
@@ -13,13 +13,14 @@ class AttBarCard extends Component {
         return;
       }
       const { google_place_id } = this.props;
-      let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
+      let url =
+        process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
       await axios
         .get(url)
-        .then(res => {
+        .then((res) => {
           this.setState({ photos: res.data[0].photos });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
@@ -29,7 +30,7 @@ class AttBarCard extends Component {
     var style = {
       backgroundImage: "url(https://via.placeholder.com/300x200)",
       backgroundSize: "cover",
-      backgroundPosition: "center"
+      backgroundPosition: "center",
     };
     if (this.state.photos.length > 0) {
       style.backgroundImage = "url(" + this.state.photos[0] + ")";
@@ -39,10 +40,22 @@ class AttBarCard extends Component {
   }
 
   render() {
-    const { attraction_name, attraction_type, open_time, close_time, description } = this.props;
+    const {
+      attraction_name,
+      attraction_type,
+      open_time,
+      close_time,
+      description,
+    } = this.props;
     return (
-      <div className="AttBarCard" style={{ display: "flex", flexDirection: "column" }}>
-        <div className="type"> {attraction_type ? attraction_type.replace("_", " ") : ""}</div>
+      <div
+        className="AttBarCard"
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        <div className="type">
+          {" "}
+          {attraction_type ? attraction_type.replace("_", " ") : ""}
+        </div>
         <div className="image" style={this.checkBgImage()}>
           <div className="description-container">
             <div className="open-time">
@@ -52,8 +65,9 @@ class AttBarCard extends Component {
             <div className="name">{attraction_name}</div>
             <div className="description">
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor incididunt
-              ut labore et dolore magna aliqua.{description}{" "}
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              mod tempor incididunt ut labore et dolore magna aliqua.
+              {description}{" "}
             </div>
           </div>
         </div>

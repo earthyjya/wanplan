@@ -3,12 +3,10 @@ import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
-import { CardDeck } from "reactstrap";
-import axios from "axios";
 
 class MyPlan extends Component {
   state = {
-    data : [],
+    data: [],
     error: null,
     redirect: false,
     redirectTo: "/",
@@ -23,24 +21,24 @@ class MyPlan extends Component {
       { id: 3, name: "Cultural", isChecked: false },
       { id: 4, name: "AUTO_TAG", isChecked: false },
     ],
-    allFalse : true,
-    url : "https://api.oneplan.in.th/api/plan_overview",
+    allFalse: true,
+    url: "https://api.oneplan.in.th/api/plan_overview",
   };
-
-
 
   savedPlan = () => {
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (this.props.isLoggedIn) {
       const { data, user_id } = this.props;
       return data
-        .filter(plan => plan.user_id === user_id)
-        .map(plan => {
+        .filter((plan) => plan.user_id === user_id)
+        .map((plan) => {
           return <PlanCard plan={plan} key={plan.plan_id} />;
         });
     } else {
       if (_planlist !== null && _planlist !== []) {
-        return _planlist.map(plan => <PlanCard plan={plan} key={plan.plan_id} />);
+        return _planlist.map((plan) => (
+          <PlanCard plan={plan} key={plan.plan_id} />
+        ));
       } else {
         return <div>Your saved plan will show here</div>;
       }
@@ -53,10 +51,10 @@ class MyPlan extends Component {
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 
-  RedirectFunc = plan_id => {
+  RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_new_plan"
+      redirectTo: "/plan/" + plan_id + "/edit_new_plan",
     });
   };
 
@@ -66,7 +64,6 @@ class MyPlan extends Component {
 
   render() {
     const { isLoading } = this.props;
-    const { list, allChecked, data, error } = this.state;
     if (isLoading) return <div></div>;
 
     return (
