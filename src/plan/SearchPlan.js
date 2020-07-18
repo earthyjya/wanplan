@@ -324,10 +324,10 @@ class SearchPlan extends Component {
               <span>At least </span>
               <select
                 className="day-input"
-                placeholder="None"
+                placeholder="0"
                 onChange={this.leastDayChanged}
               >
-                <option value="0">None</option>
+                <option value="0">0</option>
                 {(() => {
                   let days = [];
                   for (var i = 1; i <= 8; i++) {
@@ -343,10 +343,10 @@ class SearchPlan extends Component {
               <span>At most </span>
               <select
                 className="day-input"
-                placeholder="None"
+                placeholder="0"
                 onChange={this.mostDayChanged}
               >
-                <option value="0">None</option>
+                <option value="0">0</option>
                 {(() => {
                   let days = [];
                   for (var i = 1; i <= 8; i++) {

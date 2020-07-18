@@ -10,9 +10,10 @@
 
 .see-all-button{
   font-size: 2em;
-  padding: 20px;
+  padding: .3em;
   margin: 20px 70px 20px 70px;
-  min-width: 8em;
+  border-radius: .2em;
+  min-width: 6em;
   background-color: $primary;
 }
 
@@ -28,7 +29,7 @@
   align-self: center;
   text-align: left;
   @media all and (max-width: 480px){
-    padding: 0.5em;
+    padding: 0.8em;
     margin: 1em;
   }
   > * {
