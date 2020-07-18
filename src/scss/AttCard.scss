@@ -29,7 +29,6 @@
   box-sizing: border-box;
   padding: 20px;
   width: 80%;
-  height: 180px;
   border-radius: 10px;
   box-shadow: 4px 4px 7px -1px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -38,19 +37,18 @@
   @media all and (max-width: 480px){
     padding: 15px;
     flex-direction: column;
-    width: 100%;
   }
   &:focus-within{
     outline: none;
     height: 240px;
     width: 100%;
     @media all and (max-width: 480px){
-      padding: 10px;
+      padding: 15px;
       flex-direction: column;
     }
     > .AttPhotoCont{
-      width: 178px;
-      max-width: 178px;
+      width: 198px;
+      max-width: 198px;
     }
     > .StartTimeDot{
       background: $primary;
@@ -125,12 +123,17 @@
 
 .SelAttDura {
   position: relative;
-  width: 90px;
-  left: -45px;
+  width: 83px;
+  left: -50px;
   background: white;
   border-radius: 5px;
-  font-size: 1.2em;
+  font-size: 1em;
   color: grey;
+  @media all and (max-width: 480px){
+    font-size: 0.8em;
+    width: 63px;
+    left: -40px;
+  }
 }
 
 .AttPhotoCont{
@@ -157,6 +160,7 @@
   border: none;
   background: #ffffff;
   @media all and (max-width: 480px){
+    margin-right: 20px;
   }
 }
 

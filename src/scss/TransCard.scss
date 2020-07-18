@@ -35,6 +35,7 @@
 
 .transport {
     display: inline-block;
+    white-space: nowrap;
     & > * {
       margin-left: 0.4em;
       font-size: 1em;
