@@ -9,6 +9,10 @@ import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
+import MobileWarningToast from "../components/MobileWarningToast.js"
+import {
+  isMobile
+} from "react-device-detect";
 
 class Plan extends React.Component {
   state = {
@@ -33,6 +37,7 @@ class Plan extends React.Component {
     rating: 0,
     addedRating: [],
     mode: "plan",
+    showMobileWarning: false,
   };
 
   save = async () => {
@@ -149,6 +154,10 @@ class Plan extends React.Component {
   };
 
   checkEdit = async () => {
+    if(isMobile){
+      this.setState({showMobileWarning: true})
+      return
+    }
     //If user already edit the plan before, go to the edit plan page on the same url
     const { user_id, plan_id } = this.props;
     if (!this.props.isLoggedIn) {
@@ -535,13 +544,22 @@ class Plan extends React.Component {
               {addedReview.map(i => {
                 return (
                   <div className="review-box">
-                    <div>{i.rating === 0 ? "No rating" : i.rating} &#x2605;</div>
+                    <div>{i.rating === 0 ? "No rating" : String.fromCharCode(0x2605).repeat(i.rating)} </div>
                     <div>{i.review === "" ? "No comment" : i.review}</div>
                   </div>
                 );
               })}
             </div>
           </div>
+          {(() => {
+            return(
+              <MobileWarningToast
+                toggleToast = {() =>
+                  {this.setState({showMobileWarning: !this.state.showMobileWarning})}
+                }
+                isOpen = {this.state.showMobileWarning}/>
+            )
+          })()}
         </React.Fragment>
       );
     }
