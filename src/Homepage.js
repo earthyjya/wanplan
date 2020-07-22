@@ -2,19 +2,14 @@ import "./scss/Homepage.scss";
 import axios from "axios";
 import Myplan from "./plan/MyPlan.js";
 import SearchPlan from "./plan/SearchPlan.js";
-import Footer from "./Footer.js"
+import Footer from "./Footer.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faRoute,
-  faExclamation,
-  faCommentAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 import FeedbackForm from "./FeedbackForm.js";
-import "./scss/Feedback.scss"
+import "./scss/Feedback.scss";
 
 class Homepage extends Component {
   state = {
@@ -104,30 +99,37 @@ class Homepage extends Component {
         <img
           className="plan-description-picture-home"
           src="https://images.unsplash.com/photo-1525230071276-4a87f42f469e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80"
+          alt=""
         />
         <Container fluid className="plan-description-container-home">
           <Row className="oneplan-logo">
             <img
-              style={{width:'200px'}}
+              style={{ width: "200px" }}
               src="/oneplan-logo-white-removebg-preview.png"
+              alt=""
             />
           </Row>
           <Row className="oneplan-title">ONE PLAN</Row>
-          <Row className="oneplan-description">อยากเที่ยวไหน..ให้เราช่วยแพลน</Row>
+          <Row className="oneplan-description">
+            อยากเที่ยวไหน..ให้เราช่วยแพลน
+          </Row>
         </Container>
         <Myplan data={this.props.data} {...this.state} {...this.props} />
         <SearchPlan data={this.props.data} {...this.state} {...this.props} />
         <div className="homepage-ending-container">
           <div className="title">Oneplan</div>
           <div className="content">
-            ช่วยให้คนที่ไม่ชอบความยุ่งยากหรืออยากเริ่มต้นแพลนเที่ยวญี่ปุ่นด้วยตัวเองสามารถวางแผนได้ง่ายขึ้น ผ่าน Social platform ของเราที่ผู้ใช้สามารถเลือกแพลนที่เพื่อน ๆ คนอื่นแชร์ไว้มาปรับแต่งบนบอร์ดที่
-            ออกแบบมาให้สามารถแก้ไขได้ง่ายและอิสระ พร้อมจองตั๋วและโรงแรมที่เหมาะที่สุดสำหรับทริปของคุณ
+            ช่วยให้คนที่ไม่ชอบความยุ่งยากหรืออยากเริ่มต้นแพลนเที่ยวญี่ปุ่นด้วยตัวเองสามารถวางแผนได้ง่ายขึ้น
+            ผ่าน Social platform ของเราที่ผู้ใช้สามารถเลือกแพลนที่เพื่อน ๆ
+            คนอื่นแชร์ไว้มาปรับแต่งบนบอร์ดที่
+            ออกแบบมาให้สามารถแก้ไขได้ง่ายและอิสระ
+            พร้อมจองตั๋วและโรงแรมที่เหมาะที่สุดสำหรับทริปของคุณ
           </div>
           <button>สร้างแพลน</button>
-          <img src="https://via.placeholder.com/300x300"/>
+          <img src="/homepage-placeholder.jpg" alt="" />
           <div className="circle"></div>
         </div>
-        <Footer/>
+        <Footer />
       </React.Fragment>
     );
   }

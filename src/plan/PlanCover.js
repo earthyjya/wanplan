@@ -5,7 +5,7 @@ import React from "react";
 class PlanCover extends React.Component {
   state = {
     URL: null,
-    copied: false
+    copied: false,
   };
 
   componentDidMount() {

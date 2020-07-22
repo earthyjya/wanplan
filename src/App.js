@@ -2,11 +2,9 @@ import "./scss/App.scss";
 import axios from "axios";
 import EditPlan from "./plan/EditPlan";
 import Homepage from "./Homepage";
-import MyPlan from "./plan/MyPlan";
 import Plan from "./plan/Plan";
 import React, { Component } from "react";
 import Request from "./lib/Request";
-import RequestCriteria from "./lib/RequestCriteria";
 import User from "./user/User";
 import ReactGA from "react-ga";
 import fire from "./config/Firebase";
@@ -211,7 +209,7 @@ class App extends Component {
 
   logout = () => {
     fire.auth().signOut();
-  }
+  };
 
   render() {
     // eslint-disable-next-line
@@ -221,7 +219,7 @@ class App extends Component {
       <React.Fragment>
         <header className="topnav">
           <a className="oneplan" href="/home">
-            <img src="/oneplan-logo-primary.png" />
+            <img src="/oneplan-logo-primary.png" alt="Oneplan Logo" />
           </a>
           {(() => {
             if (isLoggedIn) {
@@ -281,21 +279,27 @@ class App extends Component {
           }
         })()}
         <BrowserRouter>
-
           <Route exact path="/" component={() => <Redirect to="/home" />} />
 
-          {(()=> {
-          if (isLoggedIn)
-            return(<Route path="/home" component = {() => (<Request url={APIServer + "/plan_overview"}>
-            {(result) => <Homepage {...result} {...this.state}/>}
-          </Request>)
-            }/>)
-          else
-          return(<Route path="/home">
-          <Homepage {...this.state} />
-        </Route>)
-        })()}
-          
+          {(() => {
+            if (isLoggedIn)
+              return (
+                <Route
+                  path="/home"
+                  component={() => (
+                    <Request url={APIServer + "/plan_overview"}>
+                      {(result) => <Homepage {...result} {...this.state} />}
+                    </Request>
+                  )}
+                />
+              );
+            else
+              return (
+                <Route path="/home">
+                  <Homepage {...this.state} />
+                </Route>
+              );
+          })()}
 
           {/* <Route
             exact

@@ -1,5 +1,4 @@
 import "../scss/SearchPlan.scss";
-import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
@@ -25,12 +24,17 @@ class SearchPlan extends Component {
       { id: 5, name: "Food", nameShow: "Food", isChecked: false },
       { id: 6, name: "Shopping", nameShow: "Shopping", isChecked: false },
       { id: 7, name: "Unseen", nameShow: "Unseen", isChecked: false },
-      { id: 8, name: "Must go", nameShow: "Must go", isChecked: false },
-      { id: 9, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
+      { id: 8, name: "Must_go", nameShow: "Must go", isChecked: false },
+      { id: 9, name: "Go_to_travel", nameShow: "Go to travel", isChecked: false },
+      { id: 10, name: "Nature", nameShow: "Nature", isChecked: false },
+      { id: 11, name: "Social_distancing", nameShow: "Social distancing", isChecked: false },
+      { id: 12, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
-    budgetList: [{ id: 1, name: "$", nameShow: "$", isChecked: false },
-    { id: 2, name: "$$", nameShow: "$$", isChecked: false },
-    { id: 3, name: "$$$", nameShow: "$$$", isChecked: false }],
+    budgetList: [
+      { id: 1, name: "$", nameShow: "$", isChecked: false },
+      { id: 2, name: "$$", nameShow: "$$", isChecked: false },
+      { id: 3, name: "$$$", nameShow: "$$$", isChecked: false },
+    ],
     url: "https://api.oneplan.in.th/api/plan_overview",
     seeAll: false,
   };
@@ -44,7 +48,7 @@ class SearchPlan extends Component {
   };
 
   mostDayChanged = (e) => {
-    if (e != 0) {
+    if (e !== 0) {
       this.setState({ mostDay: Number(e.target.value) });
     } else {
       this.setState({ mostDay: 1000 });
@@ -90,19 +94,22 @@ class SearchPlan extends Component {
         allFalse = false;
         // console.log("not all false");
       }
+      return null;
     });
     let url = "";
-    if (e.citySearch != 0)
+    if (e.citySearch !== 0)
       url = APIServer + "/plan_overview/criteria/" + e.citySearch + "/";
     else url = APIServer + "/plan_overview/criteria/all/";
     url = url + e.leastDay + "/" + e.mostDay + "/";
     if (!allFalse) {
       e.list.map((style) => {
         if (style.isChecked) url = url + style.name + ",";
+        return null;
       });
     } else {
       e.list.map((style) => {
         url = url + style.name + ",";
+        return null;
       });
     }
     this.setState({ url: url });
@@ -238,9 +245,9 @@ class SearchPlan extends Component {
     //     this.setState({ error, isLoading: false });
     //     console.log(error);
     //   });
-    this.showAll = this.showAll.bind(this)
-    this.showSeeAll = this.showSeeAll.bind(this)
-    this.enableSeeAll = this.enableSeeAll.bind(this)
+    this.showAll = this.showAll.bind(this);
+    this.showSeeAll = this.showSeeAll.bind(this);
+    this.enableSeeAll = this.enableSeeAll.bind(this);
     await axios
       .get(this.state.url)
       .then((result) => {
@@ -250,14 +257,14 @@ class SearchPlan extends Component {
       .catch((error) => this.setState({ error, isLoading: false }));
   }
 
-  enableSeeAll(){
-    this.setState({seeAll: true})
+  enableSeeAll() {
+    this.setState({ seeAll: true });
   }
 
-  showAll(){
+  showAll() {
     const { data } = this.state;
-    if (this.state.seeAll){
-      return(
+    if (this.state.seeAll) {
+      return (
         <React.Fragment>
           {data.map((plan) => (
             <PlanCard plan={plan} key={plan.plan_id} />
@@ -268,11 +275,11 @@ class SearchPlan extends Component {
     else{
       return(
         <React.Fragment>
-          {data.slice(0,9).map((plan) => (
+          {data.slice(0, 9).map((plan) => (
             <PlanCard plan={plan} key={plan.plan_id} />
           ))}
         </React.Fragment>
-      )
+      );
     }
   }
 
@@ -282,11 +289,11 @@ class SearchPlan extends Component {
         <button className="see-all-button" onClick={this.enableSeeAll}> See all </button>
       )
     }
-    return <React.Fragment/>
+    return <React.Fragment />;
   }
 
   render() {
-    const { list, allChecked, data, isLoading, error, budgetList } = this.state;
+    const { list, allChecked, isLoading, error, budgetList } = this.state;
     if (isLoading) return <div></div>;
 
     return (

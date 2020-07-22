@@ -19,7 +19,9 @@ class TransCard extends Component {
           {(() => {
             if (transport) {
               if (transport.text === "No transportation data")
-                return <div className="no-transport">{transport.text}</div>;
+                return (
+                  <div className="no-transport">No transportation data</div>
+                );
               return (
                 <React.Fragment>
                   {/* <div className="fromTo">
@@ -29,10 +31,30 @@ class TransCard extends Component {
                     <span> {destination.attraction_name} </span>
                   </div>*/}
                   <div className="transport">
-                    <span> 800m </span>
-                    <span> <FontAwesomeIcon icon="walking" size="sm" /> <span>10min</span></span>
-                    <span> <FontAwesomeIcon icon="train" size="sm" /> <span>5min</span></span>
-                    <span> <FontAwesomeIcon icon="car" size="sm" /> <span>2min</span></span>
+                    <span> {transport.distance} </span>
+                    {(() => {
+                      if (transport.mode === "driving")
+                        return (
+                          <span>
+                            <FontAwesomeIcon icon="car" size="sm" />
+                            <span>{transport.text}</span>
+                          </span>
+                        );
+                      if (transport.mode === "transit")
+                        return (
+                          <span>
+                            <FontAwesomeIcon icon="train" size="sm" />
+                            <span>{transport.text}</span>
+                          </span>
+                        );
+                      if (transport.mode === "walking")
+                        return (
+                          <span>
+                            <FontAwesomeIcon icon="walking" size="sm" />
+                            <span>{transport.text}</span>
+                          </span>
+                        );
+                    })()}
                   </div>
                   <a className="map" href="https://www.google.com/maps">
                     Google Map
