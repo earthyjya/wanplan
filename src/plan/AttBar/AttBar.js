@@ -10,17 +10,17 @@ class AttBar extends Component {
   state = {
     searchedPlace: {},
     nearbyPlaces: [],
-    detailsDat: ""
+    detailsDat: "",
   };
 
-  onPlaceSelected = async place => {
+  onPlaceSelected = async (place) => {
     await this.setState({ searchedPlace: {}, nearbyPlaces: [] });
     const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/googleplace/" + place.place_id;
     // console.log(url);
     await axios
       .get(url)
-      .then(res => {
+      .then((res) => {
         this.setState({ searchedPlace: res.data[0] });
         url =
           APIServer +
@@ -29,16 +29,16 @@ class AttBar extends Component {
           "&lng=" +
           res.data[0].geometry.location.lng;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     await axios
       .get(url)
-      .then(res => {
+      .then((res) => {
         console.log(res.data);
         this.setState({ nearbyPlaces: res.data });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -73,10 +73,17 @@ class AttBar extends Component {
                     : "https://via.placeholder.com/160x100"
                 }
               />
-              <div style={{ display: "flex", flexDirection: "column", paddingLeft: "0.8em" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: "0.8em",
+                }}
+              >
                 <span>
                   {" "}
-                  <FontAwesomeIcon icon="clock" /> operating hours: 09.00 - 24.00
+                  <FontAwesomeIcon icon="clock" /> operating hours: 09.00 -
+                  24.00
                 </span>
                 <span>
                   {" "}
@@ -85,13 +92,17 @@ class AttBar extends Component {
               </div>
             </div>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor incididunt
-              ut labore et dolore magna aliqua. Ut enim nim veniam, quis nostrud exercitation
-              ullamco laboris nisi ut Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-              do mod tempor incididunt ut labore et dolore magna aliqua. Ut enim nim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+              nim veniam, quis nostrud exercitation ullamco laboris nisi ut
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+              nim veniam, quis nostrud exercitation ullamco laboris nisi ut
             </p>
-            <button onClick={this.props.toggleAttModal} className="details-button">
+            <button
+              onClick={this.props.toggleAttModal}
+              className="details-button"
+            >
               more details
             </button>
             <hr />
@@ -104,7 +115,11 @@ class AttBar extends Component {
           <FontAwesomeIcon className="search-icon" icon="search" />
           <Autocomplete
             className="search-bar"
-            style={{ backgroundColor: "white", borderRadius: "8px", borderColor: "" }}
+            style={{
+              backgroundColor: "white",
+              borderRadius: "8px",
+              borderColor: "",
+            }}
             onPlaceSelected={this.onPlaceSelected}
             types={["geocode", "establishment"]}
             placeholder={this.searchPlaceholder}
@@ -127,21 +142,31 @@ class AttBar extends Component {
             {(() => {
               if (this.state.searchedPlace.google_place_id)
                 return (
-                  <div onClick={() => this.showDetails(this.state.searchedPlace)}>
+                  <div
+                    onClick={() => this.showDetails(this.state.searchedPlace)}
+                  >
                     <Droppable
-                      droppableId={this.state.searchedPlace.google_place_id + "bar"}
+                      droppableId={
+                        this.state.searchedPlace.google_place_id + "bar"
+                      }
                       isDropDisabled={true}
                       type={String}
                       direction="vertical"
                       isCombineEnabled={false}
                     >
-                      {dropProvided => (
-                        <div {...dropProvided.droppableProps} ref={dropProvided.innerRef}>
+                      {(dropProvided) => (
+                        <div
+                          {...dropProvided.droppableProps}
+                          ref={dropProvided.innerRef}
+                        >
                           <Draggable
-                            draggableId={this.state.searchedPlace.attraction_id.toString() + "bar"}
+                            draggableId={
+                              this.state.searchedPlace.attraction_id.toString() +
+                              "bar"
+                            }
                             index={this.state.searchedPlace.attraction_id}
                           >
-                            {dragProvided => (
+                            {(dragProvided) => (
                               <div
                                 {...dragProvided.dragHandleProps}
                                 {...dragProvided.draggableProps}
@@ -163,13 +188,15 @@ class AttBar extends Component {
                 return (
                   <React.Fragment>
                     {this.state.nearbyPlaces
-                      .filter(place =>
+                      .filter((place) =>
                         place.types.find(
-                          type => type === "point_of_interest" || type === "tourist_attraction"
+                          (type) =>
+                            type === "point_of_interest" ||
+                            type === "tourist_attraction"
                         )
                       )
                       .splice(0, 10)
-                      .map(dat => (
+                      .map((dat) => (
                         <div onClick={() => this.showDetails(dat)}>
                           <Droppable
                             key={dat.place_id}
@@ -179,10 +206,16 @@ class AttBar extends Component {
                             direction="vertical"
                             isCombineEnabled={false}
                           >
-                            {dropProvided => (
-                              <div {...dropProvided.droppableProps} ref={dropProvided.innerRef}>
-                                <Draggable draggableId={dat.place_id + "bar"} index={0}>
-                                  {dragProvided => (
+                            {(dropProvided) => (
+                              <div
+                                {...dropProvided.droppableProps}
+                                ref={dropProvided.innerRef}
+                              >
+                                <Draggable
+                                  draggableId={dat.place_id + "bar"}
+                                  index={0}
+                                >
+                                  {(dragProvided) => (
                                     <div
                                       {...dragProvided.dragHandleProps}
                                       {...dragProvided.draggableProps}
@@ -206,7 +239,7 @@ class AttBar extends Component {
                   </React.Fragment>
                 );
             })()}
-            {this.props.data.slice(0, 10).map(dat => (
+            {this.props.data.slice(0, 10).map((dat) => (
               <div onClick={() => this.showDetails(dat)}>
                 <Droppable
                   key={dat.google_place_id}
@@ -216,13 +249,16 @@ class AttBar extends Component {
                   direction="vertical"
                   isCombineEnabled={false}
                 >
-                  {dropProvided => (
-                    <div {...dropProvided.droppableProps} ref={dropProvided.innerRef}>
+                  {(dropProvided) => (
+                    <div
+                      {...dropProvided.droppableProps}
+                      ref={dropProvided.innerRef}
+                    >
                       <Draggable
                         draggableId={dat.attraction_id.toString() + "bar"}
                         index={dat.attraction_id}
                       >
-                        {dragProvided => (
+                        {(dragProvided) => (
                           <div
                             {...dragProvided.dragHandleProps}
                             {...dragProvided.draggableProps}

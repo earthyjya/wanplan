@@ -90,6 +90,21 @@
     align-self: center;
     margin-left: 10px;
   }
+  .DayTitle{
+    font-size: 2em;
+    font-weight: bold;
+    white-space: nowrap; 
+    @media all and (max-width: 480px){
+      font-size: 1.2em;
+    }
+  }
+  .DayInfo{
+    margin-left: 1em;
+    align-self: center;
+    @media all and (max-width: 480px){
+      font-size: 0.6em;
+    }
+  }
 }
 
 .DayTimelineContentContainer{
@@ -98,9 +113,9 @@
 }
 
 .TimeVerticalLineContainer{
-  min-width: 60px;
+  min-width: 100px;
   @media all and (max-width: 480px){
-    min-width: 20px;
+    min-width: 60px;
   }
 }
 

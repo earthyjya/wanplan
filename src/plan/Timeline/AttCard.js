@@ -131,7 +131,7 @@ class AttCard extends Component {
             <img
               src={(() => {
                 if (photos) return photos[0];
-                return "/";
+                return "https://via.placeholder.com/140x140";
               })()}
               className="AttPhoto"
               alt={attraction_name}

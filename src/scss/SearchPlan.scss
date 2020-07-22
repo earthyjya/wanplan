@@ -3,7 +3,92 @@
 .plan-card-deck-search{
   display: flex;
   flex-wrap: wrap;
-  margin: 10% !important;
+  margin: 5% !important;
   justify-content: space-around;
   align-items: center;
+}
+
+.see-all-button{
+  font-size: 2em;
+  padding: .3em;
+  margin: 20px 70px 20px 70px;
+  border-radius: .2em;
+  min-width: 6em;
+  background-color: $primary;
+}
+
+.search-plan-container{
+  margin: 2em 3em 2em 3em;
+  padding: 1em;
+  border: solid thin $secondary;
+  border-radius: 1em;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2em;
+  font-weight: bold;
+  align-self: center;
+  text-align: left;
+  @media all and (max-width: 480px){
+    padding: 0.8em;
+    margin: 1em;
+  }
+  > * {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+    > :nth-child(1){
+      text-align: right;
+      margin-right: 1.2em;
+      min-width: 110px;
+      width: 110px;
+    }
+    > :nth-child(2){
+      flex-grow: 3;
+      font-weight: normal;
+      font-size: 1em;
+    }
+    @media all and (max-width: 480px){
+      flex-direction: column;
+      > :nth-child(1){
+        text-align: left;
+      }
+      > :nth-child(2){
+        font-size: 0.8em;
+      }
+    }
+  }
+}
+
+.search-checkbox {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #888;
+}
+
+.checkbox-container{
+  margin-right: 1em;
+}
+
+.checkbox-container :checked{
+  background:#fcd328;
+}
+
+.checkbox-container :focus{
+  border-style: solid;
+  border-width: 1px;
+  border-color: #888;
+}
+
+.search-button{
+  background: $primary;
+  padding: .3em .5em .3em .5em;
+  border-radius: 3px;
+  align-self: center;
+}
+.day-input {
+  margin-right: 1em;
 }

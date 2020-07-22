@@ -181,7 +181,6 @@ class Plan extends React.Component {
   };
 
   calPlan = async (plan_detail) => {
-    //// Need to be updated when transportations are added
     // console.log(transports);
 
     let { plan_startday } = this.state;
@@ -263,6 +262,7 @@ class Plan extends React.Component {
                 text: res.data.duration.text,
                 mode: res.data.mode,
                 value: res.data.duration.value / 60,
+                distance: res.data.distance.text,
               });
             })
             .catch((err) => {
@@ -288,7 +288,7 @@ class Plan extends React.Component {
     this.setState({ ratingList: ratingList, rating: rating });
   };
 
-  submitReview = async e => {
+  submitReview = async (e) => {
     let { rating, review } = this.state;
     let { plan_id } = this.props;
     this.setState({
@@ -307,10 +307,10 @@ class Plan extends React.Component {
     // console.log({ plan_id, review, rating });
     await axios
       .post(url, { plan_id, review, rating })
-      .then(async result => {
+      .then(async (result) => {
         // console.log(result.data);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
         console.log(error);
       });
@@ -319,11 +319,11 @@ class Plan extends React.Component {
 
     await axios
       .get(url)
-      .then(async result => {
+      .then(async (result) => {
         this.setState({ addedReview: [...result.data] });
         // console.log(result.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -374,6 +374,7 @@ class Plan extends React.Component {
               "/attraction/google_id/" +
               plan_detail[i].google_place_id
           )
+          // eslint-disable-next-line
           .then((res) => {
             plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
           })
@@ -413,17 +414,24 @@ class Plan extends React.Component {
 
     await axios
       .get(url)
-      .then(async result => {
+      .then(async (result) => {
         this.setState({ addedReview: [...result.data] });
         // console.log(result.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   render() {
-    const { isLoading, error, plan_overview, modal, ratingList, addedReview } = this.state;
+    const {
+      isLoading,
+      error,
+      plan_overview,
+      modal,
+      ratingList,
+      addedReview,
+    } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
@@ -475,7 +483,7 @@ class Plan extends React.Component {
           </div>
           <Container fluid>
             <Row>
-              <Col lg={12}>
+              <Col lg={12} className="p-0">
                 {(() => {
                   if (this.state.mode === "plan")
                     return (
@@ -532,10 +540,12 @@ class Plan extends React.Component {
               />
             </div>
             <div>
-              {addedReview.map(i => {
+              {addedReview.map((i) => {
                 return (
                   <div className="review-box">
-                    <div>{i.rating === 0 ? "No rating" : i.rating} &#x2605;</div>
+                    <div>
+                      {i.rating === 0 ? "No rating" : i.rating} &#x2605;
+                    </div>
                     <div>{i.review === "" ? "No comment" : i.review}</div>
                   </div>
                 );

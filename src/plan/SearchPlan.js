@@ -1,5 +1,4 @@
 import "../scss/SearchPlan.scss";
-import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
@@ -31,10 +30,13 @@ class SearchPlan extends Component {
       { id: 11, name: "Social_distancing", nameShow: "Social distancing", isChecked: false },
       { id: 12, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
-    budgetList: [{ id: 1, name: "$", nameShow: "$", isChecked: false },
-    { id: 2, name: "$$", nameShow: "$$", isChecked: false },
-    { id: 3, name: "$$$", nameShow: "$$$", isChecked: false }],
+    budgetList: [
+      { id: 1, name: "$", nameShow: "$", isChecked: false },
+      { id: 2, name: "$$", nameShow: "$$", isChecked: false },
+      { id: 3, name: "$$$", nameShow: "$$$", isChecked: false },
+    ],
     url: "https://api.oneplan.in.th/api/plan_overview",
+    seeAll: false,
   };
 
   selectCity = (e) => {
@@ -46,7 +48,7 @@ class SearchPlan extends Component {
   };
 
   mostDayChanged = (e) => {
-    if (e != 0) {
+    if (e !== 0) {
       this.setState({ mostDay: Number(e.target.value) });
     } else {
       this.setState({ mostDay: 1000 });
@@ -92,19 +94,22 @@ class SearchPlan extends Component {
         allFalse = false;
         // console.log("not all false");
       }
+      return null;
     });
     let url = "";
-    if (e.citySearch != 0)
+    if (e.citySearch !== 0)
       url = APIServer + "/plan_overview/criteria/" + e.citySearch + "/";
     else url = APIServer + "/plan_overview/criteria/all/";
     url = url + e.leastDay + "/" + e.mostDay + "/";
     if (!allFalse) {
       e.list.map((style) => {
         if (style.isChecked) url = url + style.name + ",";
+        return null;
       });
     } else {
       e.list.map((style) => {
         url = url + style.name + ",";
+        return null;
       });
     }
     this.setState({ url: url });
@@ -240,7 +245,9 @@ class SearchPlan extends Component {
     //     this.setState({ error, isLoading: false });
     //     console.log(error);
     //   });
-
+    this.showAll = this.showAll.bind(this);
+    this.showSeeAll = this.showSeeAll.bind(this);
+    this.enableSeeAll = this.enableSeeAll.bind(this);
     await axios
       .get(this.state.url)
       .then((result) => {
@@ -250,27 +257,53 @@ class SearchPlan extends Component {
       .catch((error) => this.setState({ error, isLoading: false }));
   }
 
+  enableSeeAll() {
+    this.setState({ seeAll: true });
+  }
+
+  showAll() {
+    const { data } = this.state;
+    if (this.state.seeAll) {
+      return (
+        <React.Fragment>
+          {data.map((plan) => (
+            <PlanCard plan={plan} key={plan.plan_id} />
+          ))}
+        </React.Fragment>
+      )
+    }
+    else{
+      return(
+        <React.Fragment>
+          {data.slice(0, 9).map((plan) => (
+            <PlanCard plan={plan} key={plan.plan_id} />
+          ))}
+        </React.Fragment>
+      );
+    }
+  }
+
+  showSeeAll(){
+    if (!this.state.seeAll){
+      return(
+        <button className="see-all-button" onClick={this.enableSeeAll}> See all </button>
+      )
+    }
+    return <React.Fragment />;
+  }
+
   render() {
-    const { list, allChecked, data, isLoading, error, budgetList } = this.state;
+    const { list, allChecked, isLoading, error, budgetList } = this.state;
     if (isLoading) return <div></div>;
 
     return (
       <React.Fragment>
         {this.RenderRedirect()}
-        <div
-          style={{
-            marginTop: "20px",
-            marginLeft: "10px",
-            position: "relative",
-            fontSize: "22px",
-            fontWeight: "bold",
-            alignSelf: "center",
-            textAlign: "center",
-          }}
-        >
-          Search Plan
+        <div className="search-plan-container">
+          <span>Search Plan</span>
+          {/*"city-search-container"*/}
           <div>
-            <div className="search-subtitle">City</div>
+            <span>City:</span>
             <select
               className="plan-search-city-home"
               placeholder="choose a city..."
@@ -290,102 +323,103 @@ class SearchPlan extends Component {
                 );
               })}
             </select>
-            <div className="search-subtitle">
-              Days
-              <div style={{ fontWeight: "normal" }}>
-                At least{" "}
-                <select
-                  className="day-input"
-                  placeholder="None"
-                  onChange={this.leastDayChanged}
-                >
-                  <option value="0">None</option>
-                  {(() => {
-                    let days = [];
-                    for (var i = 1; i <= 8; i++) {
-                      days.push(i);
-                    }
-                    return days.map((day) => (
-                      <option key={day} value={day}>
-                        {day}
-                      </option>
-                    ));
-                  })()}
-                </select>{" "}
-                At most{" "}
-                <select
-                  className="day-input"
-                  placeholder="None"
-                  onChange={this.mostDayChanged}
-                >
-                  <option value="0">None</option>
-                  {(() => {
-                    let days = [];
-                    for (var i = 1; i <= 8; i++) {
-                      days.push(i);
-                    }
-                    return days.map((day) => (
-                      <option key={day} value={day}>
-                        {day}
-                      </option>
-                    ));
-                  })()}
-                </select>
-              </div>
-              Plan style
-              <div style={{ fontWeight: "normal" }}>
-                <label style={{ paddingRight: "16px" }}>
-                  <div className="checkbox-container">
+          </div>
+          {/*"days-search-container"*/}
+          <div>
+            <span>Days:</span>
+            <div>
+              <span>At least </span>
+              <select
+                className="day-input"
+                placeholder="0"
+                onChange={this.leastDayChanged}
+              >
+                <option value="0">0</option>
+                {(() => {
+                  let days = [];
+                  for (var i = 1; i <= 8; i++) {
+                    days.push(i);
+                  }
+                  return days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ));
+                })()}
+              </select>
+              <span>At most </span>
+              <select
+                className="day-input"
+                placeholder="0"
+                onChange={this.mostDayChanged}
+              >
+                <option value="0">0</option>
+                {(() => {
+                  let days = [];
+                  for (var i = 1; i <= 8; i++) {
+                    days.push(i);
+                  }
+                  return days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ));
+                })()}
+              </select>
+            </div>
+          </div>
+          {/*"style-search-container"*/}
+          <div>
+            <span>Plan style:</span>
+            <div>
+              <label className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="search-checkbox"
+                    name="all"
+                    value="all"
+                    checked={allChecked}
+                    onChange={this.allChanged}
+                  />
+                  <span> All </span>
+              </label>
+              {list.map((style) => (
+                <label className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="search-checkbox"
+                    name={style.name}
+                    value={style.name}
+                    checked={style.isChecked}
+                    onChange={this.styleChanged}
+                  />
+                  <span> {style.nameShow} </span>
+                </label>
+              ))}
+            </div>
+          </div>
+          {/*"budget-search-container"*/}
+          <div>
+            <span>Budget:</span>
+            <div>
+              {budgetList.map((price) => (
+                <label className="checkbox-container">
                     <input
                       type="checkbox"
                       className="search-checkbox"
-                      name="all"
-                      value="all"
-                      checked={allChecked}
-                      onChange={this.allChanged}
+                      name={price.name}
+                      value={price.name}
+                      checked={price.isChecked}
+                      onChange={this.priceChanged}
                     />
-                    <span> All </span>
-                  </div>
+                    <span> {price.nameShow} </span>
                 </label>
-                {list.map((style) => (
-                  <label style={{ paddingRight: "16px" }}>
-                    <div className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        className="search-checkbox"
-                        name={style.name}
-                        value={style.name}
-                        checked={style.isChecked}
-                        onChange={this.styleChanged}
-                      />
-                      <span> {style.nameShow} </span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-              Budget
-                <div>
-                {budgetList.map((price) => (
-                  <label style ={{ paddingRight: "16px" }}>
-                    <div className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        className="search-checkbox"
-                        name={price.name}
-                        value={price.name}
-                        checked={price.isChecked}
-                        onChange={this.priceChanged}
-                      />
-                      <span> {price.nameShow} </span>
-                    </div>
-                  </label>
-                ))}
-                </div>
-              <button className="search-button" onClick={this.criteria}>
-                Search
-              </button>
+              ))}
             </div>
           </div>
+          <button className="search-button" onClick={this.criteria}>
+            Search
+          </button>
         </div>
         <CardDeck className="plan-card-deck-search">
           {(() => {
@@ -393,13 +427,13 @@ class SearchPlan extends Component {
               return <div className="MyPlan-text">Can't find the plan</div>;
             return (
               <React.Fragment>
-                {data.slice(0, 9).map((plan) => (
-                  <PlanCard plan={plan} key={plan.plan_id} />
-                ))}
+                {this.showAll()}
               </React.Fragment>
             );
           })()}
+          {this.showSeeAll()}
         </CardDeck>
+
       </React.Fragment>
     );
   }

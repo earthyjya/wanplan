@@ -25,8 +25,8 @@ class DayTimeline extends Component {
               <button className="DelDay" onClick={this.delDay}>
                 &#10005;
               </button>
-              <div style={{ fontSize: "2em", fontWeight: "800" }}> Day {day}</div>
-              <div style={{ marginLeft: "1em", alignSelf: "center" }}>
+              <div className="DayTitle"> Day {day}</div>
+              <div className="DayInfo">
                 xx places | estimated time: xx | budget: xxxx JPY
               </div>
             </div>
