@@ -18,6 +18,7 @@ class Login extends Component {
     e.preventDefault();
     fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
         this.setState({error: null})
+        this.props.toggleLogin()
     }).catch((error) => {
         console.log(error);
         this.setState({password: "",
