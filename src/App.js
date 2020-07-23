@@ -63,13 +63,22 @@ class App extends Component {
     ],
     toggleLogin: false,
     toggleSignup: false,
+    token: null,
   };
 
   authListener = () => {
     fire.auth().onAuthStateChanged((user) => {
       console.log(user);
       if (user) {
-        this.setState({ user, isLoggedIn: true });
+        this.setState({ user, isLoggedIn: true, });
+        // this.setState({user_id: user.uid })
+        fire.auth().currentUser.getIdToken(true).then((idToken) => {
+          this.setState({token: idToken})
+          console.log(idToken)
+        }).catch(function(error) {
+          // Handle error
+          console.error(error)
+        });
       } else {
         this.setState({ user: null, isLoggedIn: false });
       }

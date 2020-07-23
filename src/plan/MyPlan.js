@@ -3,6 +3,7 @@ import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
+import axios from "axios"
 
 class MyPlan extends Component {
   state = {
@@ -32,18 +33,32 @@ class MyPlan extends Component {
       return data
         .filter((plan) => plan.user_id === user_id)
         .map((plan) => {
-          return <PlanCard plan={plan} key={plan.plan_id} />;
+          return <PlanCard plan={plan} key={plan.plan_id} deletable = {true} {...this.props} deleteFromCache = {this.deleteFromCache}/>;
         });
     } else {
-      if (_planlist !== null && _planlist !== []) {
+      if (_planlist !== null && _planlist !== [] && _planlist.length !== 0) {
         return _planlist.map((plan) => (
-          <PlanCard plan={plan} key={plan.plan_id} />
+          <PlanCard plan={plan} key={plan.plan_id} deletable = {true} {...this.props} deleteFromCache = {this.deleteFromCache}/>
         ));
       } else {
         return <div>Your saved plan will show here</div>;
       }
     }
   };
+
+  deleteFromCache = async (planId) => {
+    let _planlist = JSON.parse(localStorage.getItem("planlist"));
+    _planlist = _planlist.filter((plan)=> 
+      plan.plan_id !== planId
+    )
+    localStorage.setItem("planlist", JSON.stringify(_planlist));
+    this.setState({cachePlan : _planlist})
+    const APIServer = process.env.REACT_APP_APIServer;
+    let url = APIServer + "/plan_overview/" + planId
+    await axios.delete(url)
+    // .then(result => console.log(result))
+    .catch(error => console.error(error))
+  }
 
   onClickNewPlan = () => {
     const { user_id, isLoggedIn } = this.props;
@@ -61,6 +76,11 @@ class MyPlan extends Component {
   RenderRedirect = () => {
     if (this.state.redirect) return <Redirect to={this.state.redirectTo} />;
   };
+
+  componentDidMount() {
+    let _planlist = JSON.parse(localStorage.getItem("planlist"));
+    this.setState({cachePlan : _planlist})
+  }
 
   render() {
     const { isLoading } = this.props;

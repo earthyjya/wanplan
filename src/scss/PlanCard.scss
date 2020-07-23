@@ -20,6 +20,7 @@
     min-width: 200px !important;
     height: 250px;
   }
+  position: relative
 }
 
 .plan-card-img{
@@ -69,4 +70,82 @@
     top: 0.8em;
     right: 0.8em;
   }
+}
+
+.delete-plancard {
+  position: absolute;
+  left: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.delete-plan{
+  display: block;
+  position: fixed;
+  z-index: 22;
+  padding-top: 20%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+}
+
+.delete-plan-content {
+  border: none;
+  box-shadow: 0 0 40px -20px #000;
+  background-color: $gray4;
+  color: $gray1;
+  margin: auto;
+  padding: 20px;
+  border: none;
+  font-size: 14px;
+  border-radius: 5px;
+  height: 160px;
+  width: 400px;
+}
+
+.close-delete-plan {
+  float: right;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.delete-confirm {
+  background-color: tomato;
+  color: $gray1;
+  border: 2px solid $primary;
+  border-radius: 5%;
+  font-family: $engfont;
+  height: 43px;
+  width: 15%;
+  margin-top: 10px;
+  margin-left: 30%;
+  border: none;
+}
+
+.delete-confirm:hover {
+  background-color: tomato;
+  color: black;
+}
+.delete-cancel {
+  background-color: white;
+  color: $gray1;
+  border: 2px solid $primary;
+  font-family: $engfont;
+  border-radius: 5%;
+  height: 43px;
+  width: 15%;
+  margin-top: 10px;
+  margin-left: 10%;
+  border: none;
+}
+
+.delete-cancel:hover {
+  background-color: white;
+  color: black;
 }

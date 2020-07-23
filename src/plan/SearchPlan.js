@@ -25,9 +25,19 @@ class SearchPlan extends Component {
       { id: 6, name: "Shopping", nameShow: "Shopping", isChecked: false },
       { id: 7, name: "Unseen", nameShow: "Unseen", isChecked: false },
       { id: 8, name: "Must_go", nameShow: "Must go", isChecked: false },
-      { id: 9, name: "Go_to_travel", nameShow: "Go to travel", isChecked: false },
+      {
+        id: 9,
+        name: "Go_to_travel",
+        nameShow: "Go to travel",
+        isChecked: false,
+      },
       { id: 10, name: "Nature", nameShow: "Nature", isChecked: false },
-      { id: 11, name: "Social_distancing", nameShow: "Social distancing", isChecked: false },
+      {
+        id: 11,
+        name: "Social_distancing",
+        nameShow: "Social distancing",
+        isChecked: false,
+      },
       { id: 12, name: "AUTO_TAG", nameShow: "Others", isChecked: false },
     ],
     budgetList: [
@@ -37,6 +47,7 @@ class SearchPlan extends Component {
     ],
     url: "https://api.oneplan.in.th/api/plan_overview",
     seeAll: false,
+  
   };
 
   selectCity = (e) => {
@@ -123,7 +134,6 @@ class SearchPlan extends Component {
       })
       .catch((error) => this.setState({ error, isLoading: false }));
   };
-
   RedirectFunc = (plan_id) => {
     this.setState({
       redirect: true,
@@ -267,27 +277,29 @@ class SearchPlan extends Component {
       return (
         <React.Fragment>
           {data.map((plan) => (
-            <PlanCard plan={plan} key={plan.plan_id} />
+            <PlanCard plan={plan} key={plan.plan_id} deletable={false} />
           ))}
         </React.Fragment>
-      )
-    }
-    else{
-      return(
+      );
+    } else {
+      return (
         <React.Fragment>
           {data.slice(0, 9).map((plan) => (
-            <PlanCard plan={plan} key={plan.plan_id} />
+            <PlanCard plan={plan} key={plan.plan_id} deletable={false} />
           ))}
         </React.Fragment>
       );
     }
   }
 
-  showSeeAll(){
-    if (!this.state.seeAll){
-      return(
-        <button className="see-all-button" onClick={this.enableSeeAll}> See all </button>
-      )
+  showSeeAll() {
+    if (!this.state.seeAll) {
+      return (
+        <button className="see-all-button" onClick={this.enableSeeAll}>
+          {" "}
+          See all{" "}
+        </button>
+      );
     }
     return <React.Fragment />;
   }
@@ -373,15 +385,15 @@ class SearchPlan extends Component {
             <span>Plan style:</span>
             <div>
               <label className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    className="search-checkbox"
-                    name="all"
-                    value="all"
-                    checked={allChecked}
-                    onChange={this.allChanged}
-                  />
-                  <span> All </span>
+                <input
+                  type="checkbox"
+                  className="search-checkbox"
+                  name="all"
+                  value="all"
+                  checked={allChecked}
+                  onChange={this.allChanged}
+                />
+                <span> All </span>
               </label>
               {list.map((style) => (
                 <label className="checkbox-container">
@@ -404,15 +416,15 @@ class SearchPlan extends Component {
             <div>
               {budgetList.map((price) => (
                 <label className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      className="search-checkbox"
-                      name={price.name}
-                      value={price.name}
-                      checked={price.isChecked}
-                      onChange={this.priceChanged}
-                    />
-                    <span> {price.nameShow} </span>
+                  <input
+                    type="checkbox"
+                    className="search-checkbox"
+                    name={price.name}
+                    value={price.name}
+                    checked={price.isChecked}
+                    onChange={this.priceChanged}
+                  />
+                  <span> {price.nameShow} </span>
                 </label>
               ))}
             </div>
@@ -425,15 +437,10 @@ class SearchPlan extends Component {
           {(() => {
             if (error)
               return <div className="MyPlan-text">Can't find the plan</div>;
-            return (
-              <React.Fragment>
-                {this.showAll()}
-              </React.Fragment>
-            );
+            return <React.Fragment>{this.showAll()}</React.Fragment>;
           })()}
           {this.showSeeAll()}
         </CardDeck>
-
       </React.Fragment>
     );
   }
