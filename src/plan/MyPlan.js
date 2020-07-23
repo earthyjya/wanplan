@@ -4,6 +4,12 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
 import axios from "axios"
+import { CardDeck } from "reactstrap";
+import MobileWarningToast from "../components/MobileWarningToast.js"
+import axios from "axios";
+import {
+  isMobile
+} from "react-device-detect";
 
 class MyPlan extends Component {
   state = {
@@ -22,8 +28,9 @@ class MyPlan extends Component {
       { id: 3, name: "Cultural", isChecked: false },
       { id: 4, name: "AUTO_TAG", isChecked: false },
     ],
-    allFalse: true,
-    url: "https://api.oneplan.in.th/api/plan_overview",
+    allFalse : true,
+    url : "https://api.oneplan.in.th/api/plan_overview",
+    showMobileWarning: false,
   };
 
   savedPlan = () => {
@@ -61,6 +68,10 @@ class MyPlan extends Component {
   }
 
   onClickNewPlan = () => {
+    if(isMobile){
+      this.setState({showMobileWarning: true})
+      return
+    }
     const { user_id, isLoggedIn } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
@@ -98,6 +109,15 @@ class MyPlan extends Component {
           </div>
           <div className="myplan-card-deck">{this.savedPlan()}</div>
         </div>
+        {(() => {
+          return(
+            <MobileWarningToast
+              toggleToast = {() =>
+                {this.setState({showMobileWarning: !this.state.showMobileWarning})}
+              }
+              isOpen = {this.state.showMobileWarning}/>
+          )
+        })()}
       </React.Fragment>
     );
   }
