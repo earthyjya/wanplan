@@ -6,7 +6,6 @@ import PlanCard from "./PlanCard.js";
 import axios from "axios"
 import { CardDeck } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js"
-import axios from "axios";
 import {
   isMobile
 } from "react-device-detect";
@@ -55,7 +54,7 @@ class MyPlan extends Component {
 
   deleteFromCache = async (planId) => {
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    _planlist = _planlist.filter((plan)=> 
+    _planlist = _planlist.filter((plan)=>
       plan.plan_id !== planId
     )
     localStorage.setItem("planlist", JSON.stringify(_planlist));

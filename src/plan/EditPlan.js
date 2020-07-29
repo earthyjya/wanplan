@@ -683,7 +683,11 @@ class EditPlan extends React.Component {
                       );
                     else if (this.state.mode === "map")
                       return (
-                        <GGMap {...this.state} {...this.props} editing={true} />
+                        <GGMap
+                          {...this.state}
+                          {...this.props}
+                          editing={true}
+                        />
                       );
                   })()}
                 </Col>
