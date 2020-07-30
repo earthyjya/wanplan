@@ -1,5 +1,14 @@
 @import "./Style.scss";
 
+%icon{
+  width: 2em;
+  height: 2em;
+  text-align: center;
+  line-height: 2em;
+  border-radius: 2em;
+  margin-right: .4em;
+}
+
 .ggmap-container{
   padding: 5%;
   padding-bottom: 2%;
@@ -22,9 +31,21 @@
     cursor: pointer;
     font-size: 1.4em;
   }
-  .ggmap-att-name{
+  .ggmap-att-container{
     text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
+    display: flex;
+    & > :first-child{
+      @extend %icon;
+      background-color: $primary;
+    }
+  }
+  .ggmap-transport-container{
+    display: flex;
+    margin: .6em;
+    color: $gray2;
+    & > :first-child{
+      margin-right: .4em;
+    }
   }
 }
