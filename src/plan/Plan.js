@@ -9,10 +9,8 @@ import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
-import MobileWarningToast from "../components/MobileWarningToast.js"
-import {
-  isMobile
-} from "react-device-detect";
+import MobileWarningToast from "../components/MobileWarningToast.js";
+import { isMobile } from "react-device-detect";
 
 class Plan extends React.Component {
   state = {
@@ -154,9 +152,9 @@ class Plan extends React.Component {
   };
 
   checkEdit = async () => {
-    if(isMobile){
-      this.setState({showMobileWarning: true})
-      return
+    if (isMobile) {
+      this.setState({ showMobileWarning: true });
+      return;
     }
     //If user already edit the plan before, go to the edit plan page on the same url
     const { user_id, plan_id } = this.props;
@@ -359,7 +357,7 @@ class Plan extends React.Component {
   async componentDidMount() {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/load_plan/" + plan_id;
+    let url = APIServer + "/load_plan/full?planId=" + plan_id;
     await axios
       .get(url)
       .then(async (result) => {
@@ -442,7 +440,7 @@ class Plan extends React.Component {
       addedReview,
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Something went wrong :(</div>;
+    // if (error) return <div>Something went wrong :(</div>;
     else {
       return (
         <React.Fragment>
@@ -552,7 +550,11 @@ class Plan extends React.Component {
               {addedReview.map((i) => {
                 return (
                   <div className="review-box">
-                    <div>{i.rating === 0 ? "No rating" : String.fromCharCode(0x2605).repeat(i.rating)} </div>
+                    <div>
+                      {i.rating === 0
+                        ? "No rating"
+                        : String.fromCharCode(0x2605).repeat(i.rating)}{" "}
+                    </div>
                     <div>{i.review === "" ? "No comment" : i.review}</div>
                   </div>
                 );
@@ -560,13 +562,16 @@ class Plan extends React.Component {
             </div>
           </div>
           {(() => {
-            return(
+            return (
               <MobileWarningToast
-                toggleToast = {() =>
-                  {this.setState({showMobileWarning: !this.state.showMobileWarning})}
-                }
-                isOpen = {this.state.showMobileWarning}/>
-            )
+                toggleToast={() => {
+                  this.setState({
+                    showMobileWarning: !this.state.showMobileWarning,
+                  });
+                }}
+                isOpen={this.state.showMobileWarning}
+              />
+            );
           })()}
         </React.Fragment>
       );
