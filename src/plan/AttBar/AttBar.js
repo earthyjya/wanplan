@@ -129,7 +129,7 @@ class AttBar extends Component {
             onBlur={() => {
               this.placeholder = "enter your text";
             }}
-            componentRestrictions={{ country: "jp" }}
+            componentRestrictions={{ country: ["jp", "th"] }}
           />
         </div>
 
