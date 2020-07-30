@@ -5,7 +5,7 @@ class GGMapTimeline extends Component {
 	render() {
 		const { plan_detail, days, editing, isLoading, error } = this.props;
 		return (
-			<div>
+			<React.Fragment>
 				{days.map(day => (
 					<GGMapDayTimeline
 						{...this.state}
@@ -16,7 +16,7 @@ class GGMapTimeline extends Component {
 						showDetails={this.props.showDetails}
 					/>
 				))}
-			</div>
+			</React.Fragment>
 		);
 	}
 }

@@ -488,9 +488,9 @@ class Plan extends React.Component {
               </span>
             </button>
           </div>
-          <Container fluid>
-            <Row>
-              <Col lg={12} className="p-0">
+          <div>
+            <div>
+              <div>
                 {(() => {
                   if (this.state.mode === "plan")
                     return (
@@ -505,46 +505,47 @@ class Plan extends React.Component {
                       <GGMap {...this.state} {...this.props} editing={false} />
                     );
                 })()}
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
           <div className="review">
-            <div>Reviews</div>
-            <div>
-              <textarea
-                className="addReview"
-                placeholder="add a review"
-                value={this.state.review}
-                rows={3}
-                onChange={this.reviewChanged}
-              />
-            </div>
-
-            <div className="rating">
-              <div>Rating</div>
-              {(() =>
-                ratingList.map((item) => (
-                  <label>
-                    <div className="rating-container">
-                      <input
-                        type="checkbox"
-                        value={item.id}
-                        name={item.id}
-                        checked={item.isChecked}
-                        className="search-rating"
-                        onChange={this.ratingChanged}
-                      />
-                    </div>
-                  </label>
-                )))()}
+            <div style={{flexGrow: "0.8"}}>
+              <div>Reviews</div>
+              <div>
+                <textarea
+                  className="addReview"
+                  placeholder="add a review"
+                  value={this.state.review}
+                  rows={3}
+                  onChange={this.reviewChanged}
+                  />
+              </div>
             </div>
             <div>
-              <input
-                type="submit"
-                value="post"
-                className="postReview"
-                onClick={this.submitReview}
-              />
+              <div className="rating">
+                <div>Rating</div>
+                {(() =>
+                  ratingList.map((item) => (
+                    <label>
+                      <div className="rating-container">
+                        <input
+                          type="checkbox"
+                          value={item.id}
+                          name={item.id}
+                          checked={item.isChecked}
+                          className="search-rating"
+                          onChange={this.ratingChanged}
+                          />
+                      </div>
+                    </label>
+                  )))()}
+                </div>
+                <input
+                  type="submit"
+                  value="post"
+                  className="postReview"
+                  onClick={this.submitReview}
+                  />
             </div>
             <div>
               {addedReview.map((i) => {

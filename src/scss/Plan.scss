@@ -23,7 +23,7 @@
   position: sticky;
   top: 52px;
   width: 100%;
-  z-index: 2;
+  z-index: 1;
   overflow: hidden;
   background-color: white;
   display: flex;
@@ -54,7 +54,7 @@
 .title-bar > div.plan {
   color: $secondary;
   padding: 5px 20px 5px 20px;
-  cursor: default;
+  cursor: pointer;
   border-left: solid;
   @media all and (max-width: 480px){
     padding: 5px 5px 5px 5px;
@@ -62,15 +62,24 @@
   }
 }
 
-.title-bar > div.map {
+.title-bar > div.plan:hover{
+  background-color: $primary;
+}
+
+
+.title-bar > .map {
   color: $secondary;
   padding: 5px 20px 5px 20px;
-  cursor: default;
+  cursor: pointer;
   border-left: solid;
   @media all and (max-width: 480px){
     padding: 5px 5px 5px 5px;
     font-size: 18px;
   }
+}
+
+.title-bar > div.map:hover{
+  background-color: $primary;
 }
 
 .title-bar > button.white-button {
@@ -132,22 +141,18 @@
 }
 
 .review {
-  width: 100%;
-  overflow: hidden;
-  padding: 3%;
-  padding-top: 0;
-  position: relative;
+  padding: 2% 50px;
+  display: flex;
+  @media all and (max-width: 480px){
+    padding: 2% 30px;
+  }
 }
 
 .addReview {
-  border: none;
   width: 80%;
 }
 
 .postReview {
-  position: absolute;
-  top: 72px;
-  right: 16%;
   background-color: #fcd328;
   border: none;
   border-radius: 4px;
@@ -155,7 +160,6 @@
 }
 
 .rating {
-  position: absolute;
   top: 20px;
   left: 80%;
 }

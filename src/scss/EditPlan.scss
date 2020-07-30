@@ -93,7 +93,7 @@
   .DayTitle{
     font-size: 2em;
     font-weight: bold;
-    white-space: nowrap; 
+    white-space: nowrap;
     @media all and (max-width: 480px){
       font-size: 1.2em;
     }
@@ -162,4 +162,21 @@
 
 .white-button-edit2{
   padding-left: solid;
+}
+
+.editplan-container{
+  display: flex;
+}
+
+.timeline-container{
+  flex-grow: 1;
+}
+
+.attbar-container{
+  width: 33%;
+  background-color: white;
+  z-index: 1;
+  @media all and (max-width: 680px){
+    min-width: 50%;
+  }
 }

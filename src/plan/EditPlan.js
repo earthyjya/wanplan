@@ -619,100 +619,104 @@ class EditPlan extends React.Component {
               else this.addCard(source, destination);
             }}
           >
-            <Container fluid className="p-0">
-              <Row className="m-0">
-                <Col sm={12} lg={8} className="p-0">
-                  {(() => {
-                    if (this.state.loadPlanOverview)
-                      return (
-                        <EditPlanOverview
-                          {...this.state}
-                          updatePlanOverview={this.updatePlanOverview}
-                          togglePlanCover={this.togglePlanCover}
-                        />
-                      );
-                    return;
-                  })()}
-
-                  <div className="title-bar">
-                    <div className="title">{plan_city[0].city}</div>
-                    <div className="plan" onClick={this.modePlan}>
-                      Plan
-                    </div>
-                    <div className="map" onClick={this.modeMap}>
-                      Map
-                    </div>
-                    <div>
-                      {/* eslint-disable-next-line */}
-                      <i
-                        className="fa fa-pencil-square-o fa-fw"
-                        aria-hidden="true"
-                        onClick={this.toggleEditPlanContent}
+            <div className="editplan-container">
+              <div className="timeline-container">
+                {(() => {
+                  if (this.state.loadPlanOverview)
+                    return (
+                      <EditPlanOverview
+                        {...this.state}
+                        updatePlanOverview={this.updatePlanOverview}
+                        togglePlanCover={this.togglePlanCover}
                       />
-                    </div>
-                    {/*<button className="white-button" onClick={this.toggleShareModal}>
-                      Share!
-                      <span style={{ fontSize: "15px" }}>
-                        <br />
-                        this plan
-                      </span>
-                    </button>*/}
-                    <button className="white-button" onClick={this.updatePlan}>
-                      Update!
-                      <span style={{ fontSize: "15px" }}>
-                        <br />
-                        this plan
-                      </span>
-                    </button>
+                    );
+                  return;
+                })()}
+
+                <div className="title-bar">
+                  <div className="title">{plan_city[0].city}</div>
+                  <div className="plan" onClick={this.modePlan}>
+                    Plan
                   </div>
-                  {this.renderRedirect()}
-                  {(() => {
-                    if (this.state.mode === "plan")
-                      return (
-                        <Timeline
-                          {...this.state}
-                          {...this.props}
-                          addDay={this.addDay}
-                          delDay={this.delDay}
-                          changeDuration={this.changeDuration}
-                          updateDescription={this.updateDescription}
-                          delCard={this.delCard}
-                          editing={true}
-                          toggleAttModal={this.toggleAttModal}
-                          showDetails={this.showDetails}
-                        />
-                      );
-                    else if (this.state.mode === "map")
-                      return (
-                        <GGMap {...this.state} {...this.props} editing={true} />
-                      );
-                  })()}
-                </Col>
-                <Col lg={4} className="p-0">
-                  {(() => {
-                    if (this.state.loadAttBar)
-                      return (
-                        <Request
-                          url={
-                            APIServer +
-                            "/attraction/city/" +
-                            plan_city[0].city_id
-                          }
-                        >
-                          {(result) => (
-                            <AttBar
-                              toggleAttModal={this.toggleAttModal}
-                              showDetails={this.showDetails}
-                              {...result}
-                            />
-                          )}
-                        </Request>
-                      );
-                    return;
-                  })()}
-                </Col>
-              </Row>
-            </Container>
+                  <div className="map" onClick={this.modeMap}>
+                    Map
+                  </div>
+                  <div>
+                    {/* eslint-disable-next-line */}
+                    <i
+                      className="fa fa-pencil-square-o fa-fw"
+                      aria-hidden="true"
+                      onClick={this.toggleEditPlanContent}
+                    />
+                  </div>
+                  {/*<button className="white-button" onClick={this.toggleShareModal}>
+                    Share!
+                    <span style={{ fontSize: "15px" }}>
+                      <br />
+                      this plan
+                    </span>
+                  </button>*/}
+                  <button className="white-button" onClick={this.updatePlan}>
+                    Update!
+                    <span style={{ fontSize: "15px" }}>
+                      <br />
+                      this plan
+                    </span>
+                  </button>
+                </div>
+                {this.renderRedirect()}
+                {(() => {
+                  if (this.state.mode === "plan")
+                    return (
+                      <Timeline
+                        {...this.state}
+                        {...this.props}
+                        addDay={this.addDay}
+                        delDay={this.delDay}
+                        changeDuration={this.changeDuration}
+                        updateDescription={this.updateDescription}
+                        delCard={this.delCard}
+                        editing={true}
+                        toggleAttModal={this.toggleAttModal}
+                        showDetails={this.showDetails}
+                      />
+                    );
+                  else if (this.state.mode === "map")
+                    return (
+                      <GGMap {...this.state} {...this.props} editing={true} />
+                    );
+                })()}
+              </div>
+              {
+                (() => {
+                  if (this.state.mode === "plan"){
+                    return(<div className="attbar-container">
+                      {(() => {
+                        if (this.state.loadAttBar)
+                          return (
+                            <Request
+                              url={
+                                APIServer +
+                                "/attraction/city/" +
+                                plan_city[0].city_id
+                              }
+                            >
+                              {(result) => (
+                                <AttBar
+                                  toggleAttModal={this.toggleAttModal}
+                                  showDetails={this.showDetails}
+                                  {...result}
+                                />
+                              )}
+                            </Request>
+                          );
+                        return;
+                      })()}
+                    </div>)
+                  }
+                })()
+              }
+            </div>
           </DragDropContext>
           <Toast isOpen={this.state.updateToast}>
             <ToastHeader toggle={this.toggleUpdateToast}>
