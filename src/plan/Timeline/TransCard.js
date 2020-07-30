@@ -56,7 +56,20 @@ class TransCard extends Component {
                         );
                     })()}
                   </div>
-                  <a className="map" href="https://www.google.com/maps">
+                  <a
+                    className="map"
+                    href={
+                      "https://www.google.com/maps/dir/?api=1&origin=" +
+                      start.attraction_name +
+                      "&origin_place_id=" +
+                      start.google_place_id +
+                      "&destination=" +
+                      destination.attraction_name +
+                      "&destination_place_id=" +
+                      destination.google_place_id
+                    }
+                    target="_blank"
+                  >
                     Google Map
                   </a>
                 </React.Fragment>

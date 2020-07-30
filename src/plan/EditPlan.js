@@ -587,6 +587,7 @@ class EditPlan extends React.Component {
       isLoading,
       error,
       plan_overview,
+      plan_city,
       modal,
       editTitle,
       planCover,
@@ -634,7 +635,7 @@ class EditPlan extends React.Component {
                   })()}
 
                   <div className="title-bar">
-                    <div className="title">{plan_overview.city}</div>
+                    <div className="title">{plan_city[0].city}</div>
                     <div className="plan" onClick={this.modePlan}>
                       Plan
                     </div>
@@ -695,7 +696,7 @@ class EditPlan extends React.Component {
                           url={
                             APIServer +
                             "/attraction/city/" +
-                            plan_overview.city_id
+                            plan_city[0].city_id
                           }
                         >
                           {(result) => (
