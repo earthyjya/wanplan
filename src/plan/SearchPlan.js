@@ -45,9 +45,8 @@ class SearchPlan extends Component {
       { id: 2, name: "$$", nameShow: "$$", isChecked: false },
       { id: 3, name: "$$$", nameShow: "$$$", isChecked: false },
     ],
-    url: "https://api.oneplan.in.th/api/plan_overview",
+    url: process.env.REACT_APP_APIServer + "/load_plan/search?tags=AUTO_TAG",
     seeAll: false,
-  
   };
 
   selectCity = (e) => {
@@ -96,10 +95,10 @@ class SearchPlan extends Component {
 
   criteria = async () => {
     const APIServer = process.env.REACT_APP_APIServer;
+    const { list, citySearch, leastDay, mostDay } = this.state;
     let allFalse = true;
-    let e = this.state;
     // console.log(e);
-    e.list.map((i) => {
+    list.map((i) => {
       if (i.isChecked) {
         this.setState({ allFalse: false });
         allFalse = false;
@@ -108,18 +107,18 @@ class SearchPlan extends Component {
       return null;
     });
     let url = "";
-    if (e.citySearch !== 0)
-      url = APIServer + "/plan_overview/criteria/" + e.citySearch + "/";
-    else url = APIServer + "/plan_overview/criteria/all/";
-    url = url + e.leastDay + "/" + e.mostDay + "/";
+    url = APIServer + "/load_plan/search?cityId=" + citySearch;
+    if (leastDay) url += "&start=" + leastDay;
+    if (mostDay) url += "&stop=" + mostDay;
+    url += "&tags=";
     if (!allFalse) {
-      e.list.map((style) => {
-        if (style.isChecked) url = url + style.name + ",";
+      list.map((style) => {
+        if (style.isChecked) url += style.name + ",";
         return null;
       });
     } else {
-      e.list.map((style) => {
-        url = url + style.name + ",";
+      list.map((style) => {
+        url += style.name + ",";
         return null;
       });
     }
@@ -346,7 +345,9 @@ class SearchPlan extends Component {
                 placeholder="0"
                 onChange={this.leastDayChanged}
               >
-                <option value="0">0</option>
+                <option key={0} value="0">
+                  None
+                </option>
                 {(() => {
                   let days = [];
                   for (var i = 1; i <= 8; i++) {
@@ -365,7 +366,9 @@ class SearchPlan extends Component {
                 placeholder="0"
                 onChange={this.mostDayChanged}
               >
-                <option value="0">0</option>
+                <option key={0} value="0">
+                  None
+                </option>
                 {(() => {
                   let days = [];
                   for (var i = 1; i <= 8; i++) {
