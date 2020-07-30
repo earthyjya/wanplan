@@ -440,7 +440,7 @@ class Plan extends React.Component {
       addedReview,
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
-    // if (error) return <div>Something went wrong :(</div>;
+    if (error) return <div>Something went wrong :(</div>;
     else {
       return (
         <React.Fragment>

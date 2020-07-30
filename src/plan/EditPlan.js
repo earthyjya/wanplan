@@ -508,7 +508,7 @@ class EditPlan extends React.Component {
     // Since it has to fetch three times, we fetch it here and store the data in the state
     const { plan_id, new_plan } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/load_plan/" + plan_id;
+    let url = APIServer + "/load_plan/full?planId=" + plan_id;
     await axios
       .get(url)
       .then(async (result) => {
@@ -683,11 +683,7 @@ class EditPlan extends React.Component {
                       );
                     else if (this.state.mode === "map")
                       return (
-                        <GGMap
-                          {...this.state}
-                          {...this.props}
-                          editing={true}
-                        />
+                        <GGMap {...this.state} {...this.props} editing={true} />
                       );
                   })()}
                 </Col>
