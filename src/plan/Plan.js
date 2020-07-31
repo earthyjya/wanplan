@@ -24,7 +24,7 @@ class Plan extends React.Component {
     toastOpen: false,
     transports: [],
     review: "",
-    addedReview: [],
+    plan_review: [],
     ratingList: [
       { id: 1, isChecked: false },
       { id: 2, isChecked: false },
@@ -33,7 +33,6 @@ class Plan extends React.Component {
       { id: 5, isChecked: false },
     ],
     rating: 0,
-    addedRating: [],
     mode: "plan",
     showMobileWarning: false,
   };
@@ -321,18 +320,6 @@ class Plan extends React.Component {
         this.setState({ error });
         console.log(error);
       });
-
-    url = process.env.REACT_APP_APIServer + "/plan_review/plan/" + plan_id;
-
-    await axios
-      .get(url)
-      .then(async (result) => {
-        this.setState({ addedReview: [...result.data] });
-        // console.log(result.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   reviewChanged = (e) => {
@@ -416,18 +403,6 @@ class Plan extends React.Component {
       }
       this.setState(plan_detail);
     }
-
-    url = APIServer + "/plan_review/plan/" + plan_id;
-
-    await axios
-      .get(url)
-      .then(async (result) => {
-        this.setState({ addedReview: [...result.data] });
-        // console.log(result.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   render() {
@@ -437,7 +412,7 @@ class Plan extends React.Component {
       plan_overview,
       modal,
       ratingList,
-      addedReview,
+      plan_review,
     } = this.state;
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
@@ -509,7 +484,7 @@ class Plan extends React.Component {
             </div>
           </div>
           <div className="review">
-            <div style={{flexGrow: "0.8"}}>
+            <div style={{ flexGrow: "0.8" }}>
               <div>Reviews</div>
               <div>
                 <textarea
@@ -518,7 +493,7 @@ class Plan extends React.Component {
                   value={this.state.review}
                   rows={3}
                   onChange={this.reviewChanged}
-                  />
+                />
               </div>
             </div>
             <div>
@@ -535,20 +510,20 @@ class Plan extends React.Component {
                           checked={item.isChecked}
                           className="search-rating"
                           onChange={this.ratingChanged}
-                          />
+                        />
                       </div>
                     </label>
                   )))()}
-                </div>
-                <input
-                  type="submit"
-                  value="post"
-                  className="postReview"
-                  onClick={this.submitReview}
-                  />
+              </div>
+              <input
+                type="submit"
+                value="post"
+                className="postReview"
+                onClick={this.submitReview}
+              />
             </div>
             <div>
-              {addedReview.map((i) => {
+              {plan_review.map((i) => {
                 return (
                   <div className="review-box">
                     <div>
