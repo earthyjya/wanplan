@@ -36,44 +36,52 @@ class PlanOverview extends Component {
           <div className="share-banner" onClick={this.toggleShareModal}>
             <FontAwesomeIcon icon="share-alt" size="2x" />
           </div>
+          {
+            // <Row>
+            //   <div className="author-card-container">
+            //     <div style={{ textAlign: "end", alignSelf: "center" }}>
+            //       <img
+            //         src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+            //         className="avatar-image"
+            //         alt="author"
+            //       />
+            //     </div>
+            //     <div className="author-card-details">
+            //       <div className="author-card-title">
+            //         {" "}
+            //         {plan_overview.name + " " + plan_overview.surname}{" "}
+            //       </div>
+            //       <div className="author-card-description">
+            //         {" "}
+            //         {plan_overview.user_description}{" "}
+            //       </div>
+            //     </div>
+            //   </div>
+            // </Row>
+          }
           <Row>
-            <div className="author-card-container">
-              <div style={{ textAlign: "end", alignSelf: "center" }}>
-                <img
-                  src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                  className="avatar-image"
-                  alt="author"
-                />
-              </div>
-              <div className="author-card-details">
-                <div className="author-card-title">
-                  {" "}
-                  {plan_overview.name + " " + plan_overview.surname}{" "}
-                </div>
-                <div className="author-card-description">
-                  {" "}
-                  {plan_overview.user_description}{" "}
-                </div>
-              </div>
+            <div className="plan-description-title">
+              {plan_overview.plan_title}
             </div>
-          </Row>
-          <Row>
-            <div className="plan-description-title">{plan_overview.plan_title}</div>
           </Row>
           <Row className="plan-description">
             {plan_overview.plan_description}
           </Row>
-          <Row className="plan-originalId">{(() => {if (plan_overview.original_id === 0){
-			  return <div>This is an original plan</div>
-		  }else{
-			return <div>
-				Original plan at{" "}
-            <a href={"/plan/" + plan_overview.original_id}>
-              {"/plan/" + plan_overview.original_id}
-            </a>
-			</div>
-		  }})()}
-
+          <Row className="plan-originalId">
+            {(() => {
+              if (plan_overview.original_id === 0) {
+                return <div>This is an original plan</div>;
+              } else {
+                return (
+                  <div>
+                    Original plan at{" "}
+                    <a href={"/plan/" + plan_overview.original_id}>
+                      {"/plan/" + plan_overview.original_id}
+                    </a>
+                  </div>
+                );
+              }
+            })()}
           </Row>
         </Container>
       </React.Fragment>
