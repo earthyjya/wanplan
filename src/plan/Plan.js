@@ -495,6 +495,23 @@ class Plan extends React.Component {
                   onChange={this.reviewChanged}
                 />
               </div>
+              <div>
+                {(() => {
+                  if (plan_review){
+                    plan_review.map((i) => {
+                      return (
+                        <div className="review-box">
+                          <div>
+                            {i.rating === 0
+                              ? "No rating"
+                              : String.fromCharCode(0x2605).repeat(i.rating)}{" "}
+                          </div>
+                          <div>{i.review === "" ? "No comment" : i.review}</div>
+                        </div>
+                      );
+                    });}
+                })()}
+              </div>
             </div>
             <div>
               <div className="rating">
@@ -521,23 +538,6 @@ class Plan extends React.Component {
                 className="postReview"
                 onClick={this.submitReview}
               />
-            </div>
-            <div>
-              {(() => {
-                if (plan_review)
-                  plan_review.map((i) => {
-                    return (
-                      <div className="review-box">
-                        <div>
-                          {i.rating === 0
-                            ? "No rating"
-                            : String.fromCharCode(0x2605).repeat(i.rating)}{" "}
-                        </div>
-                        <div>{i.review === "" ? "No comment" : i.review}</div>
-                      </div>
-                    );
-                  });
-              })()}
             </div>
           </div>
           {(() => {
