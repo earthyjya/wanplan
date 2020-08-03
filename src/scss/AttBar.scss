@@ -174,3 +174,8 @@ input[type="text"]:focus {
   background-color: $primary;
   align-self: center;
 }
+
+.att-bar-delete{
+  cursor: pointer;
+  float: right;
+}

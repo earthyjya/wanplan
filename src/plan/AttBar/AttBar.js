@@ -62,7 +62,11 @@ class AttBar extends Component {
               {this.state.detailsDat.name
                 ? this.state.detailsDat.name
                 : this.state.detailsDat.attraction_name}
+                <span className="att-bar-delete" onClick={() => this.setState({detailsDat: ""})}>
+                  &#10005;
+                </span>
             </h3>
+
             <div style={{ display: "flex", flexDirection: "row" }}>
               <img
                 style={{ width: "160px", height: "100px" }}
