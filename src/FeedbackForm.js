@@ -75,7 +75,7 @@ class FeedbackForm extends Component {
     await axios
       .post(url, this.state)
       .then(res => {
-        console.log("post", res);
+        // console.log("post", res);
       })
       .catch(error => {
         console.log(error);
@@ -89,7 +89,7 @@ class FeedbackForm extends Component {
     await axios
       .get(url)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch(error => {
         console.log(error);

@@ -109,7 +109,7 @@ class EditPlan extends React.Component {
     await axios
       .delete(url)
       .then((res) => {
-        console.log("delete", res);
+        // console.log("delete", res);
       })
       .catch((error) => {
         console.log(error);
@@ -120,7 +120,7 @@ class EditPlan extends React.Component {
       await axios
         .post(url, day)
         .then((res) => {
-          console.log("post", res);
+          // console.log("post", res);
         })
         .catch((error) => {
           this.setState({ error });
@@ -150,7 +150,7 @@ class EditPlan extends React.Component {
       await axios
         .post(url, plan)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
         })
         .catch((error) => {
           this.setState({ error });
@@ -164,11 +164,11 @@ class EditPlan extends React.Component {
     const detail = this.state.plan_detail[order];
     const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_detail/" + plan_id + "/" + order;
-    console.log(url);
+    // console.log(url);
     await axios
       .put(url, detail)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -277,8 +277,8 @@ class EditPlan extends React.Component {
     if (!this.state.selectedCover) {
       console.log("No file is selected"); // In case the no file is selected.
     } else {
-      console.log(this.state.selectedCover);
-      console.log(this.state.selectedCover.type);
+      // console.log(this.state.selectedCover);
+      // console.log(this.state.selectedCover.type);
       const { plan_id } = this.props;
       let url = "";
       // let options = {
@@ -302,7 +302,7 @@ class EditPlan extends React.Component {
           type: this.state.selectedCover.type,
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           url = res.data;
           let options = {
             headers: {
@@ -313,7 +313,7 @@ class EditPlan extends React.Component {
           return axios.put(url, this.state.selectedCover, options);
         })
         .then((result) => {
-          console.log(result);
+          // console.log(result);
         })
         .catch((err) => {
           console.log(err);
@@ -513,6 +513,7 @@ class EditPlan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data, editTitle: new_plan });
+        // console.log(result.data)
       })
       .catch((error) => {
         this.setState({ error });
@@ -563,7 +564,7 @@ class EditPlan extends React.Component {
       days: days,
     });
     await this.setState({ isLoading: false });
-    console.log("Fetching done...");
+    // console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
     if (process.env.NODE_ENV === "production") {
       plan_detail = this.state.plan_detail;

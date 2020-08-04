@@ -124,11 +124,11 @@ class SearchPlan extends Component {
     }
     this.setState({ url: url });
 
-    console.log(url);
+    // console.log(url);
     await axios
       .get(url)
       .then((result) => {
-        console.log(result.data);
+        // console.log(result.data);
         this.setState({ data: result.data, isLoading: false, error: null });
       })
       .catch((error) => this.setState({ error, isLoading: false }));
@@ -260,7 +260,7 @@ class SearchPlan extends Component {
     await axios
       .get(this.state.url)
       .then((result) => {
-        console.log(result.data);
+        // console.log(result.data);
         this.setState({ data: result.data, isLoading: false, error: null });
       })
       .catch((error) => this.setState({ error, isLoading: false }));
@@ -399,7 +399,7 @@ class SearchPlan extends Component {
                 <span> All </span>
               </label>
               {list.map((style) => (
-                <label className="checkbox-container">
+                <label className="checkbox-container" key={style.id}>
                   <input
                     type="checkbox"
                     className="search-checkbox"
@@ -418,7 +418,7 @@ class SearchPlan extends Component {
             <span>Budget:</span>
             <div>
               {budgetList.map((price) => (
-                <label className="checkbox-container">
+                <label className="checkbox-container" key={price.id}>
                   <input
                     type="checkbox"
                     className="search-checkbox"

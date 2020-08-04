@@ -34,7 +34,7 @@ class AttBarCard extends Component {
     };
     if (this.state.photos.length > 0) {
       style.backgroundImage = "url(" + this.state.photos[0] + ")";
-      console.log(this.state.photos);
+      // console.log(this.state.photos);
     }
     return style;
   }

@@ -349,6 +349,8 @@ class Plan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data });
+        if (result.data.plan_review == null)
+        this.setState({plan_review: []})
       })
       .catch((error) => {
         this.setState({ error });
@@ -387,7 +389,7 @@ class Plan extends React.Component {
 
     await this.setState({ days: days });
     await this.setState({ isLoading: false });
-    console.log("Fetching done...");
+    // console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
     if (process.env.NODE_ENV === "production") {
       plan_detail = this.state.plan_detail;

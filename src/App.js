@@ -59,7 +59,7 @@ class App extends Component {
     user_id: 0,
     isLoggedIn: false,
     urls: [
-      "https://api.oneplan.in.th/api/plan_overview" /*+"/user/" + user_id*/,
+      "https://api.oneplan.in.th/api/load_plan/search?userId=0" /*+"/user/" + user_id*/,
     ],
     toggleLogin: false,
     toggleSignup: false,
@@ -68,13 +68,13 @@ class App extends Component {
 
   authListener = () => {
     fire.auth().onAuthStateChanged((user) => {
-      console.log(user);
+      // console.log(user);
       if (user) {
         this.setState({ user, isLoggedIn: true, });
-        // this.setState({user_id: user.uid })
+        this.setState({user_id: user.uid })
         fire.auth().currentUser.getIdToken(true).then((idToken) => {
           this.setState({token: idToken})
-          console.log(idToken)
+          // console.log(idToken)
         }).catch(function(error) {
           // Handle error
           console.error(error)
@@ -296,7 +296,7 @@ class App extends Component {
                 <Route
                   path="/home"
                   component={() => (
-                    <Request url={APIServer + "/plan_overview"}>
+                    <Request url={APIServer + "/load_plan/search?userId=" + user_id}>
                       {(result) => <Homepage {...result} {...this.state} />}
                     </Request>
                   )}

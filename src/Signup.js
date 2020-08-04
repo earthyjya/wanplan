@@ -23,7 +23,7 @@ class Signup extends Component {
         this.props.toggleSignup();
       })
       .then((u) => {
-        console.log(u);
+        // console.log(u);
       })
       .catch((error) => {
         console.log(error);

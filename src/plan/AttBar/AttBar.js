@@ -35,7 +35,7 @@ class AttBar extends Component {
     await axios
       .get(url)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.setState({ nearbyPlaces: res.data });
       })
       .catch((err) => {
@@ -54,43 +54,76 @@ class AttBar extends Component {
   }
 
   render() {
+    let { detailsDat } = this.state;
     return (
       <div ref={this.attbarRef} className="att-bar-wrap">
-        {this.state.detailsDat !== "" ? (
+        {detailsDat !== "" ? (
           <div className="att-bar-desc">
-            <h3>
-              {this.state.detailsDat.name
-                ? this.state.detailsDat.name
-                : this.state.detailsDat.attraction_name}
-            </h3>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <img
-                style={{ width: "160px", height: "100px" }}
-                alt="PlaceHolder"
-                src={
-                  this.state.detailsDat.photos
-                    ? this.state.detailsDat.photos[0]
-                    : "https://via.placeholder.com/160x100"
-                }
-              />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  paddingLeft: "0.8em",
-                }}
-              >
-                <span>
-                  {" "}
-                  <FontAwesomeIcon icon="clock" /> operating hours: 09.00 -
-                  24.00
-                </span>
-                <span>
-                  {" "}
-                  <FontAwesomeIcon icon="money-bill-wave" /> entrance fee
-                </span>
-              </div>
-            </div>
+            <Droppable
+              key={detailsDat.google_place_id}
+              droppableId={detailsDat.google_place_id + "bar"}
+              isDropDisabled={true}
+              type={String}
+              direction="vertical"
+              isCombineEnabled={false}
+            >
+              {(dropProvided) => (
+                <div
+                  {...dropProvided.droppableProps}
+                  ref={dropProvided.innerRef}
+                >
+                  <Draggable
+                    draggableId={detailsDat.attraction_id.toString() + "bar"}
+                    index={detailsDat.attraction_id}
+                  >
+                    {(dragProvided) => (
+                      <div
+                        {...dragProvided.dragHandleProps}
+                        {...dragProvided.draggableProps}
+                        ref={dragProvided.innerRef}
+                      >
+                        <h3>
+                          {this.state.detailsDat.name
+                            ? this.state.detailsDat.name
+                            : this.state.detailsDat.attraction_name}
+                        </h3>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <img
+                            style={{ width: "160px", height: "100px" }}
+                            alt="PlaceHolder"
+                            src={
+                              this.state.detailsDat.photos
+                                ? this.state.detailsDat.photos[0]
+                                : "https://via.placeholder.com/160x100"
+                            }
+                          />
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              paddingLeft: "0.8em",
+                            }}
+                          >
+                            <span>
+                              {" "}
+                              <FontAwesomeIcon icon="clock" /> operating hours:
+                              09.00 - 24.00
+                            </span>
+                            <span>
+                              {" "}
+                              <FontAwesomeIcon icon="money-bill-wave" />{" "}
+                              entrance fee
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+
+                  {dropProvided.placeholder}
+                </div>
+              )}
+            </Droppable>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               mod tempor incididunt ut labore et dolore magna aliqua. Ut enim

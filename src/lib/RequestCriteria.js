@@ -10,7 +10,7 @@ export class RequestCriteria extends Component {
 
 	async componentDidMount() {
         // console.log("Getting from " + this.props.url);
-        console.log(this.props.urls)
+        // console.log(this.props.urls)
         this.props.urls.map(async url =>
 		await axios
 			.get(url)
