@@ -76,7 +76,7 @@ class Homepage extends Component {
 
   render() {
     const { isLoading, error, feedback } = this.state;
-    if (isLoading) return <div></div>;
+    if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Something Went Wrong :(</div>;
     return (
       <React.Fragment>

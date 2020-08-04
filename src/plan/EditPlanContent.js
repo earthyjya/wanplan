@@ -85,7 +85,7 @@ class EditPlanContent extends React.Component {
     const { isLoading, plan_overview } = this.state;
     const { cities } = this.props;
     let styles = ["Sightseeing", "Cultural", "Adventure"];
-    if (isLoading) return <div></div>;
+    if (isLoading) return <div>Loading...</div>;
     return (
       <div className="edit-plan-content">
         <div className="close-edit-plan" onClick={this.props.toggleEditPlanContent}>

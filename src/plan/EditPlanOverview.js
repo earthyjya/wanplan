@@ -43,7 +43,7 @@ class EditPlanOverview extends Component {
 
   render() {
     const { isLoading, plan_overview } = this.state;
-    if (isLoading) return <div></div>;
+    if (isLoading) return <div>Loading...</div>;
     else
       return (
         <React.Fragment>

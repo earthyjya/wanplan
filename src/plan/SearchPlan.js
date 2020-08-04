@@ -305,7 +305,7 @@ class SearchPlan extends Component {
 
   render() {
     const { list, allChecked, isLoading, error, budgetList } = this.state;
-    if (isLoading) return <div></div>;
+    if (isLoading) return <div>Loading...</div>;
 
     return (
       <React.Fragment>

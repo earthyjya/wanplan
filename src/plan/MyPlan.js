@@ -94,7 +94,7 @@ class MyPlan extends Component {
 
   render() {
     const { isLoading } = this.props;
-    if (isLoading) return <div></div>;
+    if (isLoading) return <div>Loading...</div>;
 
     return (
       <React.Fragment>
