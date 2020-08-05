@@ -54,7 +54,9 @@ class Homepage extends Component {
   };
 
   RenderRedirect = () => {
-    if (this.state.redirect) return <Redirect to={this.state.redirectTo} />;
+    if (this.state.redirect){
+      window.history.pushState(this.state, "", window.location.href); 
+      return <Redirect to={this.state.redirectTo} />};
   };
 
   selectCity = (e) => {

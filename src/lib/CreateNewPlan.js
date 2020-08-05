@@ -25,7 +25,7 @@ export default async function CreateNewPlan(
   await axios
     .post(url, newPlan)
     .then(async (result) => {
-      // console.log(result)
+      // console.log(result.data)
       if (result.data === null) alert("Could not create new plan :(");
       else {
         newPlan.plan_id = result.data.id;

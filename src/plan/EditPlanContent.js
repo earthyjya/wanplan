@@ -108,7 +108,7 @@ class EditPlanContent extends React.Component {
           >
             {cities.map(city => {
               return (
-                <option value={city.city_id} className={city.city}>
+                <option key={city.city_id} value={city.city_id} className={city.city}>
                   {city.city}
                 </option>
               );
@@ -131,7 +131,7 @@ class EditPlanContent extends React.Component {
             onChange={this.onStyleChange}
           >
             {styles.map(style => {
-              return <option>{style}</option>;
+              return <option key={style}>{style}</option>;
             })}
           </select>
         </div>
