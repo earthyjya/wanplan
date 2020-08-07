@@ -1,0 +1,97 @@
+@import "./Style.scss";
+
+.m-attcard-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: .8em;
+  .time{
+    font-weight: bold;
+    text-align: center;
+  }
+  .m-attcard{
+    border-color: black;
+    border-radius: 10px;
+    border-width: thick;
+    border: solid;
+    padding: 1.6em;
+    display: flex;
+    flex-direction: column;
+    margin: 0 2em;
+    .image-container{
+      display: flex;
+      flex-direction: row;
+      margin-bottom: .6em;
+      .image{
+        border-radius: 10px;
+        max-width: 100px;
+        max-height: 100px;
+        margin-right: 1em;
+      }
+      .title{
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+      .type{
+        background-color: $primary;
+        font-size: .6em;
+        padding: .2em .6em;
+        border-radius: 5px;
+        display: inline-block;
+      }
+      .info{
+        color: $gray2;
+        font-size: 0.8em;
+      }
+    }
+    .note{
+      .title{
+        font-weight: bold;
+      }
+      .detail{
+        font-size: 0.8em;
+      }
+    }
+  }
+}
+
+.m-transcard-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 1em;
+  > *{
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-grow: 1;
+    align-items: center;
+  }
+  .location-container{
+    flex-direction: column;
+    border-right: solid;
+    border-color: $gray3;
+    padding: 1em 0;
+    .distance{
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: 500;
+      color: $gray2;
+    }
+    .map{
+      font-size: .8em;
+    }
+  }
+  .transport-container{
+    flex-direction: column;
+    span > :first-child{
+      margin-right: 0.4em;
+      font-size: 1.2em;
+    }
+    span > :nth-child(2){
+      margin-right: 0.2em;
+      font-size: .8em;
+    }
+  }
+}

@@ -123,7 +123,6 @@ class DayTimeline extends Component {
           </div>
         </React.Fragment>
       );
-    else
       return (
         <div className="DayTimeline">
           <div>
