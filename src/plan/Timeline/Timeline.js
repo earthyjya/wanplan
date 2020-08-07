@@ -1,5 +1,7 @@
 import DayTimeline from "./DayTimeline";
+import MobileDayTimeline from "../../mobile/MobileDayTimeline.js"
 import React, { Component } from "react";
+import {isMobile} from "react-device-detect";
 
 class Timeline extends Component {
   addDay = () => {
@@ -23,16 +25,35 @@ class Timeline extends Component {
           })()}
           <hr style={{ margin: "0px 0px 40px 0px" }} />
         </div>
-        {days.map(day => (
-          <DayTimeline
-            {...this.state}
-            {...this.props}
-            plan_detail={plan_detail.filter(plan => plan.day === day)}
-            day={day}
-            key={day.toString()}
-            showDetails={this.props.showDetails}
-          />
-        ))}
+        { (() => {
+          if(isMobile)
+            return(
+              days.map(day => (
+                <MobileDayTimeline
+                  {...this.state}
+                  {...this.props}
+                  plan_detail={plan_detail.filter(plan => plan.day === day)}
+                  day={day}
+                  key={day.toString()}
+                  showDetails={this.props.showDetails}
+                />)
+              )
+            )
+          else
+            return(
+              days.map(day => (
+                <DayTimeline
+                  {...this.state}
+                  {...this.props}
+                  plan_detail={plan_detail.filter(plan => plan.day === day)}
+                  day={day}
+                  key={day.toString()}
+                  showDetails={this.props.showDetails}
+                />)
+              )
+            )
+          })()
+        }
       </div>
     );
   }

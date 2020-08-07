@@ -53,9 +53,6 @@ class GGMapDayTimeline extends Component {
 
 	render() {
 		const { plan_detail, day, editing, transports } = this.props;
-		let start = "";
-		let destination = "";
-		let idx = day - 1;
 		if (this.props.focusDay === this.props.day) {
 			return (
 				<div className="ggmap-day-timeline">
