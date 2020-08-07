@@ -10,7 +10,7 @@ export default async function CreateNewPlan(
   const newPlan = {
     plan_title: "untitled",
     user_id: newUserId,
-    city_id: 2,
+    city_id: 12,
     duration: 1,
     plan_style: "",
     plan_description: "",
