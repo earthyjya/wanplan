@@ -124,8 +124,8 @@ class AttBar extends Component {
       { city: "Naha", city_id: 14, lat: 26.20047, long: 127.728577 },
     ];
     const APIServer = process.env.REACT_APP_APIServer;
-    let cityLat = cities.filter(location => location.city == this.props.city)[0].lat
-    let cityLong = cities.filter(location => location.city == this.props.city)[0].long
+    let cityLat = cities.filter(location => location.city == this.props.plan_overview.city)[0].lat
+    let cityLong = cities.filter(location => location.city == this.props.plan_overview.city)[0].long
     let url = APIServer + "/googlenearby?lat=" +
     cityLat +
     "&lng=" +
@@ -148,13 +148,13 @@ class AttBar extends Component {
     const APIServer = process.env.REACT_APP_APIServer;
     let url =  APIServer +
     "/attraction/city/" +
-    this.props.city_id
+    this.props.plan_overview.city_id
     console.log(url)
     await axios
       .get(url)
       .then((res) => {
         // console.log(res.data);
-        this.setState({ data: res.data, isLoading: false });
+        this.setState({ data: res.data.splice(0,10), isLoading: false });
       })
       .catch((err) => {
         this.setState({error: err})
@@ -393,7 +393,7 @@ class AttBar extends Component {
                   </React.Fragment>
                 );
             })()}
-            {this.state.data.splice(0, 10).map((dat) => (
+            {this.state.data.map((dat) => (
               <div onClick={() => this.showDetails(dat)}>
                 <Droppable
                   key={dat.google_place_id}

@@ -37,8 +37,6 @@ class EditPlan extends React.Component {
     selectedCover: null,
     detailsDat: null,
     mode: "plan",
-    city: '',
-    city_id: '',
     cities: []
   };
 
@@ -88,7 +86,7 @@ class EditPlan extends React.Component {
       .put(url, plan_location)
       .then((response) => {
         // console.log(response);
-        this.setState({city: plan_overview.city, city_id: plan_overview.city_id})
+        this.setState({plan_overview : {...this.state.plan_overview, city: this.state.plan_overview.city, city_id: this.state.plan_overview.city_id}})
       })
       .catch((error) => {
         this.setState({ error });
@@ -175,7 +173,6 @@ class EditPlan extends React.Component {
         });
     });
   };
-
   updateOnePlanDetail = async (order) => {
     const plan_id = this.props.plan_id;
     const detail = this.state.plan_detail[order];
@@ -530,8 +527,8 @@ class EditPlan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data, editTitle: new_plan });
-        this.setState({city: result.data.plan_city[0].city,
-        city_id : result.data.plan_city[0].city_id})
+        this.setState({plan_overview: {...this.state.plan_overview,city: result.data.plan_city[0].city,
+        city_id : result.data.plan_city[0].city_id}})
         // console.log(result.data)
       })
       .catch((error) => {
@@ -608,7 +605,6 @@ class EditPlan extends React.Component {
       error,
       plan_overview,
       plan_city,
-      city,
       modal,
       editTitle,
       planCover,
@@ -655,7 +651,7 @@ class EditPlan extends React.Component {
                 })()}
 
                 <div className="title-bar">
-                  <div className="title">{city}</div>
+                  <div className="title">{plan_overview.city}</div>
                   <div className="plan" onClick={this.modePlan}>
                     Plan
                   </div>

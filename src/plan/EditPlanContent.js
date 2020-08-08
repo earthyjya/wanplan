@@ -75,7 +75,7 @@ class EditPlanContent extends React.Component {
 
   async componentDidMount() {
     this.setState({
-      plan_overview: {...this.props.plan_overview, city: this.props.city, city_id: this.props.city_id},
+      plan_overview: {...this.props.plan_overview, city: this.props.plan_overview.city, city_id: this.props.plan_overview.city_id},
       originalCityId: this.props.plan_overview.city_id,
       isLoading: false
     });
