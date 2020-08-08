@@ -1,4 +1,4 @@
-import "../scss/MyPlan.scss";
+import "../scss/RecommendedPlan.scss";
 import CreateNewPlan from "../lib/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
@@ -8,7 +8,7 @@ import { CardDeck } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
 import { isMobile } from "react-device-detect";
 
-class MyPlan extends Component {
+class RecommendedPlan extends Component {
   state = {
     data: [],
     error: null,
@@ -39,7 +39,6 @@ class MyPlan extends Component {
         .map((plan) => {
           return (
             <PlanCard
-              cardClassName="myplan-plan-card"
               plan={plan}
               key={plan.plan_id}
               deletable={true}
@@ -52,7 +51,6 @@ class MyPlan extends Component {
       if (_planlist !== null && _planlist !== [] && _planlist.length !== 0) {
         return _planlist.map((plan) => (
           <PlanCard
-            cardClassName="myplan-plan-card"
             plan={plan}
             key={plan.plan_id}
             deletable={true}
@@ -61,7 +59,10 @@ class MyPlan extends Component {
           />
         ));
       } else {
-        return <div className="no-saved-plan-text">Your saved plan will show here</div>;
+        return(
+        <div className="no-saved-plan-text">
+          Your saved plan will show here
+        </div>);
       }
     }
   };
@@ -115,11 +116,11 @@ class MyPlan extends Component {
     return (
       <React.Fragment>
         {this.RenderRedirect()}
-        <div className="myplan-container container-fluid">
-          <div className="myplan-text">
-            <div> My Plan </div>
+        <div className="recommendedplan-container container-fluid">
+          <div className="recommendedplan-text">
+            <div> Reccommended Plan </div>
           </div>
-          <div className="myplan-card-deck">{this.savedPlan()}</div>
+          <div className="recommendedplan-card-deck">{this.savedPlan()}</div>
         </div>
         {(() => {
           return (
@@ -138,4 +139,4 @@ class MyPlan extends Component {
   }
 }
 
-export default MyPlan;
+export default RecommendedPlan;

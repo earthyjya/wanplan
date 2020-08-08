@@ -10,6 +10,7 @@ import ReactGA from "react-ga";
 import fire from "./config/Firebase";
 import Login from "./Login.js";
 import Signup from "./Signup.js";
+import SearchPlan from "./plan/SearchPlan.js";
 import {
   faPencilAlt,
   faCamera,
@@ -50,7 +51,7 @@ library.add(
   faEye,
   faFacebookSquare,
   faInstagramSquare,
-  faTwitterSquare
+  faTwitterSquare,
 );
 
 class App extends Component {
@@ -354,6 +355,9 @@ class App extends Component {
               </Request>
             )}
           />
+        <Route path="/search">
+          <SearchPlan/>
+        </Route>
         </BrowserRouter>
       </React.Fragment>
     );

@@ -73,7 +73,7 @@ class PlanCard extends Component {
             }
           })()}
           </div>
-        <Card className="plan-card">
+        <Card className={this.props.cardClassName? this.props.cardClassName: "plan-card"}>
           <div className="plan-card-view-count">
             <FontAwesomeIcon icon="eye" /> 9999
           </div>
@@ -84,14 +84,13 @@ class PlanCard extends Component {
               </div>);
             }
           })()}
-
           <CardImg
             className="plan-card-img"
             src="/myplan_placeholder.jpg"
             alt="Card image cap"
             onClick={this.handleClick}
           />
-          <CardBody onClick={this.handleClick}>
+        <CardBody onClick={this.handleClick} className="plan-card-body">
             <CardTitle className="plan-card-title">
               {this.props.plan.plan_title}
             </CardTitle>

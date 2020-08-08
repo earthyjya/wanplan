@@ -1,6 +1,7 @@
 import "./scss/Homepage.scss";
 import axios from "axios";
 import Myplan from "./plan/MyPlan.js";
+import RecommendedPlan from "./plan/RecommendedPlan.js";
 import SearchPlan from "./plan/SearchPlan.js";
 import Footer from "./Footer.js";
 import React, { Component } from "react";
@@ -55,7 +56,7 @@ class Homepage extends Component {
 
   RenderRedirect = () => {
     if (this.state.redirect){
-      window.history.pushState(this.state, "", window.location.href); 
+      window.history.pushState(this.state, "", window.location.href);
       return <Redirect to={this.state.redirectTo} />};
   };
 
@@ -82,6 +83,7 @@ class Homepage extends Component {
     if (error) return <div>Something Went Wrong :(</div>;
     return (
       <React.Fragment>
+        {this.RenderRedirect()}
         <button className="Feedback" onClick={this.toggleFeedback}>
           Give Feedback
         </button>
@@ -116,8 +118,16 @@ class Homepage extends Component {
             อยากเที่ยวไหน..ให้เราช่วยแพลน
           </Row>
         </Container>
+        <RecommendedPlan data={this.props.data} {...this.state} {...this.props} />
         <Myplan data={this.props.data} {...this.state} {...this.props} />
-        <SearchPlan data={this.props.data} {...this.state} {...this.props} />
+        <button className="search-plan-button" onClick= {
+            () => {
+              this.setState({redirect: true, redirectTo: "/search"})
+            }}
+          >
+           Search for a plan
+           <FontAwesomeIcon style={{marginLeft: "10px"}} icon="search" size="1x" />
+        </button>
         <div className="homepage-ending-container">
           <div className="title">Oneplan</div>
           <div className="content">

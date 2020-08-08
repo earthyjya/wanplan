@@ -54,6 +54,10 @@ class Plan extends React.Component {
     let newPlanId = 0;
     let savedplan = {};
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
+    if(!_planlist){
+      localStorage.setItem("planlist", JSON.stringify([]))
+      _planlist = []
+    }
     if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
       let saved = false;
       _planlist.map((plan) => {
