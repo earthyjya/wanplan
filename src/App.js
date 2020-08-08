@@ -11,6 +11,7 @@ import fire from "./config/Firebase";
 import Login from "./Login.js";
 import Signup from "./Signup.js";
 import SearchPlan from "./plan/SearchPlan.js";
+import RemovePlan from "./lib/RemovePlan.js";
 import {
   faPencilAlt,
   faCamera,
@@ -34,6 +35,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
+import DuplicatePlan from "./lib/DuplicatePlan";
 library.add(
   faPencilAlt,
   faCamera,
@@ -51,7 +53,7 @@ library.add(
   faEye,
   faFacebookSquare,
   faInstagramSquare,
-  faTwitterSquare,
+  faTwitterSquare
 );
 
 class App extends Component {
@@ -100,117 +102,40 @@ class App extends Component {
     this.authListener();
   }
 
-  logInlogOut = async () => {
-    if (this.state.isLoggedIn) {
-      this.setState({ isLoggedIn: false });
-    } else {
-      const { user_id } = this.state;
-      const APIServer = process.env.REACT_APP_APIServer;
-      this.setState({ isLoggedIn: true });
-      if (localStorage.getItem("planlist") !== null) {
-        let _planlist = JSON.parse(localStorage.getItem("planlist"));
-        for (let i = 0; i < _planlist.length; i++) {
-          let url = APIServer + "/load_plan/" + _planlist[i].plan_id;
-          await axios.get(url).then(async (result) => {
-            let data = result.data;
-            url = APIServer + "/plan_overview";
-            let original_id = data.plan_overview.original_id;
-            if (data.plan_overview.original_id === 0) original_id = 0;
-            let planId;
-            let savedplan = {
-              ...data.plan_overview,
-              original_id: original_id,
-              user_id: user_id,
-            };
-            await axios
-              .post(url, savedplan)
-              .then((result) => {
-                if (result.data === null) alert("Could not save plan :(");
-                planId = result.data.id;
-                // console.log(result);
-              })
-              .catch((error) => {
-                this.setState({ error });
-              });
-            data.plan_startday.map(async (day) => {
-              url = APIServer + "/plan_startday/";
-              let newDay = day;
-              newDay.plan_id = planId;
-              await axios
-                .post(url, newDay)
-                .then((result) => {
-                  if (result.data === null) alert("Could not save plan :(");
-                  // console.log(result);
-                })
-                .catch((error) => {
-                  this.setState({ error });
-                  console.log(error);
-                });
-            });
-
-            data.plan_detail.map(async (plan) => {
-              url = APIServer + "/plan_detail/";
-              let newPlan = plan;
-              newPlan.plan_id = planId;
-              await axios
-                .post(url, newPlan)
-                .then((result) => {
-                  if (result.data === null) alert("Could not save plan :(");
-                  // console.log(result);
-                })
-                .catch((error) => {
-                  this.setState({ error });
-                  console.log(error);
-                });
-            });
-            if (data.plan_overview.original_id === 0) {
-              if (data.plan_startday) {
-                url =
-                  APIServer +
-                  "/plan_startday/delete/" +
-                  data.plan_overview.plan_id;
-
-                await axios
-                  .delete(url)
-                  .then((result) => {
-                    if (result.data === null) alert("Could not update plan :(");
-                    // console.log(result);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }
-              if (data.plan_detail !== []) {
-                url =
-                  APIServer +
-                  "/plan_detail/delete/" +
-                  data.plan_overview.plan_id;
-
-                await axios
-                  .delete(url)
-                  .then((result) => {
-                    if (result.data === null) alert("Could not update plan :(");
-                    // console.log(result);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }
-              url = APIServer + "/plan_overview/" + data.plan_overview.plan_id;
-
-              await axios
-                .delete(url)
-                .then((result) => {
-                  if (result.data === null) alert("Could not update plan :(");
-                  // console.log(result);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            }
-          });
-        }
-      }
+  logIn = async () => {
+    const { user_id } = this.state;
+    const APIServer = process.env.REACT_APP_APIServer;
+    this.setState({ isLoggedIn: true });
+    if (
+      localStorage.getItem("planlist") !== null &&
+      localStorage.getItem("planlist") !== []
+    ) {
+      // console.log("move plans from cache to server");
+      //if there are somethings in cache post them to the server
+      let _planlist = JSON.parse(localStorage.getItem("planlist"));
+      _planlist.map((plan) => {
+        let oldPlanId = plan.plan_id;
+        let originalId = plan.plan_original;
+        // console.log("old plan id is" + oldPlanId);
+        DuplicatePlan(APIServer, oldPlanId, user_id, async (data) => {
+          //   _planlist.push({
+          //     ...data.plan_overview,
+          //     plan_id: data.plan_overview.id,
+          //   })
+          // console.log("duplicated" + oldPlanId + "to" + data.plan_overview.id);
+          let url = APIServer + "/plan_overview/" + data.plan_overview.id;
+          await axios
+            .put(url, { ...data.plan_overview, original_id: originalId })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((err) => console.log(err));
+        });
+        RemovePlan(APIServer, oldPlanId, (data) => {
+          // console.log(data);
+        });
+      });
+      localStorage.setItem("planlist", JSON.stringify([]));
     }
   };
 
@@ -279,7 +204,7 @@ class App extends Component {
           if (toggleLogin) {
             return (
               <div className="loginForm">
-                <Login toggleLogin={this.toggleLogin} />
+                <Login toggleLogin={this.toggleLogin} logIn={this.logIn} />
               </div>
             );
           }
@@ -362,9 +287,9 @@ class App extends Component {
               </Request>
             )}
           />
-        <Route path="/search">
-          <SearchPlan/>
-        </Route>
+          <Route path="/search">
+            <SearchPlan />
+          </Route>
         </BrowserRouter>
       </React.Fragment>
     );

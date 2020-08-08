@@ -11,6 +11,7 @@ import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
 import { isMobile } from "react-device-detect";
+import DuplicatePlan from "../lib/DuplicatePlan";
 
 class Plan extends React.Component {
   state = {
@@ -69,76 +70,25 @@ class Plan extends React.Component {
       });}
       if (!saved) {
         console.log("try to save to" + user_id)
-        // Duplicate plan_overview
-        let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
-        await axios
-          .post(url)
-          .then((result) => {
-            if (result.data === null) alert("Could not duplicate plan :(");
-            // console.log(result);
-            newPlanId = result.data.id;
-            savedplan = { ...result.data, plan_id: newPlanId };
-          })
-          .catch((error) => {
-            this.setState({ error });
+        //Duplicate plan overview etc.
+        DuplicatePlan(APIServer, oldPlanId, user_id, (data) =>{
+          console.log(data)
+          savedplan = {...data.plan_overview, plan_id: data.plan_overview.id}
+          if (!isLoggedIn) {
+            if (_planlist === null || _planlist === []) {
+              _planlist = [savedplan];
+              _planlist[0] = savedplan;
+              localStorage.setItem("planlist", JSON.stringify(_planlist));
+            } else {
+              _planlist.push(savedplan);
+              localStorage.setItem("planlist", JSON.stringify(_planlist));
+            }
+          }
+          this.setState({
+            redirect: true,
+            redirectTo: "/plan/" + data.plan_overview.id + redirect,
           });
-
-        // Duplicate plan_startday
-        url = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
-        await axios
-          .post(url)
-          .then((result) => {
-            if (result.data === null)
-              alert("Could not duplicate plan_startday :(");
-            // console.log(result);
-          })
-          .catch((error) => {
-            this.setState({ error });
-            console.log(error);
-          });
-
-        // Duplicate plan_detail
-        url = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
-        await axios
-          .post(url)
-          .then((result) => {
-            if (result.data === null)
-              alert("Could not duplicate plan_detail :(");
-            // console.log(result);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-        // Duplicate plan_location
-        url = APIServer + "/plan_location/" + oldPlanId + "/" + newPlanId;
-        await axios
-        .post(url)
-        .then((result) => {
-          if (result.data === null)
-            alert("Could not duplicate plan_location :(");
-          else
-            this.setState({
-              redirect: true,
-              redirectTo: "/plan/" + newPlanId + redirect,
-            });
         })
-        .catch((error) => {
-          this.setState({ error });
-          console.log(error);
-        });
-      }
-      
-      if (!isLoggedIn) {
-        savedplan.plan_id = newPlanId;
-        if (_planlist === null || _planlist === []) {
-          _planlist = [savedplan];
-          _planlist[0] = savedplan;
-          localStorage.setItem("planlist", JSON.stringify(_planlist));
-        } else {
-          _planlist.push(savedplan);
-          localStorage.setItem("planlist", JSON.stringify(_planlist));
-        }
       }
     }
   };

@@ -7,6 +7,7 @@ import axios from "axios";
 import { CardDeck } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
 import { isMobile } from "react-device-detect";
+import RemovePlan from "../lib/RemovePlan.js"
 
 class MyPlan extends Component {
   state = {
@@ -72,21 +73,7 @@ class MyPlan extends Component {
     localStorage.setItem("planlist", JSON.stringify(_planlist));
     this.setState({ cachePlan: _planlist });
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/plan_overview/" + planId;
-    await axios
-      .delete(url)
-      // .then(result => console.log(result))
-      .catch((error) => console.error(error));
-  };
-
-  onClickNewPlan = () => {
-    if (isMobile) {
-      this.setState({ showMobileWarning: true });
-      return;
-    }
-    const { user_id, isLoggedIn } = this.props;
-    const APIServer = process.env.REACT_APP_APIServer;
-    CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
+    RemovePlan(APIServer, planId, (data) => {})
   };
 
   RedirectFunc = (plan_id) => {

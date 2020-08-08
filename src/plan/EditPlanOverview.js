@@ -21,7 +21,10 @@ class EditPlanOverview extends Component {
         plan_title: e.target.value
       }
     });
-    // this.props.updatePlanOverview(this.state.plan_overview, false);
+    this.props.updatePlanOverview({
+      ...this.state.plan_overview,
+      plan_title: e.target.value
+    }, false);
   };
 
   updatePlanOverview = e => {

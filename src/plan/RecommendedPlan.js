@@ -11,73 +11,21 @@ import { isMobile } from "react-device-detect";
 class RecommendedPlan extends Component {
   state = {
     data: [],
+    isLoading: true,
     error: null,
-    redirect: false,
-    redirectTo: "/",
-    citySearch: 0,
-    cities: [],
-    leastDay: 0,
-    mostDay: 1000,
-    allChecked: false,
-    list: [
-      { id: 1, name: "Adventure", isChecked: false },
-      { id: 2, name: "Sightseeing", isChecked: false },
-      { id: 3, name: "Cultural", isChecked: false },
-      { id: 4, name: "AUTO_TAG", isChecked: false },
-    ],
     allFalse: true,
-    url: "https://api.oneplan.in.th/api/plan_overview",
     showMobileWarning: false,
   };
 
-  savedPlan = () => {
-    let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    if (this.props.isLoggedIn) {
-      const { data, user_id } = this.props;
-      return data
-        .filter((plan) => plan.user_id === user_id)
-        .map((plan) => {
-          return (
-            <PlanCard
-              plan={plan}
-              key={plan.plan_id}
-              deletable={true}
-              {...this.props}
-              deleteFromCache={this.deleteFromCache}
-            />
-          );
-        });
-    } else {
-      if (_planlist !== null && _planlist !== [] && _planlist.length !== 0) {
-        return _planlist.map((plan) => (
-          <PlanCard
-            plan={plan}
-            key={plan.plan_id}
-            deletable={true}
-            {...this.props}
-            deleteFromCache={this.deleteFromCache}
-          />
-        ));
-      } else {
-        return(
-        <div className="no-saved-plan-text">
-          Your saved plan will show here
-        </div>);
-      }
-    }
-  };
-
-  deleteFromCache = async (planId) => {
-    let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    _planlist = _planlist.filter((plan) => plan.plan_id !== planId);
-    localStorage.setItem("planlist", JSON.stringify(_planlist));
-    this.setState({ cachePlan: _planlist });
-    const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/plan_overview/" + planId;
-    await axios
-      .delete(url)
-      // .then(result => console.log(result))
-      .catch((error) => console.error(error));
+  showAll = () => {
+    const { data } = this.state;
+    return (
+      <React.Fragment>
+        {data.slice(0, 9).map((plan) => (
+          <PlanCard plan={plan} key={plan.plan_id} deletable={false} />
+        ))}
+      </React.Fragment>
+    );
   };
 
   onClickNewPlan = () => {
@@ -90,37 +38,29 @@ class RecommendedPlan extends Component {
     CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
   };
 
-  RedirectFunc = (plan_id) => {
-    this.setState({
-      redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_new_plan",
-    });
-  };
-
-  RenderRedirect = () => {
-    if (this.state.redirect) {
-      window.history.pushState(this.state, "", window.location.href);
-      return <Redirect to={this.state.redirectTo} />;
-    }
-  };
-
-  componentDidMount() {
-    let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    this.setState({ cachePlan: _planlist });
+  async componentDidMount() {
+    let url =
+      process.env.REACT_APP_APIServer + "/load_plan/search?tags=AUTO_TAG";
+    await axios
+      .get(url)
+      .then((result) => {
+        // console.log(result.data);
+        this.setState({ data: result.data, isLoading: false, error: null });
+      })
+      .catch((error) => this.setState({ error, isLoading: false }));
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, error } = this.state;
     if (isLoading) return <div>Loading...</div>;
-
+    if (error) return <div>Something Went Wrong :(</div>;
     return (
       <React.Fragment>
-        {this.RenderRedirect()}
         <div className="recommendedplan-container container-fluid">
           <div className="recommendedplan-text">
             <div> Reccommended Plan </div>
           </div>
-          <div className="recommendedplan-card-deck">{this.savedPlan()}</div>
+          <div className="recommendedplan-card-deck">{this.showAll()}</div>
         </div>
         {(() => {
           return (

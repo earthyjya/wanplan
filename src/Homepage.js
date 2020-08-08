@@ -10,7 +10,9 @@ import { Container, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 import FeedbackForm from "./FeedbackForm.js";
+import CreateNewPlan from "./lib/CreateNewPlan.js";
 import "./scss/Feedback.scss";
+import { isMobile } from "react-device-detect";
 
 class Homepage extends Component {
   state = {
@@ -42,6 +44,16 @@ class Homepage extends Component {
   //       console.log(error);
   //     })
   // }
+
+  onClickNewPlan = () => {
+    if (isMobile) {
+      this.setState({ showMobileWarning: true });
+      return;
+    }
+    const { user_id, isLoggedIn } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
+  };
 
   toggleFeedback = () => {
     this.setState({ feedback: !this.state.feedback });
@@ -137,7 +149,7 @@ class Homepage extends Component {
             ออกแบบมาให้สามารถแก้ไขได้ง่ายและอิสระ
             พร้อมจองตั๋วและโรงแรมที่เหมาะที่สุดสำหรับทริปของคุณ
           </div>
-          <button>สร้างแพลน</button>
+          <button onClick = {this.onClickNewPlan}>สร้างแพลน</button>
           <img src="/homepage-placeholder.jpg" alt="" />
           <div className="circle"></div>
         </div>
