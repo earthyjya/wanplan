@@ -37,12 +37,13 @@ class EditPlan extends React.Component {
     selectedCover: null,
     detailsDat: null,
     mode: "plan",
+    cities: []
   };
 
   updatePlan = async () => {
     //update current plan
     this.toggleUpdateToast();
-    await this.updatePlanOverview(this.state.plan_overview);
+    await this.updatePlanOverview(this.state.plan_overview, false);
     await this.updatePlanStartday();
     await this.updatePlanDetails();
     await this.setState({
@@ -54,15 +55,15 @@ class EditPlan extends React.Component {
   updatePlanNoRedirect = async () => {
     //update current plan
     //this.toggleUpdateToast();
-    await this.updatePlanOverview(this.state.plan_overview);
+    await this.updatePlanOverview(this.state.plan_overview, false);
     await this.updatePlanStartday();
     await this.updatePlanDetails();
   };
 
-  updatePlanOverview = async (plan_overview) => {
+  updatePlanOverview = async (plan_overview, reload) => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    const url = APIServer + "/plan_overview/" + plan_id;
+    let url = APIServer + "/plan_overview/" + plan_id;
     await axios
       .put(url, plan_overview)
       .then((response) => {
@@ -78,8 +79,22 @@ class EditPlan extends React.Component {
       await this.setState({
         plan_overview: { ...old_plan_overview, ...plan_overview },
       });
-      if (old_plan_overview.city_id !== plan_overview.city_id)
-        this.reloadAttBar();
+      if (this.state.city_id !== plan_overview.city_id){
+        url = APIServer + "/plan_location/" + plan_id
+        let plan_location = {plan_id : plan_id, city_id : plan_overview.city_id}
+        await axios
+      .put(url, plan_location)
+      .then((response) => {
+        // console.log(response);
+        this.setState({plan_overview : {...this.state.plan_overview, city: this.state.plan_overview.city, city_id: this.state.plan_overview.city_id}})
+      })
+      .catch((error) => {
+        this.setState({ error });
+        console.log(error);
+      });
+        if(reload) await this.setState({ loadAttBar: false });
+      }
+        
       // if (old_plan_overview.plan_title !== plan_overview.plan_title) this.reloadPlanOverview();
     }
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
@@ -158,7 +173,6 @@ class EditPlan extends React.Component {
         });
     });
   };
-
   updateOnePlanDetail = async (order) => {
     const plan_id = this.props.plan_id;
     const detail = this.state.plan_detail[order];
@@ -385,7 +399,7 @@ class EditPlan extends React.Component {
       plan_startday,
     });
     this.calPlan(plan_detail);
-    this.updatePlanOverview(plan_overview);
+    this.updatePlanOverview(plan_overview, false);
     this.updatePlanStartday();
   };
 
@@ -405,7 +419,7 @@ class EditPlan extends React.Component {
       plan_startday,
     });
     this.calPlan(plan_detail);
-    this.updatePlanOverview(plan_overview);
+    this.updatePlanOverview(plan_overview, false);
     this.updatePlanStartday();
   };
 
@@ -495,7 +509,7 @@ class EditPlan extends React.Component {
   };
 
   reloadAttBar = async () => {
-    await this.setState({ loadAttBar: false });
+    // await this.setState({ loadAttBar: false });
     await this.setState({ loadAttBar: true });
   };
 
@@ -513,6 +527,8 @@ class EditPlan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data, editTitle: new_plan });
+        this.setState({plan_overview: {...this.state.plan_overview,city: result.data.plan_city[0].city,
+        city_id : result.data.plan_city[0].city_id}})
         // console.log(result.data)
       })
       .catch((error) => {
@@ -635,7 +651,7 @@ class EditPlan extends React.Component {
                 })()}
 
                 <div className="title-bar">
-                  <div className="title">{plan_city[0].city}</div>
+                  <div className="title">{plan_overview.city}</div>
                   <div className="plan" onClick={this.modePlan}>
                     Plan
                   </div>
@@ -695,24 +711,28 @@ class EditPlan extends React.Component {
                       {(() => {
                         if (this.state.loadAttBar)
                           return (
-                            <Request
-                              url={
-                                APIServer +
-                                "/attraction/city/" +
-                                plan_city[0].city_id
-                              }
-                            >
-                              {(result) => (
+                            // <Request
+                            //   url={
+                            //     APIServer +
+                            //     "/attraction/city/" +
+                            //     plan_city[0].city_id
+                            //   }
+                            // >
+                            //   {(result) => (
                                 <AttBar
                                   toggleAttModal={this.toggleAttModal}
                                   showDetails={this.showDetails}
-                                  {...result}
+                                  reloadAttBar = {this.reloadAttBar}
+                                  {...this.state}
                                 />
-                              )}
-                            </Request>
+                            //    )}
+                            // </Request>
                           );
-                        return;
-                      })()}
+                          else{
+                            this.reloadAttBar()
+                            return;
+                          }           
+                      })()} 
                     </div>)
                   }
                 })()

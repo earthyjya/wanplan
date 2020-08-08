@@ -60,7 +60,8 @@ class App extends Component {
     user_id: 0,
     isLoggedIn: false,
     urls: [
-      "https://api.oneplan.in.th/api/load_plan/search?userId=0" /*+"/user/" + user_id*/,
+      process.env.REACT_APP_APIServer +
+        "/load_plan/search?userId=0" /*+"/user/" + user_id*/,
     ],
     toggleLogin: false,
     toggleSignup: false,
@@ -71,17 +72,21 @@ class App extends Component {
     fire.auth().onAuthStateChanged((user) => {
       // console.log(user);
       if (user) {
-        this.setState({ user, isLoggedIn: true, });
-        this.setState({user_id: user.uid })
-        fire.auth().currentUser.getIdToken(true).then((idToken) => {
-          this.setState({token: idToken})
-          // console.log(idToken)
-        }).catch(function(error) {
-          // Handle error
-          console.error(error)
-        });
+        this.setState({ user, isLoggedIn: true });
+        this.setState({ user_id: user.uid });
+        fire
+          .auth()
+          .currentUser.getIdToken(true)
+          .then((idToken) => {
+            this.setState({ token: idToken });
+            // console.log(idToken)
+          })
+          .catch(function (error) {
+            // Handle error
+            console.error(error);
+          });
       } else {
-        this.setState({ user: null, isLoggedIn: false });
+        this.setState({ user: null, isLoggedIn: false, user_id: 0 });
       }
     });
   };
@@ -297,7 +302,9 @@ class App extends Component {
                 <Route
                   path="/home"
                   component={() => (
-                    <Request url={APIServer + "/load_plan/search?userId=" + user_id}>
+                    <Request
+                      url={APIServer + "/load_plan/search?userId=" + user_id}
+                    >
                       {(result) => <Homepage {...result} {...this.state} />}
                     </Request>
                   )}

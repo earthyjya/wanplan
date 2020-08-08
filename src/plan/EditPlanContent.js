@@ -68,14 +68,14 @@ class EditPlanContent extends React.Component {
   };
 
   onSave = async () => {
-    await this.props.updatePlanOverview(this.state.plan_overview);
+    await this.props.updatePlanOverview(this.state.plan_overview, true);
     this.props.reloadPlanOverview();
     this.props.toggleEditPlanContent();
   };
 
   async componentDidMount() {
     this.setState({
-      plan_overview: this.props.plan_overview,
+      plan_overview: {...this.props.plan_overview, city: this.props.plan_overview.city, city_id: this.props.plan_overview.city_id},
       originalCityId: this.props.plan_overview.city_id,
       isLoading: false
     });

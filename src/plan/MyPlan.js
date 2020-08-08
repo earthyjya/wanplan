@@ -26,7 +26,7 @@ class MyPlan extends Component {
       { id: 4, name: "AUTO_TAG", isChecked: false },
     ],
     allFalse: true,
-    url: "https://api.oneplan.in.th/api/plan_overview",
+    url: process.env.REACT_APP_APIServer + "/plan_overview",
     showMobileWarning: false,
   };
 

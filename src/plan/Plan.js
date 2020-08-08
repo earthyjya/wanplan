@@ -100,18 +100,31 @@ class Plan extends React.Component {
           .then((result) => {
             if (result.data === null)
               alert("Could not duplicate plan_detail :(");
-            else
-              this.setState({
-                redirect: true,
-                redirectTo: "/plan/" + newPlanId + redirect,
-              });
             // console.log(result);
           })
           .catch((error) => {
             this.setState({ error });
             console.log(error);
           });
+
+        url = APIServer + "/plan_location/" + oldPlanId + "/" + newPlanId;
+        await axios
+        .post(url)
+        .then((result) => {
+          if (result.data === null)
+            alert("Could not duplicate plan_location :(");
+          else
+            this.setState({
+              redirect: true,
+              redirectTo: "/plan/" + newPlanId + redirect,
+            });
+        })
+        .catch((error) => {
+          this.setState({ error });
+          console.log(error);
+        });
       }
+      
       if (!isLoggedIn) {
         savedplan.plan_id = newPlanId;
         if (_planlist === null || _planlist === []) {
@@ -353,6 +366,8 @@ class Plan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data });
+        await this.setState({plan_overview: {...this.state.plan_overview,city: result.data.plan_city[0].city,
+          city_id : result.data.plan_city[0].city_id}})
         if (result.data.plan_review == null)
         this.setState({plan_review: []})
       })
