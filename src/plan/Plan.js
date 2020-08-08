@@ -362,6 +362,8 @@ class Plan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data });
+        await this.setState({plan_overview: {...this.state.plan_overview,city: result.data.plan_city[0].city,
+          city_id : result.data.plan_city[0].city_id}})
         if (result.data.plan_review == null)
         this.setState({plan_review: []})
       })
