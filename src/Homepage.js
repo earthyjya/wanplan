@@ -120,7 +120,7 @@ class Homepage extends Component {
         <Container fluid className="plan-description-container-home">
           <Row className="oneplan-logo">
             <img
-              style={{ width: "200px" }}
+              style={{ width: "200px", height:"200px"}}
               src="/oneplan-logo-white-removebg-preview.png"
               alt=""
             />
