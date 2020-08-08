@@ -48,6 +48,7 @@ class Plan extends React.Component {
   };
 
   saveToUser = async (user_id, redirect) => {
+    console.log("start to save to user")
     const { isLoggedIn } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let oldPlanId = this.state.plan_overview.plan_id;
@@ -55,12 +56,15 @@ class Plan extends React.Component {
     let savedplan = {};
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
+      console.log('set saved to false')
       let saved = false;
+      if (user_id === 0){
       _planlist.map((plan) => {
         if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
         return null;
-      });
+      });}
       if (!saved) {
+        console.log("try to save to" + user_id)
         // Duplicate plan_overview
         let url = APIServer + "/plan_overview/" + oldPlanId + "/" + user_id;
         await axios
@@ -99,10 +103,10 @@ class Plan extends React.Component {
             // console.log(result);
           })
           .catch((error) => {
-            this.setState({ error });
             console.log(error);
           });
 
+        // Duplicate plan_location
         url = APIServer + "/plan_location/" + oldPlanId + "/" + newPlanId;
         await axios
         .post(url)
