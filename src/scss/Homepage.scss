@@ -226,3 +226,13 @@
     height: 2.4em;
   }
 }
+
+.search-plan-button{
+  margin: 20px;
+  margin-left: calc(50vw - 100px);
+  width: 200px;
+  height: 80px;
+  background-color: $primary;
+  border-radius: 20px;
+  font-weight: bold;
+}

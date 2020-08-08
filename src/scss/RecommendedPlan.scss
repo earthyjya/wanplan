@@ -1,0 +1,26 @@
+@import "./Style.scss";
+
+.recommendedplan-container{
+  padding-top: 150px;
+  padding-bottom: 0px;
+  background-color: $secondary;
+}
+
+.recommendedplan-text {
+  color: white;
+  position: relative;
+  font-size: 2.4em;
+  font-weight: bold;
+  padding: 0 5vw 0 5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.recommendedplan-card-deck{
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll !important;
+  flex-wrap: nowrap !important;
+  height: auto;
+}
