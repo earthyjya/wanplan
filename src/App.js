@@ -102,8 +102,7 @@ class App extends Component {
     this.authListener();
   }
 
-  logIn = async () => {
-    const { user_id } = this.state;
+  logIn = async (user_id) => {
     const APIServer = process.env.REACT_APP_APIServer;
     this.setState({ isLoggedIn: true });
     if (
@@ -127,7 +126,7 @@ class App extends Component {
           await axios
             .put(url, { ...data.plan_overview, original_id: originalId })
             .then((result) => {
-              console.log(result);
+              // console.log(result);
             })
             .catch((err) => console.log(err));
         });

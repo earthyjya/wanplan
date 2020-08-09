@@ -18,7 +18,7 @@ class Login extends Component {
     fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
         this.setState({error: null})
         this.props.toggleLogin()
-        this.props.logIn()
+        this.props.logIn(u.user.uid)
     }).catch((error) => {
         console.log(error);
         this.setState({ password: "", error: error.message });
