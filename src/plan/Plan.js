@@ -38,7 +38,7 @@ class Plan extends React.Component {
     showMobileWarning: false,
   };
 
-  save = async () => {
+  save = () => {
     this.toggleToast();
     const { user_id } = this.props;
     if (this.props.isLoggedIn) {
@@ -49,31 +49,32 @@ class Plan extends React.Component {
   };
 
   saveToUser = async (user_id, redirect) => {
-    console.log("start to save to user")
+    // console.log("start to save to user");
     const { isLoggedIn } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let oldPlanId = this.state.plan_overview.plan_id;
     let newPlanId = 0;
     let savedplan = {};
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    if(!_planlist){
-      localStorage.setItem("planlist", JSON.stringify([]))
-      _planlist = []
+    if (!_planlist) {
+      localStorage.setItem("planlist", JSON.stringify([]));
+      _planlist = [];
     }
     if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
-      console.log('set saved to false')
+      // console.log("set saved to false");
       let saved = false;
-      if (user_id === 0){
-      _planlist.map((plan) => {
-        if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
-        return null;
-      });}
+      if (user_id === 0) {
+        _planlist.map((plan) => {
+          if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
+          return null;
+        });
+      }
       if (!saved) {
-        console.log("try to save to" + user_id)
+        // console.log("try to save to" + user_id);
         //Duplicate plan overview etc.
-        DuplicatePlan(APIServer, oldPlanId, user_id, (data) =>{
-          console.log(data)
-          savedplan = {...data.plan_overview, plan_id: data.plan_overview.id}
+        DuplicatePlan(APIServer, oldPlanId, user_id, (data) => {
+          // console.log(data);
+          savedplan = { ...data.plan_overview, plan_id: data.plan_overview.id };
           if (!isLoggedIn) {
             if (_planlist === null || _planlist === []) {
               _planlist = [savedplan];
@@ -88,30 +89,30 @@ class Plan extends React.Component {
             redirect: true,
             redirectTo: "/plan/" + data.plan_overview.id + redirect,
           });
-        })
+        });
       }
     }
   };
 
-  updatePlanOverview = async (plan_overview) => {
-    const { plan_id } = this.props;
-    const APIServer = process.env.REACT_APP_APIServer;
-    const url = APIServer + "/plan_overview/" + plan_id;
-    await axios
-      .put(url, plan_overview)
-      .then((result) => {
-        // console.log(result);
-      })
-      .catch((error) => {
-        this.setState({ error });
-        console.log(error);
-      });
-    if (this.state.error) alert(this.state.error);
-    else
-      this.setState({
-        plan_overview: { ...this.state.plan_overview, ...plan_overview },
-      });
-  };
+  // updatePlanOverview = async (plan_overview) => {
+  //   const { plan_id } = this.props;
+  //   const APIServer = process.env.REACT_APP_APIServer;
+  //   const url = APIServer + "/plan_overview/" + plan_id;
+  //   await axios
+  //     .put(url, plan_overview)
+  //     .then((result) => {
+  //       // console.log(result);
+  //     })
+  //     .catch((error) => {
+  //       this.setState({ error });
+  //       console.log(error);
+  //     });
+  //   if (this.state.error) alert(this.state.error);
+  //   else
+  //     this.setState({
+  //       plan_overview: { ...this.state.plan_overview, ...plan_overview },
+  //     });
+  // };
 
   toggleToast = () => {
     this.setState({ toastOpen: !this.state.toastOpen });
@@ -158,47 +159,64 @@ class Plan extends React.Component {
   };
 
   calPlan = async (plan_detail) => {
+    
+    //// Need to be updated when transportations are added
     // console.log(transports);
-
     let { plan_startday } = this.state;
-    let i = 0;
-    for (i = 0; i < plan_detail.length; i++) {
-      plan_detail[i].attraction_order = i;
-    }
-    plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
-    for (i = 0; i < plan_startday.length; i++) {
-      plan_startday[i].day = i + 1;
-    }
-    let transports = [];
-    await this.getTransports()
-      .then((res) => {
-        transports = res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    let lastDay = 0;
-    let lastTime = 0;
-    let transTime = 0;
-    let idx = 0;
-    for (i = 0; i < plan_detail.length; i++) {
-      if (plan_detail[i].day !== lastDay) {
-        lastDay = plan_detail[i].day;
-        idx = 0;
-        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-        lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+    
+    if (plan_detail) {
+      let i = 0;
+      // let j = 0;
+      // give each plan attraction order
+      for (let i = 0; i < plan_detail.length; i++) {
+        plan_detail[i].attraction_order = i;
+      }
+      // give each plan_startday the day
+      plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
+      for (i = 0; i < plan_startday.length; i++) {
+        plan_startday[i].day = i + 1;
+      }
+
+      // find transports between each attraction in each day
+      let transports = [];
+      await this.getTransports()
+        .then((res) => {
+          transports = res;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      let lastDay = 0;
+      let lastTime = 0;
+      let transTime = 0;
+      let idx = 0;
+      for (i = 0; i < plan_detail.length; i++) {
+        if (plan_detail[i].day !== lastDay) {
+          lastDay = plan_detail[i].day;
+          idx = 0;
+          if (transports[lastDay - 1]) {
+            if (transports[lastDay - 1][idx])
+              transTime =
+                Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+            else transTime = 0;
+          }
+          // console.log(plan_startday[lastDay - 1], lastDay);
+          // console.log(plan_startday)
+          lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+          ++idx;
+        }
+        plan_detail[i].start_time = Int2Str(lastTime);
+        plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
+        if (transports[lastDay - 1][idx])
+          transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+        else transTime = 0;
+        lastTime = lastTime + plan_detail[i].time_spend + transTime;
+        // console.log(transTime);
         ++idx;
       }
-      plan_detail[i].start_time = Int2Str(lastTime);
-      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-      if (transports[lastDay - 1][idx])
-        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-      else transTime = 0;
-      lastTime = lastTime + plan_detail[i].time_spend + transTime;
-      // console.log(transTime);
-      ++idx;
     }
-    await this.setState({ plan_detail, plan_startday });
+    this.setState({ plan_detail, plan_startday });
   };
 
   getTransports = async () => {
@@ -320,10 +338,14 @@ class Plan extends React.Component {
       .get(url)
       .then(async (result) => {
         await this.setState({ ...result.data });
-        await this.setState({plan_overview: {...this.state.plan_overview,city: result.data.plan_city[0].city,
-          city_id : result.data.plan_city[0].city_id}})
-        if (result.data.plan_review == null)
-        this.setState({plan_review: []})
+        await this.setState({
+          plan_overview: {
+            ...this.state.plan_overview,
+            city: result.data.plan_city[0].city,
+            city_id: result.data.plan_city[0].city_id,
+          },
+        });
+        if (result.data.plan_review == null) this.setState({ plan_review: [] });
       })
       .catch((error) => {
         this.setState({ error });
@@ -363,7 +385,8 @@ class Plan extends React.Component {
     await this.setState({ days: days });
     await this.setState({ isLoading: false });
     // console.log("Fetching done...");
-    this.calPlan(this.state.plan_detail);
+    // console.log(this.state.plan_detail, this.state.plan_startday);
+    await this.calPlan(this.state.plan_detail);
     if (process.env.NODE_ENV === "production") {
       plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {
@@ -472,19 +495,22 @@ class Plan extends React.Component {
               </div>
               <div>
                 {(() => {
-                  if (plan_review){
+                  if (plan_review) {
                     plan_review.map((i) => {
                       return (
                         <div className="review-box">
                           <div>
                             {i.rating === 0
                               ? "No rating"
-                              : String.fromCharCode(0x2605).repeat(i.rating)}{" "}
+                              : String.fromCharCode(0x2605).repeat(
+                                  i.rating
+                                )}{" "}
                           </div>
                           <div>{i.review === "" ? "No comment" : i.review}</div>
                         </div>
                       );
-                    });}
+                    });
+                  }
                 })()}
               </div>
             </div>
@@ -493,7 +519,7 @@ class Plan extends React.Component {
                 <div>Rating</div>
                 {(() =>
                   ratingList.map((item) => (
-                    <label>
+                    <label key={item.id}>
                       <div className="rating-container">
                         <input
                           type="checkbox"

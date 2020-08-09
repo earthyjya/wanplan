@@ -14,6 +14,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container, Toast, ToastBody, ToastHeader } from "reactstrap";
+import UpdatePlan from "../lib/UpdatePlan";
 
 class EditPlan extends React.Component {
   state = {
@@ -41,83 +42,104 @@ class EditPlan extends React.Component {
   };
 
   updatePlan = async () => {
+    const {
+      plan_overview,
+      plan_startday,
+      plan_detail,
+      plan_location,
+    } = this.state;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    const toUpdate = {
+      plan_overview,
+      plan_startday,
+      plan_detail,
+      plan_location: plan_location[0],
+    };
+    // console.log(toUpdate)
     //update current plan
-    this.toggleUpdateToast();
-    await this.updatePlanOverview(this.state.plan_overview, false);
-    await this.updatePlanStartday();
-    await this.updatePlanDetails();
-    this.setState({
-      redirect: true,
-      redirectTo: "/plan/" + this.props.plan_id,
+    // this.toggleUpdateToast();
+    UpdatePlan(APIServer, plan_id, "all", toUpdate, (data) => {
+      this.setState({
+        redirect: true,
+        redirectTo: "/plan/" + this.props.plan_id,
+      });
     });
   };
 
   updatePlanNoRedirect = async () => {
+    const {
+      plan_overview,
+      plan_startday,
+      plan_detail,
+      plan_location,
+    } = this.state;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    const toUpdate = {
+      plan_overview,
+      plan_startday,
+      plan_detail,
+      plan_location: plan_location[0],
+    };
     //update current plan
-    //this.toggleUpdateToast();
-    await this.updatePlanOverview(this.state.plan_overview, false);
-    await this.updatePlanStartday();
-    await this.updatePlanDetails();
+    this.toggleUpdateToast();
+    UpdatePlan(APIServer, plan_id, "all", toUpdate, (data) => {});
   };
 
   updatePlanOverview = async (plan_overview, reload) => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/plan_overview/" + plan_id;
-    await axios
-      .put(url, plan_overview)
-      .then((response) => {
-        // console.log(response);
-      })
-      .catch((error) => {
-        this.setState({ error });
-        console.log(error);
-      });
-    if (this.state.error) alert(this.state.error);
-    else {
-      const old_plan_overview = this.state.plan_overview;
-      this.setState({
-        plan_overview: { ...old_plan_overview, ...plan_overview },
-      });
-      if (this.state.city_id !== plan_overview.city_id) {
-        url = APIServer + "/plan_location/" + plan_id;
-        let plan_location = {
-          plan_id: plan_id,
-          city_id: plan_overview.city_id,
-        };
-        await axios
-          .put(url, plan_location)
-          .then((response) => {
-            // console.log(response);
-            this.setState({
-              plan_overview: {
-                ...this.state.plan_overview,
-                city: this.state.plan_overview.city,
-                city_id: this.state.plan_overview.city_id,
-              },
-            });
-          })
-          .catch((error) => {
-            this.setState({ error });
-            console.log(error);
-          });
-        if (reload) await this.setState({ loadAttBar: false });
+    UpdatePlan(
+      APIServer,
+      plan_id,
+      "plan_overview",
+      { plan_overview },
+      (data) => {
+        const old_plan_overview = this.state.plan_overview;
+        this.setState({
+          plan_overview: { ...old_plan_overview, ...plan_overview },
+        });
+        if (old_plan_overview.city_id !== plan_overview.city_id) {
+          // console.log("trying to update plan location")
+          let plan_location = {
+            plan_id: plan_id,
+            city_id: plan_overview.city_id,
+          };
+          UpdatePlan(
+            APIServer,
+            plan_id,
+            "plan_location",
+            { plan_location },
+            (data) => {
+              this.setState({
+                plan_overview: {
+                  ...this.state.plan_overview,
+                  ...plan_location,
+                },
+              });
+              // console.log("finished updating location")
+              if (reload) {
+                this.setState({ loadAttBar: false });
+                // console.log("reload attBar")
+              }
+            }
+          );
+        }
+        let _planlist = JSON.parse(localStorage.getItem("planlist"));
+        if (_planlist !== [] && _planlist !== null) {
+          localStorage.setItem(
+            "planlist",
+            JSON.stringify(
+              _planlist.map((plan) => {
+                if (plan.plan_id === plan_id) return plan_overview;
+                return plan;
+              })
+            )
+          );
+        }
       }
-
-      // if (old_plan_overview.plan_title !== plan_overview.plan_title) this.reloadPlanOverview();
-    }
-    let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    if (_planlist !== [] && _planlist !== null) {
-      localStorage.setItem(
-        "planlist",
-        JSON.stringify(
-          _planlist.map((plan) => {
-            if (plan.plan_id === plan_id) return plan_overview;
-            return plan;
-          })
-        )
-      );
-    }
+    );
   };
 
   showDetails = (dat) => {
@@ -126,62 +148,31 @@ class EditPlan extends React.Component {
 
   updatePlanStartday = async () => {
     const { plan_id } = this.props;
+    const { plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = "";
-
-    url = APIServer + "/plan_startday/delete/" + plan_id;
-    await axios
-      .delete(url)
-      .then((res) => {
-        // console.log("delete", res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.state.plan_startday.map(async (day) => {
-      url = APIServer + "/plan_startday/";
-      await axios
-        .post(url, day)
-        .then((res) => {
-          // console.log("post", res);
-        })
-        .catch((error) => {
-          this.setState({ error });
-          console.log(error);
-        });
-    });
+    UpdatePlan(
+      APIServer,
+      plan_id,
+      "plan_startday",
+      { plan_startday },
+      (data) => {}
+    );
   };
 
   updatePlanDetails = async () => {
     //update current plan
     const { plan_id } = this.props;
+    const { plan_detail } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = "";
-
-    url = APIServer + "/plan_detail/delete/" + plan_id;
-    await axios
-      .delete(url)
-      .then((res) => {
-        // console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.state.plan_detail.map(async (plan) => {
-      url = APIServer + "/plan_detail/";
-      await axios
-        .post(url, plan)
-        .then((res) => {
-          // console.log(res);
-        })
-        .catch((error) => {
-          this.setState({ error });
-          console.log(error);
-        });
-    });
+    UpdatePlan(
+      APIServer,
+      plan_id,
+      "plan_detail",
+      { plan_detail },
+      (data) => {}
+    );
   };
+
   updateOnePlanDetail = async (order) => {
     const plan_id = this.props.plan_id;
     const detail = this.state.plan_detail[order];
@@ -208,9 +199,7 @@ class EditPlan extends React.Component {
     await Promise.all(
       days.map(async (day) => {
         let idx = day - 1;
-        let places = this.state.plan_detail.filter(
-          (det) => det.day === day
-        );
+        let places = this.state.plan_detail.filter((det) => det.day === day);
         // console.log(places);
         let lastPlace = { attraction_name: "Hotel" };
         for (let j = 0; j < places.length; j++) {
@@ -347,53 +336,57 @@ class EditPlan extends React.Component {
   calPlan = async (plan_detail) => {
     //// Need to be updated when transportations are added
     // console.log(transports);
-
     let { plan_startday } = this.state;
-    let i = 0;
-    // let j = 0;
-    // give each plan attraction order
-    for (let i = 0; i < plan_detail.length; i++) {
-      plan_detail[i].attraction_order = i;
-    }
-    // give each plan_startday the day
-    plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
-    for (i = 0; i < plan_startday.length; i++) {
-      plan_startday[i].day = i + 1;
-    }
+    if (plan_detail) {
+      let i = 0;
+      // let j = 0;
+      // give each plan attraction order
+      for (let i = 0; i < plan_detail.length; i++) {
+        plan_detail[i].attraction_order = i;
+      }
+      // give each plan_startday the day
+      plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
+      for (i = 0; i < plan_startday.length; i++) {
+        plan_startday[i].day = i + 1;
+      }
 
-    // find transports between each attraction in each day
-    let transports = [];
-    await this.getTransports()
-      .then((res) => {
-        transports = res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    let lastDay = 0;
-    let lastTime = 0;
-    let transTime = 0;
-    let idx = 0;
-    for (i = 0; i < plan_detail.length; i++) {
-      if (plan_detail[i].day !== lastDay) {
-        lastDay = plan_detail[i].day;
-        idx = 0;
+      // find transports between each attraction in each day
+      let transports = [];
+      await this.getTransports()
+        .then((res) => {
+          transports = res;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      let lastDay = 0;
+      let lastTime = 0;
+      let transTime = 0;
+      let idx = 0;
+      for (i = 0; i < plan_detail.length; i++) {
+        if (plan_detail[i].day !== lastDay) {
+          lastDay = plan_detail[i].day;
+          idx = 0;
+          if (transports[lastDay - 1]) {
+            if (transports[lastDay - 1][idx])
+              transTime =
+                Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+            else transTime = 0;
+          }
+          lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+          ++idx;
+        }
+        plan_detail[i].start_time = Int2Str(lastTime);
+        plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
         if (transports[lastDay - 1][idx])
           transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
         else transTime = 0;
-        lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+        lastTime = lastTime + plan_detail[i].time_spend + transTime;
+        // console.log(transTime);
         ++idx;
       }
-      plan_detail[i].start_time = Int2Str(lastTime);
-      plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-      if (transports[lastDay - 1][idx])
-        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-      else transTime = 0;
-      lastTime = lastTime + plan_detail[i].time_spend + transTime;
-      // console.log(transTime);
-      ++idx;
     }
-
     this.setState({ plan_detail, plan_startday });
   };
 
@@ -459,9 +452,9 @@ class EditPlan extends React.Component {
   };
 
   addCard = async (source, destination) => {
-    console.log("addingCard")
+    // console.log("addingCard");
     let { droppableId, index } = destination;
-    console.log(source, destination)
+    // console.log(source, destination);
     let { plan_detail, plan_startday } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
@@ -667,7 +660,8 @@ class EditPlan extends React.Component {
                 source.droppableId.slice(
                   source.droppableId.length - 3,
                   source.droppableId.length
-                ) !== "bar" && source.droppableId.slice(
+                ) !== "bar" &&
+                source.droppableId.slice(
                   source.droppableId.length - 3,
                   source.droppableId.length
                 ) !== "Bar"

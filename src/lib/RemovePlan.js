@@ -30,6 +30,6 @@ export default async function RemovePlan(APIServer, plan_id, func) {
     })
     .catch((error) => console.error(error));
 
-  func(data);
+  await func(data);
   // console.log(data)
 }
