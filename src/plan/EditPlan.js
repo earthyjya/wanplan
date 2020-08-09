@@ -37,7 +37,7 @@ class EditPlan extends React.Component {
     selectedCover: null,
     detailsDat: null,
     mode: "plan",
-    cities: []
+    cities: [],
   };
 
   updatePlan = async () => {
@@ -46,7 +46,7 @@ class EditPlan extends React.Component {
     await this.updatePlanOverview(this.state.plan_overview, false);
     await this.updatePlanStartday();
     await this.updatePlanDetails();
-    await this.setState({
+    this.setState({
       redirect: true,
       redirectTo: "/plan/" + this.props.plan_id,
     });
@@ -76,30 +76,39 @@ class EditPlan extends React.Component {
     if (this.state.error) alert(this.state.error);
     else {
       const old_plan_overview = this.state.plan_overview;
-      await this.setState({
+      this.setState({
         plan_overview: { ...old_plan_overview, ...plan_overview },
       });
-      if (this.state.city_id !== plan_overview.city_id){
-        url = APIServer + "/plan_location/" + plan_id
-        let plan_location = {plan_id : plan_id, city_id : plan_overview.city_id}
+      if (this.state.city_id !== plan_overview.city_id) {
+        url = APIServer + "/plan_location/" + plan_id;
+        let plan_location = {
+          plan_id: plan_id,
+          city_id: plan_overview.city_id,
+        };
         await axios
-      .put(url, plan_location)
-      .then((response) => {
-        // console.log(response);
-        this.setState({plan_overview : {...this.state.plan_overview, city: this.state.plan_overview.city, city_id: this.state.plan_overview.city_id}})
-      })
-      .catch((error) => {
-        this.setState({ error });
-        console.log(error);
-      });
-        if(reload) await this.setState({ loadAttBar: false });
+          .put(url, plan_location)
+          .then((response) => {
+            // console.log(response);
+            this.setState({
+              plan_overview: {
+                ...this.state.plan_overview,
+                city: this.state.plan_overview.city,
+                city_id: this.state.plan_overview.city_id,
+              },
+            });
+          })
+          .catch((error) => {
+            this.setState({ error });
+            console.log(error);
+          });
+        if (reload) await this.setState({ loadAttBar: false });
       }
-        
+
       // if (old_plan_overview.plan_title !== plan_overview.plan_title) this.reloadPlanOverview();
     }
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (_planlist !== [] && _planlist !== null) {
-      await localStorage.setItem(
+      localStorage.setItem(
         "planlist",
         JSON.stringify(
           _planlist.map((plan) => {
@@ -194,12 +203,12 @@ class EditPlan extends React.Component {
     const APIServer = process.env.REACT_APP_APIServer;
     let transports = [];
     for (let i = 1; i <= this.state.plan_overview.duration; i++) {
-      await transports.push([]);
+      transports.push([]);
     }
     await Promise.all(
       days.map(async (day) => {
         let idx = day - 1;
-        let places = await this.state.plan_detail.filter(
+        let places = this.state.plan_detail.filter(
           (det) => det.day === day
         );
         // console.log(places);
@@ -341,13 +350,18 @@ class EditPlan extends React.Component {
 
     let { plan_startday } = this.state;
     let i = 0;
-    for (i = 0; i < plan_detail.length; i++) {
+    // let j = 0;
+    // give each plan attraction order
+    for (let i = 0; i < plan_detail.length; i++) {
       plan_detail[i].attraction_order = i;
     }
+    // give each plan_startday the day
     plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
     for (i = 0; i < plan_startday.length; i++) {
       plan_startday[i].day = i + 1;
     }
+
+    // find transports between each attraction in each day
     let transports = [];
     await this.getTransports()
       .then((res) => {
@@ -364,7 +378,9 @@ class EditPlan extends React.Component {
       if (plan_detail[i].day !== lastDay) {
         lastDay = plan_detail[i].day;
         idx = 0;
-        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+        if (transports[lastDay - 1][idx])
+          transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+        else transTime = 0;
         lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
         ++idx;
       }
@@ -377,7 +393,8 @@ class EditPlan extends React.Component {
       // console.log(transTime);
       ++idx;
     }
-    await this.setState({ plan_detail, plan_startday });
+
+    this.setState({ plan_detail, plan_startday });
   };
 
   addDay = (day) => {
@@ -389,6 +406,7 @@ class EditPlan extends React.Component {
       day: day,
       start_day: "09:00",
     });
+    // console.log(plan_startday);
     plan_detail.map((detail) => {
       if (detail.day > day) detail.day += 1;
       return null;
@@ -408,6 +426,7 @@ class EditPlan extends React.Component {
     days.pop();
     plan_overview.duration -= 1;
     plan_startday.splice(day - 1, 1);
+    // console.log(plan_startday);
     plan_detail = plan_detail.filter((plan) => plan.day !== day);
     plan_detail.map((detail) => {
       if (detail.day >= day) detail.day -= 1;
@@ -435,12 +454,15 @@ class EditPlan extends React.Component {
     if (a < b && daya !== dayb && b !== 0) b -= 1;
     plan_detail.splice(b, 0, removed);
     plan_detail.sort((a, b) => a.day - b.day);
+    // console.log(plan_detail);
     this.calPlan(plan_detail);
   };
 
   addCard = async (source, destination) => {
+    console.log("addingCard")
     let { droppableId, index } = destination;
-    const { plan_detail } = this.state;
+    console.log(source, destination)
+    let { plan_detail, plan_startday } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let toAdd = {
@@ -450,7 +472,6 @@ class EditPlan extends React.Component {
       attraction_order: index,
       day: Number(droppableId),
     };
-    // console.log(source, destination);
     const url =
       APIServer +
       "/attraction/google_id/" +
@@ -463,9 +484,20 @@ class EditPlan extends React.Component {
         // console.error(error);
       });
     plan_detail.splice(index, 0, toAdd);
-    for (let i = 0; i < plan_detail.length; i++) {
-      plan_detail[i].attraction_order = i;
+    let newPlan = [];
+    let i = 0;
+    let j = 0;
+    let lastOrder = 0;
+    for (i = 0; i < plan_startday.length; i++) {
+      // give each plan attraction order
+      let plans = plan_detail.filter((det) => det.day === plan_startday[i].day);
+      for (j = 0; j < plans.length; j++) {
+        plans[j].attraction_order = lastOrder;
+        ++lastOrder;
+      }
+      newPlan = newPlan.concat(plans);
     }
+    plan_detail = newPlan;
     this.setState({ plan_detail });
     this.calPlan(plan_detail);
     if (process.env.NODE_ENV === "production") {
@@ -510,7 +542,7 @@ class EditPlan extends React.Component {
 
   reloadAttBar = async () => {
     // await this.setState({ loadAttBar: false });
-    await this.setState({ loadAttBar: true });
+    this.setState({ loadAttBar: true });
   };
 
   reloadPlanOverview = async () => {
@@ -526,9 +558,14 @@ class EditPlan extends React.Component {
     await axios
       .get(url)
       .then(async (result) => {
-        await this.setState({ ...result.data, editTitle: new_plan });
-        this.setState({plan_overview: {...this.state.plan_overview,city: result.data.plan_city[0].city,
-        city_id : result.data.plan_city[0].city_id}})
+        this.setState({ ...result.data, editTitle: new_plan });
+        this.setState({
+          plan_overview: {
+            ...this.state.plan_overview,
+            city: result.data.plan_city[0].city,
+            city_id: result.data.plan_city[0].city_id,
+          },
+        });
         // console.log(result.data)
       })
       .catch((error) => {
@@ -571,15 +608,15 @@ class EditPlan extends React.Component {
 
     let days = [];
     for (let i = 1; i <= this.state.plan_overview.duration; i++) {
-      await days.push(i);
+      days.push(i);
     }
 
     await this.getTransports();
 
-    await this.setState({
+    this.setState({
       days: days,
     });
-    await this.setState({ isLoading: false });
+    this.setState({ isLoading: false });
     // console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
     if (process.env.NODE_ENV === "production") {
@@ -630,7 +667,10 @@ class EditPlan extends React.Component {
                 source.droppableId.slice(
                   source.droppableId.length - 3,
                   source.droppableId.length
-                ) !== "bar"
+                ) !== "bar" && source.droppableId.slice(
+                  source.droppableId.length - 3,
+                  source.droppableId.length
+                ) !== "Bar"
               )
                 this.reorderCards(source, destination);
               else this.addCard(source, destination);
@@ -704,10 +744,10 @@ class EditPlan extends React.Component {
                     );
                 })()}
               </div>
-              {
-                (() => {
-                  if (this.state.mode === "plan"){
-                    return(<div className="attbar-container">
+              {(() => {
+                if (this.state.mode === "plan") {
+                  return (
+                    <div className="attbar-container">
                       {(() => {
                         if (this.state.loadAttBar)
                           return (
@@ -719,24 +759,24 @@ class EditPlan extends React.Component {
                             //   }
                             // >
                             //   {(result) => (
-                                <AttBar
-                                  toggleAttModal={this.toggleAttModal}
-                                  showDetails={this.showDetails}
-                                  reloadAttBar = {this.reloadAttBar}
-                                  {...this.state}
-                                />
+                            <AttBar
+                              toggleAttModal={this.toggleAttModal}
+                              showDetails={this.showDetails}
+                              reloadAttBar={this.reloadAttBar}
+                              {...this.state}
+                            />
                             //    )}
                             // </Request>
                           );
-                          else{
-                            this.reloadAttBar()
-                            return;
-                          }           
-                      })()} 
-                    </div>)
-                  }
-                })()
-              }
+                        else {
+                          this.reloadAttBar();
+                          return;
+                        }
+                      })()}
+                    </div>
+                  );
+                }
+              })()}
             </div>
           </DragDropContext>
           <Toast isOpen={this.state.updateToast}>

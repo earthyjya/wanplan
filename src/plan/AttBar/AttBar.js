@@ -12,7 +12,7 @@ class AttBar extends Component {
     nearbyPlaces: [],
     detailsDat: "",
     isLoading: true,
-		error: null,
+    error: null,
   };
 
   onPlaceSelected = async (place) => {
@@ -45,7 +45,7 @@ class AttBar extends Component {
       });
   };
 
-  placeNearbyCity = async () =>{
+  placeNearbyCity = async () => {
     let cities = [
       {
         city_id: 13,
@@ -124,12 +124,13 @@ class AttBar extends Component {
       { city: "Naha", city_id: 14, lat: 26.20047, long: 127.728577 },
     ];
     const APIServer = process.env.REACT_APP_APIServer;
-    let cityLat = cities.filter(location => location.city == this.props.plan_overview.city)[0].lat
-    let cityLong = cities.filter(location => location.city == this.props.plan_overview.city)[0].long
-    let url = APIServer + "/googlenearby?lat=" +
-    cityLat +
-    "&lng=" +
-    cityLong;
+    let cityLat = cities.filter(
+      (location) => location.city == this.props.plan_overview.city
+    )[0].lat;
+    let cityLong = cities.filter(
+      (location) => location.city == this.props.plan_overview.city
+    )[0].long;
+    let url = APIServer + "/googlenearby?lat=" + cityLat + "&lng=" + cityLong;
     // console.log(url);
     await axios
       .get(url)
@@ -138,34 +139,33 @@ class AttBar extends Component {
         this.setState({ nearbyPlaces: res.data, isLoading: false });
       })
       .catch((err) => {
-        this.setState({error:err})
+        this.setState({ error: err });
         console.log(err);
       });
-  }
+  };
 
   fetchAttraction = async () => {
-    this.setState({isLoading: true})
+    this.setState({ isLoading: true });
     const APIServer = process.env.REACT_APP_APIServer;
-    let url =  APIServer +
-    "/attraction/city/" +
-    this.props.plan_overview.city_id
-    console.log(url)
+    let url =
+      APIServer + "/attraction/city/" + this.props.plan_overview.city_id;
+    console.log(url);
     await axios
       .get(url)
       .then((res) => {
         // console.log(res.data);
-        this.setState({ data: res.data.splice(0,10), isLoading: false });
+        this.setState({ data: res.data.splice(0, 10), isLoading: false });
       })
       .catch((err) => {
-        this.setState({error: err})
+        this.setState({ error: err });
         console.log(err);
       });
-  }
+  };
 
   async componentDidMount() {
     this.attbarRef = React.createRef();
     // this.placeNearbyCity();
-    this.fetchAttraction()
+    this.fetchAttraction();
   }
 
   showDetails(dat) {
@@ -181,8 +181,9 @@ class AttBar extends Component {
         {detailsDat !== "" ? (
           <div className="att-bar-desc">
             <Droppable
-              key={detailsDat.google_place_id}
-              droppableId={detailsDat.google_place_id + "bar"}
+              droppableId={(detailsDat.google_place_id!== undefined) 
+                ? detailsDat.google_place_id + "Bar"
+              : detailsDat.place_id + "Bar"}
               isDropDisabled={true}
               type={String}
               direction="vertical"
@@ -194,8 +195,10 @@ class AttBar extends Component {
                   ref={dropProvided.innerRef}
                 >
                   <Draggable
-                    draggableId={detailsDat.attraction_id.toString() + "bar"}
-                    index={detailsDat.attraction_id}
+                    draggableId={(detailsDat.attraction_id!== undefined) 
+                      ? detailsDat.attraction_id + "Bar"
+                    : detailsDat.place_id + "Bar"}
+                    index={0}
                   >
                     {(dragProvided) => (
                       <div
@@ -353,7 +356,8 @@ class AttBar extends Component {
                       .map((dat) => (
                         <div onClick={() => this.showDetails(dat)}>
                           <Droppable
-                            key={dat.place_id}
+                            key={dat.place_id.toString()}
+                            index =  {this.state.nearbyPlaces.findIndex(d => d===dat)}
                             droppableId={dat.place_id + "bar"}
                             isDropDisabled={true}
                             type={String}
@@ -367,7 +371,8 @@ class AttBar extends Component {
                               >
                                 <Draggable
                                   draggableId={dat.place_id + "bar"}
-                                  index={0}
+                                  index = {this.state.nearbyPlaces.findIndex(d => d===dat)}
+                                  key = {dat.place_id.toString()}
                                 >
                                   {(dragProvided) => (
                                     <div
@@ -379,6 +384,7 @@ class AttBar extends Component {
                                         attraction_name={dat.name}
                                         attraction_type={dat.types[0]}
                                         photos={dat.photos}
+                                        key = {dat.place_id.toString()}
                                       />
                                     </div>
                                   )}
@@ -394,9 +400,9 @@ class AttBar extends Component {
                 );
             })()}
             {this.state.data.map((dat) => (
-              <div onClick={() => this.showDetails(dat)}>
+              <div key = {dat.attraction_id} onClick={() => this.showDetails(dat)}>
                 <Droppable
-                  key={dat.google_place_id}
+                  index={dat.attraction_id}
                   droppableId={dat.google_place_id + "bar"}
                   isDropDisabled={true}
                   type={String}
@@ -411,6 +417,7 @@ class AttBar extends Component {
                       <Draggable
                         draggableId={dat.attraction_id.toString() + "bar"}
                         index={dat.attraction_id}
+                        key = {dat.attraction_id.toString() + "bar"}
                       >
                         {(dragProvided) => (
                           <div
@@ -418,7 +425,7 @@ class AttBar extends Component {
                             {...dragProvided.draggableProps}
                             ref={dragProvided.innerRef}
                           >
-                            <AttBarCard {...dat} />
+                            <AttBarCard {...dat} key = {dat.attraction_id.toString() + "bar"}/>
                           </div>
                         )}
                       </Draggable>

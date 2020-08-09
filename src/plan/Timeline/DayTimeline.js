@@ -43,8 +43,9 @@ class DayTimeline extends Component {
                   {dropProvided => (
                     <div {...dropProvided.droppableProps}>
                       <div ref={dropProvided.innerRef}>
-                        {plan_detail.map(detail => (
-                          <div key={detail.attraction_order}>
+                        {plan_detail.map(detail => {
+                          // console.log(this.props.transports)
+                          return (<div key={detail.attraction_order}>
                             {(() => {
                               start = (() => {
                                 if (detail !== plan_detail[0]) {
@@ -63,10 +64,10 @@ class DayTimeline extends Component {
                                 <TransCard
                                   start={start}
                                   destination={destination}
-                                  transport={
+                                  transport={ (this.props.transports[idx])?
                                     this.props.transports[idx][
                                       detail.attraction_order - plan_detail[0].attraction_order
-                                    ]
+                                    ] : null
                                   }
                                 />
                               );
@@ -95,7 +96,7 @@ class DayTimeline extends Component {
                               )}
                             </Draggable>
                           </div>
-                        ))}
+                        )})}
                         {(() => {
                           if (plan_detail) {
                             return (
