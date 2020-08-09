@@ -43,6 +43,7 @@ class AttBar extends Component {
       .catch((err) => {
         console.log(err);
       });
+      this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   placeNearbyCity = async () => {
