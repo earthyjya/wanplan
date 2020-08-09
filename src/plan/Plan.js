@@ -72,7 +72,8 @@ class Plan extends React.Component {
       if (!saved) {
         // console.log("try to save to" + user_id);
         //Duplicate plan overview etc.
-        DuplicatePlan(APIServer, oldPlanId, user_id, (data) => {
+        this.setState({ isLoading: true });
+        DuplicatePlan(APIServer, oldPlanId, user_id, async (data) => {
           // console.log(data);
           savedplan = { ...data.plan_overview, plan_id: data.plan_overview.id };
           if (!isLoggedIn) {
@@ -88,6 +89,12 @@ class Plan extends React.Component {
           this.setState({
             redirect: true,
             redirectTo: "/plan/" + data.plan_overview.id + redirect,
+            plan_review: [],
+            plan_overview: {
+              ...data.plan_overview,
+              plan_id: data.plan_overview.id,
+            },
+            isLoading: false,
           });
         });
       }
@@ -159,11 +166,10 @@ class Plan extends React.Component {
   };
 
   calPlan = async (plan_detail) => {
-    
     //// Need to be updated when transportations are added
     // console.log(transports);
     let { plan_startday } = this.state;
-    
+
     if (plan_detail) {
       let i = 0;
       // let j = 0;
@@ -304,6 +310,9 @@ class Plan extends React.Component {
       .post(url, { plan_id, review, rating })
       .then(async (result) => {
         // console.log(result.data);
+        this.setState({
+          plan_review: [...this.state.plan_review, result.data],
+        });
       })
       .catch((error) => {
         this.setState({ error });
@@ -496,8 +505,10 @@ class Plan extends React.Component {
               <div>
                 {(() => {
                   if (plan_review) {
-                    plan_review.map((i) => {
-                      return (
+                    return(
+                  plan_review.map((i) => {
+                    return (
+                      <React.Fragment>
                         <div className="review-box">
                           <div>
                             {i.rating === 0
@@ -508,8 +519,9 @@ class Plan extends React.Component {
                           </div>
                           <div>{i.review === "" ? "No comment" : i.review}</div>
                         </div>
-                      );
-                    });
+                      </React.Fragment>
+                    );
+                  }))
                   }
                 })()}
               </div>
