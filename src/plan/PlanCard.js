@@ -82,6 +82,14 @@ class PlanCard extends Component {
               return (<div className="delete-plancard" onClick={this.openModalDelete}>
                 &#10005;
               </div>);
+            }else{
+              if (this.props.plan.user_id == 0){
+                return(
+                  <div className="oneplan-original" >
+                    Oneplan Orignal
+                  </div>
+                );
+              }
             }
           })()}
           <CardImg
