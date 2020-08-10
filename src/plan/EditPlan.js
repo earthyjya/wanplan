@@ -473,8 +473,8 @@ class EditPlan extends React.Component {
       .get(url)
       .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
       .catch((error) => {
-        this.setState({ error });
-        // console.error(error);
+        // this.setState({ error });
+        console.error(error);
       });
     plan_detail.splice(index, 0, toAdd);
     let newPlan = [];
@@ -562,7 +562,6 @@ class EditPlan extends React.Component {
         // console.log(result.data)
       })
       .catch((error) => {
-        this.setState({ error });
         console.log(error);
       });
     if (!this.state.plan_overview) {
@@ -595,7 +594,7 @@ class EditPlan extends React.Component {
         this.setState({ cities: result.data });
       })
       .catch((error) => {
-        this.setState({ error });
+        // this.setState({ error });
         console.log(error);
       });
 

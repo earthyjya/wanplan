@@ -315,7 +315,7 @@ class Plan extends React.Component {
         });
       })
       .catch((error) => {
-        this.setState({ error });
+        // this.setState({ error });
         console.log(error);
       });
   };
@@ -357,7 +357,7 @@ class Plan extends React.Component {
         if (result.data.plan_review == null) this.setState({ plan_review: [] });
       })
       .catch((error) => {
-        this.setState({ error });
+        // this.setState({ error });
         console.log(error);
       });
     if (!this.state.plan_overview) {

@@ -140,7 +140,7 @@ class AttBar extends Component {
         this.setState({ nearbyPlaces: res.data, isLoading: false });
       })
       .catch((err) => {
-        this.setState({ error: err });
+        // this.setState({ error: err });
         console.log(err);
       });
   };
@@ -158,7 +158,7 @@ class AttBar extends Component {
         this.setState({ data: res.data.splice(0, 10), isLoading: false });
       })
       .catch((err) => {
-        this.setState({ error: err });
+        // this.setState({ error: err });
         console.log(err);
       });
   };

@@ -27,7 +27,7 @@ class Signup extends Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({ password: "", error: error.message });
+        this.setState({ password: "" });
       });
   };
 

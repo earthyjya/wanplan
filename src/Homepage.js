@@ -84,7 +84,7 @@ class Homepage extends Component {
         this.setState({ cities: result.data, isLoading: false });
       })
       .catch((error) => {
-        this.setState({ error, isLoading: false });
+        this.setState({ isLoading: false });
         console.log(error);
       });
   }

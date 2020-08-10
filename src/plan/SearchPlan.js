@@ -131,7 +131,10 @@ class SearchPlan extends Component {
         // console.log(result.data);
         this.setState({ data: result.data, isLoading: false, error: null });
       })
-      .catch((error) => this.setState({ error, isLoading: false }));
+      .catch((error) => {
+        this.setState({ isLoading: false });
+        console.log(error);
+      });
   };
   RedirectFunc = (plan_id) => {
     this.setState({
@@ -263,7 +266,10 @@ class SearchPlan extends Component {
         // console.log(result.data);
         this.setState({ data: result.data, isLoading: false, error: null });
       })
-      .catch((error) => this.setState({ error, isLoading: false }));
+      .catch((error) => {
+        this.setState({ isLoading: false });
+        console.log(error);
+      });
   }
 
   enableSeeAll() {

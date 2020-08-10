@@ -83,7 +83,7 @@ class PlanCard extends Component {
                 &#10005;
               </div>);
             }else{
-              if (this.props.plan.user_id == 0){
+              if (this.props.plan.user_id == "n6Y8TI4O58YVJHUDPUpLJ0GCzxz1"){
                 return(
                   <div className="oneplan-original" >
                     Oneplan Orignal
