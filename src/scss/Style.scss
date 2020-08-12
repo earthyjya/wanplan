@@ -67,3 +67,12 @@ textarea {
     background-color: white;
     resize: none !important;
 }
+
+
+a:hover,
+a:active{
+  outline: none;
+  outline: 0;
+  text-decoration: none;
+  color: $primary;
+}

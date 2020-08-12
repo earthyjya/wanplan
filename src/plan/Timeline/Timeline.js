@@ -1,7 +1,7 @@
 import DayTimeline from "./DayTimeline";
 import MobileDayTimeline from "../../mobile/MobileDayTimeline.js"
 import React, { Component } from "react";
-import {isMobile} from "react-device-detect";
+import {isMobileOnly} from "react-device-detect";
 
 class Timeline extends Component {
   addDay = () => {
@@ -26,7 +26,7 @@ class Timeline extends Component {
           <hr style={{ margin: "0px 0px 40px 0px" }} />
         </div>
         { (() => {
-          if(isMobile)
+          if(isMobileOnly)
             return(
               days.map(day => (
                 <MobileDayTimeline

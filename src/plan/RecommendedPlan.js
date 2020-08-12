@@ -6,7 +6,7 @@ import PlanCard from "./PlanCard.js";
 import axios from "axios";
 import { CardDeck } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
-import { isMobile } from "react-device-detect";
+import { isMobileOnly } from "react-device-detect";
 
 class RecommendedPlan extends Component {
   state = {
@@ -29,7 +29,7 @@ class RecommendedPlan extends Component {
   };
 
   onClickNewPlan = () => {
-    if (isMobile) {
+    if (isMobileOnly) {
       this.setState({ showMobileWarning: true });
       return;
     }
@@ -61,7 +61,7 @@ class RecommendedPlan extends Component {
       <React.Fragment>
         <div className="recommendedplan-container container-fluid">
           <div className="recommendedplan-text">
-            <div> Reccommended Plan </div>
+            <div> Recommended Plan </div>
           </div>
           <div className="recommendedplan-card-deck">{this.showAll()}</div>
         </div>

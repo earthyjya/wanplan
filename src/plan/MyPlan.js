@@ -6,7 +6,7 @@ import PlanCard from "./PlanCard.js";
 import axios from "axios";
 import { CardDeck } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
-import { isMobile } from "react-device-detect";
+import { isMobileOnly } from "react-device-detect";
 import RemovePlan from "../lib/RemovePlan.js"
 
 class MyPlan extends Component {

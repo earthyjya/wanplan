@@ -1,5 +1,5 @@
 import {
-  isMobile
+  isMobileOnly
 } from "react-device-detect";
 import { Toast, ToastBody, ToastHeader } from 'reactstrap';
 import React, { Component } from "react";

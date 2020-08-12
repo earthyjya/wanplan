@@ -36,6 +36,7 @@ import {
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
 import DuplicatePlan from "./lib/DuplicatePlan";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(
   faPencilAlt,
   faCamera,
@@ -159,6 +160,10 @@ class App extends Component {
         <header className="topnav">
           <a className="oneplan" href="/home">
             <img src="/oneplan-logo-primary.png" alt="Oneplan Logo" />
+          </a>
+          <a className="search-plan-a" href="/search">
+             Search for a plan
+             <FontAwesomeIcon style={{marginLeft: "10px"}} icon="search" size="1x" />
           </a>
           {(() => {
             if (isLoggedIn) {
