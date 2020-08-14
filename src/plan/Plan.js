@@ -207,8 +207,8 @@ class Plan extends React.Component {
                 Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
             else transTime = 0;
           }
-          // console.log(plan_startday[lastDay - 1], lastDay);
-          // console.log(plan_startday)
+          console.log(plan_startday[lastDay - 1], lastDay);
+          console.log(plan_startday)
           lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
           ++idx;
         }
@@ -372,7 +372,7 @@ class Plan extends React.Component {
       .get(url)
       .then(async (result) => {
         console.log(result.data)
-        // await this.setState({  })
+        await this.setState({  })
       })
       .catch((error) => {
         // this.setState({ error });
