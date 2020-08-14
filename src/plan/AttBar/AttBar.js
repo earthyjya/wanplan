@@ -13,6 +13,7 @@ class AttBar extends Component {
     detailsDat: "",
     isLoading: true,
     error: null,
+    data: []
   };
 
   onPlaceSelected = async (place) => {
@@ -165,8 +166,8 @@ class AttBar extends Component {
 
   async componentDidMount() {
     this.attbarRef = React.createRef();
-    // this.placeNearbyCity();
-    this.fetchAttraction();
+    this.placeNearbyCity();
+    // this.fetchAttraction();
   }
 
   showDetails(dat) {

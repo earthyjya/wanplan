@@ -86,6 +86,7 @@ class DayTimeline extends Component {
                                   <AttCard
                                     detail={detail}
                                     changeDuration={this.props.changeDuration}
+                                    updateTitle={this.props.updateTitle}
                                     updateDescription={this.props.updateDescription}
                                     delCard={this.props.delCard}
                                     editing={this.props.editing}
@@ -95,6 +96,14 @@ class DayTimeline extends Component {
                                 </div>
                               )}
                             </Draggable>
+                            <div>
+                              <button onClick={() =>{
+                                    console.log(`add free time at ${detail.attraction_order + 1} on day ${this.props.day}` )
+                                    this.props.addFreeTime(detail.attraction_order  + 1, this.props.day)
+                              }}>
+                                add free time/ lunch time
+                              </button>
+                            </div>
                           </div>
                         )})}
                         {(() => {

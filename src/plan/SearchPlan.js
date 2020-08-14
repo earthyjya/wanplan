@@ -144,6 +144,7 @@ class SearchPlan extends Component {
   };
 
   RenderRedirect = () => {
+    window.history.pushState(this.state, "", window.location.href);
     if (this.state.redirect) return <Redirect to={this.state.redirectTo} />;
   };
 

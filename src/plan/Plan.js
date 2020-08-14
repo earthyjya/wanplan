@@ -346,6 +346,7 @@ class Plan extends React.Component {
     await axios
       .get(url)
       .then(async (result) => {
+        console.log(result.data)
         await this.setState({ ...result.data });
         await this.setState({
           plan_overview: {
@@ -364,6 +365,19 @@ class Plan extends React.Component {
       this.setState({ error: true, isLoading: false });
       return;
     }
+
+    this.state.plan_detail.map(async plan => {
+      url = APIServer + "/googleplace/" + plan.google_place_id
+      await axios
+      .get(url)
+      .then(async (result) => {
+        console.log(result.data)
+        // await this.setState({  })
+      })
+      .catch((error) => {
+        // this.setState({ error });
+        console.log(error);
+      })})
 
     let plan_detail = this.state.plan_detail;
     for (let i = 0; i < plan_detail.length; ++i) {

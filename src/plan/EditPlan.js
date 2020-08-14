@@ -512,6 +512,37 @@ class EditPlan extends React.Component {
     this.setState({ plan_detail });
     this.calPlan(plan_detail);
   };
+  
+  addFreeTime = (order, day) =>{
+    console.log(`adding free time`)
+    let { plan_detail, plan_startday } = this.state;
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    let toAdd = {
+      plan_id,
+      time_spend: 30, //// Can be changed to "recommended time"
+      description: "",
+      attraction_order: order,
+      day:day,
+    };
+    plan_detail.splice(order, 0, toAdd);
+    let newPlan = [];
+    let i = 0;
+    let j = 0;
+    let lastOrder = 0;
+    for (i = 0; i < plan_startday.length; i++) {
+      // give each plan attraction order
+      let plans = plan_detail.filter((det) => det.day === plan_startday[i].day);
+      for (j = 0; j < plans.length; j++) {
+        plans[j].attraction_order = lastOrder;
+        ++lastOrder;
+      }
+      newPlan = newPlan.concat(plans);
+    }
+    plan_detail = newPlan;
+    this.setState({ plan_detail });
+    this.calPlan(plan_detail);
+  }
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
@@ -522,6 +553,13 @@ class EditPlan extends React.Component {
   updateDescription = (source, newDescription) => {
     const { plan_detail } = this.state;
     plan_detail[source].description = newDescription;
+    this.setState({ plan_detail });
+    this.updateOnePlanDetail(source);
+  };
+
+  updateTitle = (source, newTitle) => {
+    const { plan_detail } = this.state;
+    plan_detail[source].attraction_name = newTitle;
     this.setState({ plan_detail });
     this.updateOnePlanDetail(source);
   };
@@ -724,11 +762,13 @@ class EditPlan extends React.Component {
                         addDay={this.addDay}
                         delDay={this.delDay}
                         changeDuration={this.changeDuration}
+                        updateTitle={this.updateTitle}
                         updateDescription={this.updateDescription}
                         delCard={this.delCard}
                         editing={true}
                         toggleAttModal={this.toggleAttModal}
                         showDetails={this.showDetails}
+                        addFreeTime={this.addFreeTime}
                       />
                     );
                   else if (this.state.mode === "map")
