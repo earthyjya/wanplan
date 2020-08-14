@@ -30,11 +30,19 @@
   a {
     width: 100%;
     img{
-      height: 30px;
-      width: 30px;
+      height: 100%;
     }
   }
-
+  * > :hover{
+    color: $primary;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  :hover{
+    color: $primary;
+    text-decoration: none;
+    transition: 0.2s;
+  }
 }
 .login{
   display: inline-block;
@@ -86,4 +94,19 @@
 .signin :hover, .signin :focus, .signin :active{
   outline: none;
   outline: 0;
+}
+
+.search-plan-a{
+  display: inline-block;
+  position: absolute;
+  left: calc(50px + 1em);
+  top: 0%;
+  outline:none;
+  border: none;
+  background-color: black;
+  color: white;
+  width: 152px !important;
+  height: 52px;
+  line-height: 52px;
+  font-weight: normal;
 }

@@ -7,13 +7,12 @@ import Footer from "./Footer.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Container, Row } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 import FeedbackForm from "./FeedbackForm.js";
 import CreateNewPlan from "./lib/CreateNewPlan.js";
 import "./scss/Feedback.scss";
-import { isMobile } from "react-device-detect";
-
+import { isMobileOnly } from "react-device-detect";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class Homepage extends Component {
   state = {
     citySearch: 0,
@@ -46,7 +45,7 @@ class Homepage extends Component {
   // }
 
   onClickNewPlan = () => {
-    if (isMobile) {
+    if (isMobileOnly) {
       this.setState({ showMobileWarning: true });
       return;
     }
@@ -132,14 +131,22 @@ class Homepage extends Component {
         </Container>
         <RecommendedPlan data={this.props.data} {...this.state} {...this.props} />
         <Myplan data={this.props.data} {...this.state} {...this.props} />
-        <button className="search-plan-button" onClick= {
-            () => {
-              this.setState({redirect: true, redirectTo: "/search"})
-            }}
-          >
-           Search for a plan
-           <FontAwesomeIcon style={{marginLeft: "10px"}} icon="search" size="1x" />
-        </button>
+        {
+          (() => {
+            if(!isMobileOnly) return <SearchPlan/>
+            else
+            {
+              return(
+              <button className="search-plan-button" onClick= {
+                () => {
+                  this.setState({redirect: true, redirectTo: "/search"})
+              }}>
+                 Search for a plan
+                 <FontAwesomeIcon style={{marginLeft: "10px"}} icon="search" size="1x" />
+              </button>)
+            }
+          })()
+        }
         <div className="homepage-ending-container">
           <div className="title">Oneplan</div>
           <div className="content">

@@ -10,7 +10,7 @@ import { Redirect } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
-import { isMobile } from "react-device-detect";
+import { isMobileOnly } from "react-device-detect";
 import DuplicatePlan from "../lib/DuplicatePlan";
 
 class Plan extends React.Component {
@@ -130,7 +130,7 @@ class Plan extends React.Component {
   };
 
   checkEdit = async () => {
-    if (isMobile) {
+    if (isMobileOnly) {
       this.setState({ showMobileWarning: true });
       return;
     }
