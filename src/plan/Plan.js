@@ -167,27 +167,25 @@ class Plan extends React.Component {
 
   calPlan = async (plan_detail) => {
     //// Need to be updated when transportations are added
-    // console.log(transports);
     let { plan_startday } = this.state;
-
     if (plan_detail) {
       let i = 0;
-      // let j = 0;
       // give each plan attraction order
-      for (let i = 0; i < plan_detail.length; i++) {
-        plan_detail[i].attraction_order = i;
-      }
+      plan_detail = plan_detail.reduce(
+        (acc, cur, idx) => [...acc, { ...cur, attraction_order: idx }],
+        []
+      );
       // give each plan_startday the day
-      plan_startday = plan_startday.slice(0, this.state.plan_overview.duration);
-      for (i = 0; i < plan_startday.length; i++) {
-        plan_startday[i].day = i + 1;
-      }
-
+      plan_startday = plan_startday.reduce(
+        (acc, cur, idx) => [...acc, { ...cur, day: idx + 1 }],
+        []
+      );
       // find transports between each attraction in each day
       let transports = [];
       await this.getTransports()
         .then((res) => {
           transports = res;
+          // console.log(transports);
         })
         .catch((err) => {
           console.log(err);
@@ -207,16 +205,16 @@ class Plan extends React.Component {
                 Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
             else transTime = 0;
           }
-          console.log(plan_startday[lastDay - 1], lastDay);
-          console.log(plan_startday)
           lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
           ++idx;
         }
         plan_detail[i].start_time = Int2Str(lastTime);
         plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-        if (transports[lastDay - 1][idx])
-          transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-        else transTime = 0;
+        if (transports[lastDay - 1]) {
+          if (transports[lastDay - 1][idx])
+            transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+          else transTime = 0;
+        }
         lastTime = lastTime + plan_detail[i].time_spend + transTime;
         // console.log(transTime);
         ++idx;
@@ -224,58 +222,67 @@ class Plan extends React.Component {
     }
     this.setState({ plan_detail, plan_startday });
   };
-
   getTransports = async () => {
-    const { days } = this.state;
+    const { days, plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     let transports = [];
-    for (let i = 1; i <= this.state.plan_overview.duration; i++) {
-      await transports.push([]);
-    }
-    await Promise.all(
-      days.map(async (day) => {
-        let idx = day - 1;
-        let places = await this.state.plan_detail.filter(
-          (det) => det.day === day
-        );
-        // console.log(places);
-        let lastPlace = { attraction_name: "Hotel" };
-        for (let j = 0; j < places.length; j++) {
-          if (!lastPlace.google_place_id || !places[j].google_place_id) {
-            await transports[idx].push({
-              text: "No transportation data",
-              value: 0,
-            });
-            lastPlace = places[j];
-            continue;
-          }
-          let url =
-            APIServer +
-            "/googletransport/" +
-            lastPlace.google_place_id +
-            "/" +
-            places[j].google_place_id;
-          await axios
-            .get(url)
-            .then(async (res) => {
-              // console.log(res.data);
-              await transports[idx].push({
-                text: res.data.duration.text,
-                mode: res.data.mode,
-                value: res.data.duration.value / 60,
-                distance: res.data.distance.text,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          lastPlace = places[j];
-        }
-      })
-    );
     // console.log(transports);
-    this.setState({ transports });
-    return transports;
+    transports = days.reduce(async (acc, day) => {
+      console.log([...(await acc)]);
+      let dayTrans = [];
+      let places = this.state.plan_detail.filter((det) => det.day === day);
+      let lastPlace = { attraction_name: "Hotel" };
+      if (places)
+        dayTrans = places.reduce(async (acc1, cur1, idx1) => {
+          
+          if (idx1 === 0) lastPlace = { attraction_name: "Hotel" };
+          else lastPlace = places[idx1 - 1];
+          if (
+            !lastPlace.google_place_id ||
+            !places[idx1].google_place_id ||
+            lastPlace.google_place_id == undefined ||
+            places[idx1].google_place_id == undefined
+          ) {
+            acc1 = [
+              ...(await acc1),
+              {
+                key: idx1,
+                text: "No transportation data",
+                value: 0,
+              },
+            ];
+            
+          } else {
+            let url =
+              APIServer +
+              "/googletransport/" +
+              places[idx1 - 1].google_place_id +
+              "/" +
+              places[idx1].google_place_id;
+            await axios
+              .get(url)
+              .then(async (res) => {
+                acc1 = [
+                  ...(await acc1),
+                  {
+                    text: res.data.duration.text,
+                    mode: res.data.mode,
+                    value: res.data.duration.value / 60,
+                    distance: res.data.distance.text,
+                  },
+                ];
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          return [...(await acc1)];
+        }, []);
+      return [...(await acc), [...(await dayTrans)]];
+    }, []);
+    console.log([...(await transports)])
+    this.setState({ transports: [...(await transports)] });
+    return [...(await transports)];
   };
 
   ratingChanged = (e) => {
@@ -366,50 +373,55 @@ class Plan extends React.Component {
       return;
     }
 
-    this.state.plan_detail.map(async plan => {
+    let plan_detail = this.state.plan_detail;
+
+    plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
       url = APIServer + "/googleplace/" + plan.google_place_id
+      let data = {...plan,}
+      console.log([acc])
       await axios
       .get(url)
       .then(async (result) => {
-        console.log(result.data)
-        await this.setState({  })
+        console.log({...plan, ...result.data[0]})
+        data ={...data, ...result.data[0]}
       })
-      .catch((error) => {
+      .catch(async (error) => {
         // this.setState({ error });
         console.log(error);
-      })})
-
-    let plan_detail = this.state.plan_detail;
-    for (let i = 0; i < plan_detail.length; ++i) {
-      if (plan_detail[i].attraction_id === 0) {
+      })
+      if (plan.attraction_id === 0) {
         await axios
           .get(
             APIServer +
               "/attraction/google_id/" +
-              plan_detail[i].google_place_id
+              plan.google_place_id
           )
           // eslint-disable-next-line
           .then((res) => {
-            plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
+            data ={...data, ...res.data[0]}
           })
           .catch((err) => {
             console.log(err);
           });
       }
+      acc = [...await acc, {...data}]
+      return [...await acc]
     }
-    this.setState(plan_detail);
+      ,[])
+    this.setState({plan_detail: [...await plan_detail]});
+    // console.log(plan_detail)
 
     let days = [];
     for (let i = 1; i <= this.state.plan_overview.duration; i++) {
       await days.push(i);
     }
-    await this.getTransports().then((res) => {});
-
+    await this.getTransports().then((res) => {console.log(res)}).catch(err => console.log(err));
+    console.log(this.state.transports)
     await this.setState({ days: days });
     await this.setState({ isLoading: false });
     // console.log("Fetching done...");
     // console.log(this.state.plan_detail, this.state.plan_startday);
-    await this.calPlan(this.state.plan_detail);
+    await this.calPlan([...await this.state.plan_detail]);
     if (process.env.NODE_ENV === "production") {
       plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {

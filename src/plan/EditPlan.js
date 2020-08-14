@@ -475,7 +475,7 @@ class EditPlan extends React.Component {
       attraction_order: index,
       day: Number(droppableId),
     };
-    const url =
+    let url =
       APIServer +
       "/attraction/google_id/" +
       source.droppableId.slice(0, source.droppableId.length - 3);
@@ -486,6 +486,18 @@ class EditPlan extends React.Component {
         // this.setState({ error });
         console.error(error);
       });
+      url =
+      APIServer +
+      "/googleplace/" + toAdd.google_place_id
+      source.droppableId.slice(0, source.droppableId.length - 3);
+    await axios
+      .get(url)
+      .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
+      .catch((error) => {
+        // this.setState({ error });
+        console.error(error);
+      });
+
     plan_detail.splice(index, 0, toAdd);
     let newPlan = plan_startday.reduce(async (acc, day) => {
       let plans = plan_detail.filter((det) => det.day === day.day);
@@ -629,7 +641,26 @@ class EditPlan extends React.Component {
       }
       return [...(await acc)];
     }, []);
-    this.setState(plan_detail);
+
+    plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
+      url = APIServer + "/googleplace/" + plan.google_place_id
+      console.log([acc])
+      await axios
+      .get(url)
+      .then(async (result) => {
+        console.log({...plan, ...result.data[0]})
+        acc = [...await acc, {...plan, ...result.data[0]}]
+      })
+      .catch(async (error) => {
+        // this.setState({ error });
+        console.log(error);
+        acc = [...await acc]
+      })
+      return [...await acc]
+    }
+      ,[])
+    this.setState({plan_detail: [...await plan_detail]});
+
     url = APIServer + "/city";
     await axios
       .get(url)
@@ -651,9 +682,10 @@ class EditPlan extends React.Component {
     this.setState({
       days: days,
     });
-    this.setState({ isLoading: false });
+    
     // console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
+    await this.setState({ isLoading: false });
     if (process.env.NODE_ENV === "production") {
       plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {

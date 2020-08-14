@@ -13,10 +13,11 @@ class DayTimeline extends Component {
   };
 
   render() {
-    const { plan_detail, day, editing } = this.props;
+    const { plan_detail, day, editing, isLoading } = this.props;
     let start = "";
     let destination = "";
     let idx = day - 1;
+    if (isLoading) return <div>Loading...</div>;
     if (editing)
       return (
         <React.Fragment>
@@ -159,10 +160,10 @@ class DayTimeline extends Component {
                   <TransCard
                     start={start}
                     destination={destination}
-                    transport={
+                    transport={ (this.props.transports[idx])?
                       this.props.transports[idx][
                         detail.attraction_order - plan_detail[0].attraction_order
-                      ]
+                      ] : null
                     }
                   />
                   <AttCard
