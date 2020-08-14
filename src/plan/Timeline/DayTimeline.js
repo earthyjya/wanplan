@@ -4,9 +4,7 @@ import TransCard from "./TransCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class DayTimeline extends Component {
-  state = {
-    plan_detail : this.props.plan_detail.filter(plan => plan.day === this.props.day)
-  }
+  
   addDay = () => {
     this.props.addDay(this.props.day);
   };
@@ -17,7 +15,8 @@ class DayTimeline extends Component {
 
   render() {
     const { day, editing, isLoading } = this.props;
-    const {plan_detail} =this.state
+    const plan_detail =this.props.plan_detail.filter(plan => plan.day === day)
+
     let start = "";
     let destination = "";
     let idx = day - 1;
