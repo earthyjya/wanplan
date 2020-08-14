@@ -24,6 +24,7 @@ class EditPlan extends React.Component {
     editTitle: false,
     error: null,
     isLoading: true,
+    overviewLoaded: false,
     loadAttBar: true,
     loadPlanOverview: true,
     modal: false,
@@ -609,7 +610,7 @@ class EditPlan extends React.Component {
             ...this.state.plan_overview,
             city: result.data.plan_city[0].city,
             city_id: result.data.plan_city[0].city_id,
-          },
+          },overviewLoaded:true,
         });
         // console.log(result.data)
       })
@@ -712,9 +713,10 @@ class EditPlan extends React.Component {
       modal,
       editTitle,
       planCover,
+      overviewLoaded
     } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
-    if (isLoading) return <div>Loading...</div>;
+    if (!overviewLoaded) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
       return (

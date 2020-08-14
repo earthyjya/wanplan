@@ -19,6 +19,7 @@ class Plan extends React.Component {
     days: [],
     error: null,
     isLoading: true,
+    overviewLoaded: false,
     modal: false,
     redirect: false,
     redirectTo: "/",
@@ -363,6 +364,7 @@ class Plan extends React.Component {
           },
         });
         if (result.data.plan_review == null) this.setState({ plan_review: [] });
+        await this.setState({overviewLoaded:true})
       })
       .catch((error) => {
         // this.setState({ error });
@@ -446,8 +448,9 @@ class Plan extends React.Component {
       modal,
       ratingList,
       plan_review,
+      overviewLoaded
     } = this.state;
-    if (isLoading) return <div>Loading...</div>;
+    if (!overviewLoaded) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
     else {
       return (
