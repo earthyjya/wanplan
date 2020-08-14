@@ -644,19 +644,22 @@ class EditPlan extends React.Component {
     }, []);
 
     plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
+      let data = {...plan,}
+      if (plan.google_place_id){
       url = APIServer + "/googleplace/" + plan.google_place_id
       console.log([acc])
       await axios
       .get(url)
       .then(async (result) => {
         console.log({...plan, ...result.data[0]})
-        acc = [...await acc, {...plan, ...result.data[0]}]
+        data ={...data, ...result.data[0]}
       })
       .catch(async (error) => {
         // this.setState({ error });
         console.log(error);
-        acc = [...await acc]
       })
+    }
+    acc = [...await acc, {...data}]
       return [...await acc]
     }
       ,[])

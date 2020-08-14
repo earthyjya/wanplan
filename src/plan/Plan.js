@@ -378,8 +378,9 @@ class Plan extends React.Component {
     let plan_detail = this.state.plan_detail;
 
     plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
-      url = APIServer + "/googleplace/" + plan.google_place_id
       let data = {...plan,}
+      if (plan.google_place_id){
+      url = APIServer + "/googleplace/" + plan.google_place_id
       console.log([acc])
       await axios
       .get(url)
@@ -390,7 +391,7 @@ class Plan extends React.Component {
       .catch(async (error) => {
         // this.setState({ error });
         console.log(error);
-      })
+      })}
       if (plan.attraction_id === 0) {
         await axios
           .get(
