@@ -183,7 +183,7 @@ class AttBar extends Component {
         {detailsDat !== "" ? (
           <div className="att-bar-desc">
             <Droppable
-              droppableId={(detailsDat.google_place_id!== undefined) 
+              droppableId={(detailsDat.google_place_id!== undefined)
                 ? detailsDat.google_place_id + "Bar"
               : detailsDat.place_id + "Bar"}
               isDropDisabled={true}
@@ -197,7 +197,7 @@ class AttBar extends Component {
                   ref={dropProvided.innerRef}
                 >
                   <Draggable
-                    draggableId={(detailsDat.attraction_id!== undefined) 
+                    draggableId={(detailsDat.attraction_id!== undefined)
                       ? detailsDat.attraction_id + "Bar"
                     : detailsDat.place_id + "Bar"}
                     index={0}
@@ -212,6 +212,9 @@ class AttBar extends Component {
                           {this.state.detailsDat.name
                             ? this.state.detailsDat.name
                             : this.state.detailsDat.attraction_name}
+                            <span className="att-bar-delete" onClick={() => this.setState({detailsDat: ""})}>
+                             &#10005;
+                           </span>
                         </h3>
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <img
