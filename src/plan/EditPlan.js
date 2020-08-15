@@ -113,7 +113,7 @@ class EditPlan extends React.Component {
             "plan_location",
             { plan_location },
             (data) => {
-              this.setState({
+              this.setState({plan_location: [data.plan_location],
                 plan_overview: {
                   ...this.state.plan_overview,
                   ...plan_location,
@@ -206,8 +206,8 @@ class EditPlan extends React.Component {
           if (
             !lastPlace.google_place_id ||
             !places[idx1].google_place_id ||
-            lastPlace.google_place_id == undefined ||
-            places[idx1].google_place_id == undefined
+            lastPlace.google_place_id == "freetime" ||
+            places[idx1].google_place_id == "freetime"
           ) {
             acc1 = [
               ...(await acc1),
@@ -543,6 +543,7 @@ class EditPlan extends React.Component {
       description: "",
       attraction_order: order,
       day: day,
+      google_place_id: "freetime"
     };
     plan_detail.splice(order, 0, toAdd);
     let newPlan = plan_startday.reduce(async (acc, day) => {
@@ -645,7 +646,7 @@ class EditPlan extends React.Component {
 
     plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
       let data = {...plan,}
-      if (plan.google_place_id){
+      if (plan.google_place_id !== "freetime"){
       url = APIServer + "/googleplace/" + plan.google_place_id
       console.log([acc])
       await axios

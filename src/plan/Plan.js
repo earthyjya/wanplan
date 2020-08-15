@@ -241,8 +241,8 @@ class Plan extends React.Component {
           if (
             !lastPlace.google_place_id ||
             !places[idx1].google_place_id ||
-            lastPlace.google_place_id == undefined ||
-            places[idx1].google_place_id == undefined
+            lastPlace.google_place_id == "freetime" ||
+            places[idx1].google_place_id == "freetime"
           ) {
             acc1 = [
               ...(await acc1),
@@ -379,7 +379,7 @@ class Plan extends React.Component {
 
     plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
       let data = {...plan,}
-      if (plan.google_place_id){
+      if (plan.google_place_id !== "freetime"){
       url = APIServer + "/googleplace/" + plan.google_place_id
       console.log([acc])
       await axios

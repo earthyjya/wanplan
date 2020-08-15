@@ -150,7 +150,7 @@ class AttCard extends Component {
         >
           <div className="Triangle" />
           {(() => {
-            if (google_place_id == null) return null;
+            if (google_place_id == "freetime") return null;
             else
               return (
                 <div className="AttPhotoCont">
