@@ -100,7 +100,9 @@ class MobileDayTimeline extends Component {
   render() {
     const { plan_detail, day, editing, transports} = this.props;
     return(
-      <div>
+      <div style={{display:"flex", flexDirection: "column"}}>
+        <div className="m-day-title"> Day {day} </div>
+        <span className="m-day-info"> xx places | budget: xxxx JPY </span>
         {(() => {
           let att_show = [];
           let start = "";
@@ -118,14 +120,12 @@ class MobileDayTimeline extends Component {
               })();
               destination = detail;
             })()}
-            console.log(transports)
             if(index === 0){
               att_show.push(
                 this.mobileTransCard(transports[day - 1], index, start, destination)
               );
             }
             att_show.push(this.mobileAttCard(detail));
-            console.log(transports)
             att_show.push(
               this.mobileTransCard(transports[day - 1], index + 1, start, destination)
             );
