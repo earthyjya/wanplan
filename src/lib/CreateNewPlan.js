@@ -17,7 +17,6 @@ export default async function CreateNewPlan(
     original_id: 0,
     available: 0,
     star_rating: 0,
-    contributor: '',
   };
   // console.log(newPlan)
   let startDay = { day: 1, start_day: "09:00" };

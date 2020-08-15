@@ -69,7 +69,17 @@ class App extends Component {
     toggleLogin: false,
     toggleSignup: false,
     token: null,
+    isLoading: true,
+    name: "",
+    familyName: "",
+    photoLink: "",
+    description: "",
+    username: "",
   };
+
+  editUser = (data) => {
+    this.setState(data)
+  }
 
   authListener = () => {
     fire.auth().onAuthStateChanged((user) => {
@@ -88,6 +98,17 @@ class App extends Component {
             // Handle error
             console.error(error);
           });
+        const db = fire.firestore();
+          db.collection("users")
+            .doc(user.uid)
+            .get()
+            .then((res) => {
+              let data = res.data();
+              if (data) this.setState(data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
       } else {
         this.setState({ user: null, isLoggedIn: false, user_id: 0 });
       }
@@ -101,6 +122,7 @@ class App extends Component {
     ReactGA.initialize("UA-164341109-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
     this.authListener();
+    this.setState({ isLoading: false });
   }
 
   logIn = async (user_id) => {
@@ -137,6 +159,43 @@ class App extends Component {
       });
       localStorage.setItem("planlist", JSON.stringify([]));
     }
+    const db = fire.firestore();
+    db.collection("users")
+      .doc(user_id)
+      .get()
+      .then((res) => {
+        let data = res.data();
+
+        if (data) {
+          let { name, familyName, photoLink, username, description } = data;
+          this.setState(data);
+          db.collection("users").doc(user_id).set({
+            name,
+            familyName,
+            photoLink,
+            username,
+            description,
+          });
+        } else {
+          let {
+            name,
+            familyName,
+            photoLink,
+            username,
+            description,
+          } = this.state;
+          db.collection("users").doc(user_id).set({
+            name,
+            familyName,
+            photoLink,
+            username,
+            description,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   toggleLogin = () => {
@@ -161,9 +220,16 @@ class App extends Component {
           <a className="oneplan" href="/home">
             <img src="/oneplan-logo-primary.png" alt="Oneplan Logo" />
           </a>
+          <a className="user-profile" href={`/user/${user_id}`}>
+            User Profile
+          </a>
           <a className="search-plan-a" href="/search">
-             Search for a plan
-             <FontAwesomeIcon style={{marginLeft: "10px"}} icon="search" size="1x" />
+            Search for a plan
+            <FontAwesomeIcon
+              style={{ marginLeft: "10px" }}
+              icon="search"
+              size="1x"
+            />
           </a>
           {(() => {
             if (isLoggedIn) {
@@ -216,7 +282,7 @@ class App extends Component {
         {(() => {
           if (toggleSignup) {
             return (
-              <div className="loginForm">
+              <div className="signUpForm">
                 <Signup toggleSignup={this.toggleSignup} />
               </div>
             );
@@ -263,6 +329,15 @@ class App extends Component {
               <Plan plan_id={Number(match.params.plan_id)} {...this.state} />
             )}
           />
+
+          <Route
+            exact
+            path="/user/:user_id"
+            component={({ match }) => (
+              <User {...this.state} uid={match.params.user_id} editUser={this.editUser}/>
+            )}
+          />
+
           <Route
             path="/plan/:plan_id/edit_plan"
             component={({ match }) => (

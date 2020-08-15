@@ -7,6 +7,11 @@ class Login extends Component {
     email: "",
     password: "",
     error: null,
+    name: "",
+    familyName: "",
+    photoLink: "",
+    description: "",
+    username: "",
   };
 
   handleChange = (e) => {

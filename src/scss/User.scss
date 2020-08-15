@@ -1,0 +1,21 @@
+@import "./Style.scss";
+
+.user{
+    position: absolute;
+    top : 100px
+}
+
+.editUserContent{
+    border: none;
+    box-shadow: 0 0 40px -20px #000;
+    background-color: $gray4;
+    color: $gray1;
+    margin: auto;
+    padding: 20px;
+    border: none;
+    font-size: 20px;
+    border-radius: 5px;
+    height: 650px;
+    width: 550px;
+    position: relative
+  }

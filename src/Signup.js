@@ -7,6 +7,11 @@ class Signup extends Component {
     email: "",
     password: "",
     error: null,
+    name: "",
+    familyName: "",
+    photoLink: "",
+    description: "",
+    username: "",
   };
 
   handleChange = (e) => {
@@ -14,6 +19,8 @@ class Signup extends Component {
   };
 
   signup = (e) => {
+    let {name, familyName, photoLink, username, description } = this.state
+    const db =fire.firestore()
     e.preventDefault();
     fire
       .auth()
@@ -21,6 +28,9 @@ class Signup extends Component {
       .then((u) => {
         this.setState({ error: null });
         this.props.toggleSignup();
+        db.collection('users').doc(u.user.uid).set({
+          name, familyName, photoLink, username, description
+        })
       })
       .then((u) => {
         // console.log(u);
@@ -34,7 +44,7 @@ class Signup extends Component {
   render() {
     let { error } = this.state;
     return (
-      <div className="loginContent">
+      <div className="signUpContent">
         <div className="close-login" onClick={this.props.toggleSignup}>
           &#10005;
         </div>
@@ -62,6 +72,66 @@ class Signup extends Component {
               className="login-input-box"
               id="exampleInputPassword1"
               placeholder="Password"
+            />
+          </div>
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              value={this.state.username}
+              onChange={this.handleChange}
+              type="username"
+              name="username"
+              className="login-input-box"
+              id="exampleInputUsername1"
+              placeholder="username"
+            />
+          </div>
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              value={this.state.name}
+              onChange={this.handleChange}
+              type="name"
+              name="name"
+              className="login-input-box"
+              id="exampleInputName1"
+              placeholder="name"
+            />
+          </div>
+          <div className="form-group">
+            <label>Family Name</label>
+            <input
+              value={this.state.familyName}
+              onChange={this.handleChange}
+              type="familyName"
+              name="familyName"
+              className="login-input-box"
+              id="exampleInputFamilyName1"
+              placeholder="family name"
+            />
+          </div>
+          <div className="form-group">
+            <label>Photo link</label>
+            <input
+              value={this.state.photoLink}
+              onChange={this.handleChange}
+              type="photoLink"
+              name="photoLink"
+              className="login-input-box"
+              id="exampleInputPhotoLink1"
+              placeholder="Photo Link"
+            />
+          </div>
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              value={this.state.description}
+              onChange={this.handleChange}
+              type="description"
+              name="description"
+              className="login-input-box"
+              id="exampleInputDescription1"
+              placeholder="description"
             />
           </div>
           {(() => {
