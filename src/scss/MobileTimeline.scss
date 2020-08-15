@@ -95,3 +95,17 @@
     }
   }
 }
+
+.m-day-title{
+  font-size: 2em;
+  font-weight: bolder;
+  border-bottom: solid black;
+  padding-bottom: .2em;
+  margin-bottom: .2em;
+  align-self: center;
+}
+
+.m-day-info{
+  text-align: center;
+  color: $gray2;
+}

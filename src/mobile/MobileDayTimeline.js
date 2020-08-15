@@ -43,8 +43,8 @@ class MobileDayTimeline extends Component {
     )
   }
 
-  mobileTransCard(transport, start, destination){
-    if (transport && transport.mode) {
+  mobileTransCard(transport, index, start, destination){
+    if (transport && transport[index] && transport[index].mode) {
       return(
         <div className="m-transcard-container">
           <div className="location-container">
@@ -68,25 +68,25 @@ class MobileDayTimeline extends Component {
           </div>
           <div className="transport-container">
             {(() => {
-              if (transport.mode === "driving")
+              if (transport[index].mode === "driving")
                 return (
                   <span>
                     <FontAwesomeIcon icon="car" size="sm" />
-                    <span>{transport.text}</span>
+                    <span>{transport[index].text}</span>
                   </span>
                 );
-              if (transport.mode === "transit")
+              if (transport[index].mode === "transit")
                 return (
                   <span>
                     <FontAwesomeIcon icon="train" size="sm" />
-                    <span>{transport.text}</span>
+                    <span>{transport[index].text}</span>
                   </span>
                 );
-              if (transport.mode === "walking")
+              if (transport[index].mode === "walking")
                 return (
                   <span>
                     <FontAwesomeIcon icon="walking" size="sm" />
-                    <span>{transport.text}</span>
+                    <span>{transport[index].text}</span>
                   </span>
                 );
               })()}
@@ -100,13 +100,14 @@ class MobileDayTimeline extends Component {
   render() {
     const { plan_detail, day, editing, transports} = this.props;
     return(
-      <div>
+      <div style={{display:"flex", flexDirection: "column"}}>
+        <div className="m-day-title"> Day {day} </div>
+        <span className="m-day-info"> xx places | budget: xxxx JPY </span>
         {(() => {
           let att_show = [];
-          let idx = 0;
           let start = "";
           let destination = "";
-          plan_detail.map((detail) => {
+          plan_detail.map((detail, index) => {
             {(() => {
               start = (() => {
                 if (detail !== plan_detail[0]) {
@@ -119,16 +120,15 @@ class MobileDayTimeline extends Component {
               })();
               destination = detail;
             })()}
-            if (idx === 0)
+            if(index === 0){
               att_show.push(
-                this.mobileTransCard(transports[day - 1][idx], start, destination)
+                this.mobileTransCard(transports[day - 1], index, start, destination)
               );
+            }
             att_show.push(this.mobileAttCard(detail));
-            console.log(transports)
             att_show.push(
-              this.mobileTransCard(transports[day - 1][idx + 1], start, destination)
+              this.mobileTransCard(transports[day - 1], index + 1, start, destination)
             );
-            idx = idx + 1;
           });
           return att_show;
         })()}
