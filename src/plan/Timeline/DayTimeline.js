@@ -14,9 +14,34 @@ class DayTimeline extends Component {
   };
 
   render() {
-    const { day, editing, isLoading } = this.props;
-    const plan_detail =this.props.plan_detail.filter(plan => plan.day === day)
-
+    const { plan_detail, day, editing, isLoading, detailLoaded } = this.props;
+    let hours = [
+      "00",
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+    ];
+    let minutes = ["00", "10", "20", "30", "40", "50"];
     let start = "";
     let destination = "";
     let idx = day - 1;
@@ -30,14 +55,53 @@ class DayTimeline extends Component {
               </button>
               <div className="DayTitle"> Day {day}</div>
               {(() => {
-              if (isLoading) return <div className="Timeline">Loading...</div>;
-              else return <div className="DayInfo">
-              xx places | estimated time: xx | budget: xxxx JPY
-            </div>
+                if (!detailLoaded) return <div>Loading...</div>;
+                else
+                  return (
+                      <div className="DayInfo">
+                        xx places | estimated time: xx | budget: xxxx JPY
+                      </div>
+                  );
               })()}
+              <br />
+              <span>
+                <select
+                  className="select-startday-hour"
+                  value={this.props.plan_startday[day - 1].start_day.slice(
+                    0,
+                    2
+                  )}
+                  onChange={this.changeHour}
+                >
+                  {hours.map((hour) => {
+                    return (
+                      <option value={hour} key={hour}>
+                        {hour}
+                      </option>
+                    );
+                  })}
+                </select>
+                :
+                <select
+                  className="select-startday-minute"
+                  value={this.props.plan_startday[day - 1].start_day.slice(
+                    3,
+                    5
+                  )}
+                  onChange={this.changeMinute}
+                >
+                  {minutes.map((minute) => {
+                    return (
+                      <option value={minute} key={minute}>
+                        {minute}
+                      </option>
+                    );
+                  })}
+                </select>
+              </span>
             </div>
             {(() => {
-              if (isLoading) return <div className="Timeline">Loading...</div>;
+              if (!detailLoaded) return <div> Loading...</div>;
               else
                 return (
                   <div className="DayTimelineContentContainer">
@@ -115,6 +179,9 @@ class DayTimeline extends Component {
                                               this.props.toggleAttModal
                                             }
                                             showDetails={this.props.showDetails}
+                                            updateNearby={
+                                              this.props.updateNearby
+                                            }
                                           />
                                         </div>
                                       )}
@@ -178,62 +245,66 @@ class DayTimeline extends Component {
           <div className="Block"></div>
           <h2>Day {day}</h2>
         </div>
-        {(()=>{
-           if (isLoading) return <div className="Timeline">Loading...</div>;
-           else return <div className="DayTimelineContentContainer">
-           <div className="TimeVerticalLineContainer" />
-           <div className="AttCardTransCardContainer">
-             {plan_detail.map((detail) => (
-               <div key={detail.attraction_order}>
-                 {(() => {
-                   start = (() => {
-                     if (detail !== plan_detail[0]) {
-                       return plan_detail.filter(
-                         (det) =>
-                           det.attraction_order === detail.attraction_order - 1
-                       )[0];
-                     } else {
-                       return { attraction_name: "Hotel" };
-                     }
-                   })();
-                   destination = detail;
-                 })()}
-                 <TransCard
-                   start={start}
-                   destination={destination}
-                   transport={
-                     this.props.transports[idx]
-                       ? this.props.transports[idx][
-                           detail.attraction_order -
-                             plan_detail[0].attraction_order
-                         ]
-                       : null
-                   }
-                 />
-                 <AttCard
-                   detail={detail}
-                   changeDuration={this.props.changeDuration}
-                   delCard={this.props.delCard}
-                   editing={this.props.editing}
-                   showDetails={this.props.showDetails}
-                   toggleAttModal={this.props.toggleAttModal}
-                 />
-               </div>
-             ))}
-             {(() => {
-               if (plan_detail.length) {
-                 return (
-                   <TransCard
-                     start={plan_detail[plan_detail.length - 1]}
-                     destination={{ attraction_name: "Hotel" }}
-                     transport={{ text: "No transportation data" }}
-                   />
-                 );
-               }
-             })()}
-           </div>
-           <hr style={{ margin: "0px 30px 30px 30px" }} />
-         </div>
+        {(() => {
+          if (isLoading) return <div >Loading...</div>;
+          else
+            return (
+              <div className="DayTimelineContentContainer">
+                <div className="TimeVerticalLineContainer" />
+                <div className="AttCardTransCardContainer">
+                  {plan_detail.map((detail) => (
+                    <div key={detail.attraction_order}>
+                      {(() => {
+                        start = (() => {
+                          if (detail !== plan_detail[0]) {
+                            return plan_detail.filter(
+                              (det) =>
+                                det.attraction_order ===
+                                detail.attraction_order - 1
+                            )[0];
+                          } else {
+                            return { attraction_name: "Hotel" };
+                          }
+                        })();
+                        destination = detail;
+                      })()}
+                      <TransCard
+                        start={start}
+                        destination={destination}
+                        transport={
+                          this.props.transports[idx]
+                            ? this.props.transports[idx][
+                                detail.attraction_order -
+                                  plan_detail[0].attraction_order
+                              ]
+                            : null
+                        }
+                      />
+                      <AttCard
+                        detail={detail}
+                        changeDuration={this.props.changeDuration}
+                        delCard={this.props.delCard}
+                        editing={this.props.editing}
+                        showDetails={this.props.showDetails}
+                        toggleAttModal={this.props.toggleAttModal}
+                      />
+                    </div>
+                  ))}
+                  {(() => {
+                    if (plan_detail.length) {
+                      return (
+                        <TransCard
+                          start={plan_detail[plan_detail.length - 1]}
+                          destination={{ attraction_name: "Hotel" }}
+                          transport={{ text: "No transportation data" }}
+                        />
+                      );
+                    }
+                  })()}
+                </div>
+                <hr style={{ margin: "0px 30px 30px 30px" }} />
+              </div>
+            );
         })()}
       </div>
     );

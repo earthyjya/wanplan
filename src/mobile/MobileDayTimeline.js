@@ -98,15 +98,20 @@ class MobileDayTimeline extends Component {
   }
 
   render() {
-    const { plan_detail, day, editing, transports} = this.props;
+    const { isLoading, plan_detail, day, editing, transports, detailLoaded} = this.props;
     return(
-      <div>
+      <div style={{display:"flex", flexDirection: "column"}}>
+        <div className="m-day-title"> Day {day} </div>
+      {(()=>{
+        if (detailLoaded) return <span className="m-day-info"> xx places | budget: xxxx JPY </span>
+      })()}
         {(() => {
           let att_show = [];
           let idx = 0;
           let start = "";
           let destination = "";
-          plan_detail.map((detail) => {
+          if (!detailLoaded) return <div>Loading...</div>
+          plan_detail.map((detail, index) => {
             {(() => {
               start = (() => {
                 if (detail !== plan_detail[0]) {

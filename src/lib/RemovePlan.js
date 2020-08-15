@@ -8,27 +8,29 @@ export default async function RemovePlan(APIServer, plan_id, func) {
     .delete(url)
     .then(async (result) => {
       data.plan_overview = result.data;
-      //delete plan_location
-      await axios
-        .delete(url)
-        .then((result) => (data.plan_location = result.data))
-        .catch((error) => console.error(error));
-
-      //delete plan_startday
-      url = APIServer + "/plan_startday/delete/" + plan_id;
-      await axios
-        .delete(url)
-        .then((result) => (data.plan_startday = result.data))
-        .catch((error) => console.error(error));
-
-      //delete plan_detail
-      url = APIServer + "/plan_detail/delete/" + plan_id;
-      await axios
-        .delete(url)
-        .then((result) => (data.plan_detail = result.data))
-        .catch((error) => console.error(error));
     })
     .catch((error) => console.error(error));
+
+  let urlLocation = APIServer + "/plan_location/delete/plan/" + plan_id;
+  let urlStartday = APIServer + "/plan_startday/delete/" + plan_id;
+  let urlDetail = APIServer + "/plan_detail/delete/" + plan_id;
+
+  //delete plan_location plan_startday and plan_detail
+
+  await axios
+    .all([
+      axios.delete(urlLocation),
+      axios.delete(urlStartday),
+      axios.delete(urlDetail),
+    ])
+    .then(
+      axios.spread((...res) => {
+        data.plan_location = res[0].data;
+        data.plan_startday = res[1].data;
+        data.plan_detail = res[2].data;
+      })
+    )
+    .catch((err) => console.log(err));
 
   await func(data);
   // console.log(data)

@@ -25,10 +25,15 @@ class EditPlan extends React.Component {
     error: null,
     isLoading: true,
     overviewLoaded: false,
+    locationLoaded: false,
+    tagLoaded: false,
+    startdayLoaded: false,
+    detailLoaded: false,
+    reviewLoaded: false,
+    cityLoaded: false,
     loadAttBar: true,
     loadPlanOverview: true,
     modal: false,
-    plan_detail: [],
     publishToast: false,
     redirect: false,
     redirectTo: "/",
@@ -40,6 +45,14 @@ class EditPlan extends React.Component {
     detailsDat: null,
     mode: "plan",
     cities: [],
+    nearbyCenter: null,
+    plan_city: [],
+    plan_detail: [],
+    plan_location: [],
+    plan_overview: {},
+    plan_review: [],
+    plan_startday: [],
+    plan_tag: [],
   };
 
   updatePlan = async () => {
@@ -91,16 +104,16 @@ class EditPlan extends React.Component {
   updatePlanOverview = async (plan_overview, reload) => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
+    const old_plan_overview = this.state.plan_overview;
+    this.setState({
+      plan_overview: { ...old_plan_overview, ...plan_overview },
+    });
     UpdatePlan(
       APIServer,
       plan_id,
       "plan_overview",
       { plan_overview },
       (data) => {
-        const old_plan_overview = this.state.plan_overview;
-        this.setState({
-          plan_overview: { ...old_plan_overview, ...plan_overview },
-        });
         if (old_plan_overview.city_id !== plan_overview.city_id) {
           // console.log("trying to update plan location")
           let plan_location = {
@@ -114,6 +127,7 @@ class EditPlan extends React.Component {
             { plan_location },
             (data) => {
               this.setState({
+                plan_location: [data.plan_location],
                 plan_overview: {
                   ...this.state.plan_overview,
                   ...plan_location,
@@ -543,6 +557,7 @@ class EditPlan extends React.Component {
       description: "",
       attraction_order: order,
       day: day,
+      google_place_id: "freetime",
     };
     plan_detail.splice(order, 0, toAdd);
     let newPlan = plan_startday.reduce(async (acc, day) => {
@@ -579,6 +594,10 @@ class EditPlan extends React.Component {
     this.updateOnePlanDetail(source);
   };
 
+  updateNearby = (dat) => {
+    this.setState({ nearbyCenter: dat });
+  };
+
   renderRedirect = () => {
     if (this.state.redirect) {
       window.history.pushState(this.state, "", window.location.href);
@@ -598,100 +617,140 @@ class EditPlan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    const { plan_id, new_plan } = this.props;
+    const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/load_plan/full?planId=" + plan_id;
-    await axios
-      .get(url)
-      .then(async (result) => {
-        this.setState({ ...result.data, editTitle: new_plan });
+    let url = APIServer + "/load_plan/full";
+
+    //request for plan_overview
+    let req1 = axios
+      .get(url + "/overview?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data)
         this.setState({
+          plan_overview: { ...this.state.plan_overview, ...res.data[0] },
+          overviewLoaded: true,
+        });
+      })
+      .catch((err) => console.log(err));
+
+    // request for plan_location
+    let req2 = axios
+      .get(url + "/location?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data)
+        this.setState({
+          plan_location: res.data,
           plan_overview: {
             ...this.state.plan_overview,
-            city: result.data.plan_city[0].city,
-            city_id: result.data.plan_city[0].city_id,
-          },overviewLoaded:true,
+            city: res.data[0].city,
+            city_id: res.data[0].city_id,
+          },
+          locationLoaded: true,
         });
-        // console.log(result.data)
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => console.log(err));
+
+    //request for plan_tag
+    let req3 = axios
+      .get(url + "/tag?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data);
+        this.setState({ plan_tag: res.data, tagLoaded: true });
+      })
+      .catch((err) => console.log(err));
+
+    // request for plan_startday and set no. of days
+    let req4 = axios
+      .get(url + "/startday?planId=" + plan_id)
+      .then((res) => {
+        let days = res.data.reduce((acc, cur, idx) => [...acc, idx + 1], []);
+        this.setState({
+          plan_startday: res.data,
+          days: days,
+          startdayLoaded: true,
+        });
+      })
+      .catch((err) => console.log(err));
+
+    //request for plan_detail etc.
+    let req5 = axios
+      .get(url + "/attraction?planId=" + plan_id)
+      .then(async (res) => {
+        // console.log(res.data);
+        let plan_detail = res.data.reduce(async (acc, plan) => {
+          let data = { ...plan };
+          if (plan.google_place_id !== "freetime") {
+            url = APIServer + "/googleplace/" + plan.google_place_id;
+            // console.log([acc]);
+            await axios
+              .get(url)
+              .then(async (result) => {
+                // console.log({ ...plan, ...result.data[0] });
+                data = { ...data, ...result.data[0] };
+              })
+              .catch(async (error) => {
+                // this.setState({ error });
+                console.log(error);
+              });
+          }
+          if (plan.attraction_id === 0) {
+            await axios
+              .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
+              // eslint-disable-next-line
+              .then((res) => {
+                data = { ...data, ...res.data[0] };
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          return [...(await acc), { ...data }];
+        }, []);
+        this.setState({
+          plan_detail: [...(await plan_detail)],
+          detailLoaded: true,
+        });
+        // console.log(plan_detail)
+      })
+      .catch((err) => console.log(err));
+
+    //request for plan_review
+    let req6 = axios
+      .get(url + "/review?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data);
+        this.setState({ plan_review: res.data, reviewLoaded: true });
+      })
+      .catch((err) => console.log(err));
+    let req7 = axios
+    .get(APIServer + "/city")
+    .then((res) => {
+      this.setState({
+        cities: res.data,
+        cityLoaded: true
       });
-    if (!this.state.plan_overview) {
-      this.setState({ error: true, isLoading: false });
-      return;
-    }
-    let plan_detail = this.state.plan_detail;
-    plan_detail = plan_detail.reduce(async (acc, plan) => {
-      // console.log(acc);
-      if (plan.attraction_id === 0) {
-        await axios
-          .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
-          // eslint-disable-next-line
-          .then(async (res) => {
-            // console.log(acc.push({ ...plan, ...res.data[0] }));
-            acc = [...(await acc), { ...plan, ...res.data[0] }];
-          })
-          .catch(async (err) => {
-            // console.log(err);
-            acc = [...(await acc), null];
-          });
-      } else {
-        // console.log(plan);
-        acc = [...(await acc), plan];
-      }
-      return [...(await acc)];
-    }, []);
+    })
+    .catch((err) => console.log(err));
 
-    plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
-      let data = {...plan,}
-      if (plan.google_place_id){
-      url = APIServer + "/googleplace/" + plan.google_place_id
-      console.log([acc])
-      await axios
-      .get(url)
-      .then(async (result) => {
-        console.log({...plan, ...result.data[0]})
-        data ={...data, ...result.data[0]}
-      })
-      .catch(async (error) => {
-        // this.setState({ error });
-        console.log(error);
-      })
-    }
-    acc = [...await acc, {...data}]
-      return [...await acc]
-    }
-      ,[])
-    this.setState({plan_detail: [...await plan_detail]});
+    //resolve all requests above
+    if (this.state.isLoading)
+      Promise.all([req1, req2, req3, req4, req5, req6, req7])
+        .then(async () => {
+          await this.getTransports()
+            .then((res) => {
+              // console.log(res);
+            })
+            .catch((err) => console.log(err));
+          console.log(this.state.transports);
 
-    url = APIServer + "/city";
-    await axios
-      .get(url)
-      .then((result) => {
-        this.setState({ cities: result.data });
-      })
-      .catch((error) => {
-        // this.setState({ error });
-        console.log(error);
-      });
+          await this.calPlan(this.state.plan_detail);
 
-    let days = this.state.plan_startday.reduce(
-      (acc, cur, idx) => [...acc, idx + 1],
-      []
-    );
+        })
+        .catch((err) => console.log(err));
+        this.setState({ isLoading: false });
 
-    await this.getTransports();
-
-    this.setState({
-      days: days,
-    });
-    
-    // console.log("Fetching done...");
-    this.calPlan(this.state.plan_detail);
-    await this.setState({ isLoading: false });
     if (process.env.NODE_ENV === "production") {
-      plan_detail = this.state.plan_detail;
+      let plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {
         await axios
           .get(APIServer + "/googlephoto/" + plan_detail[i].google_place_id)
@@ -716,7 +775,10 @@ class EditPlan extends React.Component {
       modal,
       editTitle,
       planCover,
-      overviewLoaded
+      overviewLoaded,
+      locationLoaded,
+      cityLoaded,
+      loadPlanOverview
     } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     if (!overviewLoaded) return <div>Loading...</div>;
@@ -752,7 +814,7 @@ class EditPlan extends React.Component {
             <div className="editplan-container">
               <div className="timeline-container">
                 {(() => {
-                  if (this.state.loadPlanOverview)
+                  if (locationLoaded && loadPlanOverview)
                     return (
                       <EditPlanOverview
                         {...this.state}
@@ -764,7 +826,10 @@ class EditPlan extends React.Component {
                 })()}
 
                 <div className="title-bar">
-                  <div className="title">{plan_overview.city}</div>
+                  {(() => {
+                    if (locationLoaded)
+                      return <div className="title">{plan_overview.city}</div>;
+                  })()}
                   <div className="plan" onClick={this.modePlan}>
                     Plan
                   </div>
@@ -773,11 +838,16 @@ class EditPlan extends React.Component {
                   </div>
                   <div>
                     {/* eslint-disable-next-line */}
-                    <i
-                      className="fa fa-pencil-square-o fa-fw"
-                      aria-hidden="true"
-                      onClick={this.toggleEditPlanContent}
-                    />
+                    {(() => {
+                      if (locationLoaded && cityLoaded)
+                        return (
+                          <i
+                            className="fa fa-pencil-square-o fa-fw"
+                            aria-hidden="true"
+                            onClick={this.toggleEditPlanContent}
+                          />
+                        );
+                    })()}
                   </div>
                   {/*<button className="white-button" onClick={this.toggleShareModal}>
                     Share!
@@ -786,13 +856,21 @@ class EditPlan extends React.Component {
                       this plan
                     </span>
                   </button>*/}
-                  <button className="white-button" onClick={this.updatePlan}>
-                    Update!
-                    <span style={{ fontSize: "15px" }}>
-                      <br />
-                      this plan
-                    </span>
-                  </button>
+                  {(() => {
+                    if (!isLoading)
+                      return (
+                        <button
+                          className="white-button"
+                          onClick={this.updatePlan}
+                        >
+                          Update!
+                          <span style={{ fontSize: "15px" }}>
+                            <br />
+                            this plan
+                          </span>
+                        </button>
+                      );
+                  })()}
                 </div>
                 {this.renderRedirect()}
                 {(() => {
@@ -821,35 +899,26 @@ class EditPlan extends React.Component {
               </div>
               {(() => {
                 if (this.state.mode === "plan") {
-                  return (
-                    <div className="attbar-container">
-                      {(() => {
-                        if (this.state.loadAttBar)
-                          return (
-                            // <Request
-                            //   url={
-                            //     APIServer +
-                            //     "/attraction/city/" +
-                            //     plan_city[0].city_id
-                            //   }
-                            // >
-                            //   {(result) => (
-                            <AttBar
-                              toggleAttModal={this.toggleAttModal}
-                              showDetails={this.showDetails}
-                              reloadAttBar={this.reloadAttBar}
-                              {...this.state}
-                            />
-                            //    )}
-                            // </Request>
-                          );
-                        else {
-                          this.reloadAttBar();
-                          return;
-                        }
-                      })()}
-                    </div>
-                  );
+                  if (locationLoaded)
+                    return (
+                      <div className="attbar-container">
+                        {(() => {
+                          if (this.state.loadAttBar)
+                            return (
+                              <AttBar
+                                toggleAttModal={this.toggleAttModal}
+                                showDetails={this.showDetails}
+                                reloadAttBar={this.reloadAttBar}
+                                {...this.state}
+                              />
+                            );
+                          else {
+                            this.reloadAttBar();
+                            return;
+                          }
+                        })()}
+                      </div>
+                    );
                 }
               })()}
             </div>
