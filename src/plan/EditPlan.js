@@ -114,7 +114,7 @@ class EditPlan extends React.Component {
             "plan_location",
             { plan_location },
             (data) => {
-              this.setState({
+              this.setState({plan_location: [data.plan_location],
                 plan_overview: {
                   ...this.state.plan_overview,
                   ...plan_location,
@@ -146,6 +146,13 @@ class EditPlan extends React.Component {
 
   showDetails = (dat) => {
     this.setState({ detailsDat: dat });
+  };
+
+  updateStartdayTime = (day, time) => {
+    const { plan_startday } = this.state;
+    plan_startday[day - 1].start_day = time;
+    this.setState({ plan_startday });
+    this.calPlan(this.state.plan_detail);
   };
 
   updatePlanStartday = async () => {
@@ -207,8 +214,8 @@ class EditPlan extends React.Component {
           if (
             !lastPlace.google_place_id ||
             !places[idx1].google_place_id ||
-            lastPlace.google_place_id == undefined ||
-            places[idx1].google_place_id == undefined
+            lastPlace.google_place_id == "freetime" ||
+            places[idx1].google_place_id == "freetime"
           ) {
             acc1 = [
               ...(await acc1),
@@ -488,10 +495,8 @@ class EditPlan extends React.Component {
         // this.setState({ error });
         console.error(error);
       });
-      url =
-      APIServer +
-      "/googleplace/" + toAdd.google_place_id
-      source.droppableId.slice(0, source.droppableId.length - 3);
+    url = APIServer + "/googleplace/" + toAdd.google_place_id;
+    source.droppableId.slice(0, source.droppableId.length - 3);
     await axios
       .get(url)
       .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
@@ -544,6 +549,7 @@ class EditPlan extends React.Component {
       description: "",
       attraction_order: order,
       day: day,
+      google_place_id: "freetime"
     };
     plan_detail.splice(order, 0, toAdd);
     let newPlan = plan_startday.reduce(async (acc, day) => {
@@ -615,7 +621,8 @@ class EditPlan extends React.Component {
             ...this.state.plan_overview,
             city: result.data.plan_city[0].city,
             city_id: result.data.plan_city[0].city_id,
-          },overviewLoaded:true,
+          },
+          overviewLoaded: true,
         });
         // console.log(result.data)
       })
@@ -650,7 +657,7 @@ class EditPlan extends React.Component {
 
     plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
       let data = {...plan,}
-      if (plan.google_place_id){
+      if (plan.google_place_id !== "freetime"){
       url = APIServer + "/googleplace/" + plan.google_place_id
       console.log([acc])
       await axios
@@ -721,7 +728,7 @@ class EditPlan extends React.Component {
       modal,
       editTitle,
       planCover,
-      overviewLoaded
+      overviewLoaded,
     } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     if (!overviewLoaded) return <div>Loading...</div>;
@@ -817,6 +824,7 @@ class EditPlan extends React.Component {
                         showDetails={this.showDetails}
                         addFreeTime={this.addFreeTime}
                         updateNearby={this.updateNearby}
+                        updateStartdayTime={this.updateStartdayTime}
                       />
                     );
                   else if (this.state.mode === "map")

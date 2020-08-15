@@ -124,7 +124,8 @@ class SearchPlan extends Component {
     }
     this.setState({ url: url });
 
-    // console.log(url);
+    console.log(url);
+
     await axios
       .get(url)
       .then((result) => {
@@ -150,114 +151,115 @@ class SearchPlan extends Component {
 
   async componentDidMount() {
     // const APIServer = process.env.REACT_APP_APIServer;
-    let cities = [
-      {
-        city_id: 13,
-        city: "Fukuoka",
-        prefecture: "Fukuoka",
-        region: "Kyushu",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:20.000Z",
-      },
-      {
-        city_id: 6,
-        city: "Himeji",
-        prefecture: "Hyogo",
-        region: "Kansai",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:06.000Z",
-      },
-      {
-        city_id: 5,
-        city: "Hiroshima",
-        prefecture: "Hiroshima",
-        region: "Chugoku",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:04.000Z",
-      },
-      {
-        city_id: 2,
-        city: "Kanazawa",
-        prefecture: "Ishikawa",
-        region: "Chubu",
-        country_id: 1,
-        updated_time: "2020-04-07T05:23:57.000Z",
-      },
-      {
-        city_id: 7,
-        city: "Kobe",
-        prefecture: "Hyogo",
-        region: "Kansai",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:08.000Z",
-      },
-      {
-        city_id: 8,
-        city: "Kyoto",
-        prefecture: "Kyoto",
-        region: "Kansai",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:10.000Z",
-      },
-      {
-        city_id: 1,
-        city: "Nagoya",
-        prefecture: "Aichi",
-        region: "Chubu",
-        country_id: 1,
-        updated_time: "2020-04-07T05:23:55.000Z",
-      },
-      {
-        city_id: 9,
-        city: "Osaka",
-        prefecture: "Osaka",
-        region: "Kansai",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:12.000Z",
-      },
-      {
-        city_id: 15,
-        city: "Sendai",
-        prefecture: "Miyagi",
-        region: "Tohoku",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:24.000Z",
-      },
-      {
-        city_id: 3,
-        city: "Shizuoka",
-        prefecture: "Shizuoka",
-        region: "Chubu",
-        country_id: 1,
-        updated_time: "2020-04-07T05:23:59.000Z",
-      },
-      {
-        city_id: 12,
-        city: "Tokyo",
-        prefecture: "Tokyo",
-        region: "Kanto",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:18.000Z",
-      },
-      {
-        city_id: 11,
-        city: "Yokohama",
-        prefecture: "Kanagawa",
-        region: "Kanto",
-        country_id: 1,
-        updated_time: "2020-04-07T05:24:16.000Z",
-      },
-    ];
-    this.setState({ cities });
-    // await axios
-    //   .get(APIServer + "/city")
-    //   .then(result => {
-    //     this.setState({ cities: result.data, isLoading: false });
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error, isLoading: false });
-    //     console.log(error);
-    //   });
+    // let cities = [
+    //   {
+    //     city_id: 13,
+    //     city: "Fukuoka",
+    //     prefecture: "Fukuoka",
+    //     region: "Kyushu",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:20.000Z",
+    //   },
+    //   {
+    //     city_id: 6,
+    //     city: "Himeji",
+    //     prefecture: "Hyogo",
+    //     region: "Kansai",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:06.000Z",
+    //   },
+    //   {
+    //     city_id: 5,
+    //     city: "Hiroshima",
+    //     prefecture: "Hiroshima",
+    //     region: "Chugoku",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:04.000Z",
+    //   },
+    //   {
+    //     city_id: 2,
+    //     city: "Kanazawa",
+    //     prefecture: "Ishikawa",
+    //     region: "Chubu",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:23:57.000Z",
+    //   },
+    //   {
+    //     city_id: 7,
+    //     city: "Kobe",
+    //     prefecture: "Hyogo",
+    //     region: "Kansai",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:08.000Z",
+    //   },
+    //   {
+    //     city_id: 8,
+    //     city: "Kyoto",
+    //     prefecture: "Kyoto",
+    //     region: "Kansai",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:10.000Z",
+    //   },
+    //   {
+    //     city_id: 1,
+    //     city: "Nagoya",
+    //     prefecture: "Aichi",
+    //     region: "Chubu",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:23:55.000Z",
+    //   },
+    //   {
+    //     city_id: 9,
+    //     city: "Osaka",
+    //     prefecture: "Osaka",
+    //     region: "Kansai",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:12.000Z",
+    //   },
+    //   {
+    //     city_id: 15,
+    //     city: "Sendai",
+    //     prefecture: "Miyagi",
+    //     region: "Tohoku",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:24.000Z",
+    //   },
+    //   {
+    //     city_id: 3,
+    //     city: "Shizuoka",
+    //     prefecture: "Shizuoka",
+    //     region: "Chubu",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:23:59.000Z",
+    //   },
+    //   {
+    //     city_id: 12,
+    //     city: "Tokyo",
+    //     prefecture: "Tokyo",
+    //     region: "Kanto",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:18.000Z",
+    //   },
+    //   {
+    //     city_id: 11,
+    //     city: "Yokohama",
+    //     prefecture: "Kanagawa",
+    //     region: "Kanto",
+    //     country_id: 1,
+    //     updated_time: "2020-04-07T05:24:16.000Z",
+    //   },
+    // ];
+    // this.setState({ cities });
+    const APIServer = process.env.REACT_APP_APIServer;
+    await axios
+      .get(APIServer + "/city")
+      .then(result => {
+        this.setState({ cities: result.data, isLoading: false });
+      })
+      .catch(error => {
+        this.setState({ error, isLoading: false });
+        console.log(error);
+      });
     this.showAll = this.showAll.bind(this);
     this.showSeeAll = this.showSeeAll.bind(this);
     this.enableSeeAll = this.enableSeeAll.bind(this);

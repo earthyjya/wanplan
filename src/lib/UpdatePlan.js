@@ -90,7 +90,7 @@ let promise1 = new Promise(async (resolve,reject) => {
           await axios
             .post(url, plan)
             .then((res) => {
-              // console.log(res);
+              console.log(res);
               data.plan_detail = [...data.plan_detail, res.data];
             })
             .catch((error) => {
@@ -102,6 +102,7 @@ let promise1 = new Promise(async (resolve,reject) => {
             resolve(res.data)
         }).catch(error=>{
             reject(error)
+            console.log(error)
         }
         )
       }else{
