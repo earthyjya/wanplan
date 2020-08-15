@@ -40,6 +40,7 @@ class EditPlan extends React.Component {
     detailsDat: null,
     mode: "plan",
     cities: [],
+    nearbyCenter: null,
   };
 
   updatePlan = async () => {
@@ -145,6 +146,13 @@ class EditPlan extends React.Component {
 
   showDetails = (dat) => {
     this.setState({ detailsDat: dat });
+  };
+
+  updateStartdayTime = (day, time) => {
+    const { plan_startday } = this.state;
+    plan_startday[day - 1].start_day = time;
+    this.setState({ plan_startday });
+    this.calPlan(this.state.plan_detail);
   };
 
   updatePlanStartday = async () => {
@@ -487,10 +495,8 @@ class EditPlan extends React.Component {
         // this.setState({ error });
         console.error(error);
       });
-      url =
-      APIServer +
-      "/googleplace/" + toAdd.google_place_id
-      source.droppableId.slice(0, source.droppableId.length - 3);
+    url = APIServer + "/googleplace/" + toAdd.google_place_id;
+    source.droppableId.slice(0, source.droppableId.length - 3);
     await axios
       .get(url)
       .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
@@ -580,6 +586,10 @@ class EditPlan extends React.Component {
     this.updateOnePlanDetail(source);
   };
 
+  updateNearby = (dat) => {
+    this.setState({nearbyCenter: dat});
+  }
+
   renderRedirect = () => {
     if (this.state.redirect) {
       window.history.pushState(this.state, "", window.location.href);
@@ -611,7 +621,8 @@ class EditPlan extends React.Component {
             ...this.state.plan_overview,
             city: result.data.plan_city[0].city,
             city_id: result.data.plan_city[0].city_id,
-          },overviewLoaded:true,
+          },
+          overviewLoaded: true,
         });
         // console.log(result.data)
       })
@@ -687,7 +698,7 @@ class EditPlan extends React.Component {
     this.setState({
       days: days,
     });
-    
+
     // console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
     await this.setState({ isLoading: false });
@@ -717,7 +728,7 @@ class EditPlan extends React.Component {
       modal,
       editTitle,
       planCover,
-      overviewLoaded
+      overviewLoaded,
     } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     if (!overviewLoaded) return <div>Loading...</div>;
@@ -812,6 +823,8 @@ class EditPlan extends React.Component {
                         toggleAttModal={this.toggleAttModal}
                         showDetails={this.showDetails}
                         addFreeTime={this.addFreeTime}
+                        updateNearby={this.updateNearby}
+                        updateStartdayTime={this.updateStartdayTime}
                       />
                     );
                   else if (this.state.mode === "map")
