@@ -224,6 +224,21 @@
   font-weight: 100;
 }
 
+// .AttTitle {
+//   width: 100%;
+//   height: 16px;
+//   flex-grow: 1;
+//   padding: .6em;
+// }
+
+// .AttTitle p {
+//   white-space: normal;
+//   text-overflow: ellipsis;
+//   overflow: auto;
+//   font-size: 12px;
+//   height: 100%;
+// }
+
 .AttDesCont {
   width: 100%;
   height: auto;
@@ -233,7 +248,7 @@
 
 .AttDesCont p {
   white-space: normal;
-  text-overflow: ellipsis;
+  // text-overflow: ellipsis;
   overflow: auto;
   font-size: 12px;
   height: 100%;

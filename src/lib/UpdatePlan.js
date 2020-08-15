@@ -8,7 +8,7 @@ export default async function UpdatePlan(
 ) {
     let data = { error: [], plan_startday: [], plan_detail: [] };
     let url = "";
-  
+  console.log(toUpdate)
 let promise1 = new Promise(async (resolve,reject) => {
     if (condition == "all" || condition == "plan_overview") {
         //update plan_overview
@@ -138,5 +138,5 @@ Promise.all([promise1,promise2,promise3,promise4]).then(res => {
     console.log(error)
 })
   
-  // console.log(data)
+  console.log(data)
 }

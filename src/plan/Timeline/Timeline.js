@@ -1,7 +1,7 @@
 import DayTimeline from "./DayTimeline";
-import MobileDayTimeline from "../../mobile/MobileDayTimeline.js"
+import MobileDayTimeline from "../../mobile/MobileDayTimeline.js";
 import React, { Component } from "react";
-import {isMobileOnly} from "react-device-detect";
+import { isMobileOnly } from "react-device-detect";
 
 class Timeline extends Component {
   addDay = () => {
@@ -10,7 +10,6 @@ class Timeline extends Component {
 
   render() {
     const { plan_detail, days, editing, isLoading, error } = this.props;
-    if (isLoading) return <div className="Timeline">Loading...</div>;
     if (error) return <div className="Timeline">Something went wrong :(</div>;
     return (
       <div className="Timeline">
@@ -25,35 +24,30 @@ class Timeline extends Component {
           })()}
           <hr style={{ margin: "0px 0px 40px 0px" }} />
         </div>
-        { (() => {
-          if(isMobileOnly)
-            return(
-              days.map(day => (
-                <MobileDayTimeline
-                  {...this.state}
-                  {...this.props}
-                  plan_detail={plan_detail.filter(plan => plan.day === day)}
-                  day={day}
-                  key={day.toString()}
-                  showDetails={this.props.showDetails}
-                />)
-              )
-            )
-          else
-            return(
-              days.map(day => (
-                <DayTimeline
-                  {...this.state}
-                  {...this.props}
-                  plan_detail={plan_detail.filter(plan => plan.day === day)}
-                  day={day}
-                  key={day.toString()}
-                  showDetails={this.props.showDetails}
-                />)
-              )
-            )
-          })()
-        }
+        {(() => {
+          if (isMobileOnly) {
+            if (isLoading) return <div className="Timeline">Loading...</div>;
+            else return days.map((day) => (
+              <MobileDayTimeline
+                {...this.state}
+                {...this.props}
+                plan_detail={plan_detail.filter((plan) => plan.day === day)}
+                day={day}
+                key={day.toString()}
+                showDetails={this.props.showDetails}
+              />
+            ));
+          } else
+            return days.map((day) => (
+              <DayTimeline
+                {...this.state}
+                {...this.props}
+                day={day}
+                key={day.toString()}
+                showDetails={this.props.showDetails}
+              />
+            ));
+        })()}
       </div>
     );
   }

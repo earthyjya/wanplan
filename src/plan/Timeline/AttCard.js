@@ -4,39 +4,59 @@ import React, { Component } from "react";
 class AttCard extends Component {
   state = {
     description: "",
+    title: "",
     photos: [],
-    isFocused: false //isFocused is not focus seen by DOM
+    isFocused: false, //isFocused is not focus seen by DOM
   };
 
-  changeDuration = e => {
-    this.props.changeDuration(this.props.detail.attraction_order, e.target.value);
+  changeDuration = (e) => {
+    this.props.changeDuration(
+      this.props.detail.attraction_order,
+      e.target.value
+    );
   };
 
   delCard = () => {
     this.props.delCard(this.props.detail.attraction_order);
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ description: e.target.value });
   };
 
+  onChangeTitle = (e) => {
+    this.setState({ title: e.target.value });
+  };
+
+  updateTitle = () => {
+    this.props.updateTitle(
+      this.props.detail.attraction_order,
+      this.state.title
+    );
+  };
+
   updateDescription = () => {
-    this.props.updateDescription(this.props.detail.attraction_order, this.state.description);
+    this.props.updateDescription(
+      this.props.detail.attraction_order,
+      this.state.description
+    );
   };
 
   componentDidMount() {
-    this.setState({ description: this.props.description });
+    this.setState({ description: this.props.detail.description });
     this.attRef = React.createRef();
     this.handleBlur = this.handleBlur.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleBlur(event) {
-    if (!event.currentTarget.contains(event.relatedTarget)) this.setState({ isFocused: false });
+    if (!event.currentTarget.contains(event.relatedTarget))
+      this.setState({ isFocused: false });
   }
 
   handleClick() {
-    if (!this.state.isFocused && this.props.editing) this.attRef.current.focus();
+    if (!this.state.isFocused && this.props.editing)
+      this.attRef.current.focus();
   }
 
   render() {
@@ -48,7 +68,8 @@ class AttCard extends Component {
       time_spend,
       attraction_name,
       description,
-      photos
+      photos,
+      google_place_id,
     } = this.props.detail;
     let minutes = [
       0,
@@ -81,7 +102,7 @@ class AttCard extends Component {
       270,
       280,
       290,
-      300
+      300,
     ];
     if (isLoading) return <div className="AttCard">Loading...</div>;
     if (error) return <div className="AttCard">Something went wrong :(</div>;
@@ -94,8 +115,12 @@ class AttCard extends Component {
           {(() => {
             if (this.props.editing) {
               return (
-                <select className="SelAttDura" value={time_spend} onChange={this.changeDuration}>
-                  {minutes.map(min => {
+                <select
+                  className="SelAttDura"
+                  value={time_spend}
+                  onChange={this.changeDuration}
+                >
+                  {minutes.map((min) => {
                     return (
                       <option value={min} key={min}>
                         {min} mins
@@ -124,27 +149,34 @@ class AttCard extends Component {
           tabIndex="0"
         >
           <div className="Triangle" />
-          <div className="AttPhotoCont">
-            <div className="AttTypeCont">
-              <div className="AttType">Type</div>
-            </div>
-            <img
-              src={(() => {
-                if (photos) return photos[0];
-                return "https://via.placeholder.com/140x140";
-              })()}
-              className="AttPhoto"
-              alt={attraction_name}
-              onClick={this.props.toggleAttModal}
-            />
-          </div>
+          {(() => {
+            if (google_place_id == null) return null;
+            else
+              return (
+                <div className="AttPhotoCont">
+                  <div className="AttTypeCont">
+                    <div className="AttType">Type</div>
+                  </div>
+                  <img
+                    src={(() => {
+                      if (photos) return photos[0];
+                      return "https://via.placeholder.com/140x140";
+                    })()}
+                    className="AttPhoto"
+                    alt={attraction_name}
+                    onClick={this.props.toggleAttModal}
+                  />
+                </div>
+              );
+          })()}
           <div className="AttDetailsCont">
-            <div className="AttName">{attraction_name}</div>
+              <div className="AttName">{attraction_name}</div>
             {(() => {
               //If editing and focus, show textarea to edit else show just text
-              if (this.state.isFocused && this.props.editing) {
+              if (this.props.editing) {
                 return (
                   <textarea
+                    placeholder="Click to add description"
                     className="AttDesCont"
                     value={this.state.description}
                     onChange={this.onChange}
