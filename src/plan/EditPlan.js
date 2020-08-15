@@ -40,6 +40,7 @@ class EditPlan extends React.Component {
     detailsDat: null,
     mode: "plan",
     cities: [],
+    nearbyCenter: null,
   };
 
   updatePlan = async () => {
@@ -579,6 +580,10 @@ class EditPlan extends React.Component {
     this.updateOnePlanDetail(source);
   };
 
+  updateNearby = (dat) => {
+    this.setState({nearbyCenter: dat});
+  }
+
   renderRedirect = () => {
     if (this.state.redirect) {
       window.history.pushState(this.state, "", window.location.href);
@@ -686,7 +691,7 @@ class EditPlan extends React.Component {
     this.setState({
       days: days,
     });
-    
+
     // console.log("Fetching done...");
     this.calPlan(this.state.plan_detail);
     await this.setState({ isLoading: false });
@@ -811,6 +816,7 @@ class EditPlan extends React.Component {
                         toggleAttModal={this.toggleAttModal}
                         showDetails={this.showDetails}
                         addFreeTime={this.addFreeTime}
+                        updateNearby={this.updateNearby}
                       />
                     );
                   else if (this.state.mode === "map")
