@@ -4,7 +4,7 @@ import TransCard from "./TransCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class DayTimeline extends Component {
-  
+
   addDay = () => {
     this.props.addDay(this.props.day);
   };

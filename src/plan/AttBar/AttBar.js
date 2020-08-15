@@ -164,6 +164,12 @@ class AttBar extends Component {
       });
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.nearbyCenter !== this.props.nearbyCenter) {
+      this.showDetails(this.props.nearbyCenter)
+    }
+  }
+
   async componentDidMount() {
     this.attbarRef = React.createRef();
     this.placeNearbyCity();

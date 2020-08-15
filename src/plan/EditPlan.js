@@ -889,6 +889,7 @@ class EditPlan extends React.Component {
                         toggleAttModal={this.toggleAttModal}
                         showDetails={this.showDetails}
                         addFreeTime={this.addFreeTime}
+                        updateNearby={this.updateNearby}
                       />
                     );
                   else if (this.state.mode === "map")
