@@ -78,8 +78,8 @@ class App extends Component {
   };
 
   editUser = (data) => {
-    this.setState(data)
-  }
+    this.setState(data);
+  };
 
   authListener = () => {
     fire.auth().onAuthStateChanged((user) => {
@@ -99,16 +99,16 @@ class App extends Component {
             console.error(error);
           });
         const db = fire.firestore();
-          db.collection("users")
-            .doc(user.uid)
-            .get()
-            .then((res) => {
-              let data = res.data();
-              if (data) this.setState(data);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+        db.collection("users")
+          .doc(user.uid)
+          .get()
+          .then((res) => {
+            let data = res.data();
+            if (data) this.setState(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         this.setState({ user: null, isLoggedIn: false, user_id: 0 });
       }
@@ -220,9 +220,15 @@ class App extends Component {
           <a className="oneplan" href="/home">
             <img src="/oneplan-logo-primary.png" alt="Oneplan Logo" />
           </a>
-          <a className="user-profile" href={`/user/${user_id}`}>
-            User Profile
-          </a>
+          {(() => {
+            if (isLoggedIn) {
+              return (
+                <a className="user-profile" href={`/user/${user_id}`}>
+                  User Profile
+                </a>
+              );
+            }
+          })()}
           <a className="search-plan-a" href="/search">
             Search for a plan
             <FontAwesomeIcon
@@ -235,9 +241,9 @@ class App extends Component {
             if (isLoggedIn) {
               return (
                 <div className="login">
-                  <button className="login" onClick={this.logout}>
+                  <a className="login" onClick={this.logout} href="/home">
                     Log out
-                  </button>
+                  </a>
                 </div>
               );
             } else {
@@ -334,7 +340,11 @@ class App extends Component {
             exact
             path="/user/:user_id"
             component={({ match }) => (
-              <User {...this.state} uid={match.params.user_id} editUser={this.editUser}/>
+              <User
+                {...this.state}
+                uid={match.params.user_id}
+                editUser={this.editUser}
+              />
             )}
           />
 
