@@ -27,16 +27,16 @@ class Timeline extends Component {
         {(() => {
           if (isMobileOnly) {
             if (isLoading) return <div className="Timeline">Loading...</div>;
-            else return days.map((day) => (
-              <MobileDayTimeline
-                {...this.state}
-                {...this.props}
-                plan_detail={plan_detail.filter((plan) => plan.day === day)}
-                day={day}
-                key={day.toString()}
-                showDetails={this.props.showDetails}
-              />
-            ));
+            else
+              return days.map((day) => (
+                <MobileDayTimeline
+                  {...this.state}
+                  {...this.props}
+                  plan_detail={plan_detail.filter((plan) => plan.day === day)}
+                  day={day}
+                  key={day.toString()}
+                />
+              ));
           } else
             return days.map((day) => (
               <DayTimeline
@@ -44,7 +44,6 @@ class Timeline extends Component {
                 {...this.props}
                 day={day}
                 key={day.toString()}
-                showDetails={this.props.showDetails}
               />
             ));
         })()}
