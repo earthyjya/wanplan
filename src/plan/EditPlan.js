@@ -23,6 +23,7 @@ class EditPlan extends React.Component {
     dropdownOpen: false,
     editTitle: false,
     error: null,
+    isUpdating: false,
     isLoading: true,
     overviewLoaded: false,
     locationLoaded: false,
@@ -70,11 +71,12 @@ class EditPlan extends React.Component {
       plan_detail,
       plan_location: plan_location[0],
     };
+    this.setState({isUpdating:true})
     // console.log(toUpdate)
     //update current plan
     // this.toggleUpdateToast();
-    UpdatePlan(APIServer, plan_id, "all", toUpdate, (data) => {
-      this.setState({
+    await UpdatePlan(APIServer, plan_id, "all", toUpdate, async (data) => {
+      await this.setState({
         redirect: true,
         redirectTo: "/plan/" + this.props.plan_id,
       });
@@ -172,6 +174,13 @@ class EditPlan extends React.Component {
       { plan_startday },
       (data) => {}
     );
+  };
+
+  updateStartdayTime = (day, time) => {
+    const { plan_startday } = this.state;
+    plan_startday[day - 1].start_day = time;
+    this.setState({ plan_startday });
+    this.calPlan(this.state.plan_detail);
   };
 
   updatePlanDetails = async () => {
@@ -501,10 +510,8 @@ class EditPlan extends React.Component {
         // this.setState({ error });
         console.error(error);
       });
-      url =
-      APIServer +
-      "/googleplace/" + toAdd.google_place_id
-      source.droppableId.slice(0, source.droppableId.length - 3);
+    url = APIServer + "/googleplace/" + toAdd.google_place_id;
+    source.droppableId.slice(0, source.droppableId.length - 3);
     await axios
       .get(url)
       .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
@@ -723,14 +730,14 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
     let req7 = axios
-    .get(APIServer + "/city")
-    .then((res) => {
-      this.setState({
-        cities: res.data,
-        cityLoaded: true
-      });
-    })
-    .catch((err) => console.log(err));
+      .get(APIServer + "/city")
+      .then((res) => {
+        this.setState({
+          cities: res.data,
+          cityLoaded: true,
+        });
+      })
+      .catch((err) => console.log(err));
 
     //resolve all requests above
     if (this.state.isLoading)
@@ -744,10 +751,9 @@ class EditPlan extends React.Component {
           console.log(this.state.transports);
 
           await this.calPlan(this.state.plan_detail);
-
         })
         .catch((err) => console.log(err));
-        this.setState({ isLoading: false });
+    this.setState({ isLoading: false });
 
     if (process.env.NODE_ENV === "production") {
       let plan_detail = this.state.plan_detail;
@@ -778,7 +784,8 @@ class EditPlan extends React.Component {
       overviewLoaded,
       locationLoaded,
       cityLoaded,
-      loadPlanOverview
+      loadPlanOverview,
+      isUpdating,
     } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     if (!overviewLoaded) return <div>Loading...</div>;
@@ -786,194 +793,212 @@ class EditPlan extends React.Component {
     else {
       return (
         <React.Fragment>
-          <AttModal
-            detail={this.state.detailsDat}
-            toggle={this.toggleAttModal}
-            isOpen={this.state.showAttModal}
-          />
-          <DragDropContext
-            onDragEnd={({ destination, source }) => {
-              if (!destination) {
-                return;
-              }
+          {this.renderRedirect()}
+          {(() => {
+            if (isUpdating) return <div>Updating...</div>;
+            else
+              return (
+                <React.Fragment>
+                  <AttModal
+                    detail={this.state.detailsDat}
+                    toggle={this.toggleAttModal}
+                    isOpen={this.state.showAttModal}
+                  />
+                  <DragDropContext
+                    onDragEnd={({ destination, source }) => {
+                      if (!destination) {
+                        return;
+                      }
 
-              if (
-                source.droppableId.slice(
-                  source.droppableId.length - 3,
-                  source.droppableId.length
-                ) !== "bar" &&
-                source.droppableId.slice(
-                  source.droppableId.length - 3,
-                  source.droppableId.length
-                ) !== "Bar"
-              )
-                this.reorderCards(source, destination);
-              else this.addCard(source, destination);
-            }}
-          >
-            <div className="editplan-container">
-              <div className="timeline-container">
-                {(() => {
-                  if (locationLoaded && loadPlanOverview)
-                    return (
-                      <EditPlanOverview
-                        {...this.state}
-                        updatePlanOverview={this.updatePlanOverview}
-                        togglePlanCover={this.togglePlanCover}
-                      />
-                    );
-                  return;
-                })()}
+                      if (
+                        source.droppableId.slice(
+                          source.droppableId.length - 3,
+                          source.droppableId.length
+                        ) !== "bar" &&
+                        source.droppableId.slice(
+                          source.droppableId.length - 3,
+                          source.droppableId.length
+                        ) !== "Bar"
+                      )
+                        this.reorderCards(source, destination);
+                      else this.addCard(source, destination);
+                    }}
+                  >
+                    <div className="editplan-container">
+                      <div className="timeline-container">
+                        {(() => {
+                          if (locationLoaded && loadPlanOverview)
+                            return (
+                              <EditPlanOverview
+                                {...this.state}
+                                updatePlanOverview={this.updatePlanOverview}
+                                togglePlanCover={this.togglePlanCover}
+                              />
+                            );
+                          return;
+                        })()}
 
-                <div className="title-bar">
-                  {(() => {
-                    if (locationLoaded)
-                      return <div className="title">{plan_overview.city}</div>;
-                  })()}
-                  <div className="plan" onClick={this.modePlan}>
-                    Plan
-                  </div>
-                  <div className="map" onClick={this.modeMap}>
-                    Map
-                  </div>
-                  <div>
-                    {/* eslint-disable-next-line */}
-                    {(() => {
-                      if (locationLoaded && cityLoaded)
-                        return (
-                          <i
-                            className="fa fa-pencil-square-o fa-fw"
-                            aria-hidden="true"
-                            onClick={this.toggleEditPlanContent}
-                          />
-                        );
-                    })()}
-                  </div>
-                  {/*<button className="white-button" onClick={this.toggleShareModal}>
+                        <div className="title-bar">
+                          {(() => {
+                            if (locationLoaded)
+                              return (
+                                <div className="title">
+                                  {plan_overview.city}
+                                </div>
+                              );
+                          })()}
+                          <div className="plan" onClick={this.modePlan}>
+                            Plan
+                          </div>
+                          <div className="map" onClick={this.modeMap}>
+                            Map
+                          </div>
+                          <div>
+                            {/* eslint-disable-next-line */}
+                            {(() => {
+                              if (locationLoaded && cityLoaded)
+                                return (
+                                  <i
+                                    className="fa fa-pencil-square-o fa-fw"
+                                    aria-hidden="true"
+                                    onClick={this.toggleEditPlanContent}
+                                  />
+                                );
+                            })()}
+                          </div>
+                          {/*<button className="white-button" onClick={this.toggleShareModal}>
                     Share!
                     <span style={{ fontSize: "15px" }}>
                       <br />
                       this plan
                     </span>
                   </button>*/}
-                  {(() => {
-                    if (!isLoading)
-                      return (
-                        <button
-                          className="white-button"
-                          onClick={this.updatePlan}
-                        >
-                          Update!
-                          <span style={{ fontSize: "15px" }}>
-                            <br />
-                            this plan
-                          </span>
-                        </button>
-                      );
-                  })()}
-                </div>
-                {this.renderRedirect()}
-                {(() => {
-                  if (this.state.mode === "plan")
-                    return (
-                      <Timeline
-                        {...this.state}
-                        {...this.props}
-                        addDay={this.addDay}
-                        delDay={this.delDay}
-                        changeDuration={this.changeDuration}
-                        updateTitle={this.updateTitle}
-                        updateDescription={this.updateDescription}
-                        delCard={this.delCard}
-                        editing={true}
-                        toggleAttModal={this.toggleAttModal}
-                        showDetails={this.showDetails}
-                        addFreeTime={this.addFreeTime}
-                        updateNearby={this.updateNearby}
-                      />
-                    );
-                  else if (this.state.mode === "map")
-                    return (
-                      <GGMap {...this.state} {...this.props} editing={true} />
-                    );
-                })()}
-              </div>
-              {(() => {
-                if (this.state.mode === "plan") {
-                  if (locationLoaded)
-                    return (
-                      <div className="attbar-container">
+                          {(() => {
+                            if (!isLoading)
+                              return (
+                                <button
+                                  className="white-button"
+                                  onClick={this.updatePlan}
+                                >
+                                  Update!
+                                  <span style={{ fontSize: "15px" }}>
+                                    <br />
+                                    this plan
+                                  </span>
+                                </button>
+                              );
+                          })()}
+                        </div>
                         {(() => {
-                          if (this.state.loadAttBar)
+                          if (this.state.mode === "plan")
                             return (
-                              <AttBar
+                              <Timeline
+                                {...this.state}
+                                {...this.props}
+                                addDay={this.addDay}
+                                delDay={this.delDay}
+                                changeDuration={this.changeDuration}
+                                updateTitle={this.updateTitle}
+                                updateDescription={this.updateDescription}
+                                delCard={this.delCard}
+                                editing={true}
                                 toggleAttModal={this.toggleAttModal}
                                 showDetails={this.showDetails}
-                                reloadAttBar={this.reloadAttBar}
-                                {...this.state}
+                                addFreeTime={this.addFreeTime}
+                                updateNearby={this.updateNearby}
+                                updateStartdayTime={this.updateStartdayTime}
                               />
                             );
-                          else {
-                            this.reloadAttBar();
-                            return;
-                          }
+                          else if (this.state.mode === "map")
+                            return (
+                              <GGMap
+                                {...this.state}
+                                {...this.props}
+                                editing={true}
+                              />
+                            );
                         })()}
                       </div>
-                    );
-                }
-              })()}
-            </div>
-          </DragDropContext>
-          <Toast isOpen={this.state.updateToast}>
-            <ToastHeader toggle={this.toggleUpdateToast}>
-              Plan updated!
-            </ToastHeader>
-            <ToastBody>
-              If you want to save this plan, please sign-in or copy the url.
-              This plan will now show on 'My plan'.
-            </ToastBody>
-          </Toast>
-          <Toast isOpen={this.state.publishToast}>
-            <ToastHeader toggle={this.togglePublishToast}>
-              Plan published!
-            </ToastHeader>
-            <ToastBody>
-              The plan is opended to public. It will be available for other user
-            </ToastBody>
-          </Toast>
+                      {(() => {
+                        if (this.state.mode === "plan") {
+                          if (locationLoaded)
+                            return (
+                              <div className="attbar-container">
+                                {(() => {
+                                  if (this.state.loadAttBar)
+                                    return (
+                                      <AttBar
+                                        toggleAttModal={this.toggleAttModal}
+                                        showDetails={this.showDetails}
+                                        reloadAttBar={this.reloadAttBar}
+                                        {...this.state}
+                                      />
+                                    );
+                                  else {
+                                    this.reloadAttBar();
+                                    return;
+                                  }
+                                })()}
+                              </div>
+                            );
+                        }
+                      })()}
+                    </div>
+                  </DragDropContext>
+                  <Toast isOpen={this.state.updateToast}>
+                    <ToastHeader toggle={this.toggleUpdateToast}>
+                      Plan updated!
+                    </ToastHeader>
+                    <ToastBody>
+                      If you want to save this plan, please sign-in or copy the
+                      url. This plan will now show on 'My plan'.
+                    </ToastBody>
+                  </Toast>
+                  <Toast isOpen={this.state.publishToast}>
+                    <ToastHeader toggle={this.togglePublishToast}>
+                      Plan published!
+                    </ToastHeader>
+                    <ToastBody>
+                      The plan is opended to public. It will be available for
+                      other user
+                    </ToastBody>
+                  </Toast>
 
-          {modal ? (
-            <div className="share-modal">
-              <Share toggleShareModal={this.toggleShareModal} />
-            </div>
-          ) : (
-            <div></div>
-          )}
+                  {modal ? (
+                    <div className="share-modal">
+                      <Share toggleShareModal={this.toggleShareModal} />
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
 
-          {planCover ? (
-            <div className="upload-plan-cover">
-              <PlanCover
-                togglePlanCover={this.togglePlanCover}
-                fileSelectedHandler={this.fileSelectedHandler}
-                uploadSelectedCover={this.uploadSelectedCover}
-              />
-            </div>
-          ) : (
-            <div></div>
-          )}
+                  {planCover ? (
+                    <div className="upload-plan-cover">
+                      <PlanCover
+                        togglePlanCover={this.togglePlanCover}
+                        fileSelectedHandler={this.fileSelectedHandler}
+                        uploadSelectedCover={this.uploadSelectedCover}
+                      />
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
 
-          {editTitle ? (
-            <div className="edit-plan-modal">
-              <EditPlanContent
-                {...this.state}
-                toggleEditPlanContent={this.toggleEditPlanContent}
-                updatePlanOverview={this.updatePlanOverview}
-                reloadPlanOverview={this.reloadPlanOverview}
-              />
-            </div>
-          ) : (
-            <div></div>
-          )}
+                  {editTitle ? (
+                    <div className="edit-plan-modal">
+                      <EditPlanContent
+                        {...this.state}
+                        toggleEditPlanContent={this.toggleEditPlanContent}
+                        updatePlanOverview={this.updatePlanOverview}
+                        reloadPlanOverview={this.reloadPlanOverview}
+                      />
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </React.Fragment>
+              );
+          })()}
         </React.Fragment>
       );
     }

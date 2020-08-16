@@ -13,6 +13,22 @@ class DayTimeline extends Component {
     this.props.delDay(this.props.day);
   };
 
+  changeHour = (e) => {
+    this.props.updateStartdayTime(
+      this.props.day,
+      e.target.value +
+        this.props.plan_startday[this.props.day - 1].start_day.slice(2, 5)
+    );
+  };
+
+  changeMinute = (e) => {
+    this.props.updateStartdayTime(
+      this.props.day,
+      this.props.plan_startday[this.props.day - 1].start_day.slice(0, 3) +
+        e.target.value
+    );
+  };
+
   render() {
     const { plan_detail, day, editing, isLoading, detailLoaded } = this.props;
     let hours = [
