@@ -20,13 +20,17 @@ class Plan extends React.Component {
     error: null,
     isLoading: true,
     overviewLoaded: false,
+    locationLoaded: false,
+    tagLoaded: false,
+    startdayLoaded: false,
+    detailLoaded: false,
+    reviewLoaded: false,
     modal: false,
     redirect: false,
     redirectTo: "/",
     toastOpen: false,
     transports: [],
     review: "",
-    plan_review: [],
     ratingList: [
       { id: 1, isChecked: false },
       { id: 2, isChecked: false },
@@ -37,6 +41,13 @@ class Plan extends React.Component {
     rating: 0,
     mode: "plan",
     showMobileWarning: false,
+    plan_city: [],
+    plan_detail: [],
+    plan_location: [],
+    plan_overview: {},
+    plan_review: [],
+    plan_startday: [],
+    plan_tag: [],
   };
 
   save = () => {
@@ -229,13 +240,12 @@ class Plan extends React.Component {
     let transports = [];
     // console.log(transports);
     transports = days.reduce(async (acc, day) => {
-      console.log([...(await acc)]);
+      // console.log([...(await acc)]);
       let dayTrans = [];
       let places = this.state.plan_detail.filter((det) => det.day === day);
       let lastPlace = { attraction_name: "Hotel" };
       if (places)
         dayTrans = places.reduce(async (acc1, cur1, idx1) => {
-          
           if (idx1 === 0) lastPlace = { attraction_name: "Hotel" };
           else lastPlace = places[idx1 - 1];
           if (
@@ -252,7 +262,6 @@ class Plan extends React.Component {
                 value: 0,
               },
             ];
-            
           } else {
             let url =
               APIServer +
@@ -281,7 +290,7 @@ class Plan extends React.Component {
         }, []);
       return [...(await acc), [...(await dayTrans)]];
     }, []);
-    console.log([...(await transports)])
+    // console.log([...(await transports)]);
     this.setState({ transports: [...(await transports)] });
     return [...(await transports)];
   };
@@ -350,83 +359,128 @@ class Plan extends React.Component {
   async componentDidMount() {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/load_plan/full?planId=" + plan_id;
-    await axios
-      .get(url)
-      .then(async (result) => {
-        console.log(result.data)
-        await this.setState({ ...result.data });
-        await this.setState({
+    let url = APIServer + "/load_plan/full";
+
+    //request for plan_overview
+    let req1 = axios
+      .get(url + "/overview?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data)
+        this.setState({
+          plan_overview: { ...this.state.plan_overview, ...res.data[0] },
+          overviewLoaded: true,
+        });
+      })
+      .catch((err) => console.log(err));
+
+    // request for plan_location
+    let req2 = axios
+      .get(url + "/location?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data)
+        this.setState({
+          plan_location: res.data,
           plan_overview: {
             ...this.state.plan_overview,
-            city: result.data.plan_city[0].city,
-            city_id: result.data.plan_city[0].city_id,
+            city: res.data[0].city,
+            city_id: res.data[0].city_id,
           },
+          locationLoaded: true,
         });
-        if (result.data.plan_review == null) this.setState({ plan_review: [] });
-        await this.setState({overviewLoaded:true})
       })
-      .catch((error) => {
-        // this.setState({ error });
-        console.log(error);
-      });
-    if (!this.state.plan_overview) {
-      this.setState({ error: true, isLoading: false });
-      return;
-    }
+      .catch((err) => console.log(err));
 
-    let plan_detail = this.state.plan_detail;
-
-    plan_detail = this.state.plan_detail.reduce(async (acc,plan) => {
-      let data = {...plan,}
-      if (plan.google_place_id !== "freetime"){
-      url = APIServer + "/googleplace/" + plan.google_place_id
-      console.log([acc])
-      await axios
-      .get(url)
-      .then(async (result) => {
-        console.log({...plan, ...result.data[0]})
-        data ={...data, ...result.data[0]}
+    //request for plan_tag
+    let req3 = axios
+      .get(url + "/tag?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data);
+        this.setState({ plan_tag: res.data, tagLoaded: true });
       })
-      .catch(async (error) => {
-        // this.setState({ error });
-        console.log(error);
-      })}
-      if (plan.attraction_id === 0) {
-        await axios
-          .get(
-            APIServer +
-              "/attraction/google_id/" +
-              plan.google_place_id
-          )
-          // eslint-disable-next-line
-          .then((res) => {
-            data ={...data, ...res.data[0]}
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      acc = [...await acc, {...data}]
-      return [...await acc]
-    }
-      ,[])
-    this.setState({plan_detail: [...await plan_detail]});
-    // console.log(plan_detail)
+      .catch((err) => console.log(err));
 
-    let days = [];
-    for (let i = 1; i <= this.state.plan_overview.duration; i++) {
-      await days.push(i);
-    }
-    await this.getTransports().then((res) => {console.log(res)}).catch(err => console.log(err));
-    console.log(this.state.transports)
-    await this.setState({ days: days });
-    await this.setState({ isLoading: false });
-    // console.log("Fetching done...");
-    // console.log(this.state.plan_detail, this.state.plan_startday);
-    await this.calPlan([...await this.state.plan_detail]);
+    // request for plan_startday and set no. of days
+    let req4 = axios
+      .get(url + "/startday?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data);
+        let days = res.data.reduce((acc, cur, idx) => [...acc, idx + 1], []);
+        this.setState({
+          plan_startday: res.data,
+          days: days,
+          startdayLoaded: true,
+        });
+      })
+      .catch((err) => console.log(err));
+
+    //request for plan_detail etc.
+    let req5 = axios
+      .get(url + "/attraction?planId=" + plan_id)
+      .then(async (res) => {
+        // console.log(res.data);
+        let plan_detail = res.data.reduce(async (acc, plan) => {
+          let data = { ...plan };
+          if (plan.google_place_id !== "freetime") {
+            url = APIServer + "/googleplace/" + plan.google_place_id;
+            // console.log([acc]);
+            await axios
+              .get(url)
+              .then(async (result) => {
+                // console.log({ ...plan, ...result.data[0] });
+                data = { ...data, ...result.data[0] };
+              })
+              .catch(async (error) => {
+                // this.setState({ error });
+                console.log(error);
+              });
+          }
+          if (plan.attraction_id === 0) {
+            await axios
+              .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
+              // eslint-disable-next-line
+              .then((res) => {
+                data = { ...data, ...res.data[0] };
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          return [...(await acc), { ...data }];
+        }, []);
+        this.setState({
+          plan_detail: [...(await plan_detail)],
+          detailLoaded: true,
+        });
+        // console.log(plan_detail)
+      })
+      .catch((err) => console.log(err));
+
+    //request for plan_review
+    let req6 = axios
+      .get(url + "/review?planId=" + plan_id)
+      .then((res) => {
+        // console.log(res.data);
+        this.setState({ plan_review: res.data, reviewLoaded: true });
+      })
+      .catch((err) => console.log(err));
+
+    if (this.state.isLoading)
+      Promise.all([req1, req2, req3, req4, req5, req6])
+        .then(async () => {
+          await this.getTransports()
+            .then((res) => {
+              // console.log(res);
+            })
+            .catch((err) => console.log(err));
+          console.log(this.state.transports);
+
+          await this.calPlan(this.state.plan_detail);
+
+          this.setState({ isLoading: false });
+        })
+        .catch((err) => console.log(err));
     if (process.env.NODE_ENV === "production") {
-      plan_detail = this.state.plan_detail;
+      let plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {
         await axios
           .get(APIServer + "/googlephoto/" + plan_detail[i].google_place_id)
@@ -449,7 +503,9 @@ class Plan extends React.Component {
       modal,
       ratingList,
       plan_review,
-      overviewLoaded
+      overviewLoaded,
+      locationLoaded,
+      reviewLoaded,
     } = this.state;
     if (!overviewLoaded) return <div>Loading...</div>;
     if (error) return <div>Something went wrong :(</div>;
@@ -474,31 +530,41 @@ class Plan extends React.Component {
           {this.renderEditRedirect()}
           <PlanOverview {...this.state} />
           <div className="title-bar">
-            <div className="title">{plan_overview.city}</div>
+            {(() => {
+              if (locationLoaded)
+                return <div className="title">{plan_overview.city}</div>;
+            })()}
             <div className="plan" onClick={this.modePlan}>
               Plan
             </div>
             <div className="map" onClick={this.modeMap}>
               Map
             </div>
-            <button className="white-button" onClick={this.save}>
-              Save!
-              <span style={{ fontSize: "15px" }}>
-                <br />
-                to device
-              </span>
-            </button>
-            <button
-              style={{ marginLeft: "10px" }}
-              className="white-button2"
-              onClick={this.checkEdit}
-            >
-              Edit!
-              <span style={{ fontSize: "15px" }}>
-                <br />
-                this plan
-              </span>
-            </button>
+            {(() => {
+              if (!isLoading)
+                return (
+                  <React.Fragment>
+                    <button className="white-button" onClick={this.save}>
+                      Save!
+                      <span style={{ fontSize: "15px" }}>
+                        <br />
+                        to device
+                      </span>
+                    </button>
+                    <button
+                      style={{ marginLeft: "10px" }}
+                      className="white-button2"
+                      onClick={this.checkEdit}
+                    >
+                      Edit!
+                      <span style={{ fontSize: "15px" }}>
+                        <br />
+                        this plan
+                      </span>
+                    </button>
+                  </React.Fragment>
+                );
+            })()}
           </div>
           <div>
             <div>
@@ -520,69 +586,75 @@ class Plan extends React.Component {
               </div>
             </div>
           </div>
-          <div className="review">
-            <div style={{ flexGrow: "0.8" }}>
-              <div>Reviews</div>
-              <div>
-                <textarea
-                  className="addReview"
-                  placeholder="add a review"
-                  value={this.state.review}
-                  rows={3}
-                  onChange={this.reviewChanged}
-                />
-              </div>
-              <div>
-                {(() => {
-                  if (plan_review) {
-                    return(
-                  plan_review.map((i) => {
-                    return (
-                      <React.Fragment>
-                        <div className="review-box">
-                          <div>
-                            {i.rating === 0
-                              ? "No rating"
-                              : String.fromCharCode(0x2605).repeat(
-                                  i.rating
-                                )}{" "}
-                          </div>
-                          <div>{i.review === "" ? "No comment" : i.review}</div>
-                        </div>
-                      </React.Fragment>
-                    );
-                  }))
-                  }
-                })()}
-              </div>
-            </div>
-            <div>
-              <div className="rating">
-                <div>Rating</div>
-                {(() =>
-                  ratingList.map((item) => (
-                    <label key={item.id}>
-                      <div className="rating-container">
-                        <input
-                          type="checkbox"
-                          value={item.id}
-                          name={item.id}
-                          checked={item.isChecked}
-                          className="search-rating"
-                          onChange={this.ratingChanged}
-                        />
-                      </div>
-                    </label>
-                  )))()}
-              </div>
-              <input
-                type="submit"
-                value="post"
-                className="postReview"
-                onClick={this.submitReview}
-              />
-            </div>
-          </div>
+          {(() => {
+            if (reviewLoaded)
+              return (
+                <div className="review">
+                  <div style={{ flexGrow: "0.8" }}>
+                    <div>Reviews</div>
+                    <div>
+                      <textarea
+                        className="addReview"
+                        placeholder="add a review"
+                        value={this.state.review}
+                        rows={3}
+                        onChange={this.reviewChanged}
+                      />
+                    </div>
+                    <div>
+                      {(() => {
+                        if (plan_review) {
+                          return plan_review.map((i) => {
+                            return (
+                              <React.Fragment>
+                                <div className="review-box">
+                                  <div>
+                                    {i.rating === 0
+                                      ? "No rating"
+                                      : String.fromCharCode(0x2605).repeat(
+                                          i.rating
+                                        )}{" "}
+                                  </div>
+                                  <div>
+                                    {i.review === "" ? "No comment" : i.review}
+                                  </div>
+                                </div>
+                              </React.Fragment>
+                            );
+                          });
+                        }
+                      })()}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="rating">
+                      <div>Rating</div>
+                      {(() =>
+                        ratingList.map((item) => (
+                          <label key={item.id}>
+                            <div className="rating-container">
+                              <input
+                                type="checkbox"
+                                value={item.id}
+                                name={item.id}
+                                checked={item.isChecked}
+                                className="search-rating"
+                                onChange={this.ratingChanged}
+                              />
+                            </div>
+                          </label>
+                        )))()}
+                    </div>
+                    <input
+                      type="submit"
+                      value="post"
+                      className="postReview"
+                      onClick={this.submitReview}
+                    />
+                  </div>
+                </div>
+              );
+          })()}
           {(() => {
             return (
               <MobileWarningToast

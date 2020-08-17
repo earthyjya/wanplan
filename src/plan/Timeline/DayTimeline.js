@@ -4,6 +4,7 @@ import TransCard from "./TransCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class DayTimeline extends Component {
+
   addDay = () => {
     this.props.addDay(this.props.day);
   };
@@ -29,10 +30,7 @@ class DayTimeline extends Component {
   };
 
   render() {
-    const { day, editing, isLoading } = this.props;
-    const plan_detail = this.props.plan_detail.filter(
-      (plan) => plan.day === day
-    );
+    const { plan_detail, day, editing, isLoading, detailLoaded } = this.props;
     let hours = [
       "00",
       "01",
@@ -73,54 +71,53 @@ class DayTimeline extends Component {
               </button>
               <div className="DayTitle"> Day {day}</div>
               {(() => {
-                if (isLoading)
-                  return <div className="Timeline">Loading...</div>;
+                if (!detailLoaded) return <div>Loading...</div>;
                 else
                   return (
-                    <React.Fragment>
                       <div className="DayInfo">
                         xx places | estimated time: xx | budget: xxxx JPY
                       </div>
-                      <br />
-                      <span>
-                        <select
-                          className="select-startday-hour"
-                          value={this.props.plan_startday[
-                            day - 1
-                          ].start_day.slice(0, 2)}
-                          onChange={this.changeHour}
-                        >
-                          {hours.map((hour) => {
-                            return (
-                              <option value={hour} key={hour}>
-                                {hour}
-                              </option>
-                            );
-                          })}
-                        </select>
-                        :
-                        <select
-                          className="select-startday-minute"
-                          value={this.props.plan_startday[
-                            day - 1
-                          ].start_day.slice(3, 5)}
-                          onChange={this.changeMinute}
-                        >
-                          {minutes.map((minute) => {
-                            return (
-                              <option value={minute} key={minute}>
-                                {minute}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </span>
-                    </React.Fragment>
                   );
               })()}
+              <br />
+              <span>
+                <select
+                  className="select-startday-hour"
+                  value={this.props.plan_startday[day - 1].start_day.slice(
+                    0,
+                    2
+                  )}
+                  onChange={this.changeHour}
+                >
+                  {hours.map((hour) => {
+                    return (
+                      <option value={hour} key={hour}>
+                        {hour}
+                      </option>
+                    );
+                  })}
+                </select>
+                :
+                <select
+                  className="select-startday-minute"
+                  value={this.props.plan_startday[day - 1].start_day.slice(
+                    3,
+                    5
+                  )}
+                  onChange={this.changeMinute}
+                >
+                  {minutes.map((minute) => {
+                    return (
+                      <option value={minute} key={minute}>
+                        {minute}
+                      </option>
+                    );
+                  })}
+                </select>
+              </span>
             </div>
             {(() => {
-              if (isLoading) return <div className="Timeline">Loading...</div>;
+              if (!detailLoaded) return <div> Loading...</div>;
               else
                 return (
                   <div className="DayTimelineContentContainer">
@@ -198,7 +195,9 @@ class DayTimeline extends Component {
                                               this.props.toggleAttModal
                                             }
                                             showDetails={this.props.showDetails}
-                                            updateNearby={this.props.updateNearby}
+                                            updateNearby={
+                                              this.props.updateNearby
+                                            }
                                           />
                                         </div>
                                       )}
@@ -263,7 +262,7 @@ class DayTimeline extends Component {
           <h2>Day {day}</h2>
         </div>
         {(() => {
-          if (isLoading) return <div className="Timeline">Loading...</div>;
+          if (isLoading) return <div >Loading...</div>;
           else
             return (
               <div className="DayTimelineContentContainer">
