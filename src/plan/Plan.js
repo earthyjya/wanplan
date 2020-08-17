@@ -474,18 +474,12 @@ class Plan extends React.Component {
     if (this.state.isLoading)
       Promise.all([req1, req2, req3, req4, req5, req6])
         .then(async () => {
-          await this.getTransports()
-            .then((res) => {
-              // console.log(res);
-            })
-            .catch((err) => console.log(err));
-          console.log(this.state.transports);
-
+          if (this.state.detailLoaded && this.state.startdayLoaded)
           await this.calPlan(this.state.plan_detail);
-
           this.setState({ isLoading: false });
         })
         .catch((err) => console.log(err));
+
     if (process.env.NODE_ENV === "production") {
       let plan_detail = this.state.plan_detail;
       for (let i = 0; i < plan_detail.length; ++i) {

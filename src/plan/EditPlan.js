@@ -751,11 +751,11 @@ class EditPlan extends React.Component {
     if (this.state.isLoading)
       Promise.all([req1, req2, req3, req4, req5, req6, req7])
         .then(async (res) => {
-          
+          if (this.state.detailLoaded && this.state.startdayLoaded)
           await this.calPlan(this.state.plan_detail);
+          this.setState({ isLoading: false });
         })
         .catch((err) => console.log(err));
-    this.setState({ isLoading: false });
 
     if (process.env.NODE_ENV === "production") {
       let plan_detail = this.state.plan_detail;
