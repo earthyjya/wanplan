@@ -71,7 +71,7 @@ class EditPlan extends React.Component {
       plan_detail,
       plan_location: plan_location[0],
     };
-    this.setState({isUpdating:true})
+    this.setState({ isUpdating: true });
     // console.log(toUpdate)
     //update current plan
     // this.toggleUpdateToast();
@@ -216,31 +216,30 @@ class EditPlan extends React.Component {
   getTransports = async () => {
     const { days, plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
-    let transports = [];
+    let transports;
     // console.log(transports);
-    transports = days.reduce(async (acc, day) => {
+
+    // create transports as an array of promises of arrays of promises of the transport detail we need
+    transports = days.map(async (day) => {
+      // dayTrans will become promises of arrays of promises
       let dayTrans = [];
       let places = this.state.plan_detail.filter((det) => det.day === day);
       let lastPlace = { attraction_name: "Hotel" };
       if (places)
-        dayTrans = places.reduce(async (acc1, cur1, idx1) => {
+        dayTrans = places.map(async (place, idx1) => {
           if (idx1 === 0) lastPlace = { attraction_name: "Hotel" };
           else lastPlace = places[idx1 - 1];
           if (
             !lastPlace.google_place_id ||
             !places[idx1].google_place_id ||
-            lastPlace.google_place_id == undefined ||
-            places[idx1].google_place_id == undefined
+            lastPlace.google_place_id == "freetime" ||
+            places[idx1].google_place_id == "freetime"
           ) {
-            acc1 = [
-              ...(await acc1),
-              {
-                key: idx1,
-                text: "No transportation data",
-                value: 0,
-              },
-            ];
-            // console.log([...(await acc1)]);
+            place = {
+              key: idx1,
+              text: "No transportation data",
+              value: 0,
+            };
           } else {
             let url =
               APIServer +
@@ -248,29 +247,38 @@ class EditPlan extends React.Component {
               places[idx1 - 1].google_place_id +
               "/" +
               places[idx1].google_place_id;
-            await axios
+              place = axios
               .get(url)
               .then(async (res) => {
-                acc1 = [
-                  ...(await acc1),
-                  {
-                    text: res.data.duration.text,
-                    mode: res.data.mode,
-                    value: res.data.duration.value / 60,
-                    distance: res.data.distance.text,
-                  },
-                ];
+              return {
+                  text: res.data.duration.text,
+                  mode: res.data.mode,
+                  value: res.data.duration.value / 60,
+                  distance: res.data.distance.text,
+                };
               })
               .catch((err) => {
                 console.log(err);
               });
           }
-          return [...(await acc1)];
-        }, []);
-      return [...(await acc), [...(await dayTrans)]];
-    }, []);
-    this.setState({ transports: [...(await transports)] });
-    return [...(await transports)];
+          console.log(place);
+          // place is promise of each transports detail 
+          return place;
+        });
+      return dayTrans;
+    });
+    
+    //resolve promises
+    //somehow this works
+    Promise.all(transports).then( twoDProms => 
+      Promise.all(twoDProms.map(prom => Promise.all(prom))).then( (res) =>{
+        // console.log(res)
+        this.setState({transports: res})
+        transports = res
+      })
+    )
+      .catch((err) => console.log(err));
+      return transports
   };
 
   publishPlan = () => {
@@ -742,14 +750,8 @@ class EditPlan extends React.Component {
     //resolve all requests above
     if (this.state.isLoading)
       Promise.all([req1, req2, req3, req4, req5, req6, req7])
-        .then(async () => {
-          await this.getTransports()
-            .then((res) => {
-              // console.log(res);
-            })
-            .catch((err) => console.log(err));
-          console.log(this.state.transports);
-
+        .then(async (res) => {
+          
           await this.calPlan(this.state.plan_detail);
         })
         .catch((err) => console.log(err));
