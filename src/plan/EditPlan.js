@@ -213,7 +213,7 @@ class EditPlan extends React.Component {
       });
   };
 
-  getTransports = async () => {
+  getTransports = async (plan_detail) => {
     const { days, plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     let transports;
@@ -223,7 +223,7 @@ class EditPlan extends React.Component {
     transports = days.map(async (day) => {
       // dayTrans will become promises of arrays of promises
       let dayTrans = [];
-      let places = this.state.plan_detail.filter((det) => det.day === day);
+      let places = plan_detail.filter((det) => det.day === day);
       let lastPlace = { attraction_name: "Hotel" };
       if (places)
         dayTrans = places.map(async (place, idx1) => {
@@ -247,10 +247,10 @@ class EditPlan extends React.Component {
               places[idx1 - 1].google_place_id +
               "/" +
               places[idx1].google_place_id;
-              place = axios
+            place = axios
               .get(url)
               .then(async (res) => {
-              return {
+                return {
                   text: res.data.duration.text,
                   mode: res.data.mode,
                   value: res.data.duration.value / 60,
@@ -261,24 +261,25 @@ class EditPlan extends React.Component {
                 console.log(err);
               });
           }
-          console.log(place);
-          // place is promise of each transports detail 
+          // console.log(place);
+          // place is promise of each transports detail
           return place;
         });
       return dayTrans;
     });
-    
+
     //resolve promises
     //somehow this works
-    Promise.all(transports).then( twoDProms => 
-      Promise.all(twoDProms.map(prom => Promise.all(prom))).then( (res) =>{
-        // console.log(res)
-        this.setState({transports: res})
-        transports = res
-      })
-    )
+    Promise.all(transports)
+      .then((twoDProms) =>
+        Promise.all(twoDProms.map((prom) => Promise.all(prom))).then((res) => {
+          // console.log(res)
+          this.setState({ transports: res });
+          transports = res;
+        })
+      )
       .catch((err) => console.log(err));
-      return transports
+    return transports;
   };
 
   publishPlan = () => {
@@ -391,45 +392,48 @@ class EditPlan extends React.Component {
       );
       // find transports between each attraction in each day
       let transports = [];
-      await this.getTransports()
+      await this.getTransports(plan_detail)
         .then((res) => {
           transports = res;
           // console.log(transports);
+          let lastDay = 0;
+          let lastTime = 0;
+          let transTime = 0;
+          let idx = 0;
+          for (i = 0; i < plan_detail.length; i++) {
+            if (plan_detail[i].day !== lastDay) {
+              lastDay = plan_detail[i].day;
+              idx = 0;
+              if (transports[lastDay - 1]) {
+                if (transports[lastDay - 1][idx])
+                  transTime =
+                    Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+                else transTime = 0;
+              }
+              lastTime =
+                Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
+              ++idx;
+            }
+            plan_detail[i].start_time = Int2Str(lastTime);
+            plan_detail[i].end_time = Int2Str(
+              lastTime + plan_detail[i].time_spend
+            );
+            if (transports[lastDay - 1]) {
+              if (transports[lastDay - 1][idx])
+                transTime =
+                  Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+              else transTime = 0;
+            }
+            lastTime = lastTime + plan_detail[i].time_spend + transTime;
+            // console.log(transTime);
+            ++idx;
+          }
+          this.setState({ plan_detail, plan_startday });
         })
         .catch((err) => {
           console.log(err);
         });
-
-      let lastDay = 0;
-      let lastTime = 0;
-      let transTime = 0;
-      let idx = 0;
-      for (i = 0; i < plan_detail.length; i++) {
-        if (plan_detail[i].day !== lastDay) {
-          lastDay = plan_detail[i].day;
-          idx = 0;
-          if (transports[lastDay - 1]) {
-            if (transports[lastDay - 1][idx])
-              transTime =
-                Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-            else transTime = 0;
-          }
-          lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
-          ++idx;
-        }
-        plan_detail[i].start_time = Int2Str(lastTime);
-        plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-        if (transports[lastDay - 1]) {
-          if (transports[lastDay - 1][idx])
-            transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-          else transTime = 0;
-        }
-        lastTime = lastTime + plan_detail[i].time_spend + transTime;
-        // console.log(transTime);
-        ++idx;
-      }
     }
-    this.setState({ plan_detail, plan_startday });
   };
 
   addDay = (day) => {
@@ -507,20 +511,13 @@ class EditPlan extends React.Component {
       attraction_order: index,
       day: Number(droppableId),
     };
+
+    //request for attraction link etc
     let url =
       APIServer +
       "/attraction/google_id/" +
       source.droppableId.slice(0, source.droppableId.length - 3);
-    await axios
-      .get(url)
-      .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
-      .catch((error) => {
-        // this.setState({ error });
-        console.error(error);
-      });
-    url = APIServer + "/googleplace/" + toAdd.google_place_id;
-    source.droppableId.slice(0, source.droppableId.length - 3);
-    await axios
+    let req1 = axios
       .get(url)
       .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
       .catch((error) => {
@@ -528,30 +525,50 @@ class EditPlan extends React.Component {
         console.error(error);
       });
 
-    plan_detail.splice(index, 0, toAdd);
-    let newPlan = plan_startday.reduce(async (acc, day) => {
-      let plans = plan_detail.filter((det) => det.day === day.day);
-      plans = plans.reduce(
-        (acc1, plan, idx) => [...acc1, { ...plan, attraction_order: idx }],
-        []
-      );
-      return [...(await acc), ...plans];
-    }, []);
-    plan_detail = newPlan;
-    this.setState({ plan_detail: [...(await plan_detail)] });
-    // console.log(plan_detail);
-    this.calPlan([...(await plan_detail)]);
+    //request for attraction name and other detail
+    url =
+      APIServer +
+      "/googleplace/" +
+      source.droppableId.slice(0, source.droppableId.length - 3);
+    let req2 = axios
+      .get(url)
+      .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
+      .catch((error) => {
+        // this.setState({ error });
+        console.error(error);
+      });
+
+    //request for google photo in production stage
+    let req3 = null;
     if (process.env.NODE_ENV === "production") {
-      await axios
-        .get(APIServer + "/googlephoto/" + plan_detail[index].google_place_id)
-        .then((res) => {
-          plan_detail[index] = { ...plan_detail[index], ...res.data[0] };
-        })
+      req3 = axios
+        .get(
+          APIServer +
+            "/googlephoto/" +
+            source.droppableId.slice(0, source.droppableId.length - 3)
+        )
+        .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
         .catch((err) => {
           console.log(err);
         });
-      this.setState(plan_detail);
     }
+
+    //resolve all requests
+    Promise.all([req1, req2, req3])
+      .then(async (res) => {
+        // console.log(res);
+        plan_detail = plan_detail.map( plan => {
+          if (plan.attraction_order >= index)
+          return {...plan, attraction_order: plan.attraction_order+1}
+          else return plan
+        })
+        // console.log(plan_detail)
+        plan_detail.splice(index, 0, toAdd);
+        // console.log(plan_detail)
+        this.setState(plan_detail);
+        this.calPlan(plan_detail);
+      })
+      .catch((err) => console.log(err));
   };
 
   delCard = (index) => {
@@ -561,7 +578,7 @@ class EditPlan extends React.Component {
     this.calPlan(plan_detail);
   };
 
-  addFreeTime = async (order, day) => {
+  addFreeTime = (order, day) => {
     // console.log(`adding free time`);
     let { plan_detail, plan_startday } = this.state;
     const { plan_id } = this.props;
@@ -574,19 +591,14 @@ class EditPlan extends React.Component {
       day: day,
       google_place_id: "freetime",
     };
+    plan_detail = plan_detail.map( plan => {
+      if (plan.attraction_order >= order)
+      return {...plan, attraction_order: plan.attraction_order+1}
+      else return plan
+    })
     plan_detail.splice(order, 0, toAdd);
-    let newPlan = plan_startday.reduce(async (acc, day) => {
-      let plans = plan_detail.filter((det) => det.day === day.day);
-      plans = plans.reduce(
-        (acc1, plan, idx) => [...acc1, { ...plan, attraction_order: idx }],
-        []
-      );
-      return [...(await acc), ...plans];
-    }, []);
-    plan_detail = newPlan;
-    this.setState({ plan_detail: [...(await plan_detail)] });
-    // console.log(plan_detail);
-    this.calPlan([...(await plan_detail)]);
+    this.setState(plan_detail);
+    this.calPlan(plan_detail);
   };
 
   changeDuration = (source, newDuration) => {
@@ -752,7 +764,7 @@ class EditPlan extends React.Component {
       Promise.all([req1, req2, req3, req4, req5, req6, req7])
         .then(async (res) => {
           if (this.state.detailLoaded && this.state.startdayLoaded)
-          await this.calPlan(this.state.plan_detail);
+            await this.calPlan(this.state.plan_detail);
           this.setState({ isLoading: false });
         })
         .catch((err) => console.log(err));
