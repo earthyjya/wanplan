@@ -32,6 +32,8 @@ class EditPlan extends React.Component {
     detailLoaded: false,
     reviewLoaded: false,
     cityLoaded: false,
+    nearybyLoaded: false,
+    transLoaded: false,
     loadAttBar: true,
     loadPlanOverview: true,
     modal: false,
@@ -54,6 +56,7 @@ class EditPlan extends React.Component {
     plan_review: [],
     plan_startday: [],
     plan_tag: [],
+    nearbyPlaces: [],
   };
 
   updatePlan = async () => {
@@ -167,7 +170,6 @@ class EditPlan extends React.Component {
     const { plan_startday } = this.state;
     plan_startday[day - 1].start_day = time;
     this.setState({ plan_startday });
-    this.calPlan(this.state.plan_detail);
   };
 
   updatePlanStartday = async () => {
@@ -213,14 +215,14 @@ class EditPlan extends React.Component {
       });
   };
 
-  getTransports = async (plan_detail) => {
+  getTransports = (plan_detail, setTime) => {
     const { days, plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     let transports;
     // console.log(transports);
 
     // create transports as an array of promises of arrays of promises of the transport detail we need
-    transports = days.map(async (day) => {
+    transports = days.map((day) => {
       // dayTrans will become promises of arrays of promises
       let dayTrans = [];
       let places = plan_detail.filter((det) => det.day === day);
@@ -249,7 +251,7 @@ class EditPlan extends React.Component {
               places[idx1].google_place_id;
             place = axios
               .get(url)
-              .then(async (res) => {
+              .then((res) => {
                 return {
                   text: res.data.duration.text,
                   mode: res.data.mode,
@@ -270,16 +272,16 @@ class EditPlan extends React.Component {
 
     //resolve promises
     //somehow this works
-    Promise.all(transports)
+    axios
+      .all(transports)
       .then((twoDProms) =>
-        Promise.all(twoDProms.map((prom) => Promise.all(prom))).then((res) => {
+        axios.all(twoDProms.map((prom) => axios.all(prom))).then((res) => {
           // console.log(res)
           this.setState({ transports: res });
-          transports = res;
+          setTime(res);
         })
       )
       .catch((err) => console.log(err));
-    return transports;
   };
 
   publishPlan = () => {
@@ -375,8 +377,7 @@ class EditPlan extends React.Component {
     }
   };
 
-  calPlan = async (plan_detail) => {
-    //// Need to be updated when transportations are added
+  calPlan = (plan_detail) => {
     let { plan_startday } = this.state;
     if (plan_detail) {
       let i = 0;
@@ -391,48 +392,47 @@ class EditPlan extends React.Component {
         []
       );
       // find transports between each attraction in each day
-      let transports = [];
-      await this.getTransports(plan_detail)
-        .then((res) => {
-          transports = res;
-          // console.log(transports);
-          let lastDay = 0;
-          let lastTime = 0;
-          let transTime = 0;
-          let idx = 0;
-          for (i = 0; i < plan_detail.length; i++) {
-            if (plan_detail[i].day !== lastDay) {
-              lastDay = plan_detail[i].day;
-              idx = 0;
-              if (transports[lastDay - 1]) {
-                if (transports[lastDay - 1][idx])
-                  transTime =
-                    Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-                else transTime = 0;
-              }
-              lastTime =
-                Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
-              ++idx;
-            }
-            plan_detail[i].start_time = Int2Str(lastTime);
-            plan_detail[i].end_time = Int2Str(
-              lastTime + plan_detail[i].time_spend
-            );
+      this.getTransports(plan_detail, (transports) => {
+        let lastDay = 0;
+        let lastTime = 0;
+        let transTime = 0;
+        let idx = 0;
+        for (i = 0; i < plan_detail.length; i++) {
+          if (plan_detail[i].day !== lastDay) {
+            lastDay = plan_detail[i].day;
+            idx = 0;
             if (transports[lastDay - 1]) {
               if (transports[lastDay - 1][idx])
                 transTime =
                   Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
               else transTime = 0;
             }
-            lastTime = lastTime + plan_detail[i].time_spend + transTime;
-            // console.log(transTime);
+            lastTime =
+              Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
             ++idx;
           }
-          this.setState({ plan_detail, plan_startday });
-        })
-        .catch((err) => {
-          console.log(err);
+          plan_detail[i].start_time = Int2Str(lastTime);
+          plan_detail[i].end_time = Int2Str(
+            lastTime + plan_detail[i].time_spend
+          );
+          if (transports[lastDay - 1]) {
+            if (transports[lastDay - 1][idx])
+              transTime =
+                Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+            else transTime = 0;
+          }
+          lastTime = lastTime + plan_detail[i].time_spend + transTime;
+          // console.log(transTime);
+          ++idx;
+        }
+        // console.log(plan_detail)
+        this.setState({
+          plan_detail: plan_detail,
+          plan_startday,
+          isLoading: false,
+          transLoaded: true,
         });
+      });
     }
   };
 
@@ -455,7 +455,7 @@ class EditPlan extends React.Component {
       plan_overview,
       plan_startday,
     });
-    this.calPlan(plan_detail);
+    setTimeout(this.calPlan(plan_detail), 15);
     this.updatePlanOverview(plan_overview, false);
     this.updatePlanStartday();
   };
@@ -476,7 +476,7 @@ class EditPlan extends React.Component {
       plan_overview,
       plan_startday,
     });
-    this.calPlan(plan_detail);
+    setTimeout(this.calPlan(plan_detail), 15);
     this.updatePlanOverview(plan_overview, false);
     this.updatePlanStartday();
   };
@@ -493,18 +493,22 @@ class EditPlan extends React.Component {
     if (a < b && daya !== dayb && b !== 0) b -= 1;
     plan_detail.splice(b, 0, removed);
     plan_detail.sort((a, b) => a.day - b.day);
+    this.setState(plan_detail);
     // console.log(plan_detail);
-    this.calPlan(plan_detail);
+    this.setState({ transLoaded: false });
+    setTimeout(this.calPlan(plan_detail), 15);
   };
 
-  addCard = async (source, destination) => {
+  addCard = (source, destination) => {
     // console.log("addingCard");
     let { droppableId, index } = destination;
     // console.log(source, destination);
     let { plan_detail, plan_startday } = this.state;
+    // console.log(this.state.nearbyPlaces[source.index])
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let toAdd = {
+      attraction_name: this.state.nearbyPlaces[source.index].name,
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
       description: "",
@@ -512,70 +516,79 @@ class EditPlan extends React.Component {
       day: Number(droppableId),
     };
 
-    //request for attraction link etc
-    let url =
-      APIServer +
-      "/attraction/google_id/" +
-      source.droppableId.slice(0, source.droppableId.length - 3);
-    let req1 = axios
-      .get(url)
-      .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
-      .catch((error) => {
-        // this.setState({ error });
-        console.error(error);
-      });
+    //add at first to make smooth exp
+    plan_detail = plan_detail.map((plan) => {
+      if (plan.attraction_order >= index)
+        return { ...plan, attraction_order: plan.attraction_order + 1 };
+      else return plan;
+    });
+    plan_detail.splice(index, 0, toAdd);
+    this.setState({ plan_detail: plan_detail });
+    // console.log(plan_detail);
 
-    //request for attraction name and other detail
-    url =
-      APIServer +
-      "/googleplace/" +
-      source.droppableId.slice(0, source.droppableId.length - 3);
-    let req2 = axios
-      .get(url)
-      .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
-      .catch((error) => {
-        // this.setState({ error });
-        console.error(error);
-      });
-
-    //request for google photo in production stage
-    let req3 = null;
-    if (process.env.NODE_ENV === "production") {
-      req3 = axios
-        .get(
-          APIServer +
-            "/googlephoto/" +
-            source.droppableId.slice(0, source.droppableId.length - 3)
-        )
+    this.setState({ transLoaded: false });
+    setTimeout(() => {
+      //request for attraction link etc
+      let url =
+        APIServer +
+        "/attraction/google_id/" +
+        source.droppableId.slice(0, source.droppableId.length - 3);
+      let req1 = axios
+        .get(url)
         .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          // this.setState({ error });
+          console.error(error);
         });
-    }
 
-    //resolve all requests
-    Promise.all([req1, req2, req3])
-      .then(async (res) => {
-        // console.log(res);
-        plan_detail = plan_detail.map( plan => {
-          if (plan.attraction_order >= index)
-          return {...plan, attraction_order: plan.attraction_order+1}
-          else return plan
+      //request for attraction name and other detail
+      url =
+        APIServer +
+        "/googleplace/" +
+        source.droppableId.slice(0, source.droppableId.length - 3);
+      let req2 = axios
+        .get(url)
+        .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
+        .catch((error) => {
+          // this.setState({ error });
+          console.error(error);
+        });
+
+      //request for google photo in production stage
+      let req3 = null;
+      if (process.env.NODE_ENV === "production") {
+        req3 = axios
+          .get(
+            APIServer +
+              "/googlephoto/" +
+              source.droppableId.slice(0, source.droppableId.length - 3)
+          )
+          .then((result) => (toAdd = { ...toAdd, ...result.data[0] }))
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      //resolve all requests
+      axios
+        .all([req1, req2, req3])
+        .then(async (res) => {
+          plan_detail.splice(index, 1);
+          plan_detail.splice(index, 0, toAdd);
+          // console.log(plan_detail)
+          this.setState(plan_detail);
+          this.calPlan(plan_detail);
         })
-        // console.log(plan_detail)
-        plan_detail.splice(index, 0, toAdd);
-        // console.log(plan_detail)
-        this.setState(plan_detail);
-        this.calPlan(plan_detail);
-      })
-      .catch((err) => console.log(err));
+        .catch((err) => console.log(err));
+    }, 15);
   };
 
   delCard = (index) => {
     const { plan_detail } = this.state;
     plan_detail.splice(index, 1);
     this.setState({ plan_detail });
-    this.calPlan(plan_detail);
+    this.setState({ transLoaded: false });
+    setTimeout(this.calPlan(plan_detail), 15);
   };
 
   addFreeTime = (order, day) => {
@@ -591,20 +604,21 @@ class EditPlan extends React.Component {
       day: day,
       google_place_id: "freetime",
     };
-    plan_detail = plan_detail.map( plan => {
+    plan_detail = plan_detail.map((plan) => {
       if (plan.attraction_order >= order)
-      return {...plan, attraction_order: plan.attraction_order+1}
-      else return plan
-    })
+        return { ...plan, attraction_order: plan.attraction_order + 1 };
+      else return plan;
+    });
     plan_detail.splice(order, 0, toAdd);
     this.setState(plan_detail);
-    this.calPlan(plan_detail);
+    this.setState({ transLoaded: false });
+    setTimeout(this.calPlan(plan_detail), 15);
   };
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
     plan_detail[source].time_spend = Number(newDuration);
-    this.calPlan(plan_detail);
+    setTimeout(this.calPlan(plan_detail), 15);
   };
 
   updateDescription = (source, newDescription) => {
@@ -623,6 +637,105 @@ class EditPlan extends React.Component {
 
   updateNearby = (dat) => {
     this.setState({ nearbyCenter: dat });
+  };
+
+  placeNearbyCity = async () => {
+    let cities = [
+      {
+        city_id: 13,
+        city: "Fukuoka",
+        lat: 33.5901838,
+        long: 130.401718,
+      },
+      {
+        city_id: 6,
+        city: "Himeji",
+        lat: 34.815147,
+        long: 134.685349,
+      },
+      {
+        city_id: 5,
+        city: "Hiroshima",
+        lat: 34.385204,
+        long: 132.455292,
+      },
+      {
+        city_id: 2,
+        city: "Kanazawa",
+        lat: 36.560001,
+        long: 136.640015,
+      },
+      {
+        city_id: 7,
+        city: "Kobe",
+        lat: 34.688896,
+        long: 135.193977,
+      },
+      {
+        city_id: 8,
+        city: "Kyoto",
+        lat: 35.01858,
+        long: 135.763835,
+      },
+      {
+        city_id: 1,
+        city: "Nagoya",
+        lat: 35.155397,
+        long: 136.903381,
+      },
+      {
+        city_id: 9,
+        city: "Osaka",
+        lat: 34.685293,
+        long: 135.514694,
+      },
+      {
+        city_id: 15,
+        city: "Sendai",
+        lat: 38.266651,
+        long: 140.869446,
+      },
+      {
+        city_id: 3,
+        city: "Shizuoka",
+        lat: 34.977119,
+        long: 138.383087,
+      },
+      {
+        city_id: 12,
+        city: "Tokyo",
+        lat: 35.6803997,
+        long: 139.7690174,
+      },
+      {
+        city_id: 11,
+        city: "Yokohama",
+        lat: 35.443707,
+        long: 139.638031,
+      },
+      { city: "Hatsukaichi", city_id: 4, lat: 34.348505, long: 132.331833 },
+      { city: "Suita", city_id: 10, lat: 34.759779, long: 135.515799 },
+      { city: "Naha", city_id: 14, lat: 26.20047, long: 127.728577 },
+    ];
+    const APIServer = process.env.REACT_APP_APIServer;
+    let cityLat = cities.filter(
+      (location) => location.city == this.state.plan_overview.city
+    )[0].lat;
+    let cityLong = cities.filter(
+      (location) => location.city == this.state.plan_overview.city
+    )[0].long;
+    let url = APIServer + "/googlenearby?lat=" + cityLat + "&lng=" + cityLong;
+    // console.log(url);
+    await axios
+      .get(url)
+      .then((res) => {
+        // console.log(res.data);
+        this.setState({ nearbyPlaces: res.data, nearbyLoaded: true });
+      })
+      .catch((err) => {
+        // this.setState({ error: err });
+        console.log(err);
+      });
   };
 
   renderRedirect = () => {
@@ -700,46 +813,75 @@ class EditPlan extends React.Component {
       .catch((err) => console.log(err));
 
     //request for plan_detail etc.
-    let req5 = axios
-      .get(url + "/attraction?planId=" + plan_id)
-      .then(async (res) => {
-        // console.log(res.data);
-        let plan_detail = res.data.reduce(async (acc, plan) => {
-          let data = { ...plan };
-          if (plan.google_place_id !== "freetime") {
-            url = APIServer + "/googleplace/" + plan.google_place_id;
-            // console.log([acc]);
-            await axios
-              .get(url)
-              .then(async (result) => {
-                // console.log({ ...plan, ...result.data[0] });
-                data = { ...data, ...result.data[0] };
-              })
-              .catch(async (error) => {
-                // this.setState({ error });
-                console.log(error);
+    let req5 = new Promise((response, rej) =>
+      axios
+        .get(url + "/attraction?planId=" + plan_id)
+        .then(async (res) => {
+          // console.log(res.data);
+
+          let plan_detail = res.data.map((plan) => {
+            // console.log(plan);
+            let reqPlace = { ...plan };
+            let reqPhoto = { ...plan };
+            let data = { ...plan };
+            if (data.google_place_id !== "freetime") {
+              url = APIServer + "/googleplace/" + plan.google_place_id;
+
+              reqPlace = axios
+                .get(url)
+                .then((result) => {
+                  // console.log({ ...data, ...result.data[0] })
+                  data = { ...data, ...result.data[0] };
+                  if (result.attraction_id === 0) {
+                    axios
+                      .get(
+                        APIServer +
+                          "/attraction/google_id/" +
+                          plan.google_place_id
+                      )
+                      .then((res) => {
+                        console.log(data, res.data[0]);
+                        data = { ...data, ...res.data[0] };
+                        return data;
+                      });
+                    // eslint-disable-next-line
+                  } else return data;
+                })
+                .catch((error) => {
+                  // this.setState({ error });
+                  console.log(error);
+                });
+            }
+
+            if (process.env.NODE_ENV === "production") {
+              reqPhoto = axios
+                .get(APIServer + "/googlephoto/" + plan.google_place_id)
+                .then((res) => {
+                  data = { ...data, ...res.data[0] };
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+            return [reqPlace, reqPhoto];
+          });
+          let plans = [];
+          // console.log( plan_detail);
+          Promise.all(plan_detail.map((reqArr) => Promise.all(reqArr))).then(
+            (result) => {
+              plans = result.map((res) => {
+                res = res.reduce((acc, dat) => {
+                  return { ...acc, ...dat };
+                }, {});
+                return res;
               });
-          }
-          if (plan.attraction_id === 0) {
-            await axios
-              .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
-              // eslint-disable-next-line
-              .then((res) => {
-                data = { ...data, ...res.data[0] };
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-          return [...(await acc), { ...data }];
-        }, []);
-        this.setState({
-          plan_detail: [...(await plan_detail)],
-          detailLoaded: true,
-        });
-        // console.log(plan_detail)
-      })
-      .catch((err) => console.log(err));
+              this.setState({ plan_detail: plans, detailLoaded: true });
+              response(plans);
+            }
+          );
+        })
+        .catch((err) => console.log(err))
+    );
 
     //request for plan_review
     let req6 = axios
@@ -749,6 +891,8 @@ class EditPlan extends React.Component {
         this.setState({ plan_review: res.data, reviewLoaded: true });
       })
       .catch((err) => console.log(err));
+
+    // request for city
     let req7 = axios
       .get(APIServer + "/city")
       .then((res) => {
@@ -759,30 +903,27 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    //resolve all requests above
-    if (this.state.isLoading)
-      Promise.all([req1, req2, req3, req4, req5, req6, req7])
-        .then(async (res) => {
-          if (this.state.detailLoaded && this.state.startdayLoaded)
-            await this.calPlan(this.state.plan_detail);
-          this.setState({ isLoading: false });
-        })
-        .catch((err) => console.log(err));
+    //resolve req1 (overview) and req3 (location)
+    // then search for nearby places
+    Promise.all([req1, req2])
+      .then(() => {
+        if (this.state.overviewLoaded && this.state.locationLoaded)
+          setTimeout(() => this.placeNearbyCity(), 15);
+      })
+      .catch((err) => console.log(err));
 
-    if (process.env.NODE_ENV === "production") {
-      let plan_detail = this.state.plan_detail;
-      for (let i = 0; i < plan_detail.length; ++i) {
-        await axios
-          .get(APIServer + "/googlephoto/" + plan_detail[i].google_place_id)
-          .then((res) => {
-            plan_detail[i] = { ...plan_detail[i], ...res.data[0] };
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      this.setState(plan_detail);
-    }
+    //resolve req4(planstartday) and req5(plandetail)
+    Promise.all([req4, req5])
+      .then((res) => {
+        // console.log(res)
+        if (this.state.startdayLoaded && this.state.detailLoaded)
+          setTimeout(this.calPlan(res[1]), 15);
+      })
+      .catch((err) => console.log(err));
+
+    //resolve other requests
+    Promise.all([req3, req6, req7]).catch((err) => console.log(err));
+
     this.toggleAttModal = this.toggleAttModal.bind(this);
   }
 

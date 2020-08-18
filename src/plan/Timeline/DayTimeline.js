@@ -4,7 +4,6 @@ import TransCard from "./TransCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class DayTimeline extends Component {
-
   addDay = () => {
     this.props.addDay(this.props.day);
   };
@@ -74,9 +73,9 @@ class DayTimeline extends Component {
                 if (!detailLoaded) return <div>Loading...</div>;
                 else
                   return (
-                      <div className="DayInfo">
-                        xx places | estimated time: xx | budget: xxxx JPY
-                      </div>
+                    <div className="DayInfo">
+                      xx places | estimated time: xx | budget: xxxx JPY
+                    </div>
                   );
               })()}
               <br />
@@ -166,6 +165,7 @@ class DayTimeline extends Component {
                                                 ]
                                               : null
                                           }
+                                          transLoaded={this.props.transLoaded}
                                         />
                                       );
                                     })()}
@@ -233,6 +233,7 @@ class DayTimeline extends Component {
                                       transport={{
                                         text: "No transportation data",
                                       }}
+                                      transLoaded={this.props.transLoaded}
                                     />
                                   );
                                 }
@@ -262,7 +263,7 @@ class DayTimeline extends Component {
           <h2>Day {day}</h2>
         </div>
         {(() => {
-          if (isLoading) return <div >Loading...</div>;
+          if (isLoading) return <div>Loading...</div>;
           else
             return (
               <div className="DayTimelineContentContainer">
@@ -295,6 +296,7 @@ class DayTimeline extends Component {
                               ]
                             : null
                         }
+                        transLoaded={this.props.transLoaded}
                       />
                       <AttCard
                         detail={detail}
@@ -313,6 +315,7 @@ class DayTimeline extends Component {
                           start={plan_detail[plan_detail.length - 1]}
                           destination={{ attraction_name: "Hotel" }}
                           transport={{ text: "No transportation data" }}
+                          transLoaded={this.props.transLoaded}
                         />
                       );
                     }

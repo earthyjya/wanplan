@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class TransCard extends Component {
   render() {
-    const { start, destination, transport } = this.props;
-    if (!start || !destination)
+    const { start, destination, transport, transLoaded } = this.props;
+    if (!start && destination.attraction_name === "Hotel" )
       return (
         <div className="TransCardTimeContainer">
           <div className="Transcard">
@@ -17,7 +17,7 @@ class TransCard extends Component {
       <div className="TransCardTimeContainer">
         <div className="Transcard">
           {(() => {
-            if (transport) {
+            if (transport && transLoaded) {
               if (transport.text === "No transportation data")
                 return (
                   <div className="no-transport">No transportation data</div>
