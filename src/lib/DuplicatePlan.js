@@ -1,10 +1,5 @@
 import axios from "axios";
-export default async function DuplicatePlan(
-  APIServer,
-  oldPlanId,
-  user_id,
-  func
-) {
+export default async function DuplicatePlan (APIServer, oldPlanId, user_id) {
   // Duplicate plan_overview
   let newPlanId = null;
   let data = {};
@@ -18,9 +13,7 @@ export default async function DuplicatePlan(
       //  console.log("new plan id is" + newPlanId)
       data.plan_overview = result.data;
     })
-    .catch((error) => {
-      //  this.setState({ error });
-    });
+    .catch((error) => console.log(error));
 
   let urlStartday = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
   let urlDetail = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
@@ -28,21 +21,18 @@ export default async function DuplicatePlan(
 
   //duplicate plan_startday plan_detail and plan_location
 
-  await axios
-    .all([
-      axios.post(urlStartday),
-      axios.post(urlDetail),
-      axios.post(urlLocation),
-    ])
-    .then(
-      axios.spread((...res) => {
-        data.plan_startday = res[0].data;
-        data.plan_detail = res[1].data;
-        data.plan_location = res[2].data;
-      })
-    )
+  await Promise.all([
+    axios.post(urlStartday),
+    axios.post(urlDetail),
+    axios.post(urlLocation),
+  ])
+    .then((res) => {
+      data.plan_startday = res[0].data;
+      data.plan_detail = res[1].data;
+      data.plan_location = res[2].data;
+    })
     .catch((err) => console.log(err));
 
-  await func(data);
+  return data;
   //  console.log(data)
 }

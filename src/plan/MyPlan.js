@@ -73,7 +73,7 @@ class MyPlan extends Component {
     localStorage.setItem("planlist", JSON.stringify(_planlist));
     this.setState({ cachePlan: _planlist });
     const APIServer = process.env.REACT_APP_APIServer;
-    RemovePlan(APIServer, planId, (data) => {})
+    RemovePlan(APIServer, planId)
   };
 
   RedirectFunc = (plan_id) => {

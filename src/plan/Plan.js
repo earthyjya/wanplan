@@ -86,8 +86,7 @@ class Plan extends React.Component {
         // console.log("try to save to" + user_id);
         //Duplicate plan overview etc.
         this.setState({ isLoading: true });
-        DuplicatePlan(APIServer, oldPlanId, user_id, async (data) => {
-          // console.log(data);
+        let data = await DuplicatePlan(APIServer, oldPlanId, user_id);
           savedplan = { ...data.plan_overview, plan_id: data.plan_overview.id };
           if (!isLoggedIn) {
             if (_planlist === null || _planlist === []) {
@@ -109,7 +108,7 @@ class Plan extends React.Component {
             },
             isLoading: false,
           });
-        });
+        
       }
     }
   };

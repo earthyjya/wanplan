@@ -138,23 +138,15 @@ class App extends Component {
       _planlist.map((plan) => {
         let oldPlanId = plan.plan_id;
         let originalId = plan.plan_original;
-        // console.log("old plan id is" + oldPlanId);
-        DuplicatePlan(APIServer, oldPlanId, user_id, async (data) => {
-          //   _planlist.push({
-          //     ...data.plan_overview,
-          //     plan_id: data.plan_overview.id,
-          //   })
-          // console.log("duplicated" + oldPlanId + "to" + data.plan_overview.id);
+        DuplicatePlan(APIServer, oldPlanId, user_id).then((data) => {
           let url = APIServer + "/plan_overview/" + data.plan_overview.id;
-          await axios
+          axios
             .put(url, { ...data.plan_overview, original_id: originalId })
             .then((result) => {
               // console.log(result);
             })
             .catch((err) => console.log(err));
-        });
-        RemovePlan(APIServer, oldPlanId, (data) => {
-          // console.log(data);
+          RemovePlan(APIServer, oldPlanId);
         });
       });
       localStorage.setItem("planlist", JSON.stringify([]));
