@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import mapStyles from "./mapStyles";
 import { Row, Col, Container, Toast, ToastBody, ToastHeader } from "reactstrap";
 import GGMapTimeline from "./GGMapTimeline.js";
@@ -8,6 +8,7 @@ import "../../scss/GGMap.scss";
 class GGMap extends Component {
 	state = {
 		focusDay: 1,
+		activeMarker: null,
 	};
 
 	setFocusDay = (d) => {
@@ -49,7 +50,11 @@ class GGMap extends Component {
 												lat: detail.geometry.location.lat,
 												lng: detail.geometry.location.lng,
 											}}
-										/>
+										>
+											<InfoWindow>
+												<div>{detail.attraction_name}</div>
+											</InfoWindow>
+										</Marker>
 									);
 								return null;
 							})}
