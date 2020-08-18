@@ -216,7 +216,7 @@ class EditPlan extends React.Component {
       });
   };
 
-  getTransports = (plan_detail, setTime) => {
+  getTransports = async (plan_detail) => {
     const { days, plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     let transports;
@@ -273,16 +273,17 @@ class EditPlan extends React.Component {
 
     //resolve promises
     //somehow this works
-    axios
-      .all(transports)
+    let results = await Promise.all(transports)
       .then((twoDProms) =>
-        axios.all(twoDProms.map((prom) => axios.all(prom))).then((res) => {
-          // console.log(res)
-          this.setState({ transports: res });
-          setTime(res);
-        })
+        Promise.all(twoDProms.map((prom) => axios.all(prom)))
       )
+      .then((res) => {
+        // console.log(res)
+        return res;
+      })
       .catch((err) => console.log(err));
+    this.setState({ transports: results });
+    return results;
   };
 
   publishPlan = () => {
@@ -378,7 +379,7 @@ class EditPlan extends React.Component {
     }
   };
 
-  calPlan = (plan_detail) => {
+  calPlan = async (plan_detail) => {
     let { plan_startday } = this.state;
     if (plan_detail) {
       let i = 0;
@@ -393,46 +394,41 @@ class EditPlan extends React.Component {
         []
       );
       // find transports between each attraction in each day
-      this.getTransports(plan_detail, (transports) => {
-        let lastDay = 0;
-        let lastTime = 0;
-        let transTime = 0;
-        let idx = 0;
-        for (i = 0; i < plan_detail.length; i++) {
-          if (plan_detail[i].day !== lastDay) {
-            lastDay = plan_detail[i].day;
-            idx = 0;
-            if (transports[lastDay - 1]) {
-              if (transports[lastDay - 1][idx])
-                transTime =
-                  Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-              else transTime = 0;
-            }
-            lastTime =
-              Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
-            ++idx;
-          }
-          plan_detail[i].start_time = Int2Str(lastTime);
-          plan_detail[i].end_time = Int2Str(
-            lastTime + plan_detail[i].time_spend
-          );
+      let transports = await this.getTransports(plan_detail);
+      let lastDay = 0;
+      let lastTime = 0;
+      let transTime = 0;
+      let idx = 0;
+      for (i = 0; i < plan_detail.length; i++) {
+        if (plan_detail[i].day !== lastDay) {
+          lastDay = plan_detail[i].day;
+          idx = 0;
           if (transports[lastDay - 1]) {
             if (transports[lastDay - 1][idx])
               transTime =
                 Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
             else transTime = 0;
           }
-          lastTime = lastTime + plan_detail[i].time_spend + transTime;
-          // console.log(transTime);
+          lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
           ++idx;
         }
-        // console.log(plan_detail)
-        this.setState({
-          plan_detail: plan_detail,
-          plan_startday,
-          isLoading: false,
-          transLoaded: true,
-        });
+        plan_detail[i].start_time = Int2Str(lastTime);
+        plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
+        if (transports[lastDay - 1]) {
+          if (transports[lastDay - 1][idx])
+            transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
+          else transTime = 0;
+        }
+        lastTime = lastTime + plan_detail[i].time_spend + transTime;
+        // console.log(transTime);
+        ++idx;
+      }
+      // console.log(plan_detail)
+      this.setState({
+        plan_detail: plan_detail,
+        plan_startday,
+        isLoading: false,
+        transLoaded: true,
       });
     }
   };
@@ -500,7 +496,7 @@ class EditPlan extends React.Component {
     setTimeout(this.calPlan(plan_detail), 15);
   };
 
-  addCard = (source, destination) => {
+  addCard = async (source, destination) => {
     // console.log("addingCard");
     let { droppableId, index } = destination;
     console.log(source, destination);
@@ -547,7 +543,7 @@ class EditPlan extends React.Component {
     // console.log(plan_detail);
 
     this.setState({ transLoaded: false });
-    setTimeout(() => {
+    setTimeout(async () => {
       //request for attraction link etc
       let url =
         APIServer +
@@ -590,19 +586,15 @@ class EditPlan extends React.Component {
       }
 
       //resolve all requests
-      axios
-        .all([req1, req2, req3])
-        .then((res) => {
-          res = res.reduce((acc, plan) => {
-            return {...acc, ...plan}
-          },{})
-          plan_detail.splice(index, 1);
-          plan_detail.splice(index, 0, res);
-          // console.log(plan_detail)
-          this.setState(plan_detail);
-          this.calPlan(plan_detail);
-        })
-        .catch((err) => console.log(err));
+      let results = await Promise.all([req1, req2, req3]);
+
+      results = results.reduce((acc, plan) => {
+        return { ...acc, ...plan };
+      }, {});
+      plan_detail.splice(index, 1);
+      plan_detail.splice(index, 0, results);
+      this.setState({ plan_detail });
+      this.calPlan(plan_detail);
     }, 15);
   };
 
@@ -784,6 +776,7 @@ class EditPlan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
+    console.log("didMount");
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let url = APIServer + "/load_plan/full";
@@ -843,58 +836,45 @@ class EditPlan extends React.Component {
     let req5 = axios
       .get(url + "/attraction?planId=" + plan_id)
       .then(async (res) => {
+        console.time("detail")
         // console.log(res.data);
-
-        let plan_detail = res.data.map((plan) => {
+        let plan_detail = res.data.map(async (plan) => {
           // console.log(plan);
           let reqPlace = { ...plan };
           let reqPhoto = { ...plan };
-          let data = { ...plan };
-          if (data.google_place_id !== "freetime") {
-            url = APIServer + "/googleplace/" + plan.google_place_id;
+          let reqLink = { ...plan };
 
-            reqPlace = axios
-              .get(url)
-              .then((result) => {
-                // console.log({ ...data, ...result.data[0] })
-                data = { ...data, ...result.data[0] };
-                if (result.attraction_id === 0) {
-                  axios
-                    .get(
-                      APIServer +
-                        "/attraction/google_id/" +
-                        plan.google_place_id
-                    )
-                    .then((res) => {
-                      console.log(data, res.data[0]);
-                      data = { ...data, ...res.data[0] };
-                      return data;
-                    });
-                  // eslint-disable-next-line
-                } else return data;
-              })
-              .catch((error) => {
-                // this.setState({ error });
-                console.log(error);
-              });
-          }
-
+          //request for photo if in production stage
           if (process.env.NODE_ENV === "production") {
             reqPhoto = axios
               .get(APIServer + "/googlephoto/" + plan.google_place_id)
-              .then((res) => {
-                data = { ...data, ...res.data[0] };
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+              .then((res) => ({ ...plan, ...res.data[0] }));
           }
-          return [reqPlace, reqPhoto];
+
+          //request for attraction name etc.
+          if (plan.google_place_id !== "freetime") {
+            url = APIServer + "/googleplace/" + plan.google_place_id;
+            reqPlace = await axios
+              .get(url)
+              .then((result) => ({ ...plan, ...result.data[0] }));
+          }
+
+          // request for attraction link
+            reqLink = async () => { 
+              if (await reqPlace.attraction_id === 0)
+              return axios
+              .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
+              .then((res) => ({ ...plan, ...res.data[0] }));
+              else return {...plan}
+            }
+
+          return [reqPlace, reqLink, reqPhoto];
         });
+
         // console.log( plan_detail);
-        let result = await Promise.all(
-          plan_detail.map((reqArr) => Promise.all(reqArr))
-        );
+        //resolve above requests
+        let result = await Promise.all(plan_detail).then(subPlans => Promise.all(subPlans.map(plan => Promise.all(plan))))
+        // then merge plan_detail from all 3 requests
         let plans = result.map((res) => {
           res = res.reduce((acc, dat) => {
             return { ...acc, ...dat };
@@ -902,6 +882,7 @@ class EditPlan extends React.Component {
           return res;
         });
         this.setState({ plan_detail: plans, detailLoaded: true });
+        console.timeEnd("detail")
         return plans;
       })
       .catch((err) => console.log(err));
