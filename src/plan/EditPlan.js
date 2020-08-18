@@ -57,6 +57,7 @@ class EditPlan extends React.Component {
     plan_startday: [],
     plan_tag: [],
     nearbyPlaces: [],
+    searchedPlace: {},
   };
 
   updatePlan = async () => {
@@ -502,13 +503,25 @@ class EditPlan extends React.Component {
   addCard = (source, destination) => {
     // console.log("addingCard");
     let { droppableId, index } = destination;
-    // console.log(source, destination);
+    console.log(source, destination);
     let { plan_detail, plan_startday } = this.state;
     // console.log(this.state.nearbyPlaces[source.index])
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
+    
+    let name = ""
+    if (source.droppableId.slice(
+      source.droppableId.length - 3,
+      source.droppableId.length
+    ) === "bar" && source.index !== 0) name = this.state.nearbyPlaces[source.index].name
+    else if (source.droppableId.slice(
+      source.droppableId.length - 3,
+      source.droppableId.length
+    ) === "Bar") name = this.state.detailsDat.name
+    else name = this.state.searchedPlace.attraction_name
+
     let toAdd = {
-      attraction_name: this.state.nearbyPlaces[source.index].name,
+      attraction_name: name,
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
       description: "",
@@ -737,6 +750,10 @@ class EditPlan extends React.Component {
         console.log(err);
       });
   };
+
+  setSearchedPlace = (data) => {
+    this.setState({searchedPlace:data})
+  }
 
   renderRedirect = () => {
     if (this.state.redirect) {
@@ -1086,6 +1103,7 @@ class EditPlan extends React.Component {
                                         toggleAttModal={this.toggleAttModal}
                                         showDetails={this.showDetails}
                                         reloadAttBar={this.reloadAttBar}
+                                        setSearchedPlace={this.setSearchedPlace}
                                         {...this.state}
                                       />
                                     );

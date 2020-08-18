@@ -25,6 +25,7 @@ class AttBar extends Component {
       .get(url)
       .then((res) => {
         this.setState({ searchedPlace: res.data[0] });
+        this.props.setSearchedPlace(res.data[0])
         url =
           APIServer +
           "/googlenearby?lat=" +
