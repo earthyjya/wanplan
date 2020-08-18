@@ -405,75 +405,71 @@ class Plan extends React.Component {
       .catch((err) => console.log(err));
 
     //request for plan_detail etc.
-    let req5 = new Promise((response, rej) =>
-      axios
-        .get(url + "/attraction?planId=" + plan_id)
-        .then(async (res) => {
-          // console.log(res.data);
+    let req5 = axios
+      .get(url + "/attraction?planId=" + plan_id)
+      .then(async (res) => {
+        // console.log(res.data);
 
-          let plan_detail = res.data.map((plan) => {
-            // console.log(plan);
-            let reqPlace = { ...plan };
-            let reqPhoto = { ...plan };
-            let data = { ...plan };
-            if (data.google_place_id !== "freetime") {
-              url = APIServer + "/googleplace/" + plan.google_place_id;
+        let plan_detail = res.data.map((plan) => {
+          // console.log(plan);
+          let reqPlace = { ...plan };
+          let reqPhoto = { ...plan };
+          let data = { ...plan };
+          if (data.google_place_id !== "freetime") {
+            url = APIServer + "/googleplace/" + plan.google_place_id;
 
-              reqPlace = axios
-                .get(url)
-                .then((result) => {
-                  // console.log({ ...data, ...result.data[0] })
-                  data = { ...data, ...result.data[0] };
-                  if (result.attraction_id === 0) {
-                    axios
-                      .get(
-                        APIServer +
-                          "/attraction/google_id/" +
-                          plan.google_place_id
-                      )
-                      .then((res) => {
-                        console.log(data, res.data[0]);
-                        data = { ...data, ...res.data[0] };
-                        return data;
-                      });
-                    // eslint-disable-next-line
-                  } else return data;
-                })
-                .catch((error) => {
-                  // this.setState({ error });
-                  console.log(error);
-                });
-            }
-
-            if (process.env.NODE_ENV === "production") {
-              reqPhoto = axios
-                .get(APIServer + "/googlephoto/" + plan.google_place_id)
-                .then((res) => {
-                  data = { ...data, ...res.data[0] };
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-            return [reqPlace, reqPhoto];
-          });
-          let plans = [];
-          // console.log( plan_detail);
-          Promise.all(plan_detail.map((reqArr) => Promise.all(reqArr))).then(
-            (result) => {
-              plans = result.map((res) => {
-                res = res.reduce((acc, dat) => {
-                  return { ...acc, ...dat };
-                }, {});
-                return res;
+            reqPlace = axios
+              .get(url)
+              .then((result) => {
+                // console.log({ ...data, ...result.data[0] })
+                data = { ...data, ...result.data[0] };
+                if (result.attraction_id === 0) {
+                  axios
+                    .get(
+                      APIServer +
+                        "/attraction/google_id/" +
+                        plan.google_place_id
+                    )
+                    .then((res) => {
+                      console.log(data, res.data[0]);
+                      data = { ...data, ...res.data[0] };
+                      return data;
+                    });
+                  // eslint-disable-next-line
+                } else return data;
+              })
+              .catch((error) => {
+                // this.setState({ error });
+                console.log(error);
               });
-              this.setState({ plan_detail: plans, detailLoaded: true });
-              response(plans);
-            }
-          );
-        })
-        .catch((err) => console.log(err))
-    );
+          }
+
+          if (process.env.NODE_ENV === "production") {
+            reqPhoto = axios
+              .get(APIServer + "/googlephoto/" + plan.google_place_id)
+              .then((res) => {
+                data = { ...data, ...res.data[0] };
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          return [reqPlace, reqPhoto];
+        });
+        // console.log( plan_detail);
+        let result = await Promise.all(
+          plan_detail.map((reqArr) => Promise.all(reqArr))
+        );
+        let plans = result.map((res) => {
+          res = res.reduce((acc, dat) => {
+            return { ...acc, ...dat };
+          }, {});
+          return res;
+        });
+        this.setState({ plan_detail: plans, detailLoaded: true });
+        return plans;
+      })
+      .catch((err) => console.log(err));
 
     //request for plan_review
     let req6 = axios
