@@ -17,54 +17,15 @@ class AttBar extends Component {
   };
 
   onPlaceSelected = async (place) => {
-    await this.setState({ searchedPlace: {}, nearbyPlaces: [] });
-    const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/googleplace/" + place.place_id;
-    console.log(url);
-    await axios
-      .get(url)
-      .then((res) => {
-        this.setState({ searchedPlace: res.data[0] });
-        this.props.setSearchedPlace(res.data[0])
-        url =
-          APIServer +
-          "/googlenearby?lat=" +
-          res.data[0].geometry.location.lat +
-          "&lng=" +
-          res.data[0].geometry.location.lng;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    await axios
-      .get(url)
-      .then((res) => {
-        // console.log(res.data);
-        this.setState({ nearbyPlaces: res.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await this.props.setSearchedPlace(place)
     this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  fetchAttraction = async () => {
-    this.setState({ isLoading: true });
-    const APIServer = process.env.REACT_APP_APIServer;
-    let url =
-      APIServer + "/attraction/city/" + this.props.plan_overview.city_id;
-    console.log(url);
-    await axios
-      .get(url)
-      .then((res) => {
-        // console.log(res.data);
-        this.setState({ data: res.data.splice(0, 10), isLoading: false });
-      })
-      .catch((err) => {
-        // this.setState({ error: err });
-        console.log(err);
-      });
-  };
+  showDetails(dat) {
+    this.setState({ detailsDat: dat });
+    this.props.showDetails(dat);
+    this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.nearbyCenter !== this.props.nearbyCenter) {
@@ -74,13 +35,6 @@ class AttBar extends Component {
 
   async componentDidMount() {
     this.attbarRef = React.createRef();
-    // this.fetchAttraction();
-  }
-
-  showDetails(dat) {
-    this.setState({ detailsDat: dat });
-    this.props.showDetails(dat);
-    this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   render() {

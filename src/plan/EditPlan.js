@@ -11,7 +11,6 @@ import PlanCover from "./PlanCover";
 import Timeline from "./Timeline/Timeline";
 import AttModal from "./AttModal.js";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container, Toast, ToastBody, ToastHeader } from "reactstrap";
 import UpdatePlan, {
@@ -20,6 +19,13 @@ import UpdatePlan, {
   UpdateLocation,
   UpdateDetail,
 } from "../lib/managePlan/UpdatePlan";
+import { UpdatePlanInCache } from "../lib/Cache.js";
+import { GetTransports, AssignTime } from "../lib/Transports";
+import { ReorderDetail, ReorderStartday } from "../lib/Reorder";
+import { GetPlanDetailExtraDatas } from "../lib/GetData";
+import SearchPlaceNearbyCity, {
+  FindNearby,
+} from "../lib/SearchPlaceNearbyCity";
 
 class EditPlan extends React.Component {
   state = {
@@ -37,7 +43,7 @@ class EditPlan extends React.Component {
     detailLoaded: false,
     reviewLoaded: false,
     cityLoaded: false,
-    nearybyLoaded: false,
+    nearbyLoaded: false,
     transLoaded: false,
     loadAttBar: true,
     loadPlanOverview: true,
@@ -111,7 +117,7 @@ class EditPlan extends React.Component {
     UpdatePlan(APIServer, plan_id, toUpdate);
   };
 
-  updatePlanOverview = async (plan_overview, reload) => {
+  updatePlanOverview = async (plan_overview) => {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const old_plan_overview = this.state.plan_overview;
@@ -120,36 +126,28 @@ class EditPlan extends React.Component {
     });
     await UpdateOverview(APIServer, plan_id, { plan_overview });
 
-    if (old_plan_overview.city_id !== plan_overview.city_id) {
-      let plan_location = {
-        plan_id: plan_id,
-        city_id: plan_overview.city_id,
-      };
-      await UpdateLocation(APIServer, plan_id, { plan_location });
-      this.setState({
-        plan_location: [plan_location],
-        plan_overview: {
-          ...this.state.plan_overview,
-          ...plan_location,
-        },
-      });
-      if (reload) {
-        this.setState({ loadAttBar: false });
-      }
-    }
+    if (old_plan_overview.city_id !== plan_overview.city_id)
+      this.updatePlanCity(plan_overview);
 
-    let _planlist = JSON.parse(localStorage.getItem("planlist"));
-    if (_planlist !== [] && _planlist !== null) {
-      localStorage.setItem(
-        "planlist",
-        JSON.stringify(
-          _planlist.map((plan) => {
-            if (plan.plan_id === plan_id) return plan_overview;
-            return plan;
-          })
-        )
-      );
-    }
+    UpdatePlanInCache(plan_id, plan_overview);
+  };
+
+  updatePlanCity = async (plan_overview) => {
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    let plan_location = {
+      plan_id: plan_id,
+      city_id: plan_overview.city_id,
+    };
+    await UpdateLocation(APIServer, plan_id, { plan_location });
+    this.setState({
+      plan_location: [plan_location],
+      plan_overview: {
+        ...this.state.plan_overview,
+        ...plan_location,
+      },
+    });
+    this.setState({ loadAttBar: false });
   };
 
   showDetails = (dat) => {
@@ -191,76 +189,6 @@ class EditPlan extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  getTransports = async (plan_detail) => {
-    const { days, plan_startday } = this.state;
-    const APIServer = process.env.REACT_APP_APIServer;
-    let transports;
-    // console.log(transports);
-
-    // create transports as an array of promises of arrays of promises of the transport detail we need
-    transports = days.map((day) => {
-      // dayTrans will become promises of arrays of promises
-      let dayTrans = [];
-      let places = plan_detail.filter((det) => det.day === day);
-      let lastPlace = { attraction_name: "Hotel" };
-      if (places)
-        dayTrans = places.map(async (place, idx1) => {
-          if (idx1 === 0) lastPlace = { attraction_name: "Hotel" };
-          else lastPlace = places[idx1 - 1];
-          if (
-            !lastPlace.google_place_id ||
-            !places[idx1].google_place_id ||
-            lastPlace.google_place_id == "freetime" ||
-            places[idx1].google_place_id == "freetime"
-          ) {
-            place = {
-              key: idx1,
-              text: "No transportation data",
-              value: 0,
-            };
-          } else {
-            let url =
-              APIServer +
-              "/googletransport/" +
-              places[idx1 - 1].google_place_id +
-              "/" +
-              places[idx1].google_place_id;
-            place = axios
-              .get(url)
-              .then((res) => {
-                return {
-                  text: res.data.duration.text,
-                  mode: res.data.mode,
-                  value: res.data.duration.value / 60,
-                  distance: res.data.distance.text,
-                };
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-          // console.log(place);
-          // place is promise of each transports detail
-          return place;
-        });
-      return dayTrans;
-    });
-
-    //resolve promises
-    //somehow this works
-    let results = await Promise.all(transports)
-      .then((twoDProms) =>
-        Promise.all(twoDProms.map((prom) => axios.all(prom)))
-      )
-      .then((res) => {
-        // console.log(res)
-        return res;
-      })
-      .catch((err) => console.log(err));
-    this.setState({ transports: results });
-    return results;
   };
 
   publishPlan = () => {
@@ -356,56 +284,28 @@ class EditPlan extends React.Component {
     }
   };
 
+  getTransports = async (plan_detail) => {
+    const { days } = this.state;
+    const APIServer = process.env.REACT_APP_APIServer;
+    return GetTransports(APIServer, plan_detail, days);
+  };
+
   calPlan = async (plan_detail) => {
     let { plan_startday } = this.state;
     if (plan_detail) {
-      let i = 0;
-      // give each plan attraction order
-      plan_detail = plan_detail.reduce(
-        (acc, cur, idx) => [...acc, { ...cur, attraction_order: idx }],
-        []
-      );
-      // give each plan_startday the day
-      plan_startday = plan_startday.reduce(
-        (acc, cur, idx) => [...acc, { ...cur, day: idx + 1 }],
-        []
-      );
+      plan_detail = ReorderDetail(plan_detail);
+      plan_startday = ReorderStartday(plan_startday);
       // find transports between each attraction in each day
+
       let transports = await this.getTransports(plan_detail);
-      let lastDay = 0;
-      let lastTime = 0;
-      let transTime = 0;
-      let idx = 0;
-      for (i = 0; i < plan_detail.length; i++) {
-        if (plan_detail[i].day !== lastDay) {
-          lastDay = plan_detail[i].day;
-          idx = 0;
-          if (transports[lastDay - 1]) {
-            if (transports[lastDay - 1][idx])
-              transTime =
-                Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-            else transTime = 0;
-          }
-          lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
-          ++idx;
-        }
-        plan_detail[i].start_time = Int2Str(lastTime);
-        plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
-        if (transports[lastDay - 1]) {
-          if (transports[lastDay - 1][idx])
-            transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-          else transTime = 0;
-        }
-        lastTime = lastTime + plan_detail[i].time_spend + transTime;
-        // console.log(transTime);
-        ++idx;
-      }
+      plan_detail = AssignTime(plan_detail, plan_startday, transports);
       // console.log(plan_detail)
       this.setState({
-        plan_detail: plan_detail,
+        plan_detail,
         plan_startday,
         isLoading: false,
         transLoaded: true,
+        transports,
       });
     }
   };
@@ -473,33 +373,48 @@ class EditPlan extends React.Component {
     setTimeout(() => this.calPlan(plan_detail), 15);
   };
 
+  copyNameFromAttBar = (tail, index) => {
+    let name = "";
+    if (tail === "bar" && index !== 0)
+      name = this.state.nearbyPlaces[index].name;
+    else if (tail === "Bar") name = this.state.detailsDat.name;
+    else name = this.state.searchedPlace.attraction_name;
+    return name;
+  };
+
+  addNewPlanToPlanDetail = (plan_detail, index, toAdd) => {
+    plan_detail = plan_detail.map((plan) => {
+      if (plan.attraction_order >= index)
+        return { ...plan, attraction_order: plan.attraction_order + 1 };
+      else return plan;
+    });
+    plan_detail.splice(index, 0, toAdd);
+    this.setState({ plan_detail });
+    return plan_detail;
+  };
+
+  replacePlanInPlanDetail = (plan_detail, index, toReplace) => {
+    plan_detail.splice(index, 1);
+    plan_detail.splice(index, 0, toReplace);
+    this.setState({ plan_detail });
+    return plan_detail;
+  };
+
   addCard = async (source, destination) => {
-    // console.log("addingCard");
     let { droppableId, index } = destination;
-    console.log(source, destination);
-    let { plan_detail, plan_startday } = this.state;
-    // console.log(this.state.nearbyPlaces[source.index])
+    let { plan_detail } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
+    const tail = source.droppableId.slice(
+      source.droppableId.length - 3,
+      source.droppableId.length
+    );
+    const google_place_id = source.droppableId.slice(
+      0,
+      source.droppableId.length - 3
+    );
 
-    let name = "";
-    if (
-      source.droppableId.slice(
-        source.droppableId.length - 3,
-        source.droppableId.length
-      ) === "bar" &&
-      source.index !== 0
-    )
-      name = this.state.nearbyPlaces[source.index].name;
-    else if (
-      source.droppableId.slice(
-        source.droppableId.length - 3,
-        source.droppableId.length
-      ) === "Bar"
-    )
-      name = this.state.detailsDat.name;
-    else name = this.state.searchedPlace.attraction_name;
-
+    const name = this.copyNameFromAttBar(tail, source.index);
     let toAdd = {
       attraction_name: name,
       plan_id,
@@ -509,68 +424,11 @@ class EditPlan extends React.Component {
       day: Number(droppableId),
     };
 
-    //add at first to make smooth exp
-    plan_detail = plan_detail.map((plan) => {
-      if (plan.attraction_order >= index)
-        return { ...plan, attraction_order: plan.attraction_order + 1 };
-      else return plan;
-    });
-    plan_detail.splice(index, 0, toAdd);
-    this.setState({ plan_detail: plan_detail });
-    // console.log(plan_detail);
-
+    this.addNewPlanToPlanDetail(plan_detail, index, toAdd);
     this.setState({ transLoaded: false });
     setTimeout(async () => {
-      //request for attraction link etc
-      let url =
-        APIServer +
-        "/attraction/google_id/" +
-        source.droppableId.slice(0, source.droppableId.length - 3);
-      let req1 = axios
-        .get(url)
-        .then((result) => ({ ...toAdd, ...result.data[0] }))
-        .catch((error) => {
-          // this.setState({ error });
-          console.error(error);
-        });
-
-      //request for attraction name and other detail
-      url =
-        APIServer +
-        "/googleplace/" +
-        source.droppableId.slice(0, source.droppableId.length - 3);
-      let req2 = axios
-        .get(url)
-        .then((result) => ({ ...toAdd, ...result.data[0] }))
-        .catch((error) => {
-          // this.setState({ error });
-          console.error(error);
-        });
-
-      //request for google photo in production stage
-      let req3 = null;
-      if (process.env.NODE_ENV === "production") {
-        req3 = axios
-          .get(
-            APIServer +
-              "/googlephoto/" +
-              source.droppableId.slice(0, source.droppableId.length - 3)
-          )
-          .then((result) => ({ ...toAdd, ...result.data[0] }))
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-
-      //resolve all requests
-      let results = await Promise.all([req1, req2, req3]);
-
-      results = results.reduce((acc, plan) => {
-        return { ...acc, ...plan };
-      }, {});
-      plan_detail.splice(index, 1);
-      plan_detail.splice(index, 0, results);
-      this.setState({ plan_detail });
+      let results = GetPlanDetailExtraDatas(APIServer, google_place_id);
+      plan_detail = this.replacePlanInPlanDetail(plan_detail, index, results);
       this.calPlan(plan_detail);
     }, 15);
   };
@@ -584,10 +442,8 @@ class EditPlan extends React.Component {
   };
 
   addFreeTime = (order, day) => {
-    // console.log(`adding free time`);
-    let { plan_detail, plan_startday } = this.state;
+    let { plan_detail } = this.state;
     const { plan_id } = this.props;
-    const APIServer = process.env.REACT_APP_APIServer;
     let toAdd = {
       plan_id,
       time_spend: 30, //// Can be changed to "recommended time"
@@ -596,13 +452,7 @@ class EditPlan extends React.Component {
       day: day,
       google_place_id: "freetime",
     };
-    plan_detail = plan_detail.map((plan) => {
-      if (plan.attraction_order >= order)
-        return { ...plan, attraction_order: plan.attraction_order + 1 };
-      else return plan;
-    });
-    plan_detail.splice(order, 0, toAdd);
-    this.setState(plan_detail);
+    plan_detail = this.addNewPlanToPlanDetail(plan_detail, order, toAdd);
     this.setState({ transLoaded: false });
     setTimeout(() => this.calPlan(plan_detail), 15);
   };
@@ -631,107 +481,31 @@ class EditPlan extends React.Component {
     this.setState({ nearbyCenter: dat });
   };
 
-  placeNearbyCity = async () => {
-    let cities = [
-      {
-        city_id: 13,
-        city: "Fukuoka",
-        lat: 33.5901838,
-        long: 130.401718,
-      },
-      {
-        city_id: 6,
-        city: "Himeji",
-        lat: 34.815147,
-        long: 134.685349,
-      },
-      {
-        city_id: 5,
-        city: "Hiroshima",
-        lat: 34.385204,
-        long: 132.455292,
-      },
-      {
-        city_id: 2,
-        city: "Kanazawa",
-        lat: 36.560001,
-        long: 136.640015,
-      },
-      {
-        city_id: 7,
-        city: "Kobe",
-        lat: 34.688896,
-        long: 135.193977,
-      },
-      {
-        city_id: 8,
-        city: "Kyoto",
-        lat: 35.01858,
-        long: 135.763835,
-      },
-      {
-        city_id: 1,
-        city: "Nagoya",
-        lat: 35.155397,
-        long: 136.903381,
-      },
-      {
-        city_id: 9,
-        city: "Osaka",
-        lat: 34.685293,
-        long: 135.514694,
-      },
-      {
-        city_id: 15,
-        city: "Sendai",
-        lat: 38.266651,
-        long: 140.869446,
-      },
-      {
-        city_id: 3,
-        city: "Shizuoka",
-        lat: 34.977119,
-        long: 138.383087,
-      },
-      {
-        city_id: 12,
-        city: "Tokyo",
-        lat: 35.6803997,
-        long: 139.7690174,
-      },
-      {
-        city_id: 11,
-        city: "Yokohama",
-        lat: 35.443707,
-        long: 139.638031,
-      },
-      { city: "Hatsukaichi", city_id: 4, lat: 34.348505, long: 132.331833 },
-      { city: "Suita", city_id: 10, lat: 34.759779, long: 135.515799 },
-      { city: "Naha", city_id: 14, lat: 26.20047, long: 127.728577 },
-    ];
+  searchPlaceNearbyCity = async () => {
     const APIServer = process.env.REACT_APP_APIServer;
-    let cityLat = cities.filter(
-      (location) => location.city == this.state.plan_overview.city
-    )[0].lat;
-    let cityLong = cities.filter(
-      (location) => location.city == this.state.plan_overview.city
-    )[0].long;
-    let url = APIServer + "/googlenearby?lat=" + cityLat + "&lng=" + cityLong;
-    // console.log(url);
-    await axios
-      .get(url)
-      .then((res) => {
-        // console.log(res.data);
-        this.setState({ nearbyPlaces: res.data, nearbyLoaded: true });
-      })
-      .catch((err) => {
-        // this.setState({ error: err });
-        console.log(err);
-      });
+    const { plan_overview } = this.state;
+    const res = await SearchPlaceNearbyCity(APIServer, plan_overview);
+    console.log(res);
+    this.setState({ nearbyPlaces: res, nearbyLoaded: true });
   };
 
-  setSearchedPlace = (data) => {
-    this.setState({ searchedPlace: data });
+  setSearchedPlace = async (place) => {
+    const APIServer = process.env.REACT_APP_APIServer;
+    let url = APIServer + "/googleplace/" + place.place_id;
+    this.setState({ searchedPlace: {}, nearbyPlaces: [] });
+    let res = await axios
+      .get(url)
+      .then((res) => res)
+      .catch((err) => console.log(err));
+
+    this.setState({ searchedPlace: res.data[0] });
+
+    res = await FindNearby(
+      APIServer,
+      res.data[0].geometry.location.lat,
+      res.data[0].geometry.location.lng
+    );
+    this.setState({ nearbyPlaces: res });
   };
 
   renderRedirect = () => {
@@ -892,7 +666,7 @@ class EditPlan extends React.Component {
     Promise.all([req1, req2])
       .then(() => {
         if (this.state.overviewLoaded && this.state.locationLoaded)
-          setTimeout(() => this.placeNearbyCity(), 15);
+          setTimeout(() => this.searchPlaceNearbyCity(), 15);
       })
       .catch((err) => console.log(err));
 
