@@ -14,7 +14,12 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container, Toast, ToastBody, ToastHeader } from "reactstrap";
-import UpdatePlan from "../lib/managePlan/UpdatePlan";
+import UpdatePlan, {
+  UpdateOverview,
+  UpdateStartday,
+  UpdateLocation,
+  UpdateDetail,
+} from "../lib/managePlan/UpdatePlan";
 
 class EditPlan extends React.Component {
   state = {
@@ -79,11 +84,10 @@ class EditPlan extends React.Component {
 
     //update current plan
     // this.toggleUpdateToast();
-    await UpdatePlan(APIServer, plan_id, "all", toUpdate, async (data) => {
-      await this.setState({
-        redirect: true,
-        redirectTo: "/plan/" + this.props.plan_id,
-      });
+    await UpdatePlan(APIServer, plan_id, toUpdate);
+    this.setState({
+      redirect: true,
+      redirectTo: "/plan/" + this.props.plan_id,
     });
   };
 
@@ -104,7 +108,7 @@ class EditPlan extends React.Component {
     };
     //update current plan
     this.toggleUpdateToast();
-    UpdatePlan(APIServer, plan_id, "all", toUpdate, (data) => {});
+    UpdatePlan(APIServer, plan_id, toUpdate);
   };
 
   updatePlanOverview = async (plan_overview, reload) => {
@@ -114,53 +118,38 @@ class EditPlan extends React.Component {
     this.setState({
       plan_overview: { ...old_plan_overview, ...plan_overview },
     });
-    UpdatePlan(
-      APIServer,
-      plan_id,
-      "plan_overview",
-      { plan_overview },
-      (data) => {
-        if (old_plan_overview.city_id !== plan_overview.city_id) {
-          // console.log("trying to update plan location")
-          let plan_location = {
-            plan_id: plan_id,
-            city_id: plan_overview.city_id,
-          };
-          UpdatePlan(
-            APIServer,
-            plan_id,
-            "plan_location",
-            { plan_location },
-            (data) => {
-              this.setState({
-                plan_location: [data.plan_location],
-                plan_overview: {
-                  ...this.state.plan_overview,
-                  ...plan_location,
-                },
-              });
-              // console.log("finished updating location")
-              if (reload) {
-                this.setState({ loadAttBar: false });
-                // console.log("reload attBar")
-              }
-            }
-          );
-        }
-        let _planlist = JSON.parse(localStorage.getItem("planlist"));
-        if (_planlist !== [] && _planlist !== null) {
-          localStorage.setItem(
-            "planlist",
-            JSON.stringify(
-              _planlist.map((plan) => {
-                if (plan.plan_id === plan_id) return plan_overview;
-                return plan;
-              })
-            )
-          );
-        }
+    await UpdateOverview(APIServer, plan_id, { plan_overview });
+
+    if (old_plan_overview.city_id !== plan_overview.city_id) {
+      let plan_location = {
+        plan_id: plan_id,
+        city_id: plan_overview.city_id,
+      };
+      await UpdateLocation(APIServer, plan_id, { plan_location });
+      this.setState({
+        plan_location: [plan_location],
+        plan_overview: {
+          ...this.state.plan_overview,
+          ...plan_location,
+        },
+      });
+      if (reload) {
+        this.setState({ loadAttBar: false });
       }
-    );
+    }
+
+    let _planlist = JSON.parse(localStorage.getItem("planlist"));
+    if (_planlist !== [] && _planlist !== null) {
+      localStorage.setItem(
+        "planlist",
+        JSON.stringify(
+          _planlist.map((plan) => {
+            if (plan.plan_id === plan_id) return plan_overview;
+            return plan;
+          })
+        )
+      );
+    }
   };
 
   showDetails = (dat) => {
@@ -177,13 +166,7 @@ class EditPlan extends React.Component {
     const { plan_id } = this.props;
     const { plan_startday } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
-    UpdatePlan(
-      APIServer,
-      plan_id,
-      "plan_startday",
-      { plan_startday },
-      (data) => {}
-    );
+    UpdateStartday(APIServer, plan_id, { plan_startday });
   };
 
   updatePlanDetails = async () => {
@@ -191,13 +174,7 @@ class EditPlan extends React.Component {
     const { plan_id } = this.props;
     const { plan_detail } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
-    UpdatePlan(
-      APIServer,
-      plan_id,
-      "plan_detail",
-      { plan_detail },
-      (data) => {}
-    );
+    UpdateDetail(APIServer, plan_id, { plan_detail });
   };
 
   updateOnePlanDetail = async (order) => {
@@ -452,7 +429,7 @@ class EditPlan extends React.Component {
       plan_overview,
       plan_startday,
     });
-    setTimeout(this.calPlan(plan_detail), 15);
+    setTimeout(() => this.calPlan(plan_detail), 15);
     this.updatePlanOverview(plan_overview, false);
     this.updatePlanStartday();
   };
@@ -473,7 +450,7 @@ class EditPlan extends React.Component {
       plan_overview,
       plan_startday,
     });
-    setTimeout(this.calPlan(plan_detail), 15);
+    setTimeout(() => this.calPlan(plan_detail), 15);
     this.updatePlanOverview(plan_overview, false);
     this.updatePlanStartday();
   };
@@ -493,7 +470,7 @@ class EditPlan extends React.Component {
     this.setState(plan_detail);
     // console.log(plan_detail);
     this.setState({ transLoaded: false });
-    setTimeout(this.calPlan(plan_detail), 15);
+    setTimeout(() => this.calPlan(plan_detail), 15);
   };
 
   addCard = async (source, destination) => {
@@ -603,7 +580,7 @@ class EditPlan extends React.Component {
     plan_detail.splice(index, 1);
     this.setState({ plan_detail });
     this.setState({ transLoaded: false });
-    setTimeout(this.calPlan(plan_detail), 15);
+    setTimeout(() => this.calPlan(plan_detail), 15);
   };
 
   addFreeTime = (order, day) => {
@@ -627,13 +604,13 @@ class EditPlan extends React.Component {
     plan_detail.splice(order, 0, toAdd);
     this.setState(plan_detail);
     this.setState({ transLoaded: false });
-    setTimeout(this.calPlan(plan_detail), 15);
+    setTimeout(() => this.calPlan(plan_detail), 15);
   };
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
     plan_detail[source].time_spend = Number(newDuration);
-    setTimeout(this.calPlan(plan_detail), 15);
+    setTimeout(() => this.calPlan(plan_detail), 15);
   };
 
   updateDescription = (source, newDescription) => {
@@ -836,7 +813,7 @@ class EditPlan extends React.Component {
     let req5 = axios
       .get(url + "/attraction?planId=" + plan_id)
       .then(async (res) => {
-        console.time("detail")
+        console.time("detail");
         // console.log(res.data);
         let plan_detail = res.data.map(async (plan) => {
           // console.log(plan);
@@ -860,20 +837,23 @@ class EditPlan extends React.Component {
           }
 
           // request for attraction link
-            reqLink = async () => { 
-              if (await reqPlace.attraction_id === 0)
+          reqLink = async () => {
+            if ((await reqPlace.attraction_id) === 0)
               return axios
-              .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
-              .then((res) => ({ ...plan, ...res.data[0] }));
-              else return {...plan}
-            }
-
+                .get(
+                  APIServer + "/attraction/google_id/" + plan.google_place_id
+                )
+                .then((res) => ({ ...plan, ...res.data[0] }));
+            else return { ...plan };
+          };
           return [reqPlace, reqLink, reqPhoto];
         });
 
         // console.log( plan_detail);
         //resolve above requests
-        let result = await Promise.all(plan_detail).then(subPlans => Promise.all(subPlans.map(plan => Promise.all(plan))))
+        let result = await Promise.all(plan_detail).then((subPlans) =>
+          Promise.all(subPlans.map((plan) => Promise.all(plan)))
+        );
         // then merge plan_detail from all 3 requests
         let plans = result.map((res) => {
           res = res.reduce((acc, dat) => {
@@ -882,7 +862,7 @@ class EditPlan extends React.Component {
           return res;
         });
         this.setState({ plan_detail: plans, detailLoaded: true });
-        console.timeEnd("detail")
+        console.timeEnd("detail");
         return plans;
       })
       .catch((err) => console.log(err));
@@ -921,7 +901,7 @@ class EditPlan extends React.Component {
       .then((res) => {
         // console.log(res)
         if (this.state.startdayLoaded && this.state.detailLoaded)
-          setTimeout(this.calPlan(res[1]), 15);
+          setTimeout(() => this.calPlan(res[1]), 15);
       })
       .catch((err) => console.log(err));
 

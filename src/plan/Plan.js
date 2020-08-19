@@ -469,7 +469,7 @@ class Plan extends React.Component {
       .then((res) => {
         // console.log(res)
         if (this.state.startdayLoaded && this.state.detailLoaded)
-          setTimeout(this.calPlan(res[1]), 15);
+          setTimeout(() => this.calPlan(res[1]), 15);
       })
       .catch((err) => console.log(err));
 
