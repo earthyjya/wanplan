@@ -427,7 +427,7 @@ class EditPlan extends React.Component {
     this.addNewPlanToPlanDetail(plan_detail, index, toAdd);
     this.setState({ transLoaded: false });
     setTimeout(async () => {
-      let results = GetPlanDetailExtraDatas(APIServer, google_place_id);
+      let results = await GetPlanDetailExtraDatas(APIServer, google_place_id);
       plan_detail = this.replacePlanInPlanDetail(plan_detail, index, results);
       this.calPlan(plan_detail);
     }, 15);
@@ -485,7 +485,6 @@ class EditPlan extends React.Component {
     const APIServer = process.env.REACT_APP_APIServer;
     const { plan_overview } = this.state;
     const res = await SearchPlaceNearbyCity(APIServer, plan_overview);
-    console.log(res);
     this.setState({ nearbyPlaces: res, nearbyLoaded: true });
   };
 
@@ -587,7 +586,6 @@ class EditPlan extends React.Component {
     let req5 = axios
       .get(url + "/attraction?planId=" + plan_id)
       .then(async (res) => {
-        console.time("detail");
         // console.log(res.data);
         let plan_detail = res.data.map(async (plan) => {
           // console.log(plan);
@@ -636,7 +634,6 @@ class EditPlan extends React.Component {
           return res;
         });
         this.setState({ plan_detail: plans, detailLoaded: true });
-        console.timeEnd("detail");
         return plans;
       })
       .catch((err) => console.log(err));
