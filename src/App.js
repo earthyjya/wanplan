@@ -11,7 +11,7 @@ import fire from "./config/Firebase";
 import Login from "./Login.js";
 import Signup from "./Signup.js";
 import SearchPlan from "./plan/SearchPlan.js";
-import RemovePlan from "./lib/RemovePlan.js";
+import RemovePlan from "./lib/managePlan/RemovePlan.js";
 import {
   faPencilAlt,
   faCamera,
@@ -35,7 +35,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
-import DuplicatePlan from "./lib/DuplicatePlan";
+import DuplicatePlan from "./lib/managePlan/DuplicatePlan";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(
   faPencilAlt,

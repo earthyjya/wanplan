@@ -1,5 +1,5 @@
 import "../scss/MyPlan.scss";
-import CreateNewPlan from "../lib/CreateNewPlan.js";
+import CreateNewPlan from "../lib/managePlan/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
@@ -7,7 +7,7 @@ import axios from "axios";
 import { CardDeck } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
 import { isMobileOnly } from "react-device-detect";
-import RemovePlan from "../lib/RemovePlan.js"
+import RemovePlan from "../lib/managePlan/RemovePlan.js"
 
 class MyPlan extends Component {
   state = {

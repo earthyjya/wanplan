@@ -14,7 +14,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { Int2Str, Str2Int } from "../lib/ConvertTime.js";
 import { Redirect } from "react-router-dom";
 import { Row, Col, Container, Toast, ToastBody, ToastHeader } from "reactstrap";
-import UpdatePlan from "../lib/UpdatePlan";
+import UpdatePlan from "../lib/managePlan/UpdatePlan";
 
 class EditPlan extends React.Component {
   state = {
@@ -76,7 +76,7 @@ class EditPlan extends React.Component {
       plan_location: plan_location[0],
     };
     this.setState({ isUpdating: true });
-    // console.log(toUpdate)
+
     //update current plan
     // this.toggleUpdateToast();
     await UpdatePlan(APIServer, plan_id, "all", toUpdate, async (data) => {

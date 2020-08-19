@@ -9,26 +9,23 @@ export default async function UpdatePlan(
     let data = { error: [], plan_startday: [], plan_detail: [] };
     let url = "";
   console.log(toUpdate)
-let promise1 = new Promise(async (resolve,reject) => {
+
+//for updating plan_overview
+let promise1 = async ()  => {
     if (condition == "all" || condition == "plan_overview") {
-        //update plan_overview
         url = APIServer + "/plan_overview/" + plan_id;
-        await axios
+        return axios
           .put(url, toUpdate.plan_overview)
           .then((res) => {
             // console.log(res);
             data.plan_overview = res.data
-            resolve(res.data)
           })
           .catch((error) => {
             console.log(error);
             data.error = [ ...data.error, error ];
-            reject(error)
           });
-      }else{
-        resolve()
+        }
     }
-})
   
  let promise2 = new Promise(async (resolve,reject) => {
     if (condition == "all" || condition == "plan_startday") {

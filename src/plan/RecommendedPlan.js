@@ -1,5 +1,5 @@
 import "../scss/RecommendedPlan.scss";
-import CreateNewPlan from "../lib/CreateNewPlan.js";
+import {CreateNewPlan, CreateNewPlanInCache} from "../lib/managePlan/CreateNewPlan.js";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import PlanCard from "./PlanCard.js";
@@ -28,14 +28,18 @@ class RecommendedPlan extends Component {
     );
   };
 
-  onClickNewPlan = () => {
+  onClickNewPlan = async () => {
     if (isMobileOnly) {
       this.setState({ showMobileWarning: true });
       return;
     }
     const { user_id, isLoggedIn } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    CreateNewPlan(APIServer, user_id, isLoggedIn, this.RedirectFunc);
+    let newUserId = 0;
+    if (isLoggedIn) newUserId = user_id;
+    const newPlan = await CreateNewPlan(APIServer, newUserId);
+    this.RedirectFunc(newPlan.plan_id)
+    if(!isLoggedIn) CreateNewPlanInCache(newPlan)
   };
 
   async componentDidMount() {

@@ -11,7 +11,7 @@ import { Row, Col, Container } from "reactstrap";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
 import MobileWarningToast from "../components/MobileWarningToast.js";
 import { isMobileOnly } from "react-device-detect";
-import DuplicatePlan from "../lib/DuplicatePlan";
+import DuplicatePlan from "../lib/managePlan/DuplicatePlan";
 
 class Plan extends React.Component {
   state = {
