@@ -61,7 +61,7 @@ class App extends Component {
   state = {
     user: {},
     user_id: 0,
-    isLoggedIn: false,
+    isLoggedIn: null,
     urls: [
       process.env.REACT_APP_APIServer +
         "/load_plan/search?userId=0" /*+"/user/" + user_id*/,
@@ -75,17 +75,22 @@ class App extends Component {
     photoLink: "",
     description: "",
     username: "",
+    mountedTime: 0,
   };
 
   editUser = (data) => {
     this.setState(data);
   };
 
-  authListener = () => {
+  authListener = async () => {
     fire.auth().onAuthStateChanged((user) => {
       // console.log(user);
+      const time = (performance.now() - this.state.mountedTime)
+      console.log(time)
       if (user) {
-        this.setState({ user, isLoggedIn: true });
+        setTimeout(()=> {
+          this.setState({ user, isLoggedIn: true });
+        },time)
         this.setState({ user_id: user.uid });
         fire
           .auth()
@@ -110,7 +115,11 @@ class App extends Component {
             console.log(err);
           });
       } else {
-        this.setState({ user: null, isLoggedIn: false, user_id: 0 });
+        setTimeout(()=> {
+
+          this.setState({ user: null, isLoggedIn: false, user_id: 0 });
+        },time)
+        
       }
     });
   };
@@ -118,11 +127,11 @@ class App extends Component {
   delete = () => {
     localStorage.setItem("planlist", JSON.stringify([]));
   };
-  componentDidMount() {
+  async componentDidMount () {
     ReactGA.initialize("UA-164341109-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
-    this.authListener();
-    this.setState({ isLoading: false });
+    await this.authListener();
+    this.setState({ isLoading: false,mountedTime: performance.now(),})
   }
 
   logIn = async (user_id) => {
@@ -202,10 +211,15 @@ class App extends Component {
     fire.auth().signOut();
   };
 
+  // shouldComponentUpdate(){
+  //   return false
+  // }
+
   render() {
     // eslint-disable-next-line
     const { user_id, toggleLogin, toggleSignup, isLoggedIn } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
+    if (isLoggedIn === null) return <div>Loading...</div>
     return (
       <React.Fragment>
         <header className="topnav">
@@ -346,7 +360,7 @@ class App extends Component {
               <EditPlan
                 plan_id={Number(match.params.plan_id)}
                 new_plan={false}
-                {...this.state}
+                // {...this.state}
               />
             )}
           />

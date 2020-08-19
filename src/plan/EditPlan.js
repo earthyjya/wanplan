@@ -603,13 +603,13 @@ class EditPlan extends React.Component {
           //request for attraction name etc.
           if (plan.google_place_id !== "freetime") {
             url = APIServer + "/googleplace/" + plan.google_place_id;
-            reqPlace = await axios
+            reqPlace = axios
               .get(url)
               .then((result) => ({ ...plan, ...result.data[0] }));
           }
 
           // request for attraction link
-          reqLink = async () => {
+          reqLink = (async () => {
             if ((await reqPlace.attraction_id) === 0)
               return axios
                 .get(
@@ -617,7 +617,7 @@ class EditPlan extends React.Component {
                 )
                 .then((res) => ({ ...plan, ...res.data[0] }));
             else return { ...plan };
-          };
+          })();
           return [reqPlace, reqLink, reqPhoto];
         });
 
