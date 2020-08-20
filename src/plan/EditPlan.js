@@ -26,6 +26,7 @@ import { GetPlanDetailExtraDatas } from "../lib/GetData";
 import SearchPlaceNearbyCity, {
   FindNearby,
 } from "../lib/SearchPlaceNearbyCity";
+import { AddNewPlanToPlanDetail } from "../lib/DealWithAttCard";
 
 class EditPlan extends React.Component {
   state = {
@@ -296,7 +297,6 @@ class EditPlan extends React.Component {
       plan_detail = ReorderDetail(plan_detail);
       plan_startday = ReorderStartday(plan_startday);
       // find transports between each attraction in each day
-
       let transports = await this.getTransports(plan_detail);
       plan_detail = AssignTime(plan_detail, plan_startday, transports);
       // console.log(plan_detail)
@@ -383,13 +383,8 @@ class EditPlan extends React.Component {
   };
 
   addNewPlanToPlanDetail = (plan_detail, index, toAdd) => {
-    plan_detail = plan_detail.map((plan) => {
-      if (plan.attraction_order >= index)
-        return { ...plan, attraction_order: plan.attraction_order + 1 };
-      else return plan;
-    });
-    plan_detail.splice(index, 0, toAdd);
-    this.setState({ plan_detail });
+    plan_detail = AddNewPlanToPlanDetail(plan_detail, index, toAdd);
+    this.setState({ plan_detail, transLoaded: false });
     return plan_detail;
   };
 
@@ -403,16 +398,11 @@ class EditPlan extends React.Component {
   addCard = async (source, destination) => {
     let { droppableId, index } = destination;
     let { plan_detail } = this.state;
+    let sourceId = source.droppableId;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
-    const tail = source.droppableId.slice(
-      source.droppableId.length - 3,
-      source.droppableId.length
-    );
-    const google_place_id = source.droppableId.slice(
-      0,
-      source.droppableId.length - 3
-    );
+    const tail = sourceId.slice(sourceId.length - 3, sourceId.length);
+    const google_place_id = sourceId.slice(0, sourceId.length - 3);
 
     const name = this.copyNameFromAttBar(tail, source.index);
     let toAdd = {
@@ -424,10 +414,10 @@ class EditPlan extends React.Component {
       day: Number(droppableId),
     };
 
-    this.addNewPlanToPlanDetail(plan_detail, index, toAdd);
-    this.setState({ transLoaded: false });
+    plan_detail = this.addNewPlanToPlanDetail(plan_detail, index, toAdd);
     setTimeout(async () => {
       let results = await GetPlanDetailExtraDatas(APIServer, google_place_id);
+      results = { ...plan_detail[index], ...results };
       plan_detail = this.replacePlanInPlanDetail(plan_detail, index, results);
       this.calPlan(plan_detail);
     }, 15);
