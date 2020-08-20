@@ -181,6 +181,7 @@ class DayTimeline extends Component {
                                           tabIndex="-1"
                                         >
                                           <AttCard
+                                            key={detail.description}
                                             detail={detail}
                                             changeDuration={
                                               this.props.changeDuration
@@ -299,6 +300,7 @@ class DayTimeline extends Component {
                         transLoaded={this.props.transLoaded}
                       />
                       <AttCard
+                        key={detail.description}
                         detail={detail}
                         changeDuration={this.props.changeDuration}
                         delCard={this.props.delCard}

@@ -117,7 +117,7 @@ class EditPlan extends React.Component {
       plan_location: plan_location[0],
     };
     //update current plan
-    this.toggleUpdateToast();
+    // this.toggleUpdateToast();
     UpdatePlan(APIServer, plan_id, toUpdate);
   };
 
@@ -333,8 +333,9 @@ class EditPlan extends React.Component {
       plan_startday,
     });
     setTimeout(() => this.calPlan(plan_detail), 15);
-    this.updatePlanOverview(plan_overview, false);
+    this.updatePlanOverview(plan_overview);
     this.updatePlanStartday();
+    this.updatePlanDetails()
   };
 
   delDay = (day) => {
@@ -353,9 +354,12 @@ class EditPlan extends React.Component {
       plan_overview,
       plan_startday,
     });
-    setTimeout(() => this.calPlan(plan_detail), 15);
-    this.updatePlanOverview(plan_overview, false);
-    this.updatePlanStartday();
+    setTimeout(async () => {
+      await this.calPlan(plan_detail);
+      this.updatePlanOverview(plan_overview);
+      this.updatePlanStartday();
+      this.updatePlanDetails()
+    }, 15);
   };
 
   reorderCards = (source, destination) => {
@@ -373,7 +377,12 @@ class EditPlan extends React.Component {
     this.setState(plan_detail);
     // console.log(plan_detail);
     this.setState({ transLoaded: false });
-    setTimeout(() => this.calPlan(plan_detail), 15);
+    setTimeout(async () => {
+      await this.calPlan(plan_detail);
+      this.updatePlanOverview(this.state.plan_overview);
+      this.updatePlanStartday();
+      this.updatePlanDetails();
+    }, 15);
   };
 
   copyNameFromAttBar = (tail, index) => {
@@ -422,7 +431,8 @@ class EditPlan extends React.Component {
       let results = await GetPlanDetailExtraDatas(APIServer, google_place_id);
       results = { ...plan_detail[index], ...results };
       plan_detail = this.replacePlanInPlanDetail(plan_detail, index, results);
-      this.calPlan(plan_detail);
+      await this.calPlan(plan_detail);
+      this.updatePlanDetails();
     }, 15);
   };
 
@@ -431,7 +441,10 @@ class EditPlan extends React.Component {
     plan_detail.splice(index, 1);
     this.setState({ plan_detail });
     this.setState({ transLoaded: false });
-    setTimeout(() => this.calPlan(plan_detail), 15);
+    setTimeout(async () => {
+      await this.calPlan(plan_detail);
+      this.updatePlanDetails();
+    }, 15);
   };
 
   addFreeTime = (order, day) => {
@@ -446,13 +459,16 @@ class EditPlan extends React.Component {
       google_place_id: "freetime",
     };
     plan_detail = this.addNewPlanToPlanDetail(plan_detail, order, toAdd);
-    setTimeout(() => this.calPlan(plan_detail), 15);
+    setTimeout(async () => {await this.calPlan(plan_detail)
+      this.updatePlanDetails()}, 15);
   };
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
     plan_detail[source].time_spend = Number(newDuration);
-    setTimeout(() => this.calPlan(plan_detail), 15);
+    setTimeout(async () => {await this.calPlan(plan_detail)
+      this.updateOnePlanDetail(source);}, 15);
+    
   };
 
   updateDescription = (source, newDescription) => {
@@ -606,13 +622,9 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
-  async componentDidMount() {
-    // Since it has to fetch three times, we fetch it here and store the data in the state
-    console.log("didMount");
-    const { plan_id } = this.props;
-    const APIServer = process.env.REACT_APP_APIServer;
+  reqDataAll = async (APIServer, plan_id) => {
     const url = APIServer + "/load_plan/full";
-
+    console.log(url + "/overview?planId=" + plan_id);
     const req1 = this.reqOverview(url, plan_id);
     const req2 = this.reqLocation(url, plan_id);
     const req3 = this.reqTag(url, plan_id);
@@ -634,7 +646,15 @@ class EditPlan extends React.Component {
 
     //resolve other requests
     Promise.all([req3, req6, req7]).catch((err) => console.log(err));
+  };
 
+  async componentDidMount() {
+    // Since it has to fetch three times, we fetch it here and store the data in the state
+    console.log("didMount");
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    this.reqDataAll(APIServer, plan_id);
+    // setInterval(() => this.reqDataAll(APIServer, plan_id), 10000);
     this.toggleAttModal = this.toggleAttModal.bind(this);
   }
 
