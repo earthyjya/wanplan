@@ -119,6 +119,7 @@ class Plan extends React.Component {
     const { user_id, plan_id } = this.props;
     if (!this.props.isLoggedIn) {
       let _planlist = JSON.parse(localStorage.getItem("planlist"));
+      if(!_planlist) _planlist = []
       let saved = false;
       _planlist.map((plan) => {
         if (plan.plan_id === plan_id) saved = true;
