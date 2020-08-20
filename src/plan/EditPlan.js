@@ -49,8 +49,7 @@ class EditPlan extends React.Component {
     cityLoaded: false,
     nearbyLoaded: false,
     transLoaded: false,
-    loadAttBar: true,
-    loadPlanOverview: true,
+    editPlanOverviewKey: 0, 
     modal: false,
     publishToast: false,
     redirect: false,
@@ -151,7 +150,7 @@ class EditPlan extends React.Component {
         ...plan_location,
       },
     });
-    this.setState({ loadAttBar: false });
+    this.searchPlaceNearbyCity()
   };
 
   showDetails = (dat) => {
@@ -335,7 +334,7 @@ class EditPlan extends React.Component {
     setTimeout(() => this.calPlan(plan_detail), 15);
     this.updatePlanOverview(plan_overview);
     this.updatePlanStartday();
-    this.updatePlanDetails()
+    this.updatePlanDetails();
   };
 
   delDay = (day) => {
@@ -358,7 +357,7 @@ class EditPlan extends React.Component {
       await this.calPlan(plan_detail);
       this.updatePlanOverview(plan_overview);
       this.updatePlanStartday();
-      this.updatePlanDetails()
+      this.updatePlanDetails();
     }, 15);
   };
 
@@ -459,16 +458,19 @@ class EditPlan extends React.Component {
       google_place_id: "freetime",
     };
     plan_detail = this.addNewPlanToPlanDetail(plan_detail, order, toAdd);
-    setTimeout(async () => {await this.calPlan(plan_detail)
-      this.updatePlanDetails()}, 15);
+    setTimeout(async () => {
+      await this.calPlan(plan_detail);
+      this.updatePlanDetails();
+    }, 15);
   };
 
   changeDuration = (source, newDuration) => {
     const { plan_detail } = this.state;
     plan_detail[source].time_spend = Number(newDuration);
-    setTimeout(async () => {await this.calPlan(plan_detail)
-      this.updateOnePlanDetail(source);}, 15);
-    
+    setTimeout(async () => {
+      await this.calPlan(plan_detail);
+      this.updateOnePlanDetail(source);
+    }, 15);
   };
 
   updateDescription = (source, newDescription) => {
@@ -522,14 +524,8 @@ class EditPlan extends React.Component {
     }
   };
 
-  reloadAttBar = async () => {
-    // await this.setState({ loadAttBar: false });
-    this.setState({ loadAttBar: true });
-  };
-
   reloadPlanOverview = async () => {
-    await this.setState({ loadPlanOverview: false });
-    await this.setState({ loadPlanOverview: true });
+    this.setState({editPlanOverviewKey: this.state.editPlanOverviewKey + 1})
   };
 
   reqOverview = async (url, plan_id) =>
@@ -670,8 +666,8 @@ class EditPlan extends React.Component {
       overviewLoaded,
       locationLoaded,
       cityLoaded,
-      loadPlanOverview,
       isUpdating,
+      editPlanOverviewKey,
     } = this.state;
     const APIServer = process.env.REACT_APP_APIServer;
     if (!overviewLoaded) return <div>Loading...</div>;
@@ -713,9 +709,10 @@ class EditPlan extends React.Component {
                     <div className="editplan-container">
                       <div className="timeline-container">
                         {(() => {
-                          if (locationLoaded && loadPlanOverview)
+                          if (locationLoaded)
                             return (
                               <EditPlanOverview
+                                key={editPlanOverviewKey}
                                 {...this.state}
                                 updatePlanOverview={this.updatePlanOverview}
                                 togglePlanCover={this.togglePlanCover}
@@ -810,22 +807,12 @@ class EditPlan extends React.Component {
                           if (locationLoaded)
                             return (
                               <div className="attbar-container">
-                                {(() => {
-                                  if (this.state.loadAttBar)
-                                    return (
-                                      <AttBar
-                                        toggleAttModal={this.toggleAttModal}
-                                        showDetails={this.showDetails}
-                                        reloadAttBar={this.reloadAttBar}
-                                        setSearchedPlace={this.setSearchedPlace}
-                                        {...this.state}
-                                      />
-                                    );
-                                  else {
-                                    this.reloadAttBar();
-                                    return;
-                                  }
-                                })()}
+                                <AttBar
+                                  toggleAttModal={this.toggleAttModal}
+                                  showDetails={this.showDetails}
+                                  setSearchedPlace={this.setSearchedPlace}
+                                  {...this.state}
+                                />
                               </div>
                             );
                         }
