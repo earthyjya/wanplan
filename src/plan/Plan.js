@@ -14,9 +14,8 @@ import { isMobileOnly } from "react-device-detect";
 import DuplicatePlan from "../lib/managePlan/DuplicatePlan";
 import { GetTransports, AssignTime } from "../lib/Transports";
 import { ReorderDetail, ReorderStartday } from "../lib/Reorder";
-import {
-  GetPlanDetailExtraDatasPromises,
-} from "../lib/GetData";
+import { GetPlanDetailExtraDatasPromises } from "../lib/GetData";
+import { SaveNewPlanToCache } from "../lib/Cache";
 
 class Plan extends React.Component {
   state = {
@@ -66,56 +65,41 @@ class Plan extends React.Component {
     }
   };
 
-  saveToUser = async (user_id, redirect) => {
-    // console.log("start to save to user");
+  duplicatePlanToNewUser = async (user_id, redirect) => {
     const { isLoggedIn } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     let oldPlanId = this.state.plan_overview.plan_id;
-    let newPlanId = 0;
-    let savedplan = {};
+    this.setState({ isLoading: true });
+    let data = await DuplicatePlan(APIServer, oldPlanId, user_id);
+    let savedplan = { ...data.plan_overview, plan_id: data.plan_overview.id };
+    if (!isLoggedIn) SaveNewPlanToCache(savedplan);
+    this.setState({
+      redirect: true,
+      redirectTo: "/plan/" + data.plan_overview.id + redirect,
+      plan_review: [],
+      plan_overview: {
+        ...data.plan_overview,
+        plan_id: data.plan_overview.id,
+      },
+      isLoading: false,
+    });
+  };
+
+  saveToUser = async (user_id, redirect) => {
+    // console.log("start to save to user");
     let _planlist = JSON.parse(localStorage.getItem("planlist"));
     if (!_planlist) {
       localStorage.setItem("planlist", JSON.stringify([]));
       _planlist = [];
     }
-    if (user_id !== this.state.plan_overview.user_id || user_id === 0) {
-      // console.log("set saved to false");
-      let saved = false;
-      if (user_id === 0) {
-        _planlist.map((plan) => {
-          if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
-          return null;
-        });
-      }
-      if (!saved) {
-        // console.log("try to save to" + user_id);
-        //Duplicate plan overview etc.
-        this.setState({ isLoading: true });
-        let data = await DuplicatePlan(APIServer, oldPlanId, user_id);
-          savedplan = { ...data.plan_overview, plan_id: data.plan_overview.id };
-          if (!isLoggedIn) {
-            if (_planlist === null || _planlist === []) {
-              _planlist = [savedplan];
-              _planlist[0] = savedplan;
-              localStorage.setItem("planlist", JSON.stringify(_planlist));
-            } else {
-              _planlist.push(savedplan);
-              localStorage.setItem("planlist", JSON.stringify(_planlist));
-            }
-          }
-          this.setState({
-            redirect: true,
-            redirectTo: "/plan/" + data.plan_overview.id + redirect,
-            plan_review: [],
-            plan_overview: {
-              ...data.plan_overview,
-              plan_id: data.plan_overview.id,
-            },
-            isLoading: false,
-          });
-        
-      }
-    }
+    let saved = false;
+    if (user_id === 0)
+      _planlist.map((plan) => {
+        if (plan.plan_id === this.state.plan_overview.plan_id) saved = true;
+        return null;
+      });
+    if (user_id === this.state.plan_overview.user_id) saved = true;
+    if (!saved) this.duplicatePlanToNewUser(user_id, redirect);
   };
 
   toggleToast = () => {
