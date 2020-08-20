@@ -11,7 +11,7 @@ export const UpdateStartday = async (APIServer, plan_id, toUpdate) => {
   await axios.delete(url);
 
   url = APIServer + "/plan_startday/";
-  let results = await Promise.all(
+  let results = Promise.all(
     toUpdate.plan_startday.map(
       async (day) => await axios.post(url, day).then((res) => res.data).catch(err => console.log(err))
     )
@@ -24,7 +24,7 @@ export const UpdateDetail = async (APIServer, plan_id, toUpdate) => {
   await axios.delete(url);
 
   url = APIServer + "/plan_detail/";
-  let results = await Promise.all(
+  let results = Promise.all(
     toUpdate.plan_detail.map(
       async (plan) => await axios.post(url, plan).then((res) => res.data).catch(err => console.log(err))
     )
