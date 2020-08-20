@@ -29,5 +29,35 @@ export const GetPlanDetailExtraDatas = async (APIServer, google_place_id) => {
   results = results.reduce((acc, plan) => {
     return { ...acc, ...plan };
   }, {});
-  return results
+  return results;
+};
+
+export const GetPlanDetailExtraDatasPromises = async (APIServer, plan) => {
+  let reqPlace = { ...plan };
+  let reqPhoto = { ...plan };
+  let reqLink = { ...plan };
+
+  //request for photo if in production stage
+  if (process.env.NODE_ENV === "production") {
+    reqPhoto = axios
+      .get(APIServer + "/googlephoto/" + plan.google_place_id)
+      .then((res) => ({ ...plan, ...res.data[0] }));
+  }
+
+  //request for attraction name etc.
+  if (plan.google_place_id !== "freetime") {
+    reqPlace = axios
+      .get(APIServer + "/googleplace/" + plan.google_place_id)
+      .then((result) => ({ ...plan, ...result.data[0] }));
+  }
+
+  // request for attraction link
+  reqLink = (async () => {
+    if ((await reqPlace.attraction_id) === 0)
+      return axios
+        .get(APIServer + "/attraction/google_id/" + plan.google_place_id)
+        .then((res) => ({ ...plan, ...res.data[0] }));
+    else return { ...plan };
+  })();
+  return [reqPlace, reqLink, reqPhoto];
 };

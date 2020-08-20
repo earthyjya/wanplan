@@ -22,7 +22,10 @@ import UpdatePlan, {
 import { UpdatePlanInCache } from "../lib/Cache.js";
 import { GetTransports, AssignTime } from "../lib/Transports";
 import { ReorderDetail, ReorderStartday } from "../lib/Reorder";
-import { GetPlanDetailExtraDatas } from "../lib/GetData";
+import {
+  GetPlanDetailExtraDatas,
+  GetPlanDetailExtraDatasPromises,
+} from "../lib/GetData";
 import SearchPlaceNearbyCity, {
   FindNearby,
 } from "../lib/SearchPlaceNearbyCity";
@@ -443,7 +446,6 @@ class EditPlan extends React.Component {
       google_place_id: "freetime",
     };
     plan_detail = this.addNewPlanToPlanDetail(plan_detail, order, toAdd);
-    this.setState({ transLoaded: false });
     setTimeout(() => this.calPlan(plan_detail), 15);
   };
 
@@ -514,18 +516,10 @@ class EditPlan extends React.Component {
     await this.setState({ loadPlanOverview: true });
   };
 
-  async componentDidMount() {
-    // Since it has to fetch three times, we fetch it here and store the data in the state
-    console.log("didMount");
-    const { plan_id } = this.props;
-    const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/load_plan/full";
-
-    //request for plan_overview
-    let req1 = axios
+  reqOverview = async (url, plan_id) =>
+    axios
       .get(url + "/overview?planId=" + plan_id)
       .then((res) => {
-        // console.log(res.data)
         this.setState({
           plan_overview: { ...this.state.plan_overview, ...res.data[0] },
           overviewLoaded: true,
@@ -533,11 +527,10 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    // request for plan_location
-    let req2 = axios
+  reqLocation = async (url, plan_id) =>
+    axios
       .get(url + "/location?planId=" + plan_id)
       .then((res) => {
-        // console.log(res.data)
         this.setState({
           plan_location: res.data,
           plan_overview: {
@@ -550,20 +543,19 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    //request for plan_tag
-    let req3 = axios
+  reqTag = async (url, plan_id) =>
+    axios
       .get(url + "/tag?planId=" + plan_id)
       .then((res) => {
-        // console.log(res.data);
         this.setState({ plan_tag: res.data, tagLoaded: true });
       })
       .catch((err) => console.log(err));
 
-    // request for plan_startday and set no. of days
-    let req4 = axios
+  reqStartday = async (url, plan_id) =>
+    axios
       .get(url + "/startday?planId=" + plan_id)
       .then((res) => {
-        let days = res.data.reduce((acc, cur, idx) => [...acc, idx + 1], []);
+        const days = res.data.reduce((acc, cur, idx) => [...acc, idx + 1], []);
         this.setState({
           plan_startday: res.data,
           days: days,
@@ -572,47 +564,14 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    //request for plan_detail etc.
-    let req5 = axios
+  reqDetail = async (url, plan_id) =>
+    axios
       .get(url + "/attraction?planId=" + plan_id)
       .then(async (res) => {
-        // console.log(res.data);
-        let plan_detail = res.data.map(async (plan) => {
-          // console.log(plan);
-          let reqPlace = { ...plan };
-          let reqPhoto = { ...plan };
-          let reqLink = { ...plan };
-
-          //request for photo if in production stage
-          if (process.env.NODE_ENV === "production") {
-            reqPhoto = axios
-              .get(APIServer + "/googlephoto/" + plan.google_place_id)
-              .then((res) => ({ ...plan, ...res.data[0] }));
-          }
-
-          //request for attraction name etc.
-          if (plan.google_place_id !== "freetime") {
-            url = APIServer + "/googleplace/" + plan.google_place_id;
-            reqPlace = axios
-              .get(url)
-              .then((result) => ({ ...plan, ...result.data[0] }));
-          }
-
-          // request for attraction link
-          reqLink = (async () => {
-            if ((await reqPlace.attraction_id) === 0)
-              return axios
-                .get(
-                  APIServer + "/attraction/google_id/" + plan.google_place_id
-                )
-                .then((res) => ({ ...plan, ...res.data[0] }));
-            else return { ...plan };
-          })();
-          return [reqPlace, reqLink, reqPhoto];
-        });
-
-        // console.log( plan_detail);
-        //resolve above requests
+        const APIServer = process.env.REACT_APP_APIServer;
+        let plan_detail = res.data.map(async (plan) =>
+          GetPlanDetailExtraDatasPromises(APIServer, plan)
+        );
         let result = await Promise.all(plan_detail).then((subPlans) =>
           Promise.all(subPlans.map((plan) => Promise.all(plan)))
         );
@@ -628,17 +587,16 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    //request for plan_review
-    let req6 = axios
+  reqReview = async (url, plan_id) =>
+    axios
       .get(url + "/review?planId=" + plan_id)
       .then((res) => {
-        // console.log(res.data);
         this.setState({ plan_review: res.data, reviewLoaded: true });
       })
       .catch((err) => console.log(err));
 
-    // request for city
-    let req7 = axios
+  reqCity = async (APIServer) =>
+    axios
       .get(APIServer + "/city")
       .then((res) => {
         this.setState({
@@ -648,22 +606,30 @@ class EditPlan extends React.Component {
       })
       .catch((err) => console.log(err));
 
+  async componentDidMount() {
+    // Since it has to fetch three times, we fetch it here and store the data in the state
+    console.log("didMount");
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    const url = APIServer + "/load_plan/full";
+
+    const req1 = this.reqOverview(url, plan_id);
+    const req2 = this.reqLocation(url, plan_id);
+    const req3 = this.reqTag(url, plan_id);
+    const req4 = this.reqStartday(url, plan_id);
+    const req5 = this.reqDetail(url, plan_id);
+    const req6 = this.reqReview(url, plan_id);
+    const req7 = this.reqCity(APIServer);
+
     //resolve req1 (overview) and req3 (location)
     // then search for nearby places
     Promise.all([req1, req2])
-      .then(() => {
-        if (this.state.overviewLoaded && this.state.locationLoaded)
-          setTimeout(() => this.searchPlaceNearbyCity(), 15);
-      })
+      .then(() => setTimeout(() => this.searchPlaceNearbyCity(), 15))
       .catch((err) => console.log(err));
 
     //resolve req4(planstartday) and req5(plandetail)
     Promise.all([req4, req5])
-      .then((res) => {
-        // console.log(res)
-        if (this.state.startdayLoaded && this.state.detailLoaded)
-          setTimeout(() => this.calPlan(res[1]), 15);
-      })
+      .then((res) => setTimeout(() => this.calPlan(res[1]), 15))
       .catch((err) => console.log(err));
 
     //resolve other requests
