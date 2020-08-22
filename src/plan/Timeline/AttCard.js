@@ -143,7 +143,7 @@ class AttCard extends Component {
           onClick={this.handleClick}
           onFocus={() => {
             this.setState({ isFocused: true });
-            if (this.props.editing) this.props.showDetails(this.props.detail);
+            // if (this.props.editing) this.props.showDetails(this.props.detail);
           }}
           onBlur={this.handleBlur}
           tabIndex="0"
@@ -170,14 +170,20 @@ class AttCard extends Component {
               );
           })()}
           <div className="AttDetailsCont">
-              <div className="AttName">
-                {attraction_name}
-                {
-                  this.props.editing && google_place_id !== null ?
-                  <span className="see-nearby-button" onClick={() => this.props.updateNearby(this.props.detail)}> see nearby</span>:
-                  <React.Fragment></React.Fragment>
-                }
-              </div>
+            <div className="AttName">
+              {attraction_name}
+              {this.props.editing && google_place_id !== null ? (
+                <span
+                  className="see-nearby-button"
+                  onClick={() => this.props.updateNearby(this.props.detail)}
+                >
+                  {" "}
+                  see nearby
+                </span>
+              ) : (
+                <React.Fragment></React.Fragment>
+              )}
+            </div>
             {(() => {
               //If editing and focus, show textarea to edit else show just text
               if (this.props.editing) {

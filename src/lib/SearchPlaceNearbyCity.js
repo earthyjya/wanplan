@@ -84,11 +84,21 @@ export default async function (APIServer, plan_overview) {
   const cityLong = cities.filter(
     (location) => location.city == plan_overview.city
   )[0].long;
-  return FindNearby(APIServer,cityLat,cityLong)
+  return FindNearby(APIServer, cityLat, cityLong, "tourist_attraction", 5000);
 }
 
-export const FindNearby = async (APIServer,lat, long) => {
-  const url = APIServer + "/googlenearby?lat=" + lat + "&lng=" + long;
+export const FindNearby = async (APIServer, lat, long, type, radius) => {
+  let url =
+    APIServer +
+    "/googlenearby?lat=" +
+    lat +
+    "&lng=" +
+    long +
+    "&type=" +
+    type +
+    "&radius=" +
+    radius;
+  console.log(url);
   return axios
     .get(url)
     .then((res) => res.data)

@@ -48,8 +48,9 @@ class EditPlan extends React.Component {
     reviewLoaded: false,
     cityLoaded: false,
     nearbyLoaded: false,
+    nearbyOption: "tourist_attraciton",
     transLoaded: false,
-    editPlanOverviewKey: 0, 
+    editPlanOverviewKey: 0,
     modal: false,
     publishToast: false,
     redirect: false,
@@ -150,11 +151,20 @@ class EditPlan extends React.Component {
         ...plan_location,
       },
     });
-    this.searchPlaceNearbyCity()
+    this.searchPlaceNearbyCity();
   };
 
-  showDetails = (dat) => {
+  showDetails = async (dat) => {
+    const APIServer = process.env.REACT_APP_APIServer;
     this.setState({ detailsDat: dat });
+    let res = await FindNearby(
+      APIServer,
+      dat.geometry.location.lat,
+      dat.geometry.location.lng,
+      this.state.nearbyOption,
+      1500
+    );
+    this.setState({ nearbyPlaces: res });
   };
 
   updateStartdayTime = (day, time) => {
@@ -487,6 +497,19 @@ class EditPlan extends React.Component {
     this.updateOnePlanDetail(source);
   };
 
+  setNearbyOption = async (type) => {
+    const APIServer = process.env.REACT_APP_APIServer;
+    this.setState({ nearbyOption: type });
+    let res = await FindNearby(
+      APIServer,
+      this.state.detailsDat.geometry.location.lat,
+      this.state.detailsDat.geometry.location.lng,
+      type,
+      1500
+    );
+    this.setState({ nearbyPlaces: res });
+  };
+
   updateNearby = (dat) => {
     this.setState({ nearbyCenter: dat });
   };
@@ -512,7 +535,9 @@ class EditPlan extends React.Component {
     res = await FindNearby(
       APIServer,
       res.data[0].geometry.location.lat,
-      res.data[0].geometry.location.lng
+      res.data[0].geometry.location.lng,
+      this.state.nearbyOption,
+      1500
     );
     this.setState({ nearbyPlaces: res });
   };
@@ -525,7 +550,7 @@ class EditPlan extends React.Component {
   };
 
   reloadPlanOverview = async () => {
-    this.setState({editPlanOverviewKey: this.state.editPlanOverviewKey + 1})
+    this.setState({ editPlanOverviewKey: this.state.editPlanOverviewKey + 1 });
   };
 
   reqOverview = async (url, plan_id) =>
@@ -811,6 +836,7 @@ class EditPlan extends React.Component {
                                   toggleAttModal={this.toggleAttModal}
                                   showDetails={this.showDetails}
                                   setSearchedPlace={this.setSearchedPlace}
+                                  setNearbyOption={this.setNearbyOption}
                                   {...this.state}
                                 />
                               </div>

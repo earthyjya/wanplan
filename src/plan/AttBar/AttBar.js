@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class AttBar extends Component {
   state = {
-    searchedPlace: {},
     nearbyPlaces: [],
     detailsDat: "",
     isLoading: true,
@@ -17,8 +16,12 @@ class AttBar extends Component {
   };
 
   onPlaceSelected = async (place) => {
-    await this.props.setSearchedPlace(place)
+    await this.props.setSearchedPlace(place);
     this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  selectNearbyOption = (e) => {
+    this.props.setNearbyOption(e.target.value);
   };
 
   showDetails(dat) {
@@ -29,7 +32,7 @@ class AttBar extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.nearbyCenter !== this.props.nearbyCenter) {
-      this.showDetails(this.props.nearbyCenter)
+      this.showDetails(this.props.nearbyCenter);
     }
   }
 
@@ -44,9 +47,11 @@ class AttBar extends Component {
         {detailsDat !== "" ? (
           <div className="att-bar-desc">
             <Droppable
-              droppableId={(detailsDat.google_place_id!== undefined)
-                ? detailsDat.google_place_id + "Bar"
-              : detailsDat.place_id + "Bar"}
+              droppableId={
+                detailsDat.google_place_id !== undefined
+                  ? detailsDat.google_place_id + "Bar"
+                  : detailsDat.place_id + "Bar"
+              }
               isDropDisabled={true}
               type={String}
               direction="vertical"
@@ -58,9 +63,11 @@ class AttBar extends Component {
                   ref={dropProvided.innerRef}
                 >
                   <Draggable
-                    draggableId={(detailsDat.attraction_id!== undefined)
-                      ? detailsDat.attraction_id + "Bar"
-                    : detailsDat.place_id + "Bar"}
+                    draggableId={
+                      detailsDat.attraction_id !== undefined
+                        ? detailsDat.attraction_id + "Bar"
+                        : detailsDat.place_id + "Bar"
+                    }
                     index={0}
                   >
                     {(dragProvided) => (
@@ -73,9 +80,12 @@ class AttBar extends Component {
                           {this.state.detailsDat.name
                             ? this.state.detailsDat.name
                             : this.state.detailsDat.attraction_name}
-                            <span className="att-bar-delete" onClick={() => this.setState({detailsDat: ""})}>
-                             &#10005;
-                           </span>
+                          <span
+                            className="att-bar-delete"
+                            onClick={() => this.setState({ detailsDat: "" })}
+                          >
+                            &#10005;
+                          </span>
                         </h3>
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <img
@@ -154,23 +164,33 @@ class AttBar extends Component {
             }}
             componentRestrictions={{ country: "jp" }}
           />
+          <select
+            className="nearby-option"
+            value={this.props.nearbyOption}
+            onChange={this.selectNearbyOption}
+          >
+            <option value="tourist_attraction">Tourist Attraction</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="cafe">Cafe</option>
+            <option value="lodging">Hotel</option>
+          </select>
         </div>
 
-        {!this.props.nearbyLoaded  ? (
+        {!this.props.nearbyLoaded ? (
           <div className="AttBar">Loading...</div>
         ) : this.state.error ? (
           <div className="AttBar">{this.state.error.message}</div>
         ) : (
           <div className="AttBar">
             {(() => {
-              if (this.state.searchedPlace.google_place_id)
+              if (this.props.searchedPlace.google_place_id)
                 return (
                   <div
-                    onClick={() => this.showDetails(this.state.searchedPlace)}
+                    onClick={() => this.showDetails(this.props.searchedPlace)}
                   >
                     <Droppable
                       droppableId={
-                        this.state.searchedPlace.google_place_id + "bar"
+                        this.props.searchedPlace.google_place_id + "bar"
                       }
                       isDropDisabled={true}
                       type={String}
@@ -184,10 +204,10 @@ class AttBar extends Component {
                         >
                           <Draggable
                             draggableId={
-                              this.state.searchedPlace.attraction_id.toString() +
+                              this.props.searchedPlace.attraction_id.toString() +
                               "bar"
                             }
-                            index={this.state.searchedPlace.attraction_id}
+                            index={this.props.searchedPlace.attraction_id}
                           >
                             {(dragProvided) => (
                               <div
@@ -195,7 +215,7 @@ class AttBar extends Component {
                                 {...dragProvided.draggableProps}
                                 ref={dragProvided.innerRef}
                               >
-                                <AttBarCard {...this.state.searchedPlace} />
+                                <AttBarCard {...this.props.searchedPlace} />
                               </div>
                             )}
                           </Draggable>
