@@ -146,7 +146,7 @@ class AttBar extends Component {
         <div className="search-container">
           <span>Nearby</span>
           <FontAwesomeIcon className="search-icon" icon="search" />
-          <Autocomplete
+          {/* <Autocomplete
             className="search-bar"
             style={{
               backgroundColor: "white",
@@ -173,7 +173,7 @@ class AttBar extends Component {
             <option value="restaurant">Restaurant</option>
             <option value="cafe">Cafe</option>
             <option value="lodging">Hotel</option>
-          </select>
+          </select> */}
         </div>
 
         {!this.props.nearbyLoaded ? (

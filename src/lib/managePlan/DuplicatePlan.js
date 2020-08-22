@@ -35,10 +35,9 @@ export default async function DuplicatePlan(APIServer, oldPlanId, user_id) {
   newPlanId = data.plan_overview.id;
 
   const results = await duplicatePlanDetailnStuff (APIServer,oldPlanId,newPlanId)
-
+  if(!results) return data;
   data.plan_startday = results[0].data;
   data.plan_detail = results[1].data;
   data.plan_location = results[2].data;
   return data;
-  //  console.log(data)
 }

@@ -78,29 +78,30 @@ const cities = [
 ];
 
 export default async function (APIServer, plan_overview) {
-  const cityLat = cities.filter(
+  const city = cities.filter(
     (location) => location.city == plan_overview.city
-  )[0].lat;
-  const cityLong = cities.filter(
-    (location) => location.city == plan_overview.city
-  )[0].long;
-  return FindNearby(APIServer, cityLat, cityLong, "tourist_attraction", 5000);
-}
+    )[0]
+    if (!city) return [];
+    const cityLat = city.lat;
+    const cityLong = city.long;
+    return FindNearby(APIServer,cityLat,cityLong)
+  }
 
 export const FindNearby = async (APIServer, lat, long, type, radius) => {
-  let url =
-    APIServer +
-    "/googlenearby?lat=" +
-    lat +
-    "&lng=" +
-    long +
-    "&type=" +
-    type +
-    "&radius=" +
-    radius;
-  console.log(url);
-  return axios
-    .get(url)
-    .then((res) => res.data)
-    .catch((err) => console.log(err));
+  // let url =
+  //   APIServer +
+  //   "/googlenearby?lat=" +
+  //   lat +
+  //   "&lng=" +
+  //   long +
+  //   "&type=" +
+  //   type +
+  //   "&radius=" +
+  //   radius;
+  // console.log(url);
+  // return axios
+  //   .get(url)
+  //   .then((res) => res.data)
+  //   .catch((err) => console.log(err));
+  return [];
 };

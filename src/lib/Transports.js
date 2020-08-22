@@ -6,20 +6,21 @@ export const GetTransportsBetween2Places = async (
   place1,
   place2
 ) => {
-  let url = APIServer + "/googletransport/" + place1 + "/" + place2;
-  return axios
-    .get(url)
-    .then((res) => {
-      return {
-        text: res.data.duration.text,
-        mode: res.data.mode,
-        value: res.data.duration.value / 60,
-        distance: res.data.distance.text,
-      };
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  // let url = APIServer + "/googletransport/" + place1 + "/" + place2;
+  // return axios
+  //   .get(url)
+  //   .then((res) => {
+  //     return {
+  //       text: res.data.duration.text,
+  //       mode: res.data.mode,
+  //       value: res.data.duration.value / 60,
+  //       distance: res.data.distance.text,
+  //     };
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  return {};
 };
 
 export const CreateTransportInDayPromise = (APIServer, places) =>

@@ -127,6 +127,7 @@ class App extends Component {
   delete = () => {
     localStorage.setItem("planlist", JSON.stringify([]));
   };
+  
   async componentDidMount () {
     ReactGA.initialize("UA-164341109-1");
     ReactGA.pageview(window.location.pathname + window.location.search);

@@ -171,6 +171,7 @@ class EditPlan extends React.Component {
     const { plan_startday } = this.state;
     plan_startday[day - 1].start_day = time;
     this.setState({ plan_startday });
+    this.updatePlanStartday();
   };
 
   updatePlanStartday = async () => {
@@ -523,23 +524,23 @@ class EditPlan extends React.Component {
 
   setSearchedPlace = async (place) => {
     const APIServer = process.env.REACT_APP_APIServer;
-    let url = APIServer + "/googleplace/" + place.place_id;
-    this.setState({ searchedPlace: {}, nearbyPlaces: [] });
-    let res = await axios
-      .get(url)
-      .then((res) => res)
-      .catch((err) => console.log(err));
+    // let url = APIServer + "/googleplace/" + place.place_id;
+    // this.setState({ searchedPlace: {}, nearbyPlaces: [] });
+    // let res = await axios
+    //   .get(url)
+    //   .then((res) => res)
+    //   .catch((err) => console.log(err));
 
-    this.setState({ searchedPlace: res.data[0] });
+    // this.setState({ searchedPlace: res.data[0] });
 
-    res = await FindNearby(
-      APIServer,
-      res.data[0].geometry.location.lat,
-      res.data[0].geometry.location.lng,
-      this.state.nearbyOption,
-      1500
-    );
-    this.setState({ nearbyPlaces: res });
+    // res = await FindNearby(
+    //   APIServer,
+    //   res.data[0].geometry.location.lat,
+    //   res.data[0].geometry.location.lng,
+    //   this.state.nearbyOption,
+    //   1500
+    // );
+    // this.setState({ nearbyPlaces: res });
   };
 
   renderRedirect = () => {
@@ -645,7 +646,6 @@ class EditPlan extends React.Component {
 
   reqDataAll = async (APIServer, plan_id) => {
     const url = APIServer + "/load_plan/full";
-    console.log(url + "/overview?planId=" + plan_id);
     const req1 = this.reqOverview(url, plan_id);
     const req2 = this.reqLocation(url, plan_id);
     const req3 = this.reqTag(url, plan_id);
