@@ -132,6 +132,18 @@ class DayTimeline extends Component {
                         {(dropProvided) => (
                           <div {...dropProvided.droppableProps}>
                             <div ref={dropProvided.innerRef}>
+                              <div>
+                                <button
+                                  onClick={() => {
+                                    this.props.addFreeTime(
+                                      0,
+                                      this.props.day
+                                    );
+                                  }}
+                                >
+                                  add free time/ lunch time
+                                </button>
+                              </div>
                               {plan_detail.map((detail) => {
                                 // console.log(this.props.transports)
                                 return (
