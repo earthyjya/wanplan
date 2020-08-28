@@ -289,7 +289,7 @@ class EditPlan extends React.Component {
           return axios.put(url, this.state.selectedCover, options);
         })
         .then((result) => {
-          // console.log(result);
+          console.log(result);
         })
         .catch((err) => {
           console.log(err);
