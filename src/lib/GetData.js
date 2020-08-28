@@ -17,7 +17,7 @@ export const GetPlanDetailExtraDatas = async (APIServer, google_place_id) => {
 
   //request for google photo in production stage
   let req3 = null;
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production" && google_place_id !== "freetime") {
     req3 = axios
       .get(APIServer + "/googlephoto/" + google_place_id)
       .then((result) => ({ ...result.data[0] }))
@@ -38,7 +38,7 @@ export const GetPlanDetailExtraDatasPromises = async (APIServer, plan) => {
   let reqLink = { ...plan };
 
   //request for photo if in production stage
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production"  && plan.google_place_id !== "freetime") {
     reqPhoto = axios
       .get(APIServer + "/googlephoto/" + plan.google_place_id)
       .then((res) => ({ ...plan, ...res.data[0] }));

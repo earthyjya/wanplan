@@ -562,7 +562,10 @@ class EditPlan extends React.Component {
           overviewLoaded: true,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ overviewLoaded: true });
+        console.log(err);
+      });
 
   reqLocation = async (url, plan_id) =>
     axios
@@ -578,7 +581,10 @@ class EditPlan extends React.Component {
           locationLoaded: true,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ locationLoaded: true });
+        console.log(err);
+      });
 
   reqTag = async (url, plan_id) =>
     axios
@@ -586,7 +592,10 @@ class EditPlan extends React.Component {
       .then((res) => {
         this.setState({ plan_tag: res.data, tagLoaded: true });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ tagLoaded: true });
+        console.log(err);
+      });
 
   reqStartday = async (url, plan_id) =>
     axios
@@ -599,7 +608,10 @@ class EditPlan extends React.Component {
           startdayLoaded: true,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ startdayLoaded: true });
+        console.log(err);
+      });
 
   reqDetail = async (url, plan_id) =>
     axios
@@ -622,7 +634,10 @@ class EditPlan extends React.Component {
         this.setState({ plan_detail: plans, detailLoaded: true });
         return plans;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ detailLoaded: true });
+        console.log(err);
+      });
 
   reqReview = async (url, plan_id) =>
     axios
@@ -630,7 +645,10 @@ class EditPlan extends React.Component {
       .then((res) => {
         this.setState({ plan_review: res.data, reviewLoaded: true });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ reviewLoaded: true });
+        console.log(err);
+      });
 
   reqCity = async (APIServer) =>
     axios
@@ -641,7 +659,10 @@ class EditPlan extends React.Component {
           cityLoaded: true,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ cityLoaded: true });
+        console.log(err);
+      });
 
   reqDataAll = async (APIServer, plan_id) => {
     const url = APIServer + "/load_plan/full";
@@ -658,12 +679,18 @@ class EditPlan extends React.Component {
     // then search for nearby places
     Promise.all([req1, req2])
       .then(() => setTimeout(() => this.searchPlaceNearbyCity(), 15))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ nearbyLoaded: true });
+        console.log(err);
+      });
 
     //resolve req4(planstartday) and req5(plandetail)
     Promise.all([req4, req5])
       .then((res) => setTimeout(() => this.calPlan(res[1]), 15))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ isLoading: false, transLoaded: true });
+        console.log(err);
+      });
 
     //resolve other requests
     Promise.all([req3, req6, req7]).catch((err) => console.log(err));
