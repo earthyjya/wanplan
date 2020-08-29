@@ -29,7 +29,7 @@ class DayTimeline extends Component {
   };
 
   render() {
-    const { plan_detail, day, editing, isLoading, detailLoaded } = this.props;
+    const { plan_detail, day, editing, detailLoaded } = this.props;
     let hours = [
       "00",
       "01",
@@ -264,7 +264,7 @@ class DayTimeline extends Component {
           <h2>Day {day}</h2>
         </div>
         {(() => {
-          if (isLoading) return <div>Loading...</div>;
+          if (!detailLoaded) return <div>Loading...</div>;
           else
             return (
               <div className="DayTimelineContentContainer">
