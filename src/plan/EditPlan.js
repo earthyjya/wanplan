@@ -631,7 +631,7 @@ class EditPlan extends React.Component {
 
   reqDataAll = async (APIServer, plan_id) => {
     const url = APIServer + "/load_plan/full";
-    console.log(url + "/overview?planId=" + plan_id);
+    // console.log(url + "/overview?planId=" + plan_id);
     const req1 = this.reqOverview(url, plan_id);
     const req2 = this.reqLocation(url, plan_id);
     const req3 = this.reqTag(url, plan_id);

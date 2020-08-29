@@ -78,14 +78,38 @@ const cities = [
 ];
 
 export default async function (APIServer, plan_overview) {
-  const city = cities.filter(
-    (location) => location.city == plan_overview.city
-  )[0];
-  if (!city) return [];
-  const cityLat = city.lat;
-  const cityLong = city.long;
-  return FindNearby(APIServer, cityLat, cityLong, "tourist_attraction", 5000);
+  const placeIds = await SearchRecommendAtt(APIServer, plan_overview);
+  let recommendedPlaces = placeIds.map(async (place) => {
+    return axios
+      .get(APIServer + "/googleplace/" + place.google_place_id)
+      .then((res) => res.data[0])
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+  });
+  recommendedPlaces = await Promise.all(recommendedPlaces);
+  recommendedPlaces = recommendedPlaces.map((place) => {
+    return {
+      ...place,
+      types: place.attraction_types,
+      place_id: place.google_place_id,
+    };
+  });
+  return recommendedPlaces;
 }
+
+export const SearchRecommendAtt = async (APIServer, plan_overview) => {
+  const url =
+    APIServer + "/attraction_recommended/city?cityId=" + plan_overview.city_id;
+  return axios
+    .get(url)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return [];
+    });
+};
 
 export const FindNearby = async (APIServer, lat, long, type, radius) => {
   let url =
