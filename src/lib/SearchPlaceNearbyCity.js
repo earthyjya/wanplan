@@ -78,12 +78,12 @@ const cities = [
 ];
 
 export default async function (APIServer, plan_overview) {
-  const cityLat = cities.filter(
+  const city = cities.filter(
     (location) => location.city == plan_overview.city
-  )[0].lat;
-  const cityLong = cities.filter(
-    (location) => location.city == plan_overview.city
-  )[0].long;
+  )[0];
+  if (!city) return [];
+  const cityLat = city.lat;
+  const cityLong = city.long;
   return FindNearby(APIServer, cityLat, cityLong, "tourist_attraction", 5000);
 }
 
