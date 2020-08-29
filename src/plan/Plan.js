@@ -234,101 +234,66 @@ class Plan extends React.Component {
   };
 
   reqOverview = async (url, plan_id) =>
-    axios
-      .get(url + "/overview?planId=" + plan_id)
-      .then((res) => {
-        this.setState({
-          plan_overview: { ...this.state.plan_overview, ...res.data[0] },
-          overviewLoaded: true,
-        });
-      })
-      .catch((err) => {
-        this.setState({ overviewLoaded: true });
-        console.log(err);
+    axios.get(url + "/overview?planId=" + plan_id).then((res) => {
+      this.setState({
+        plan_overview: { ...this.state.plan_overview, ...res.data[0] },
+        overviewLoaded: true,
       });
+    });
 
   reqLocation = async (url, plan_id) =>
-    axios
-      .get(url + "/location?planId=" + plan_id)
-      .then((res) => {
-        this.setState({
-          plan_location: res.data,
-          plan_overview: {
-            ...this.state.plan_overview,
-            city: res.data[0].city,
-            city_id: res.data[0].city_id,
-          },
-          locationLoaded: true,
-        });
-      })
-      .catch((err) => {
-        this.setState({ locationLoaded: true });
-        console.log(err);
+    axios.get(url + "/location?planId=" + plan_id).then((res) => {
+      this.setState({
+        plan_location: res.data,
+        plan_overview: {
+          ...this.state.plan_overview,
+          city: res.data[0].city,
+          city_id: res.data[0].city_id,
+        },
+        locationLoaded: true,
       });
+    });
 
   reqTag = async (url, plan_id) =>
-    axios
-      .get(url + "/tag?planId=" + plan_id)
-      .then((res) => {
-        this.setState({ plan_tag: res.data, tagLoaded: true });
-      })
-      .catch((err) => {
-        this.setState({ tagLoaded: true });
-        console.log(err);
-      });
+    axios.get(url + "/tag?planId=" + plan_id).then((res) => {
+      this.setState({ plan_tag: res.data, tagLoaded: true });
+    });
 
   reqStartday = async (url, plan_id) =>
-    axios
-      .get(url + "/startday?planId=" + plan_id)
-      .then((res) => {
-        const days = res.data.reduce((acc, cur, idx) => [...acc, idx + 1], []);
-        this.setState({
-          plan_startday: res.data,
-          days: days,
-          startdayLoaded: true,
-        });
-      })
-      .catch((err) => {
-        this.setState({ startdayLoaded: true });
-        console.log(err);
+    axios.get(url + "/startday?planId=" + plan_id).then((res) => {
+      const days = res.data.reduce((acc, cur, idx) => [...acc, idx + 1], []);
+      this.setState({
+        plan_startday: res.data,
+        days: days,
+        startdayLoaded: true,
       });
+    });
 
   reqDetail = async (url, plan_id) =>
-    axios
-      .get(url + "/attraction?planId=" + plan_id)
-      .then(async (res) => {
-        const APIServer = process.env.REACT_APP_APIServer;
-        let plan_detail = res.data.map(async (plan) =>
-          GetPlanDetailExtraDatasPromises(APIServer, plan)
-        );
-        let result = await Promise.all(plan_detail).then((subPlans) =>
-          Promise.all(subPlans.map((plan) => Promise.all(plan)))
-        );
-        // then merge plan_detail from all 3 requests
-        let plans = result.map((res) => {
-          res = res.reduce((acc, dat) => {
-            return { ...acc, ...dat };
-          }, {});
-          return res;
-        });
-        this.setState({ plan_detail: plans, detailLoaded: true });
-        return plans;
-      })
-      .catch((err) => {
-        this.setState({ detailLoaded: true });
-        console.log(err);
+    axios.get(url + "/attraction?planId=" + plan_id).then(async (res) => {
+      this.setState({ plan_detail: res.data });
+      const APIServer = process.env.REACT_APP_APIServer;
+      let plan_detail = res.data.map(async (plan) =>
+        GetPlanDetailExtraDatasPromises(APIServer, plan)
+      );
+      let result = await Promise.all(plan_detail).then((subPlans) =>
+        Promise.all(subPlans.map((plan) => Promise.all(plan)))
+      );
+      // then merge plan_detail from all 3 requests
+      let plans = result.map((res) => {
+        res = res.reduce((acc, dat) => {
+          return { ...acc, ...dat };
+        }, {});
+        return res;
       });
+      this.setState({ plan_detail: plans, detailLoaded: true });
+      return plans;
+    });
 
   reqReview = async (url, plan_id) =>
-    axios
-      .get(url + "/review?planId=" + plan_id)
-      .then((res) => {
-        this.setState({ plan_review: res.data, reviewLoaded: true });
-      })
-      .catch((err) => {
-        this.setState({ reviewLoaded: true });
-        console.log(err);
-      });
+    axios.get(url + "/review?planId=" + plan_id).then((res) => {
+      this.setState({ plan_review: res.data, reviewLoaded: true });
+    });
 
   async componentDidMount() {
     const { plan_id } = this.props;
@@ -347,12 +312,25 @@ class Plan extends React.Component {
     Promise.all([req4, req5])
       .then((res) => setTimeout(() => this.calPlan(res[1]), 15))
       .catch((err) => {
-        this.setState({ isLoading: false, transLoaded: true });
+        this.setState({
+          detailLoaded: true,
+          startdayLoaded: true,
+          isLoading: false,
+          transLoaded: true,
+        });
         console.log(err);
       });
 
     // resolve all other requests
-    Promise.all([req1, req2, req3, req6]).catch((err) => console.log(err));
+    Promise.all([req1, req2, req3, req6]).catch((err) => {
+      this.setState({
+        overviewLoaded: true,
+        locationLoaded: true,
+        tagLoaded: true,
+        reviewLoaded: true,
+      });
+      console.log(err);
+    });
   }
 
   render() {
