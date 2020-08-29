@@ -6,41 +6,47 @@ import { Row, Container } from "reactstrap";
 class EditPlanOverview extends Component {
   state = {
     dropdownOpen: false,
-    isLoading: true
-
+    isLoading: true,
   };
 
   toggleDropDown = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
-  changeTitle = e => {
+  changeTitle = (e) => {
     this.setState({
       plan_overview: {
         ...this.state.plan_overview,
-        plan_title: e.target.value
-      }
+        plan_title: e.target.value,
+      },
     });
-    this.props.updatePlanOverview({
-      ...this.state.plan_overview,
-      plan_title: e.target.value
-    }, false);
+    this.props.updatePlanOverview(
+      {
+        ...this.state.plan_overview,
+        plan_title: e.target.value,
+      },
+      false
+    );
   };
 
-  updatePlanOverview = e => {
+  updatePlanOverview = (e) => {
     this.setState({
       plan_overview: {
         ...this.state.plan_overview,
-        plan_title: e.target.value
-      }
+        plan_title: e.target.value,
+      },
     });
     this.props.updatePlanOverview(this.state.plan_overview, false);
   };
 
   componentDidMount() {
     this.setState({
-      plan_overview: {...this.props.plan_overview, city: this.props.plan_overview.city, city_id : this.props.plan_overview.city_id},
-      isLoading: false
+      plan_overview: {
+        ...this.props.plan_overview,
+        city: this.props.plan_overview.city,
+        city_id: this.props.plan_overview.city_id,
+      },
+      isLoading: false,
     });
   }
 
@@ -55,24 +61,31 @@ class EditPlanOverview extends Component {
             className="plan-description-picture"
             style={{
               backgroundImage:
-                "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)"
+                "url(https://d3hne3c382ip58.cloudfront.net/resized/1920x700/japan-tours-400X400_.JPG)",
             }}
           ></Container>
           <Container fluid className="plan-description-container plan-header">
-            <div className="choose-photo-container" onClick={this.props.togglePlanCover}>
+            <div
+              className="choose-photo-container"
+              onClick={this.props.togglePlanCover}
+            >
               <FontAwesomeIcon icon="camera" size="lg" />
-              <span style={{ marginLeft: "8px" }}>choose a cover photo</span>
+              <span style={{ margin: "8px" }}>choose a cover photo</span>
             </div>
 
             <Row>
-                <input
-                  type="textarea"
-                  id="title-input"
-                  value={plan_overview.plan_title}
-                  onChange={this.changeTitle}
-                  onBlur={this.updatePlanOverview}
-                />
-              <FontAwesomeIcon size="2x" className="title-input-icon" icon="pencil-alt" />
+              <input
+                type="textarea"
+                id="title-input"
+                value={plan_overview.plan_title}
+                onChange={this.changeTitle}
+                onBlur={this.updatePlanOverview}
+              />
+              <FontAwesomeIcon
+                size="2x"
+                className="title-input-icon"
+                icon="pencil-alt"
+              />
             </Row>
             <Row className="plan-description-city-days">
               city name(s) | xx days
@@ -83,7 +96,7 @@ class EditPlanOverview extends Component {
             if (this.props.updated && this.props.title) {
               if (this.state.plan_overview !== this.props.plan_overview)
                 this.setState({
-                  plan_overview: this.props.plan_overview
+                  plan_overview: this.props.plan_overview,
                 });
               this.props.titleChanged(false);
             } else if (this.props.updated) {
