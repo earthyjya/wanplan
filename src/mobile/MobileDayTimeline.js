@@ -30,13 +30,13 @@ class MobileDayTimeline extends Component {
             />
             <div>
               <div className="type"> tourism </div>
-              <div className="title"> Someplacedera </div>
+              <div className="title"> {attraction_name} </div>
               <div className="info"> entrance fee: xxx JPY opening: .... </div>
             </div>
           </div>
           <div className="note">
             <span className="title"> author's note </span>
-            <div className="detail"> lorem ipsum sawassdee krub pee eiei sabai dee mai kub</div>
+            <div className="detail"> {description} </div>
           </div>
         </div>
       </div>
