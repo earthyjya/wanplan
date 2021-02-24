@@ -273,6 +273,7 @@ class AttBar extends Component {
                                       <AttBarCard
                                         attraction_name={dat.name}
                                         attraction_type={dat.types[0]}
+                                        google_place_id={dat.google_place_id}
                                         photos={dat.photos}
                                         key={dat.place_id.toString()}
                                       />
