@@ -168,9 +168,12 @@ class EditPlan extends React.Component {
   };
 
   updateStartdayTime = (day, time) => {
-    const { plan_startday } = this.state;
+    const { plan_startday, plan_detail } = this.state;
     plan_startday[day - 1].start_day = time;
     this.setState({ plan_startday });
+    setTimeout(async () => {
+      await this.calPlan(plan_detail);
+    }, 15);
   };
 
   updatePlanStartday = async () => {
