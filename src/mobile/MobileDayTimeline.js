@@ -17,7 +17,7 @@ class MobileDayTimeline extends Component {
     } = detail;
     return(
       <div className="m-attcard-container">
-        <span className="time"> 8:00 </span>
+        <span className="time"> {start_time} </span>
         <div className="m-attcard">
           <div className="image-container">
             <img
