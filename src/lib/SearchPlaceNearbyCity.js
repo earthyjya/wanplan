@@ -90,12 +90,14 @@ export default async function (APIServer, plan_overview) {
   });
   recommendedPlaces = await Promise.all(recommendedPlaces);
   recommendedPlaces = recommendedPlaces.map((place) => {
+    if(place === null)  return null;
     return {
       ...place,
       types: place.attraction_types,
       place_id: place.google_place_id,
     };
-  });
+  })
+  .filter(place => place !== null);
   return recommendedPlaces;
 }
 

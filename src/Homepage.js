@@ -134,6 +134,19 @@ class Homepage extends Component {
             อยากเที่ยวไหน..ให้เราช่วยแพลน
           </Row>
         </Container>
+        <div className="homepage-ending-container">
+          <div className="title">Oneplan</div>
+          <div className="content">
+            We want to create a better traveling experience
+
+            Oneplan ต้องการที่จะช่วยให้การแพลนเที่ยวญี่ปุ่นครั้งต่อไปง่ายยิ่งขึ้น 
+            ตอนนี้เรากำลังปรับปรุงเว็ปไซต์เพื่อที่จะรับกับการท่องเที่ยวหลังยุคโควิด
+            สามารถลองใช้ Travel Planner เวอร์ชั่นเก่าของเราได้
+          </div>
+          <button onClick={this.onClickNewPlan}>ลองใช้งาน</button>
+          <img src="/homepage-placeholder.jpg" alt="" />
+          <div className="circle"></div>
+        </div>
         <RecommendedPlan
           data={this.props.data}
           {...this.state}
@@ -160,19 +173,6 @@ class Homepage extends Component {
             );
           }
         })()}
-        <div className="homepage-ending-container">
-          <div className="title">Oneplan</div>
-          <div className="content">
-            ช่วยให้คนที่ไม่ชอบความยุ่งยากหรืออยากเริ่มต้นแพลนเที่ยวญี่ปุ่นด้วยตัวเองสามารถวางแผนได้ง่ายขึ้น
-            ผ่าน Social platform ของเราที่ผู้ใช้สามารถเลือกแพลนที่เพื่อน ๆ
-            คนอื่นแชร์ไว้มาปรับแต่งบนบอร์ดที่
-            ออกแบบมาให้สามารถแก้ไขได้ง่ายและอิสระ
-            พร้อมจองตั๋วและโรงแรมที่เหมาะที่สุดสำหรับทริปของคุณ
-          </div>
-          <button onClick={this.onClickNewPlan}>สร้างแพลน</button>
-          <img src="/homepage-placeholder.jpg" alt="" />
-          <div className="circle"></div>
-        </div>
         <Footer />
       </React.Fragment>
     );
