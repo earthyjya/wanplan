@@ -45,17 +45,21 @@ class Homepage extends Component {
   // }
 
   onClickNewPlan = async () => {
-    if (isMobileOnly) {
-      this.setState({ showMobileWarning: true });
-      return;
-    }
-    const { user_id, isLoggedIn } = this.props;
-    const APIServer = process.env.REACT_APP_APIServer;
-    let newUserId = 0;
-    if (isLoggedIn) newUserId = user_id;
-    const newPlan = await CreateNewPlan(APIServer, newUserId);
-    this.RedirectFunc(newPlan.plan_id)
-    if(!isLoggedIn) CreateNewPlanInCache(newPlan)
+    //THIS FUNCTION IS TO CREATE NEW PLAN
+    // if (isMobileOnly) {
+    //   this.setState({ showMobileWarning: true });
+    //   return;
+    // }
+    // const { user_id, isLoggedIn } = this.props;
+    // const APIServer = process.env.REACT_APP_APIServer;
+    // let newUserId = 0;
+    // if (isLoggedIn) newUserId = user_id;
+    // const newPlan = await CreateNewPlan(APIServer, newUserId);
+    // this.RedirectFunc(newPlan.plan_id)
+    // if(!isLoggedIn) CreateNewPlanInCache(newPlan)
+
+    // THIS IS FOR ลองใช้งาน BUTTON
+    this.RedirectFunc("1113");
   };
 
   toggleFeedback = () => {
@@ -63,9 +67,16 @@ class Homepage extends Component {
   };
 
   RedirectFunc = (plan_id) => {
+    // FOR NEW PLAN
+    // this.setState({
+    //   redirect: true,
+    //   redirectTo: "/plan/" + plan_id + "/edit_plan",
+    // });
+
+    // FOR ลองใช้งาน BUTTON
     this.setState({
       redirect: true,
-      redirectTo: "/plan/" + plan_id + "/edit_plan",
+     redirectTo: "/plan/" + plan_id, 
     });
   };
 

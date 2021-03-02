@@ -56,7 +56,6 @@ export async function CreateNewPlan(
   createPlanLocation(url, plan_location);
 
   return newPlan
-  // console.log(result);
 }
 
 export function CreateNewPlanInCache(newPlan){
