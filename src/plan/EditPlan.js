@@ -76,12 +76,7 @@ class EditPlan extends React.Component {
   };
 
   updatePlan = async () => {
-    const {
-      plan_overview,
-      plan_startday,
-      plan_detail,
-      plan_location,
-    } = this.state;
+    const { plan_overview, plan_startday, plan_detail, plan_location } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const toUpdate = {
@@ -102,12 +97,7 @@ class EditPlan extends React.Component {
   };
 
   updatePlanNoRedirect = async () => {
-    const {
-      plan_overview,
-      plan_startday,
-      plan_detail,
-      plan_location,
-    } = this.state;
+    const { plan_overview, plan_startday, plan_detail, plan_location } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const toUpdate = {
@@ -654,8 +644,15 @@ class EditPlan extends React.Component {
       });
 
     //resolve req4(planstartday) and req5(plandetail)
+    // auto add a day if days is empty, then calculate plan
     Promise.all([req4, req5])
-      .then((res) => setTimeout(() => this.calPlan(res[1]), 15))
+      .then((res) => {
+        if(this.state.days.length === 0) {
+          console.log("days is empty");
+          this.addDay(1);
+        }
+        setTimeout(() => this.calPlan(res[1]), 15);
+      })
       .catch((err) => {
         this.setState({
           isLoading: false,
