@@ -223,9 +223,11 @@ class App extends Component {
     return (
       <React.Fragment>
         <header className="topnav">
-          <a className="oneplan" href="/home">
-            <img src="/oneplan-logo-primary.png" alt="Oneplan Logo" />
+          <div className="oneplan-logo-container">
+           <a href="/home"> 
+            <img src="/oneplan-logo-primary.png" alt="Oneplan Logo" /> 
           </a>
+          </div>
           {(() => {
             if (isLoggedIn) {
               return (
@@ -246,29 +248,20 @@ class App extends Component {
           {(() => {
             if (isLoggedIn) {
               return (
-                <div className="login">
-                  <a className="login" onClick={this.logout} href="/home">
-                    Log out
-                  </a>
-                </div>
+                <button className="login-button" onClick={this.logout} href="/home">
+                  Log out
+                </button>
               );
             } else {
               return (
-                <div>
-                  <div className="login">
-                    <button className="login" onClick={this.toggleLogin}>
-                      Log In
-                    </button>
-                  </div>
-                  <div className="signin">
-                    <button
-                      className="signin-button"
-                      onClick={this.toggleSignup}
-                    >
-                      Sign Up
-                    </button>
-                  </div>
-                </div>
+                <>
+                  <button className="login-button" onClick={this.toggleLogin}>
+                    Log In
+                  </button>
+                  <button className="signup-button" onClick={this.toggleSignup}>
+                    Sign Up
+                  </button>
+                </>
               );
             }
           })()}
