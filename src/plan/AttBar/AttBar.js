@@ -125,12 +125,7 @@ class AttBar extends Component {
               )}
             </Droppable>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              nim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              nim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            Attraction details
             </p>
             <button
               onClick={this.props.toggleAttModal}
