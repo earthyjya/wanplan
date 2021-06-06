@@ -13,6 +13,7 @@ class AttBar extends Component {
     isLoading: true,
     error: null,
     data: [],
+    country: "",
   };
 
   onPlaceSelected = async (place) => {
@@ -22,6 +23,10 @@ class AttBar extends Component {
 
   selectNearbyOption = (e) => {
     this.props.setNearbyOption(e.target.value);
+  };
+
+  selectCountryOption = (e) => {
+    this.setState({country: e.target.value});
   };
 
   showDetails(dat) {
@@ -125,7 +130,7 @@ class AttBar extends Component {
               )}
             </Droppable>
             <p>
-            Attraction details
+              Attraction details
             </p>
             <button
               onClick={this.props.toggleAttModal}
@@ -157,8 +162,16 @@ class AttBar extends Component {
             onBlur={() => {
               this.placeholder = "enter your text";
             }}
-            componentRestrictions={{ country: "jp" }}
+            componentRestrictions={{ country: this.state.country }}
           />
+          <select
+            className="nearby-option"
+            value={this.state.country}
+            onChange={this.selectCountryOption}
+          >
+            <option value="th">TH</option>
+            <option value="jp">JP</option>
+          </select>
           <select
             className="nearby-option"
             value={this.props.nearbyOption}
