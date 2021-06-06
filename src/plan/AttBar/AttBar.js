@@ -7,13 +7,14 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class AttBar extends Component {
-	state = {
-		nearbyPlaces: [],
-		detailsDat: "",
-		isLoading: true,
-		error: null,
-		data: [],
-	};
+  state = {
+    nearbyPlaces: [],
+    detailsDat: "",
+    isLoading: true,
+    error: null,
+    data: [],
+    country: "",
+  };
 
 	onPlaceSelected = async (place) => {
 		await this.props.setSearchedPlace(place);
@@ -24,11 +25,15 @@ class AttBar extends Component {
 		this.props.setNearbyOption(e.target.value);
 	};
 
-	showDetails(dat) {
-		this.setState({ detailsDat: dat });
-		this.props.showDetails(dat);
-		this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
-	}
+  selectCountryOption = (e) => {
+    this.setState({country: e.target.value});
+  };
+
+  showDetails(dat) {
+    this.setState({ detailsDat: dat });
+    this.props.showDetails(dat);
+    this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.nearbyCenter !== this.props.nearbyCenter) {
@@ -120,165 +125,169 @@ class AttBar extends Component {
 										)}
 									</Draggable>
 
-									{dropProvided.placeholder}
-								</div>
-							)}
-						</Droppable>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-							mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-							nim veniam, quis nostrud exercitation ullamco laboris nisi ut
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-							mod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-							nim veniam, quis nostrud exercitation ullamco laboris nisi ut
-						</p>
-						<button
-							onClick={this.props.toggleAttModal}
-							className="details-button"
-						>
-							more details
-						</button>
-						<hr />
-					</div>
-				) : (
-					<React.Fragment />
-				)}
-				<div className="search-container">
-					<span>Nearby</span>
-					<FontAwesomeIcon className="search-icon" icon="search" />
-					<Autocomplete
-						className="search-bar"
-						style={{
-							backgroundColor: "white",
-							borderRadius: "8px",
-							borderColor: "",
-						}}
-						onPlaceSelected={this.onPlaceSelected}
-						types={["geocode", "establishment"]}
-						placeholder={this.searchPlaceholder}
-						onFocus={() => {
-							this.placeholder = "";
-						}}
-						onBlur={() => {
-							this.placeholder = "enter your text";
-						}}
-						componentRestrictions={{ country: "th" }}
-					/>
-					<select
-						className="nearby-option"
-						value={this.props.nearbyOption}
-						onChange={this.selectNearbyOption}
-					>
-						<option value="tourist_attraction">Tourist Attraction</option>
-						<option value="restaurant">Restaurant</option>
-						<option value="cafe">Cafe</option>
-						<option value="lodging">Hotel</option>
-					</select>
-				</div>
+                  {dropProvided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            <p>
+              Attraction details
+            </p>
+            <button
+              onClick={this.props.toggleAttModal}
+              className="details-button"
+            >
+              more details
+            </button>
+            <hr />
+          </div>
+        ) : (
+          <React.Fragment />
+        )}
+        <div className="search-container">
+          <span>Nearby</span>
+          <FontAwesomeIcon className="search-icon" icon="search" />
+          <Autocomplete
+            className="search-bar"
+            style={{
+              backgroundColor: "white",
+              borderRadius: "8px",
+              borderColor: "",
+            }}
+            onPlaceSelected={this.onPlaceSelected}
+            types={["geocode", "establishment"]}
+            placeholder={this.searchPlaceholder}
+            onFocus={() => {
+              this.placeholder = "";
+            }}
+            onBlur={() => {
+              this.placeholder = "enter your text";
+            }}
+            componentRestrictions={{ country: this.state.country }}
+          />
+          <select
+            className="nearby-option"
+            value={this.state.country}
+            onChange={this.selectCountryOption}
+          >
+            <option value="th">TH</option>
+            <option value="jp">JP</option>
+          </select>
+          <select
+            className="nearby-option"
+            value={this.props.nearbyOption}
+            onChange={this.selectNearbyOption}
+          >
+            <option value="tourist_attraction">Tourist Attraction</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="cafe">Cafe</option>
+            <option value="lodging">Hotel</option>
+          </select>
+        </div>
 
-				{!this.props.nearbyLoaded ? (
-					<div className="AttBar">Loading...</div>
-				) : this.state.error ? (
-					<div className="AttBar">{this.state.error.message}</div>
-				) : (
-					<div className="AttBar">
-						{(() => {
-							if (this.props.searchedPlace.google_place_id)
-								return (
-									<div
-										onClick={() => this.showDetails(this.props.searchedPlace)}
-									>
-										<Droppable
-											droppableId={
-												this.props.searchedPlace.google_place_id + "bar"
-											}
-											isDropDisabled={true}
-											type={String}
-											direction="vertical"
-											isCombineEnabled={false}
-										>
-											{(dropProvided) => (
-												<div
-													{...dropProvided.droppableProps}
-													ref={dropProvided.innerRef}
-												>
-													<Draggable
-														draggableId={
-															this.props.searchedPlace.attraction_id.toString() +
-															"bar"
-														}
-														index={this.props.searchedPlace.attraction_id}
-													>
-														{(dragProvided) => (
-															<div
-																{...dragProvided.dragHandleProps}
-																{...dragProvided.draggableProps}
-																ref={dragProvided.innerRef}
-															>
-																<AttBarCard {...this.props.searchedPlace} />
-															</div>
-														)}
-													</Draggable>
-													{dropProvided.placeholder}
-												</div>
-											)}
-										</Droppable>
-									</div>
-								);
-						})()}
-						{(() => {
-							if (this.props.nearbyPlaces !== [])
-								return (
-									<React.Fragment>
-										{this.props.nearbyPlaces
-											.filter((place) =>
-												place.types.find(
-													(type) =>
-														type === "point_of_interest" ||
-														type === "tourist_attraction"
-												)
-											)
-											.splice(0, 10)
-											.map((dat) => (
-												<div onClick={() => this.showDetails(dat)}>
-													<Droppable
-														key={dat.place_id.toString()}
-														index={this.props.nearbyPlaces.findIndex(
-															(d) => d === dat
-														)}
-														droppableId={dat.place_id + "bar"}
-														isDropDisabled={true}
-														type={String}
-														direction="vertical"
-														isCombineEnabled={false}
-													>
-														{(dropProvided) => (
-															<div
-																{...dropProvided.droppableProps}
-																ref={dropProvided.innerRef}
-															>
-																<Draggable
-																	draggableId={dat.place_id + "bar"}
-																	index={this.props.nearbyPlaces.findIndex(
-																		(d) => d === dat
-																	)}
-																	key={dat.place_id.toString()}
-																>
-																	{(dragProvided) => (
-																		<div
-																			{...dragProvided.dragHandleProps}
-																			{...dragProvided.draggableProps}
-																			ref={dragProvided.innerRef}
-																		>
-																			<AttBarCard
-																				attraction_name={dat.name}
-																				attraction_type={dat.types[0]}
-																				photos={dat.photos}
-																				key={dat.place_id.toString()}
-																			/>
-																		</div>
-																	)}
-																</Draggable>
+        {!this.props.nearbyLoaded ? (
+          <div className="AttBar">Loading...</div>
+        ) : this.state.error ? (
+          <div className="AttBar">{this.state.error.message}</div>
+        ) : (
+          <div className="AttBar">
+            {(() => {
+              if (this.props.searchedPlace.google_place_id)
+                return (
+                  <div
+                    onClick={() => this.showDetails(this.props.searchedPlace)}
+                  >
+                    <Droppable
+                      droppableId={
+                        this.props.searchedPlace.google_place_id + "bar"
+                      }
+                      isDropDisabled={true}
+                      type={String}
+                      direction="vertical"
+                      isCombineEnabled={false}
+                    >
+                      {(dropProvided) => (
+                        <div
+                          {...dropProvided.droppableProps}
+                          ref={dropProvided.innerRef}
+                        >
+                          <Draggable
+                            draggableId={
+                              this.props.searchedPlace.attraction_id.toString() +
+                              "bar"
+                            }
+                            index={this.props.searchedPlace.attraction_id}
+                          >
+                            {(dragProvided) => (
+                              <div
+                                {...dragProvided.dragHandleProps}
+                                {...dragProvided.draggableProps}
+                                ref={dragProvided.innerRef}
+                              >
+                                <AttBarCard {...this.props.searchedPlace} />
+                              </div>
+                            )}
+                          </Draggable>
+                          {dropProvided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                );
+            })()}
+            {(() => {
+              if (this.props.nearbyPlaces !== [])
+                return (
+                  <React.Fragment>
+                    {this.props.nearbyPlaces
+                      .filter((place) =>
+                        place.types.find(
+                          (type) =>
+                            type === "point_of_interest" ||
+                            type === "tourist_attraction"
+                        )
+                      )
+                      .splice(0, 10)
+                      .map((dat) => (
+                        <div onClick={() => this.showDetails(dat)}>
+                          <Droppable
+                            key={dat.place_id.toString()}
+                            index={this.props.nearbyPlaces.findIndex(
+                              (d) => d === dat
+                            )}
+                            droppableId={dat.place_id + "bar"}
+                            isDropDisabled={true}
+                            type={String}
+                            direction="vertical"
+                            isCombineEnabled={false}
+                          >
+                            {(dropProvided) => (
+                              <div
+                                {...dropProvided.droppableProps}
+                                ref={dropProvided.innerRef}
+                              >
+                                <Draggable
+                                  draggableId={dat.place_id + "bar"}
+                                  index={this.props.nearbyPlaces.findIndex(
+                                    (d) => d === dat
+                                  )}
+                                  key={dat.place_id.toString()}
+                                >
+                                  {(dragProvided) => (
+                                    <div
+                                      {...dragProvided.dragHandleProps}
+                                      {...dragProvided.draggableProps}
+                                      ref={dragProvided.innerRef}
+                                    >
+                                      <AttBarCard
+                                        attraction_name={dat.name}
+                                        attraction_type={dat.types[0]}
+                                        google_place_id={dat.google_place_id}
+                                        photos={dat.photos}
+                                        key={dat.place_id.toString()}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
 
 																{dropProvided.placeholder}
 															</div>

@@ -65,8 +65,7 @@ class AttBarCard extends Component {
             <div className="name">{attraction_name}</div>
             <div className="description">
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              mod tempor incididunt ut labore et dolore magna aliqua.
+              Attraction details
               {description}{" "}
             </div>
           </div>
