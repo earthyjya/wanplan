@@ -53,6 +53,9 @@ class AttBar extends Component {
 
 	async componentDidMount() {
 		this.attbarRef = React.createRef();
+    if(this.props.country !== "th" && this.props.country !== "jp"){
+      this.props.history.replace('/');
+    }
 	}
 
 	render() {
