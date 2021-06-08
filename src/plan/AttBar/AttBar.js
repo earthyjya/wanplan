@@ -5,6 +5,15 @@ import axios from "axios";
 import React, { Component } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Redirect, useHistory, useParams } from "react-router";
+
+function withCountryAndHistory(Component) {
+  return function WrappedComponent(props) {
+    let { country } = useParams();
+    let history = useHistory();
+    return <Component {...props} country={country} history={history} />;
+  }
+}
 
 class AttBar extends Component {
   state = {
@@ -13,7 +22,6 @@ class AttBar extends Component {
     isLoading: true,
     error: null,
     data: [],
-    country: "",
   };
 
 	onPlaceSelected = async (place) => {
@@ -26,11 +34,13 @@ class AttBar extends Component {
 	};
 
   selectCountryOption = (e) => {
-    this.setState({country: e.target.value});
+    this.props.history.push(`./${e.target.value}`);
+    this.props.history.go(0)
   };
 
   showDetails(dat) {
     this.setState({ detailsDat: dat });
+
     this.props.showDetails(dat);
     this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -154,7 +164,7 @@ class AttBar extends Component {
               borderColor: "",
             }}
             onPlaceSelected={this.onPlaceSelected}
-            types={["geocode", "establishment"]}
+            
             placeholder={this.searchPlaceholder}
             onFocus={() => {
               this.placeholder = "";
@@ -162,12 +172,16 @@ class AttBar extends Component {
             onBlur={() => {
               this.placeholder = "enter your text";
             }}
-            componentRestrictions={{ country: this.state.country }}
+            options={{
+              types: ["geocode", "establishment"],
+              componentRestrictions: { country: this.props.country },
+            }}
+
           />
           <select
             className="nearby-option"
-            value={this.state.country}
             onChange={this.selectCountryOption}
+            value={this.props.country}
           >
             <option value="th">TH</option>
             <option value="jp">JP</option>
@@ -348,4 +362,4 @@ class AttBar extends Component {
 	}
 }
 
-export default AttBar;
+export default withCountryAndHistory(AttBar);

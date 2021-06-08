@@ -34,7 +34,7 @@ import {
   faTwitterSquare,
 } from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { Route, BrowserRouter, Redirect } from "react-router-dom";
+import { Route, BrowserRouter, Redirect, Switch } from "react-router-dom";
 import DuplicatePlan from "./lib/managePlan/DuplicatePlan";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(
@@ -346,17 +346,19 @@ class App extends Component {
               />
             )}
           />
-
-          <Route
-            path="/plan/:plan_id/edit_plan"
-            component={({ match }) => (
-              <EditPlan
-                plan_id={Number(match.params.plan_id)}
-                new_plan={false}
-                // {...this.state}
-              />
-            )}
-          />
+          <Switch>
+            <Redirect exact from="/plan/:plan_id/edit_plan" to="/plan/:plan_id/edit_plan/th"/>
+            <Route
+              path="/plan/:plan_id/edit_plan/:country"
+              component={({ match }) => (
+                <EditPlan
+                  plan_id={Number(match.params.plan_id)}
+                  new_plan={false}
+                  {...this.state}
+                />
+              )}
+            />          
+          </Switch>
           <Route
             path="/plan/:plan_id/edit_new_plan"
             component={({ match }) => (
