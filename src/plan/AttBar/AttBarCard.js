@@ -8,13 +8,8 @@ class AttBarCard extends Component {
 
   async componentDidMount() {
     if (process.env.NODE_ENV === "production") {
-      if (this.props.photos) {
-        await this.setState({ photos: this.props.photos });
-        return;
-      }
       const { google_place_id } = this.props;
-      let url =
-        process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
+      let url = process.env.REACT_APP_APIServer + "/googlephoto/" + google_place_id;
       await axios
         .get(url)
         .then((res) => {
@@ -28,13 +23,12 @@ class AttBarCard extends Component {
 
   checkBgImage() {
     var style = {
-      backgroundImage: "url(https://via.placeholder.com/300x200)",
+      backgroundImage: "url(/no-photo-placeholder.png)",
       backgroundSize: "cover",
       backgroundPosition: "center",
     };
     if (this.state.photos.length > 0) {
       style.backgroundImage = "url(" + this.state.photos[0] + ")";
-      // console.log(this.state.photos);
     }
     return style;
   }

@@ -21,7 +21,6 @@ class AttBar extends Component {
     detailsDat: "",
     isLoading: true,
     error: null,
-    data: [],
   };
 
 	onPlaceSelected = async (place) => {
@@ -264,14 +263,13 @@ class AttBar extends Component {
                         )
                       )
                       .splice(0, 10)
-                      .map((dat) => (
-                        <div onClick={() => this.showDetails(dat)}>
+                      .map((place, idx) => (
+                        <div key={place.place_id.toString()}
+                            onClick={() => this.showDetails(place)}
+                        >
                           <Droppable
-                            key={dat.place_id.toString()}
-                            index={this.props.nearbyPlaces.findIndex(
-                              (d) => d === dat
-                            )}
-                            droppableId={dat.place_id + "bar"}
+                            index={idx}
+                            droppableId={place.place_id + "bar"}
                             isDropDisabled={true}
                             type={String}
                             direction="vertical"
@@ -283,11 +281,9 @@ class AttBar extends Component {
                                 ref={dropProvided.innerRef}
                               >
                                 <Draggable
-                                  draggableId={dat.place_id + "bar"}
-                                  index={this.props.nearbyPlaces.findIndex(
-                                    (d) => d === dat
-                                  )}
-                                  key={dat.place_id.toString()}
+                                  draggableId={place.place_id + "bar"}
+                                  index={idx}
+                                  key={place.place_id.toString()}
                                 >
                                   {(dragProvided) => (
                                     <div
@@ -296,16 +292,15 @@ class AttBar extends Component {
                                       ref={dragProvided.innerRef}
                                     >
                                       <AttBarCard
-                                        attraction_name={dat.name}
-                                        attraction_type={dat.types[0]}
-                                        google_place_id={dat.google_place_id}
-                                        photos={dat.photos}
-                                        key={dat.place_id.toString()}
+                                        attraction_name={place.name}
+                                        attraction_type={place.types[0]}
+                                        google_place_id={place.place_id}
+                                        photos={place.photos}
+                                        key={place.place_id.toString()}
                                       />
                                     </div>
                                   )}
                                 </Draggable>
-
 																{dropProvided.placeholder}
 															</div>
 														)}
@@ -315,49 +310,6 @@ class AttBar extends Component {
 									</React.Fragment>
 								);
 						})()}
-						{this.state.data.map((dat) => (
-							<div
-								key={dat.attraction_id}
-								onClick={() => this.showDetails(dat)}
-							>
-								<Droppable
-									index={dat.attraction_id}
-									droppableId={dat.google_place_id + "bar"}
-									isDropDisabled={true}
-									type={String}
-									direction="vertical"
-									isCombineEnabled={false}
-								>
-									{(dropProvided) => (
-										<div
-											{...dropProvided.droppableProps}
-											ref={dropProvided.innerRef}
-										>
-											<Draggable
-												draggableId={dat.attraction_id.toString() + "bar"}
-												index={dat.attraction_id}
-												key={dat.attraction_id.toString() + "bar"}
-											>
-												{(dragProvided) => (
-													<div
-														{...dragProvided.dragHandleProps}
-														{...dragProvided.draggableProps}
-														ref={dragProvided.innerRef}
-													>
-														<AttBarCard
-															{...dat}
-															key={dat.attraction_id.toString() + "bar"}
-														/>
-													</div>
-												)}
-											</Draggable>
-
-											{dropProvided.placeholder}
-										</div>
-									)}
-								</Droppable>
-							</div>
-						))}
 					</div>
 				)}
 			</div>
