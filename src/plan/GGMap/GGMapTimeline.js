@@ -8,7 +8,6 @@ class GGMapTimeline extends Component {
 			<React.Fragment>
 				{days.map((day) => (
 					<GGMapDayTimeline
-						{...this.state}
 						{...this.props}
 						plan_detail={plan_detail.filter((plan) => plan.day === day)}
 						day={day}

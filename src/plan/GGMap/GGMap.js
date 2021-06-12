@@ -51,7 +51,11 @@ class GGMap extends Component {
 												lng: detail.geometry.location.lng,
 											}}
 										>
-											<InfoWindow>
+											<InfoWindow
+												position={{
+													lat: detail.geometry.location.lat,
+													lng: detail.geometry.location.lng,
+												}}>
 												<div>{detail.attraction_name}</div>
 											</InfoWindow>
 										</Marker>

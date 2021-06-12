@@ -1,7 +1,23 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class GGMapDayTimeline extends Component {
-	getTransportComponent = (transport) => {
+
+	renderTransportComponent = (transports, day, idx) => {
+		if(!Array.isArray(transports) || transports.length <= day || 
+			 !Array.isArray(transports[day]) || transports[day].length <= idx || 
+			 !transports[day][idx])
+		{
+			return (
+			<div className="ggmap-transport-container">
+				<span>
+					<span>{"Transportation not found"}</span>
+				</span>
+			</div>
+			);
+		} 
+			
+		let transport = transports[day][idx];
+
 		if (transport && transport.mode) {
 			return (
 				<div className="ggmap-transport-container">
@@ -36,7 +52,7 @@ class GGMapDayTimeline extends Component {
 		}
 	};
 
-	getAttComponent = (detail) => {
+	renderAttComponent = (detail) => {
 		return (
 			<div className="ggmap-att-container">
 				<div>
@@ -51,6 +67,22 @@ class GGMapDayTimeline extends Component {
 		this.props.setFocusDay(this.props.day);
 	};
 
+	renderComponents = (plan_detail, transports, day) => {
+		if(!plan_detail) return(<></>);
+		let att_show = [];
+		plan_detail.map((detail, idx) => {
+			if (idx === 0)
+				att_show.push(
+					this.renderTransportComponent(transports, day-1, idx)
+				);
+			att_show.push(this.renderAttComponent(detail));
+			att_show.push(
+				this.renderTransportComponent(transports, day-1, idx+1)
+			);
+		});
+		return att_show;
+	}
+
 	render() {
 		const { plan_detail, day, editing, transports } = this.props;
 		if (this.props.focusDay === this.props.day) {
@@ -58,22 +90,7 @@ class GGMapDayTimeline extends Component {
 				<div className="ggmap-day-timeline">
 					<div className="ggmap-day-title"> Day {day}</div>
 					<div> Hotel </div>
-					{(() => {
-						let att_show = [];
-						let idx = 0;
-						plan_detail.map((detail) => {
-							if (idx === 0)
-								att_show.push(
-									this.getTransportComponent(transports[day - 1][idx])
-								);
-							att_show.push(this.getAttComponent(detail));
-							att_show.push(
-								this.getTransportComponent(transports[day - 1][idx + 1])
-							);
-							idx = idx + 1;
-						});
-						return att_show;
-					})()}
+					{this.renderComponents(plan_detail, transports, day)}
 					<div> Hotel </div>
 				</div>
 			);
@@ -81,9 +98,11 @@ class GGMapDayTimeline extends Component {
 			return (
 				<div className="ggmap-day-timeline">
 					<div className="ggmap-day-title" onClick={this.setFocusDay}>
-						{" "}
-						Day {day}
+						{` Day ${day}`}
 					</div>
+					<div> Hotel </div>
+					{this.renderComponents(plan_detail, transports, day)}
+					<div> Hotel </div>
 				</div>
 			);
 		}

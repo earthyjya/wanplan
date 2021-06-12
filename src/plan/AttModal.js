@@ -70,11 +70,11 @@ class AttModal extends Component {
               />
               <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
             </Carousel>
-            <div class="attmodal-description-container">
-              <div class="name"> {attraction_name} </div>
-              <div class="type"> sightseeing place </div>
-              <div class="time-container">
-                <div class="opening">
+            <div className="attmodal-description-container">
+              <div className="name"> {attraction_name} </div>
+              <div className="type"> sightseeing place </div>
+              <div className="time-container">
+                <div className="opening">
                   <span>
                     {" "}
                     <FontAwesomeIcon icon="clock" />
@@ -82,7 +82,7 @@ class AttModal extends Component {
                   </span>
                   <span>{open_time + " - " + close_time}</span>
                 </div>
-                <div class="peak">
+                <div className="peak">
                   <span>
                     {" "}
                     <FontAwesomeIcon icon="calendar-alt" />
@@ -90,7 +90,7 @@ class AttModal extends Component {
                   </span>
                   <span> 8:00 - 16:00 </span>
                 </div>
-                <div class="link">
+                <div className="link">
                   <span>
                     {" "}
                     <FontAwesomeIcon icon="link" />
@@ -98,7 +98,7 @@ class AttModal extends Component {
                   <a href={attraction_link}>link</a>
                 </div>
               </div>
-              <div class="description">{attraction_description}</div>
+              <div className="description">{attraction_description}</div>
             </div>
           </ModalBody>
         </Modal>
