@@ -493,10 +493,11 @@ class EditPlan extends React.Component {
   setNearbyOption = async (type) => {
     const APIServer = process.env.REACT_APP_APIServer;
     this.setState({ nearbyOption: type });
+    if(!this.state.searchedPlace) return;
     let res = await FindNearby(
       APIServer,
-      this.state.detailsDat.geometry.location.lat,
-      this.state.detailsDat.geometry.location.lng,
+      this.state.searchedPlace.geometry.location.lat,
+      this.state.searchedPlace.geometry.location.lng,
       type,
       1500
     );
@@ -524,6 +525,7 @@ class EditPlan extends React.Component {
       .catch((err) => console.log(err));
 
     this.setState({ searchedPlace: res.data[0] });
+    console.log(this.state.searchedPlace);
 
     res = await FindNearby(
       APIServer,
