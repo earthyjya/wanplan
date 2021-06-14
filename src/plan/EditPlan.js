@@ -76,7 +76,8 @@ class EditPlan extends React.Component {
   };
 
   updatePlan = async () => {
-    const { plan_overview, plan_startday, plan_detail, plan_location } = this.state;
+    const { plan_overview, plan_startday, plan_detail, plan_location } =
+      this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const toUpdate = {
@@ -97,7 +98,8 @@ class EditPlan extends React.Component {
   };
 
   updatePlanNoRedirect = async () => {
-    const { plan_overview, plan_startday, plan_detail, plan_location } = this.state;
+    const { plan_overview, plan_startday, plan_detail, plan_location } =
+      this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const toUpdate = {
@@ -476,6 +478,20 @@ class EditPlan extends React.Component {
     }, 15);
   };
 
+  changeTransportMode = (day, order, newMode) => {
+    const { transports } = this.state;
+    let newTransports = transports;
+    newTransports[day][order].mode = newMode;
+    this.setState({ transports: newTransports });
+  };
+
+  changeTransportText = (day, order, newText) => {
+    const { transports } = this.state;
+    let newTransports = transports;
+    newTransports[day][order].text = newText;
+    this.setState({ transports: newTransports });
+  };
+
   updateDescription = (source, newDescription) => {
     const { plan_detail } = this.state;
     plan_detail[source].description = newDescription;
@@ -493,7 +509,7 @@ class EditPlan extends React.Component {
   setNearbyOption = async (type) => {
     const APIServer = process.env.REACT_APP_APIServer;
     this.setState({ nearbyOption: type });
-    if(!this.state.searchedPlace) return;
+    if (!this.state.searchedPlace) return;
     let res = await FindNearby(
       APIServer,
       this.state.searchedPlace.geometry.location.lat,
@@ -652,7 +668,7 @@ class EditPlan extends React.Component {
     // auto add a day if days is empty, then calculate plan
     Promise.all([req4, req5])
       .then((res) => {
-        if(this.state.days.length === 0) {
+        if (this.state.days.length === 0) {
           console.log("days is empty");
           this.addDay(1);
         }
@@ -821,6 +837,8 @@ class EditPlan extends React.Component {
                                 addFreeTime={this.addFreeTime}
                                 updateNearby={this.updateNearby}
                                 updateStartdayTime={this.updateStartdayTime}
+                                changeTransportMode={this.changeTransportMode}
+                                changeTransportText={this.changeTransportText}
                               />
                             );
                           else if (this.state.mode === "map")

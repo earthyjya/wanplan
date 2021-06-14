@@ -3,8 +3,31 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class TransCard extends Component {
+  state = {
+    mode: "driving",
+    text: "",
+  };
+
+  changeMode = (e) => {
+    const { day, order } = this.props;
+    this.props.changeTransportMode(day, order, e.target.value);
+  };
+
+  changeText = (e) => {
+    const { day, order } = this.props;
+    this.props.changeTransportText(day, order, e.target.value * 5 + " mins");
+  };
+
+  static getDerivedStateFromProps(NextProps) {
+    return {
+      mode: NextProps.transport ? NextProps.transport.mode : "driving",
+      text: NextProps.transport ? NextProps.transport.text : "",
+    };
+  }
+
   render() {
-    const { start, destination, transport, transLoaded } = this.props;
+    const { start, destination, transport, transLoaded, editing } = this.props;
+    const { mode, text } = this.state;
     if (!start && destination.attraction_name === "Hotel")
       return (
         <div className="TransCardTimeContainer">
@@ -41,27 +64,59 @@ class TransCard extends Component {
                   <div className="transport">
                     <span> {transport.distance} </span>
                     {(() => {
-                      if (transport.mode === "driving")
+                      if (!editing) {
+                        if (mode === "driving")
+                          return (
+                            <span>
+                              <FontAwesomeIcon icon="car" size="sm" />
+                              <span> {text} </span>
+                            </span>
+                          );
+                        if (mode === "transit")
+                          return (
+                            <span>
+                              <FontAwesomeIcon icon="train" size="sm" />
+                              <span> {text} </span>
+                            </span>
+                          );
+                        if (mode === "walking")
+                          return (
+                            <span>
+                              <FontAwesomeIcon icon="walking" size="sm" />
+                              <span> {text} </span>
+                            </span>
+                          );
+                      } else {
                         return (
                           <span>
-                            <FontAwesomeIcon icon="car" size="sm" />
-                            <span>{transport.text}</span>
+                            <select
+                              style={{ fontFamily: "FontAwesome" }}
+                              value={mode}
+                              onChange={this.changeMode}
+                            >
+                              <option value="transit" key="transit">
+                                &#xf238;
+                              </option>
+                              <option value="driving" key="driving">
+                                &#xf1b9;
+                              </option>
+                              <option value="walking" key="walking">
+                                &#xf554;
+                              </option>
+                            </select>
+                            <select
+                              value={Math.ceil(text.split(" ")[0] / 5)}
+                              onChange={this.changeText}
+                            >
+                              {[...Array(100).keys()].map((key) => (
+                                <option value={key} key={key}>
+                                  {key * 5} mins
+                                </option>
+                              ))}
+                            </select>
                           </span>
                         );
-                      if (transport.mode === "transit")
-                        return (
-                          <span>
-                            <FontAwesomeIcon icon="train" size="sm" />
-                            <span>{transport.text}</span>
-                          </span>
-                        );
-                      if (transport.mode === "walking")
-                        return (
-                          <span>
-                            <FontAwesomeIcon icon="walking" size="sm" />
-                            <span>{transport.text}</span>
-                          </span>
-                        );
+                      }
                     })()}
                   </div>
                   <a

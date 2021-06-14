@@ -9,7 +9,8 @@ class Timeline extends Component {
   };
 
   render() {
-    const { plan_detail, days, editing, isLoading, error, startdayLoaded } = this.props;
+    const { plan_detail, days, editing, isLoading, error, startdayLoaded } =
+      this.props;
     if (error) return <div className="Timeline">Something went wrong :(</div>;
     return (
       <div className="Timeline">
@@ -26,8 +27,8 @@ class Timeline extends Component {
         </div>
         {(() => {
           if (!startdayLoaded) return <div>Loading...</div>;
-          else{
-          if (isMobileOnly) 
+          else {
+            if (isMobileOnly)
               return days.map((day) => (
                 <MobileDayTimeline
                   {...this.state}
@@ -37,17 +38,19 @@ class Timeline extends Component {
                   key={day.toString()}
                 />
               ));
-          else
-            return days.map((day) => (
-              <DayTimeline
-                {...this.state}
-                {...this.props}
-                plan_detail={plan_detail.filter((plan) => plan.day === day)}
-                day={day}
-                key={day.toString()}
-                showDetails={this.props.showDetails}
-              />
-            ));
+            else
+              return days.map((day) => (
+                <DayTimeline
+                  {...this.state}
+                  {...this.props}
+                  plan_detail={plan_detail.filter((plan) => plan.day === day)}
+                  day={day}
+                  key={day.toString()}
+                  showDetails={this.props.showDetails}
+                  changeTransportMode={this.props.changeTransportMode}
+                  changeTransportText={this.props.changeTransportText}
+                />
+              ));
           }
         })()}
       </div>
