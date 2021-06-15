@@ -481,14 +481,15 @@ class EditPlan extends React.Component {
   changeTransportMode = (day, order, newMode) => {
     const { transports } = this.state;
     let newTransports = transports;
-    newTransports[day][order].mode = newMode;
+    newTransports[day-1][order].mode = newMode;
     this.setState({ transports: newTransports });
   };
 
   changeTransportText = (day, order, newText) => {
     const { transports } = this.state;
     let newTransports = transports;
-    newTransports[day][order].text = newText;
+    newTransports[day-1][order].text = newText;
+    newTransports[day-1][order].value = parseFloat(newText.split(" ")[0]);
     this.setState({ transports: newTransports });
   };
 

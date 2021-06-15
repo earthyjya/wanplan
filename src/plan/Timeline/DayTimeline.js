@@ -154,7 +154,7 @@ class DayTimeline extends Component {
                                       //Transport
                                       return (
                                         <TransCard
-                                          day={idx}
+                                          day={day}
                                           order={
                                             detail.attraction_order -
                                             plan_detail[0].attraction_order
@@ -239,7 +239,7 @@ class DayTimeline extends Component {
                                 if (plan_detail) {
                                   return (
                                     <TransCard
-                                      day={idx}
+                                      day={day}
                                       order={plan_detail.length}
                                       start={
                                         plan_detail[plan_detail.length - 1]
@@ -308,7 +308,7 @@ class DayTimeline extends Component {
                         destination = detail;
                       })()}
                       <TransCard
-                        day={idx}
+                        day={day}
                         order={
                           detail.attraction_order -
                           plan_detail[0].attraction_order
@@ -343,7 +343,7 @@ class DayTimeline extends Component {
                     if (plan_detail.length) {
                       return (
                         <TransCard
-                          day={idx}
+                          day={day}
                           order={plan_detail.length}
                           start={plan_detail[plan_detail.length - 1]}
                           destination={{ attraction_name: "Hotel" }}
