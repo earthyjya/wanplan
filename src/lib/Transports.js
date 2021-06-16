@@ -10,7 +10,10 @@ export const GetTransportsBetween2Places = async (
   return axios
     .get(url)
     .then((res) => {
+      // console.log(res)
       return {
+        source_id: place1,
+        destination_id: place2,
         text: res.data.duration.text,
         mode: res.data.mode,
         value: res.data.duration.value / 60,
@@ -22,7 +25,7 @@ export const GetTransportsBetween2Places = async (
     });
 };
 
-export const CreateTransportInDayPromise = (APIServer, places) =>
+export const CreateTransportInDayPromise = (APIServer, places, day) =>
   places.map(async (place, idx1) => {
     let lastPlace = { attraction_name: "Hotel" };
     if (idx1 === 0) lastPlace = { attraction_name: "Hotel" };
@@ -35,6 +38,8 @@ export const CreateTransportInDayPromise = (APIServer, places) =>
     ) {
       return {
         key: idx1,
+        day: day,
+        trans_order: idx1,
         text: "No transportation data",
         value: 0,
       };
@@ -61,11 +66,18 @@ export const GetTransports = async (APIServer, plan_detail, days) => {
     let dayTrans = [];
     let places = plan_detail.filter((det) => det.day === day);
 
-    if (places) dayTrans = CreateTransportInDayPromise(APIServer, places);
+    if (places) dayTrans = CreateTransportInDayPromise(APIServer, places, day);
     return dayTrans;
   });
-
   let results = await ResolveTransportsPromise(transports);
+
+  let plan_id = plan_detail[0].plan_id;
+  results = results.map((daytrans, dayIdx) =>
+    daytrans.map((tran, order) => {
+      return { plan_id: plan_id, day: dayIdx + 1, trans_order: order, ...tran };
+    })
+  );
+  // console.log(results);
   return results;
 };
 
@@ -79,9 +91,12 @@ export const AssignTime = (plan_detail, plan_startday, transports) => {
       lastDay = plan_detail[i].day;
       idx = 0;
       if (transports[lastDay - 1]) {
-        if (transports[lastDay - 1][idx])
-          transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-        else transTime = 0;
+        if (transports[lastDay - 1][idx]) {
+          let value = transports[lastDay - 1][idx].text.split(" ")[0];
+          if (isNaN(value)) value = 0;
+          value = Number(value);
+          transTime = Math.ceil(value / 5) * 5;
+        } else transTime = 0;
       }
       lastTime = Str2Int(plan_startday[lastDay - 1].start_day) + transTime;
       ++idx;
@@ -89,9 +104,12 @@ export const AssignTime = (plan_detail, plan_startday, transports) => {
     plan_detail[i].start_time = Int2Str(lastTime);
     plan_detail[i].end_time = Int2Str(lastTime + plan_detail[i].time_spend);
     if (transports[lastDay - 1]) {
-      if (transports[lastDay - 1][idx])
-        transTime = Math.ceil(transports[lastDay - 1][idx].value / 10) * 10;
-      else transTime = 0;
+      if (transports[lastDay - 1][idx]) {
+        let value = transports[lastDay - 1][idx].text.split(" ")[0];
+        if (isNaN(value)) value = 0;
+        value = Number(value);
+        transTime = Math.ceil(value / 5) * 5;
+      } else transTime = 0;
     }
     lastTime = lastTime + plan_detail[i].time_spend + transTime;
     // console.log(transTime);

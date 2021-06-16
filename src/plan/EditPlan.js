@@ -18,10 +18,15 @@ import UpdatePlan, {
   UpdateStartday,
   UpdateLocation,
   UpdateDetail,
+  UpdateTransport,
 } from "../lib/managePlan/UpdatePlan";
 import { UpdatePlanInCache } from "../lib/Cache.js";
 import { GetTransports, AssignTime } from "../lib/Transports";
-import { ReorderDetail, ReorderStartday } from "../lib/Reorder";
+import {
+  ReorderDetail,
+  ReorderStartday,
+  ReorderTransport,
+} from "../lib/Reorder";
 import {
   GetPlanDetailExtraDatas,
   GetPlanDetailExtraDatasPromises,
@@ -76,8 +81,13 @@ class EditPlan extends React.Component {
   };
 
   updatePlan = async () => {
-    const { plan_overview, plan_startday, plan_detail, plan_location } =
-      this.state;
+    const {
+      plan_overview,
+      plan_startday,
+      plan_detail,
+      plan_location,
+      transports,
+    } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const toUpdate = {
@@ -85,6 +95,7 @@ class EditPlan extends React.Component {
       plan_startday,
       plan_detail,
       plan_location: plan_location[0],
+      transports,
     };
     this.setState({ isUpdating: true });
 
@@ -98,8 +109,13 @@ class EditPlan extends React.Component {
   };
 
   updatePlanNoRedirect = async () => {
-    const { plan_overview, plan_startday, plan_detail, plan_location } =
-      this.state;
+    const {
+      plan_overview,
+      plan_startday,
+      plan_detail,
+      plan_location,
+      transports,
+    } = this.state;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     const toUpdate = {
@@ -107,6 +123,7 @@ class EditPlan extends React.Component {
       plan_startday,
       plan_detail,
       plan_location: plan_location[0],
+      transports,
     };
     //update current plan
     // this.toggleUpdateToast();
@@ -183,11 +200,34 @@ class EditPlan extends React.Component {
     UpdateDetail(APIServer, plan_id, { plan_detail });
   };
 
+  updateTransport = async (transports) => {
+    //update current plan
+    const { plan_id } = this.props;
+    const APIServer = process.env.REACT_APP_APIServer;
+    UpdateTransport(APIServer, plan_id, { transports });
+  };
+
   updateOnePlanDetail = async (order) => {
     const plan_id = this.props.plan_id;
     const detail = this.state.plan_detail[order];
     const APIServer = process.env.REACT_APP_APIServer;
     const url = APIServer + "/plan_detail/" + plan_id + "/" + order;
+    // console.log(url);
+    await axios
+      .put(url, detail)
+      .then((res) => {
+        // console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  updateOneTransport = async (day, order, transports) => {
+    const plan_id = this.props.plan_id;
+    const detail = transports[day - 1][order];
+    const APIServer = process.env.REACT_APP_APIServer;
+    const url = APIServer + "/transport/" + plan_id + "/" + day + "/" + order;
     // console.log(url);
     await axios
       .put(url, detail)
@@ -298,6 +338,19 @@ class EditPlan extends React.Component {
     return GetTransports(APIServer, plan_detail, days);
   };
 
+  reArrangePlanDetail = (plan_detail, plan_startday, transports) => {
+    plan_detail = ReorderDetail(plan_detail);
+    plan_startday = ReorderStartday(plan_startday);
+    plan_detail = AssignTime(plan_detail, plan_startday, transports);
+    this.setState({
+      plan_detail,
+      plan_startday,
+      isLoading: false,
+      transLoaded: true,
+      transports,
+    });
+  };
+
   calPlan = async (plan_detail) => {
     let { plan_startday } = this.state;
     if (plan_detail) {
@@ -318,7 +371,8 @@ class EditPlan extends React.Component {
   };
 
   addDay = (day) => {
-    let { days, plan_overview, plan_detail, plan_startday } = this.state;
+    let { days, plan_overview, plan_detail, plan_startday, transports } =
+      this.state;
     days = days.concat(days.length + 1);
     plan_overview.duration += 1;
     plan_startday.splice(day, 0, {
@@ -326,6 +380,9 @@ class EditPlan extends React.Component {
       day: day,
       start_day: "09:00",
     });
+    plan_startday = ReorderStartday(plan_startday);
+    transports.splice(day, 0, []);
+    transports = ReorderTransport(transports);
     // console.log(plan_startday);
     plan_detail.map((detail) => {
       if (detail.day > day) detail.day += 1;
@@ -335,18 +392,26 @@ class EditPlan extends React.Component {
       days,
       plan_overview,
       plan_startday,
+      plan_detail,
+      transports,
     });
-    setTimeout(() => this.calPlan(plan_detail), 15);
+    // setTimeout(() => this.calPlan(plan_detail), 15);
+    this.reArrangePlanDetail(plan_detail, plan_startday, transports);
     this.updatePlanOverview(plan_overview);
     this.updatePlanStartday();
     this.updatePlanDetails();
+    this.updateTransport(transports);
   };
 
   delDay = (day) => {
-    let { days, plan_overview, plan_detail, plan_startday } = this.state;
+    let { days, plan_overview, plan_detail, plan_startday, transports } =
+      this.state;
     days.pop();
     plan_overview.duration -= 1;
     plan_startday.splice(day - 1, 1);
+    // plan_startday = ReorderStartday(plan_startday);
+    transports.splice(day - 1, 1);
+    transports = ReorderTransport(transports);
     // console.log(plan_startday);
     plan_detail = plan_detail.filter((plan) => plan.day !== day);
     plan_detail.map((detail) => {
@@ -357,35 +422,83 @@ class EditPlan extends React.Component {
       days,
       plan_overview,
       plan_startday,
+      transports,
+      plan_detail,
     });
     setTimeout(async () => {
-      await this.calPlan(plan_detail);
+      // await this.calPlan(plan_detail);
+      this.reArrangePlanDetail(plan_detail.plan_startday, transports);
       this.updatePlanOverview(plan_overview);
       this.updatePlanStartday();
       this.updatePlanDetails();
+      this.updateTransport(transports);
     }, 15);
+  };
+
+  transDelCard = (transports, index) => {
+    let { plan_detail } = this.state;
+    const { plan_id } = this.props;
+    let day = plan_detail[index].day;
+    let trans_order =
+      index -
+      plan_detail.filter((plan) => plan.day === day)[0].attraction_order;
+    transports[day - 1].splice(trans_order, 1);
+    if (trans_order < transports[day - 1].length)
+      transports[day - 1][trans_order] = {
+        plan_id,
+        day,
+        trans_order,
+        text: "0 mins",
+        value: 0,
+        mode: "driving",
+      };
+    transports = ReorderTransport(transports);
+    return transports;
+  };
+
+  transAddCard = (transports, index, day) => {
+    let { plan_detail } = this.state;
+    const { plan_id } = this.props;
+    let trans_order =
+      index -
+      plan_detail.filter((plan) => plan.day === day)[0].attraction_order;
+    const newTran = {
+      plan_id,
+      day,
+      trans_order,
+      text: "0 mins",
+      value: 0,
+      mode: "driving",
+    };
+    if (trans_order < transports[day - 1].length)
+      transports[day - 1][trans_order] = newTran;
+    transports[day - 1].splice(trans_order, 0, newTran);
+    transports = ReorderTransport(transports);
+    return transports;
   };
 
   reorderCards = (source, destination) => {
     // console.log(source, destination);
+    let { plan_detail, transports, plan_startday } = this.state;
     let a = source.index;
     let b = destination.index;
     const daya = Number(source.droppableId);
     const dayb = Number(destination.droppableId);
-    let { plan_detail } = this.state;
+    transports = this.transDelCard(transports, a);
+    transports = this.transAddCard(transports, b, dayb);
     let [removed] = plan_detail.splice(a, 1);
     removed.day = dayb;
     if (a < b && daya !== dayb && b !== 0) b -= 1;
     plan_detail.splice(b, 0, removed);
     plan_detail.sort((a, b) => a.day - b.day);
-    this.setState(plan_detail);
-    // console.log(plan_detail);
-    this.setState({ transLoaded: false });
+    this.setState({ plan_detail, transports });
     setTimeout(async () => {
-      await this.calPlan(plan_detail);
+      // await this.calPlan(plan_detail);
+      this.reArrangePlanDetail(plan_detail, plan_startday, transports);
       this.updatePlanOverview(this.state.plan_overview);
       this.updatePlanStartday();
       this.updatePlanDetails();
+      this.updateTransport(transports);
     }, 15);
   };
 
@@ -413,7 +526,7 @@ class EditPlan extends React.Component {
 
   addCard = async (source, destination) => {
     let { droppableId, index } = destination;
-    let { plan_detail } = this.state;
+    let { plan_detail, plan_startday, transports } = this.state;
     let sourceId = source.droppableId;
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
@@ -430,29 +543,37 @@ class EditPlan extends React.Component {
       day: Number(droppableId),
     };
 
+    transports = this.transAddCard(transports, index, Number(droppableId));
+    this.setState({ transports });
     plan_detail = this.addNewPlanToPlanDetail(plan_detail, index, toAdd);
+    this.setState({ transLoaded: false });
     setTimeout(async () => {
       let results = await GetPlanDetailExtraDatas(APIServer, google_place_id);
       results = { ...plan_detail[index], ...results };
       plan_detail = this.replacePlanInPlanDetail(plan_detail, index, results);
-      await this.calPlan(plan_detail);
+      // await this.calPlan(plan_detail);
+      this.reArrangePlanDetail(plan_detail, plan_startday, transports);
       this.updatePlanDetails();
+      this.updateTransport(transports);
     }, 15);
   };
 
   delCard = (index) => {
-    const { plan_detail } = this.state;
+    let { plan_detail, plan_startday, transports } = this.state;
+    transports = this.transDelCard(transports, index);
     plan_detail.splice(index, 1);
-    this.setState({ plan_detail });
+    this.setState({ plan_detail, transports });
     this.setState({ transLoaded: false });
     setTimeout(async () => {
-      await this.calPlan(plan_detail);
+      // await this.calPlan(plan_detail);
+      this.reArrangePlanDetail(plan_detail, plan_startday, transports);
       this.updatePlanDetails();
+      this.updateTransport(transports);
     }, 15);
   };
 
   addFreeTime = (order, day) => {
-    let { plan_detail } = this.state;
+    let { plan_detail, plan_startday, transports } = this.state;
     const { plan_id } = this.props;
     let toAdd = {
       plan_id,
@@ -462,10 +583,15 @@ class EditPlan extends React.Component {
       day: day,
       google_place_id: "freetime",
     };
+    transports = this.transAddCard(transports, order, day);
+    this.setState({ transports });
     plan_detail = this.addNewPlanToPlanDetail(plan_detail, order, toAdd);
+    this.setState({ transLoaded: true });
     setTimeout(async () => {
-      await this.calPlan(plan_detail);
+      // await this.calPlan(plan_detail);
+      this.reArrangePlanDetail(plan_detail, plan_startday, transports);
       this.updatePlanDetails();
+      this.updateTransport(transports);
     }, 15);
   };
 
@@ -481,16 +607,18 @@ class EditPlan extends React.Component {
   changeTransportMode = (day, order, newMode) => {
     const { transports } = this.state;
     let newTransports = transports;
-    newTransports[day-1][order].mode = newMode;
+    newTransports[day - 1][order].mode = newMode;
     this.setState({ transports: newTransports });
+    this.updateOneTransport(day, order, newTransports);
   };
 
   changeTransportText = (day, order, newText) => {
     const { transports } = this.state;
     let newTransports = transports;
-    newTransports[day-1][order].text = newText;
-    newTransports[day-1][order].value = parseFloat(newText.split(" ")[0]);
+    newTransports[day - 1][order].text = newText;
+    newTransports[day - 1][order].value = parseFloat(newText.split(" ")[0]);
     this.setState({ transports: newTransports });
+    this.updateOneTransport(day, order, newTransports);
   };
 
   updateDescription = (source, newDescription) => {
@@ -601,6 +729,7 @@ class EditPlan extends React.Component {
           days: days,
           startdayLoaded: true,
         });
+        return res.data;
       })
       .catch((err) => {
         this.setState({ startdayLoaded: true });
@@ -641,6 +770,14 @@ class EditPlan extends React.Component {
       });
     });
 
+  reqTransport = async (url, plan_id) =>
+    axios
+      .get(url + "/transport?planId=" + plan_id)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.log(err);
+      });
+
   reqDataAll = async (APIServer, plan_id) => {
     const url = APIServer + "/load_plan/full";
     // console.log(url + "/overview?planId=" + plan_id);
@@ -651,6 +788,7 @@ class EditPlan extends React.Component {
     const req5 = this.reqDetail(url, plan_id);
     const req6 = this.reqReview(url, plan_id);
     const req7 = this.reqCity(APIServer);
+    const req8 = this.reqTransport(url, plan_id);
 
     //resolve req1 (overview) and req3 (location)
     // then search for nearby places
@@ -667,13 +805,19 @@ class EditPlan extends React.Component {
 
     //resolve req4(planstartday) and req5(plandetail)
     // auto add a day if days is empty, then calculate plan
-    Promise.all([req4, req5])
+    Promise.all([req4, req5, req8])
       .then((res) => {
         if (this.state.days.length === 0) {
           console.log("days is empty");
           this.addDay(1);
         }
-        setTimeout(() => this.calPlan(res[1]), 15);
+        if (res[2].length == 0) setTimeout(() => this.calPlan(res[1]), 15);
+        let transports = this.state.days.map((day) =>
+          res[2].filter((tran) => tran.day === day)
+        );
+        let plan_detail = AssignTime(res[1], res[0], this.state.transports);
+        // console.log(transports);
+        this.reArrangePlanDetail(plan_detail, res[0], transports);
       })
       .catch((err) => {
         this.setState({

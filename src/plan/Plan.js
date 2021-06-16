@@ -153,6 +153,19 @@ class Plan extends React.Component {
     return GetTransports(APIServer, plan_detail, days);
   };
 
+  reArrangePlanDetail = (plan_detail, plan_startday, transports) => {
+    plan_detail = ReorderDetail(plan_detail);
+    plan_startday = ReorderStartday(plan_startday);
+    plan_detail = AssignTime(plan_detail, plan_startday, transports);
+    this.setState({
+      plan_detail,
+      plan_startday,
+      isLoading: false,
+      transLoaded: true,
+      transports,
+    });
+  };
+
   calPlan = async (plan_detail) => {
     let { plan_startday } = this.state;
     if (plan_detail) {
@@ -267,6 +280,7 @@ class Plan extends React.Component {
         days: days,
         startdayLoaded: true,
       });
+      return res.data;
     });
 
   reqDetail = async (url, plan_id) =>
@@ -295,6 +309,14 @@ class Plan extends React.Component {
       this.setState({ plan_review: res.data, reviewLoaded: true });
     });
 
+  reqTransport = async (url, plan_id) =>
+    axios
+      .get(url + "/transport?planId=" + plan_id)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.log(err);
+      });
+
   async componentDidMount() {
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
@@ -306,11 +328,24 @@ class Plan extends React.Component {
     const req4 = this.reqStartday(url, plan_id);
     const req5 = this.reqDetail(url, plan_id);
     const req6 = this.reqReview(url, plan_id);
+    const req8 = this.reqTransport(url, plan_id);
 
     // resolve req4(plan_detail) and req5(plan_startday) then
     // calculate transportation time etc.
-    Promise.all([req4, req5])
-      .then((res) => setTimeout(() => this.calPlan(res[1]), 15))
+    Promise.all([req4, req5, req8])
+      .then((res) => {
+        if (this.state.days.length === 0) {
+          console.log("days is empty");
+          this.addDay(1);
+        }
+        if (res[2].length == 0) setTimeout(() => this.calPlan(res[1]), 15);
+        let transports = this.state.days.map((day) =>
+          res[2].filter((tran) => tran.day === day)
+        );
+        let plan_detail = AssignTime(res[1], res[0], this.state.transports);
+        console.log(transports);
+        this.reArrangePlanDetail(plan_detail, res[0], transports);
+      })
       .catch((err) => {
         this.setState({
           detailLoaded: true,

@@ -15,12 +15,14 @@ const duplicatePlanOverview = async (url) => {
 const duplicatePlanDetailnStuff = async (APIServer,oldPlanId,newPlanId) => {
   let urlStartday = APIServer + "/plan_startday/" + oldPlanId + "/" + newPlanId;
   let urlDetail = APIServer + "/plan_detail/" + oldPlanId + "/" + newPlanId;
+  let urlTransport = APIServer + "/transport/" + oldPlanId + "/" + newPlanId;
   let urlLocation = APIServer + "/plan_location/" + oldPlanId + "/" + newPlanId;
 
   //duplicate plan_startday plan_detail and plan_location
   return await Promise.all([
     axios.post(urlStartday),
     axios.post(urlDetail),
+    axios.post(urlTransport),
     axios.post(urlLocation),
   ])
     .catch((err) => console.log(err));
@@ -38,7 +40,8 @@ export default async function DuplicatePlan(APIServer, oldPlanId, user_id) {
 
   data.plan_startday = results[0].data;
   data.plan_detail = results[1].data;
-  data.plan_location = results[2].data;
+  data.transports = results[2].data;
+  data.plan_location = results[3].data;
   return data;
   //  console.log(data)
 }
