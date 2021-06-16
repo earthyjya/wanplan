@@ -6,6 +6,12 @@ export const GetTransportsBetween2Places = async (
   place1,
   place2
 ) => {
+  if (!place1 || !place2 || place1 === "freetime" || place2 === "freetime")
+    return {
+      source_id: place1,
+      source_id: place2,
+      text: "No transportation data",
+    };
   let url = APIServer + "/googletransport/" + place1 + "/" + place2;
   return axios
     .get(url)
@@ -14,7 +20,7 @@ export const GetTransportsBetween2Places = async (
       return {
         source_id: place1,
         destination_id: place2,
-        text: res.data.duration.text,
+        text: Math.ceil(res.data.duration.value / 60 / 5) * 5 + " mins",
         mode: res.data.mode,
         value: res.data.duration.value / 60,
         distance: res.data.distance.text,
