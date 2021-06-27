@@ -27,6 +27,7 @@ import {
   faLink,
   faCalendarAlt,
   faEye,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -54,7 +55,8 @@ library.add(
   faEye,
   faFacebookSquare,
   faInstagramSquare,
-  faTwitterSquare
+  faTwitterSquare,
+  faStar,
 );
 
 class App extends Component {

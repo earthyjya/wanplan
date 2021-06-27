@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 class AttBarCard extends Component {
@@ -51,6 +52,7 @@ class AttBarCard extends Component {
           {attraction_type ? attraction_type.replace("_", " ") : ""}
         </div>
         <div className="image" style={this.checkBgImage()}>
+          <FontAwesomeIcon onClick={()=>{}} className="star" icon="star"/>
           <div className="description-container">
             <div className="open-time">
               {" "}
