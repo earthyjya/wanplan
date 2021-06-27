@@ -12,24 +12,21 @@ class AttBar extends Component {
   };
 
   async componentDidMount() {
-    this.onClickAttBarCard = this.onClickAttBarCard.bind(this);
     this.attbarRef = React.createRef();
-    this.renderAttBarDesc = this.renderAttBarDesc.bind(this);
-    this.renderAttBarTab = this.renderAttBarTab.bind(this);
 	}
-
-  onClickAttBarCard(dat) {
+  
+  componentDidUpdate(prevProps) {
+    if (prevProps.nearbyCenter !== this.props.nearbyCenter) {
+      this.showDetails(this.props.nearbyCenter);
+		}
+	}
+  
+  onClickAttBarCard = (dat) => {
     this.setState({ detailsDat: dat });
     this.props.showDetails(dat);
     this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
-
-  componentDidUpdate(prevProps) {
-		if (prevProps.nearbyCenter !== this.props.nearbyCenter) {
-			this.showDetails(this.props.nearbyCenter);
-		}
-	}
-
+  
   changeTabTo(tabName) {
     this.setState({AttBarTab: tabName})
     // clear attbar details after changing tab
@@ -146,9 +143,20 @@ class AttBar extends Component {
           ) : this.state.error ? (
             <div className="AttBar">{this.state.error.message}</div>
           ) : this.state.AttBarTab === "nearby" ? (
-            <AttBarNearby {...this.props} onClickAttBarCard={this.onClickAttBarCard}/>
+            <AttBarNearby
+              searchedPlace = {this.props.searchedPlace}
+              nearbyPlaces = {this.props.nearbyPlaces}
+              setFavoritePlaces = {this.props.setFavoritePlaces}
+              setSearchedPlace = {this.props.setSearchedPlace}
+              attbarRef = {this.attbarRef}
+              onClickAttBarCard={this.onClickAttBarCard}
+            />
           ) : this.state.AttBarTab === "favorites" ? (
-            <AttBarFavorites/>
+            <AttBarFavorites 
+              favoritePlaces={this.props.favoritePlaces} 
+              setFavoritePlaces={this.props.setFavoritePlaces} 
+              onClickAttBarCard={this.onClickAttBarCard}
+            />
           ) : <></>
         }
 			</div>

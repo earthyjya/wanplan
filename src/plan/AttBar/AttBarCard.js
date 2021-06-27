@@ -7,6 +7,20 @@ class AttBarCard extends Component {
     photos: [],
   };
 
+  toggleFavorite() {
+    const { google_place_id } = this.props
+    let favorite_places = JSON.parse(localStorage.getItem("favorite_places"));
+    if (favorite_places === null)
+    {
+      localStorage.setItem("favorite_places", JSON.stringify([]));
+      favorite_places  = []
+    }
+    favorite_places.includes(google_place_id) ?
+      favorite_places = favorite_places.filter(id => id !== google_place_id)
+      : favorite_places.push(google_place_id) 
+    localStorage.setItem("favorite_places", JSON.stringify(favorite_places));
+  }
+
   async componentDidMount() {
     if (process.env.NODE_ENV === "production") {
       const { google_place_id } = this.props;
@@ -52,18 +66,11 @@ class AttBarCard extends Component {
           {attraction_type ? attraction_type.replace("_", " ") : ""}
         </div>
         <div className="image" style={this.checkBgImage()}>
-          <FontAwesomeIcon onClick={()=>{}} className="star" icon="star"/>
+          <FontAwesomeIcon onClick={ ()=> this.toggleFavorite() } className="star" icon="star"/>
           <div className="description-container">
-            <div className="open-time">
-              {" "}
-              Open : {open_time} - {close_time}{" "}
-            </div>
+            <div className="open-time"> {` Open : ${open_time} - ${close_time}`} </div>
             <div className="name">{attraction_name}</div>
-            <div className="description">
-              {" "}
-              Attraction details
-              {description}{" "}
-            </div>
+            <div className="description"> {` Attraction details ${description} `} </div>
           </div>
         </div>
       </div>

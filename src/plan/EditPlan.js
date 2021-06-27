@@ -82,6 +82,7 @@ class EditPlan extends React.Component {
     plan_tag: [],
     nearbyPlaces: [],
     searchedPlace: {},
+    favoritePlaces: [],
   };
 
   updatePlan = async () => {
@@ -720,6 +721,7 @@ class EditPlan extends React.Component {
 
   setSearchedPlace = async (place) => {
     const APIServer = process.env.REACT_APP_APIServer;
+    console.log("place.place_id: ", place.place_id);
     let url = APIServer + "/googleplace/" + place.place_id;
     this.setState({ searchedPlace: {}, nearbyPlaces: [] });
     let res = await axios
@@ -739,6 +741,24 @@ class EditPlan extends React.Component {
     );
     this.setState({ nearbyPlaces: res });
   };
+
+  setFavoritePlaces = async () => {
+    const APIServer = process.env.REACT_APP_APIServer;
+    const favorite_places = JSON.parse(localStorage.getItem("favorite_places"));
+    var res = await Promise.all(
+      favorite_places.map( async place_id => { 
+        console.log(place_id)
+        let url = APIServer + "/googleplace/" + place_id;
+        let res = await axios
+          .get(url)
+          .then((res) => res)
+          .catch((err) => console.log(err));
+        return res.data[0];
+      })
+    )
+    console.log("Favorite places results:", res);
+    this.setState({ favoritePlaces: res });
+  }
 
   renderRedirect = () => {
     if (this.state.redirect) {
@@ -896,7 +916,6 @@ class EditPlan extends React.Component {
 
   async componentDidMount() {
     // Since it has to fetch three times, we fetch it here and store the data in the state
-    console.log("didMount");
     const { plan_id } = this.props;
     const APIServer = process.env.REACT_APP_APIServer;
     this.reqDataAll(APIServer, plan_id);
@@ -1063,6 +1082,7 @@ class EditPlan extends React.Component {
                                   toggleAttModal={this.toggleAttModal}
                                   showDetails={this.showDetails}
                                   setSearchedPlace={this.setSearchedPlace}
+                                  setFavoritePlaces={this.setFavoritePlaces}
                                   setNearbyOption={this.setNearbyOption}
                                   {...this.state}
                                 />

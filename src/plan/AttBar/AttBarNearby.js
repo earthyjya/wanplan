@@ -21,7 +21,7 @@ class AttBarNearby extends Component {
     error: null,
   };
 
-	async componentDidMount() {
+	componentDidMount() {
     if(this.props.country !== "th" && this.props.country !== "jp"){
       this.props.history.replace('/');
     }
@@ -29,17 +29,18 @@ class AttBarNearby extends Component {
 
   onPlaceSelected = async (place) => {
     await this.props.setSearchedPlace(place);
-    this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    this.props.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   selectNearbyOption = (e) => {
     this.props.setNearbyOption(e.target.value);
-  };
+  }
 
   selectCountryOption = (e) => {
     this.props.history.push(`./${e.target.value}`);
     this.props.history.go(0);
-  };
+  }
+
   render() {
     return (
       <>
