@@ -5,15 +5,26 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 
 class AttBarFavorites extends Component {
 
+  state = {
+    favoritePlaces: [],
+  }
+
   async componentDidMount() {
     await this.props.setFavoritePlaces()
-    console.log(this.props);
+    this.setState({favoritePlaces: this.props.favoritePlaces});
+  }
+
+  // when an attbarcard is removed from favorited, delete it from attbarfavorite
+  onUnFavorite = (google_place_id) => {
+    let favoritePlaces = this.state.favoritePlaces;
+    favoritePlaces = favoritePlaces.filter(place => place.google_place_id !== google_place_id)
+    this.setState({favoritePlaces: favoritePlaces});
   }
 
   render() {
     return (
       <>
-        {this.props.favoritePlaces
+        {this.state.favoritePlaces
           .filter(place => place !== null)
           .map((place, idx) => {
             console.log(place);
@@ -52,6 +63,7 @@ class AttBarFavorites extends Component {
                               google_place_id={place.google_place_id}
                               photos={place.photos}
                               key={place.google_place_id.toString()}
+                              onUnFavorite={this.onUnFavorite}
                             />
                           </div>
                         )}

@@ -5,20 +5,32 @@ import axios from "axios";
 class AttBarCard extends Component {
   state = {
     photos: [],
+    isFavorited: false,
   };
 
-  toggleFavorite() {
-    const { google_place_id } = this.props
+  toggleFavorite(e) {
+    const { google_place_id, onUnFavorite } = this.props
     let favorite_places = JSON.parse(localStorage.getItem("favorite_places"));
-    if (favorite_places === null)
-    {
+    if (favorite_places === null){
       localStorage.setItem("favorite_places", JSON.stringify([]));
       favorite_places  = []
     }
-    favorite_places.includes(google_place_id) ?
+    if(favorite_places.includes(google_place_id)){
       favorite_places = favorite_places.filter(id => id !== google_place_id)
-      : favorite_places.push(google_place_id) 
+    }
+    else{
+      favorite_places.push(google_place_id);
+    }
     localStorage.setItem("favorite_places", JSON.stringify(favorite_places));
+
+    // prevent dragging card
+    e.stopPropagation();
+    this.setState({isFavorited: !this.state.isFavorited}, 
+      () => {
+        // callback, used in AttBarFavorite
+        onUnFavorite && !this.state.isFavorited && onUnFavorite(google_place_id)
+      }
+    );
   }
 
   async componentDidMount() {
@@ -34,6 +46,15 @@ class AttBarCard extends Component {
           console.log(err);
         });
     }
+    this.checkFavorited()
+  }
+
+  checkFavorited(){
+    const { google_place_id } = this.props
+    let favorite_places = JSON.parse(localStorage.getItem("favorite_places"));
+    favorite_places ?
+      this.setState({isFavorited: favorite_places.includes(google_place_id)}) :
+      this.setState({isFavorited: false})
   }
 
   checkBgImage() {
@@ -62,11 +83,14 @@ class AttBarCard extends Component {
         style={{ display: "flex", flexDirection: "column" }}
       >
         <div className="type">
-          {" "}
-          {attraction_type ? attraction_type.replace("_", " ") : ""}
+          {` ${attraction_type ? attraction_type.replaceAll("_", " ") : ""}`}
         </div>
         <div className="image" style={this.checkBgImage()}>
-          <FontAwesomeIcon onClick={ ()=> this.toggleFavorite() } className="star" icon="star"/>
+          <FontAwesomeIcon 
+            onClick={ (e) => this.toggleFavorite(e) } 
+            className={this.state.isFavorited ? "star-on" : "star-off"} 
+            icon="star"
+          />
           <div className="description-container">
             <div className="open-time"> {` Open : ${open_time} - ${close_time}`} </div>
             <div className="name">{attraction_name}</div>

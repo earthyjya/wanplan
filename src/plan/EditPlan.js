@@ -747,7 +747,6 @@ class EditPlan extends React.Component {
     const favorite_places = JSON.parse(localStorage.getItem("favorite_places"));
     var res = await Promise.all(
       favorite_places.map( async place_id => { 
-        console.log(place_id)
         let url = APIServer + "/googleplace/" + place_id;
         let res = await axios
           .get(url)

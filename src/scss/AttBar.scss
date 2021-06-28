@@ -18,11 +18,24 @@
   width: auto;
   color: white;
 
-  .star{
+  @mixin star {
+    font-size: 1.5em;
+    cursor: pointer;
     position: absolute;
-    color: gray;
-    right: 50px;
+    right: 1em;
     top: 50px;
+    stroke: black;
+    stroke-width: 10;
+  }
+
+  .star-off{
+    @include star;
+    color: gray;
+  }
+
+  .star-on{
+    @include star;
+    color: $primary;
   }
 
   .name{
@@ -38,7 +51,7 @@
   }
   .type{
     color: black;
-    width: 100px;
+    width: 150px;
     background-color: $primary;
     text-align: center;
     border-radius: 10px 10px 0 0;
