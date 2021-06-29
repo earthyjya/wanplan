@@ -63,6 +63,8 @@
 .plan-description-picture-home {
   position: absolute;
   min-height: 700px;
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
   width: 100%;
   clip-path: circle(1700px at 50% -900px);
   object-fit: cover;
