@@ -7,8 +7,8 @@ import AttBarFavorites from "./AttBarFavorites";
 
 class AttBar extends Component {
   state = {
-    AttBarTab: "nearby",
-    detailsDat: "",
+    attBarTab: "nearby",
+    detailsDat: "",  
   };
 
   async componentDidMount() {
@@ -26,9 +26,9 @@ class AttBar extends Component {
     this.props.showDetails(dat);
     this.attbarRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
-  
+
   changeTabTo(tabName) {
-    this.setState({AttBarTab: tabName})
+    this.setState({ attBarTab: tabName })
     // clear attbar details after changing tab
     this.setState({ detailsDat: "" });
   }
@@ -125,9 +125,19 @@ class AttBar extends Component {
 
   renderAttBarTab() {
     return (
-    <div>
-      <button onClick={() => this.changeTabTo("nearby")}> Nearby </button>
-      <button onClick={() => this.changeTabTo("favorites")}> Favorites </button>
+    <div className="att-bar-tab-container">
+      <button 
+        className={this.state.attBarTab === "nearby" ? "activated" : ""} 
+        onClick={() => this.changeTabTo("nearby")}
+      > 
+        Nearby 
+      </button>
+      <button 
+        className={this.state.attBarTab === "favorites" ? "activated" : ""} 
+        onClick={() => this.changeTabTo("favorites")}
+      > 
+        Favorites 
+      </button>
     </div>
     );
   }
@@ -142,7 +152,7 @@ class AttBar extends Component {
             <div className="AttBar">Loading...</div>
           ) : this.state.error ? (
             <div className="AttBar">{this.state.error.message}</div>
-          ) : this.state.AttBarTab === "nearby" ? (
+          ) : this.state.attBarTab === "nearby" ? (
             <AttBarNearby
               searchedPlace = {this.props.searchedPlace}
               nearbyPlaces = {this.props.nearbyPlaces}
@@ -151,7 +161,7 @@ class AttBar extends Component {
               attbarRef = {this.attbarRef}
               onClickAttBarCard={this.onClickAttBarCard}
             />
-          ) : this.state.AttBarTab === "favorites" ? (
+          ) : this.state.attBarTab === "favorites" ? (
             <AttBarFavorites 
               favoritePlaces={this.props.favoritePlaces} 
               setFavoritePlaces={this.props.setFavoritePlaces} 

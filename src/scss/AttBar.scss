@@ -102,44 +102,43 @@
 
 .search-container {
   position: sticky;
-  top: -38px;
+  top: 45px;
   right: 0px;
   z-index: 1;
   font-size: 1.4em;
-  padding-top: 18px;
-  padding-bottom: 18px;
   background-color: white;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+  padding: 8px 24px 36px 24px;
+
+
+  .search-bar {
+    background: white !important;
+    outline: none;
+    border: solid 1px;
+    border-radius: 12px;
+    border-color: $gray2;
+    color: black;
+    width: 95%;
+    padding: 0.2em 0.4em;
+    margin-bottom: 5px;
+    font-size: .8em;
+    font-family: "FontAwesome", "Noto Sans";
+    border-radius: "8px";
+    &::placeholder{
+      color: $gray2;
+      left: 30px;
+    }
+  }
    > span{
     font-weight: bold;
   }
   .nearby-option{
     margin-right: 12px;
-    font-size: 1em;
+    font-size: .8em;
     border: solid 1px;
     border-radius: 6px;
     border-color: $gray3;
     color: $gray2;
-  }
-}
-
-.search-bar {
-  background: white !important;
-  outline: none;
-  padding: 5px;
-  margin: 5px;
-  border: solid 1px;
-  border-radius: 12px;
-  border-color: $gray2;
-  color: black;
-  width: 95%;
-  padding: 0.4em 0.6em;
-  font-size: 1em;
-  font-family: "FontAwesome", "Noto Sans";
-  border-radius: "8px";
-  margin: 10px 0px;
-  &::placeholder{
-    color: $gray2;
-    left: 30px;
   }
 }
 
@@ -166,18 +165,20 @@ input[type="text"]:focus {
 
 .att-bar-wrap {
   position: sticky;
-  top: 54px;
+  top: 52px;
   height: calc(100vh - 54px);
   overflow-y: scroll;
-  padding: 36px;
   box-shadow: -1px 0px 20px 2px rgba(0, 0, 0, 0.15);
   z-index: 10;
 }
 
 .att-bar-desc{
+  z-index: 2;
   display: flex;
   flex-direction: column;
   font-size: 0.9em;
+  padding: 16px;
+  background-color: white;
   justify-content: space-evenly;
   & > * {
     margin-bottom: 1em;
@@ -207,4 +208,32 @@ input[type="text"]:focus {
 .att-bar-delete{
   cursor: pointer;
   float: right;
+  font-size: .6em;
+}
+
+.att-bar-favorite, .att-bar-nearby{
+  z-index: 1;
+  .AttBarCard{
+    margin: 36px;
+  }
+}
+
+.att-bar-tab-container {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: white;
+  button{
+    height: 45px;
+    width: 130px;
+    font-size: 1.2em;
+    font-weight: 900;
+    background-color: white;
+  }
+  button:hover, .activated{
+    background-color: $primary;
+  }
+  .deavtivated{
+    background-color: white;
+  }
 }

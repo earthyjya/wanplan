@@ -43,7 +43,7 @@ class AttBarNearby extends Component {
 
   render() {
     return (
-      <>
+      <div className="att-bar-nearby">
         <div className="search-container">
           <Autocomplete
             className="search-bar"
@@ -73,7 +73,7 @@ class AttBarNearby extends Component {
             <option value="lodging">Hotel</option>
           </select>
         </div>
-        <div className="AttBar">
+        <>
           {(() => {
             if (this.props.searchedPlace.google_place_id)
               return (
@@ -177,8 +177,8 @@ class AttBarNearby extends Component {
                 </React.Fragment>
               );
           })()}
-        </div>
-      </>
+        </>
+      </div>
     );
   }
 }

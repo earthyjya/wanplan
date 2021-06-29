@@ -23,7 +23,7 @@ class AttBarFavorites extends Component {
 
   render() {
     return (
-      <>
+      <div className="att-bar-favorite">
         {this.state.favoritePlaces
           .filter(place => place !== null)
           .map((place, idx) => {
@@ -75,7 +75,7 @@ class AttBarFavorites extends Component {
               </div>
             )
           })}
-      </>
+      </div>
     );
   }
 }
